@@ -48,12 +48,17 @@ public class ReportBorrowedBooks extends BaseReport {
     }
 
     @Override
+    public String getFilename() {
+        return "Entliehene_Buecher";
+    }
+
+    @Override
     public byte[] execute(ContentType contentType, List<Long> ids, Long school_id,
                           Long school_term_id, Connection con) throws IOException, JRException {
 
-        String sql = StatementStore.getStatement("library.getClassList");
+        String sql = StatementStore.getStatement("libraryReports.schuelerBorrowedBooks");
 
-        sql.replace(":ids", getSQLList(ids));
+        sql = sql.replace(":ids", getSQLList(ids));
 
         List<BorrowedBooksRecord> borrowedBooks = con.createQuery(sql)
                 .addParameter("school_id", school_term_id)

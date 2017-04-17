@@ -12,7 +12,11 @@ public class BorrowedBooksRecord {
     public String surname;
     public Date exit_date;
     public String title;
-    public String begindate;
+    public Date begindate;
+
+    public BorrowedBooksRecord(){
+
+    }
 
     public String getClass_name() {
         return class_name;
@@ -34,7 +38,7 @@ public class BorrowedBooksRecord {
         return title;
     }
 
-    public String getBegindate() {
+    public Date getBegindate() {
         return begindate;
     }
 

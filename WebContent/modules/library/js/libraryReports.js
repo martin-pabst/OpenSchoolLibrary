@@ -73,12 +73,14 @@
             selectedRows: selectedRows,
             reportId: reportId,
             contentType: contentType,
-            dataType: dataType
+            dataType: dataType,
+            school_id: global_school_id,
+            school_term_id: global_school_term_id
         };
 
         var text = JSON.stringify(requestData);
         $('#reportParameterTextarea').val(text);
-        alert(text);
+        // alert(text);
     }
 
     function getHtmlForReport(report) {

@@ -13,7 +13,7 @@ public enum DataType {
         this.id = id;
     }
 
-    public static DataType findById(int id) {
+    public static DataType findById(long id) {
 
         for (DataType dataType : DataType.values()) {
             if (dataType.id == id) {

@@ -21,7 +21,7 @@
         WHERE
             student.school_id = :school_id AND
             student_school_term.id = :school_term_id AND
-            stundent_id IN :ids
+            student.id IN :ids
 
     </statement>
 

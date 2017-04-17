@@ -1,9 +1,5 @@
 package de.sp.modules.library;
 
-import de.sp.modules.library.servlets.reports.LibraryNavigatorDataServlet;
-import org.apache.velocity.Template;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-
 import de.sp.database.model.User;
 import de.sp.main.mainframe.menu.MenuItem;
 import de.sp.main.mainframe.menu.MenuItemSide;
@@ -18,9 +14,13 @@ import de.sp.modules.library.servlets.borrow.borrowerlist.LibraryBorrowerListSer
 import de.sp.modules.library.servlets.inventory.books.LibraryBookFormServlet;
 import de.sp.modules.library.servlets.inventory.books.LibraryInventoryBooksServlet;
 import de.sp.modules.library.servlets.inventory.copies.LibraryInventoryCopiesServlet;
+import de.sp.modules.library.servlets.reports.LibraryNavigatorDataServlet;
+import de.sp.modules.library.servlets.reports.LibraryReportServlet;
 import de.sp.modules.library.servlets.returnbooks.returnerlist.ReturnerListServlet;
 import de.sp.modules.library.servlets.returnbooks.scanbarcodeservlet.FeeServlet;
 import de.sp.modules.library.servlets.returnbooks.scanbarcodeservlet.LibraryReturnBookServlet;
+import org.apache.velocity.Template;
+import org.eclipse.jetty.servlet.ServletContextHandler;
 
 public class LibraryModule extends Module {
 
@@ -99,6 +99,7 @@ public class LibraryModule extends Module {
 		context.addServlet(FeeServlet.class, "/library/fee/*");
 		context.addServlet(ReturnerListServlet.class, "/library/returnerList/*");
 		context.addServlet(LibraryNavigatorDataServlet.class, "/library/reports/navigatordata");
+		context.addServlet(LibraryReportServlet.class, "/library/reports/start");
 	}
 
 	@Override

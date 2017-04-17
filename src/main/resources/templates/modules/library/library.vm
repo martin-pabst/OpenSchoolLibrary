@@ -262,7 +262,7 @@
                         </div>
                     </td>
                     <td>
-                        <form name="startReportForm" href="/library/reports/start" target="_blank">
+                        <form name="startReportForm" action="/library/reports/start" target="_blank" method="post">
                             <textarea id="reportParameterTextarea" name="reportParameters" style="visibility: hidden; width: 0; height: 0"></textarea>
                             <button id="reportsStart" class="btn btn-default" type="submit"
                                     style="margin: 0 10px; float: right">Start

@@ -17,6 +17,7 @@ abstract public class BaseReport {
     abstract public String getName();
     abstract public String getDescription();
     abstract public List<ContentType> getContentTypes();
+    abstract public String getFilename();
 
     private int id;
 

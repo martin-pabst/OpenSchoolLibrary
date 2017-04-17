@@ -4,6 +4,7 @@ import de.sp.modules.library.servlets.reports.reportsschueler.borrowedbooks.Repo
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -79,4 +80,11 @@ public class ReportManager {
     }
 
 
+    public BaseReport getReport(DataType dataType, Long reportId) {
+
+        List<BaseReport> reportList = reports.get(dataType.getId());
+
+        return reportList.get(reportId.intValue());
+
+    }
 }
