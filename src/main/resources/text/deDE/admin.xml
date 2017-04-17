@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<textresourcefile>
+	<textresources path="admin" language="de-DE">
+		<text path="moduleName">Administration</text>
+	</textresources>
+	<textresources path="admin.menu" language="de-DE">
+		<text path="main"> </text>
+		<text path="asvimport">Datenimport aus ASV</text>
+		<text path="schools">Schulen verwalten</text>
+	</textresources>
+	<textresources path="admin.permissions" language="de-DE">
+		<text path="main">Administratormodul öffnen</text>
+	</textresources>
+	<textresources path="admin.asvimport" language="de-DE">
+		<text path="exportfile">ASV-Exportdatei:</text>
+		<text path="upload">Hochladen und Importieren</text>
+	</textresources>
+</textresourcefile>

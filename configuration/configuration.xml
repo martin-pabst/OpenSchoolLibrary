@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+	<database>
+		<type>postgres</type>
+		<connection>jdbc:postgresql://localhost/bibliothek</connection>
+		<username>bibliothek</username>
+		<password>bibliothek</password>
+	</database>
+
+	<directories>
+		<loggingconfigfilename>configuration/log4j.xml</loggingconfigfilename>
+		<webcontentdirectory>WebContent</webcontentdirectory>
+	</directories>
+
+	<languages default="de-DE">
+		<language>
+			<languageCode>en-US</languageCode>
+			<name>English</name>
+			<englishName>English</englishName>
+			<country>USA</country>
+			<englishCountryName>USA</englishCountryName>
+			<fallback>en-EN</fallback>
+		</language>
+		<language>
+			<languageCode>en-EN</languageCode>
+			<name>English</name>
+			<englishName>English</englishName>
+			<country>Great Britain</country>
+			<englishCountryName>Great Britain</englishCountryName>
+			<fallback>en-US</fallback>
+		</language>
+		<language>
+			<languageCode>de-DE</languageCode>
+			<name>Deutsch</name>
+			<englishName>German</englishName>
+			<country>Deutschland</country>
+			<englishCountryName>Germany</englishCountryName>
+			<fallback>en-EN</fallback>
+			<fallback>en-US</fallback>
+		</language>
+	</languages>
+
+
+</configuration>
+

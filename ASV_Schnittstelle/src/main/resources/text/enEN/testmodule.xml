@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<textresourcefile>
+	<textresources path="testmodule" language="en-EN">
+		<text path="moduleName">Test module</text>
+	</textresources>
+	<textresources path="testmodule.menu" language="en-EN">
+		<text path="main">Test module</text>
+		<text path="item1">Item 1</text>
+		<text path="item2">Item 2</text>
+	</textresources>
+	<textresources path="testmodule.permissions" language="en-EN">
+		<text path="open">Open Test module</text>
+	</textresources>
+</textresourcefile>

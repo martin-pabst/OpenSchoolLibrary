@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+	<!-- Table book -->
+
+	<statement name="book_copy.getAll">
+		select id, book_id, edition, barcode from
+		book_copy
+	</statement>
+
+	<statement name="book_copy.insert">
+		insert into book_copy (book_id, edition,
+		barcode)
+		values (:book_id, :edition, :barcode)
+	</statement>
+
+	<statement name="book_copy.delete">
+		delete from book_copy where id = :id
+	</statement>
+
+	<statement name="book_copy.setSorted_out_date">
+		update book_copy
+		set sorted_out_date = :sorted_out_date
+		where id = :book_copy_id
+	</statement>
+
+	<statement name="book_copy.deleteFees">
+		delete from fee where borrows_id in (
+				select id from borrows where book_copy_id = :book_copy_id
+		)
+	</statement>
+
+
+	<statement name="book_copy.deleteBorrows">
+		delete from borrows where book_copy_id =
+		:book_copy_id
+	</statement>
+
+	<statement name="book_copy.findByBarcodeAndSchool">
+	select book_copy.id as book_copy_id, book.id as book_id, book.title, book.author
+		from book_copy 
+			join book on book_copy.book_id = book.id
+			join school on book.school_id = school.id
+		where
+			school.id = :school_id and
+			book_copy.barcode = :barcode
+	</statement>
+
+	<statement name="book_copy.inventoryList">
+		select book_copy.id, book_copy.book_id, book_copy.barcode,
+		book_copy.edition, borrows.begindate,
+		student.firstname as student_firstname, student.surname as student_surname,
+		teacher.firstname as teacher_firstname, teacher.surname as teacher_surname,
+		teacher.id as teacher_id,
+		class.name as class_name
+		from
+		book_copy
+		left join borrows on borrows.book_copy_id = book_copy.id and borrows.return_date is null 
+		left join student on borrows.student_id = student.id
+		left join student_school_term on student_school_term.student_id =
+		student.id and student_school_term.school_term_id = :school_term_id
+		left join class on student_school_term.class_id = class.id
+		left join teacher on borrows.teacher_id = teacher.id
+		where
+		book_copy.book_id = :book_id AND
+		book_copy.sorted_out_date is null
+	</statement>
+	
+	<statement name="book_copy.getSchoolIdForBookCopy">
+		select school.id from 
+		book_copy join book on book_copy.book_id = book.id
+		join school on book.school_id = school.id
+		where book_copy.id = :book_copy_id
+	</statement>
+
+	<statement name="book_copy.getFeeList">
+		select fee.id from
+			book_copy JOIN borrows on borrows.book_copy_id = book_copy.id
+			          JOIN fee on fee.borrows_id = borrows.id
+		where book_copy.id = :book_copy_id
+	</statement>
+
+</statementlist>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+<!-- Table school -->
+
+	<statement name="value.getAll" >
+		select id, valuestore_key, school_id, name, abbreviation, external_key from value
+	</statement>
+	
+	<statement name="value.insert">
+		insert into value (valuestore_key, school_id, name, abbreviation, external_key) 
+		values (:valuestore_key, :school_id, :name, :abbreviation, :external_key)
+	</statement>
+
+	<statement name="value.remove">
+		delete from value where id = :id
+	</statement>
+	
+	<statement name="value.findBySchoolAndValueStore" >
+		select id, valuestore_key, school_id, name, abbreviation, external_key 
+		from value
+		where school_id = :school_id and valuestore_key = :valuestore_key
+	</statement>
+	
+	<statement name="value.findBySchoolAndValueStoreAndExternalKey" >
+		select id, valuestore_key, school_id, name, abbreviation, external_key 
+		from value
+		where school_id = :school_id and valuestore_key = :valuestore_key and external_key = :external_key
+	</statement>
+
+	
+</statementlist>

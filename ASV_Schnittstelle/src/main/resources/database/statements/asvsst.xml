@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+	<statement name="asvsst.deleteStudentClassReferences">
+		update student_school_term
+		set class_id = null where
+		school_term_id = :school_term_id
+	</statement>
+
+</statementlist>

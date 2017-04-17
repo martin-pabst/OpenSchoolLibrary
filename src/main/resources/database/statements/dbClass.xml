@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+<!-- Table school -->
+
+	<statement name="class.getAll" >
+		select id, school_term_id, name, year_of_school, form_id from class
+	</statement>
+	
+	<statement name="class.insert">
+		insert into class (school_term_id, name, year_of_school, form_id) 
+		values (:school_term_id, :name, :year_of_school, :form_id)
+	</statement>
+
+	<statement name="class.delete">
+		delete from class where id = :id
+	</statement>
+	
+	
+	<statement name="class.update">
+		update class set 
+		school_term_id = :school_term_id,
+		name = :name, 
+		year_of_school = :year_of_school
+		where id = :id
+	</statement>
+
+
+	
+</statementlist>

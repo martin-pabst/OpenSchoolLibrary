@@ -1,0 +1,293 @@
+<div id="library">
+
+    <ul class="nav nav-tabs" style="background-color: white">
+        <li role="presentation" class="active"><a data-toggle="tab" href="#libraryBorrow" id="libraryBorrowTab">
+            <i class="fa fa-shopping-basket fa-fw" aria-hidden="true"></i>
+            <span class="menuitemtext">${ts.get("library.menu.borrow")}</span></a></li>
+
+        <li role="presentation"><a data-toggle="tab" href="#libraryInventory" id="libraryInventoryTab">
+            <i class="fa fa-th-list fa-fw" aria-hidden="true"></i>
+            <span class="menuitemtext">${ts.get("library.menu.inventory")}</span></a></li>
+
+        <li role="presentation"><a data-toggle="tab" href="#libraryReturn" id="libraryReturnTab">
+            <i class="fa fa-reply-all fa-fw" aria-hidden="true"></i>
+            <span class="menuitemtext">${ts.get("library.menu.return")}</span></a></li>
+
+        <li role="presentation"><a data-toggle="tab" href="#libraryAdmonition" id="libraryAdmonitionTab">
+            <i class="fa fa-warning fa-fw" aria-hidden="true"></i>
+            <span class="menuitemtext">${ts.get("library.menu.admonition")}</span></a></li>
+
+        <li role="presentation"><a data-toggle="tab" href="#libraryReports" id="libraryReportsTab">
+            <i class="fa fa-print fa-fw" aria-hidden="true"></i>
+            <span class="menuitemtext">${ts.get("library.menu.reports")}</span></a></li>
+    </ul>
+
+    <div class="tab-content">
+
+        <!-- Borrow -->
+
+        <div id="libraryBorrow" class="tab-pane fade active in" style="margin-top: 10px">
+            <div id="libraryBorrowLeft" class="col-md-5">
+                <div id="libraryBorrowerList" style="height: 760px"></div>
+            </div>
+            <div class="col-md-7">
+                <div id="libraryBorrowBarcodeFields" class="col-md-12" style="padding: 0">
+                    <h4 id="libraryBorrowBorrower" style="height: 20px; margin-bottom: 5px"></h4>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon3">Ausleihen:</span>
+                        <input id="libraryBorrowBarcodeField" type="text" class="form-control" placeholder="Barcode"
+                               aria-describedby="basic-addon3">
+                    </div>
+                </div>
+
+                <div class="col-md-12" style="padding: 0">
+                    <div class="col-md-7" style="padding: 0px">
+                        <div id="libraryBorrowedBooksList" style="height: 400px; margin-top: 5px"></div>
+                    </div>
+                    <div class="col-md-5" style="padding-right: 0px">
+                        <div id="libraryNeededBooksList" style="height: 400px; margin-top: 5px"></div>
+                    </div>
+                </div>
+                <div class="col-md-12" style="padding: 0">
+                    <h4 style="margin-top: 10px">Zustand des Buchs<span id="bookTitle"
+                                                                        style="font-weight: bold"></span>:</h4>
+
+                    <div id="bookDetailTextAll" style="height: 130px; width: 100%;
+                    margin-bottom: 4px; overflow: auto"></div>
+
+                    <div class="col-md-8" style="padding-left: 0; padding-right: 0">
+                        <textarea id="bookDetailText" style="height: 90px; width: 100%"
+                                  placeholder="Beschreibung des Buchzustands hier eingeben..."></textarea>
+                    </div>
+                    <div class="col-md-4" style="padding-right: 0; padding-top: 0">
+                        <div class="w2ui-field">
+                            <input id="bookDetailDate">
+                        </div>
+                        <div style="height: 5px"></div>
+                        <div class="dropup">
+                            <button id="bookDetailMark" class="btn btn-default dropdown-toggle" type="button"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="true">Zustand als Note<span
+                                    class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" id="bookDetailMarkUL">
+                                <li><a href="#" data-value="1 (wie neu)">1 (wie neu)</a></li>
+                                <li><a href="#"
+                                       data-value="2 (leichte Abnutzungsspuren)">2 (leichte Abnutzungsspuren)</a></li>
+                                <li><a href="#" data-value="3 (stark abgenutzt)">3 (stark abgenutzt)</a>
+                                </li>
+                                <li><a href="#" data-value="4 (leicht beschädigt)">4 (leicht beschädigt)</a>
+                                </li>
+                                <li><a href="#"
+                                       data-value="5 (mittelschwer beschädigt)">5 (mittelschwer beschädigt)</a></li>
+                                <li><a href="#" data-value="6 (schwer beschädigt)">6 (schwer beschädigt)</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div style="height: 5px"></div>
+                        <button id="bookDetailButton" class="btn btn-default">Hinzufügen</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory -->
+
+        <div id="libraryInventory" class="tab-pane fade" style="padding: 10px 10px 0px 10px">
+            <div id="libraryInventoryLeft" class="col-md-8">
+                <div id="libraryInventoryBooks" style="height: 500px"></div>
+                <div id="libraryInventoryBookForm" style="height: 200px; margin-top: 15px"></div>
+            </div>
+            <div id="libraryInventoryRight" class="col-md-4">
+                <div id="libraryInventoryCopies" style="height: 600px"></div>
+                <div id="libraryInventoryBarcodeFields">
+                    <div class="input-group" style="margin-top: 10px">
+                        <span class="input-group-addon" id="basic-addon1">Neu erfassen:</span>
+                        <input id="libraryInventoryAddCopy" type="text" class="form-control" placeholder="Barcode"
+                               aria-describedby="basic-addon1">
+                    </div>
+                    <div class="input-group" style="margin-top: 10px">
+                        <span class="input-group-addon" id="basic-addon2">Markieren:</span>
+                        <input id="libraryInventorySelect" type="text" class="form-control" placeholder="Barcode"
+                               aria-describedby="basic-addon2">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Return -->
+
+        <div id="libraryReturn" class="tab-pane fade" style="margin-top: 10px">
+            <div class="col-md-6">
+
+                <div id="libraryReturnFields" class="col-md-12" style="padding: 0">
+                    <div class="input-group" style="margin-bottom: 10px">
+                        <span class="input-group-addon" id="basic-addon4">Rückgabe:</span>
+                        <input id="libraryReturnBarcodeField" type="text" class="form-control" placeholder="Barcode"
+                               aria-describedby="basic-addon4">
+                    </div>
+
+                    <div class="panel panel-default" style="margin-bottom: 10px">
+                        <div class="panel-heading" id="bookReturnTitle">Zustand</div>
+                        <div class="panel-body" style="padding: 5px">
+
+                            <div id="bookReturnDetailTextAll" style="height: 100px; width: 100%;
+                    margin-bottom: 10px; overflow: auto"></div>
+
+                            <div class="col-md-6" style="padding-left: 0; padding-right: 0">
+                            <textarea id="bookReturnDetailText" style="height: 85px; width: 100%"
+                                      placeholder="Beschreibung des Buchzustands hier eingeben..."></textarea>
+                            </div>
+                            <div class="col-md-6" style="padding-right: 0; padding-top: 0">
+                                <span class="w2ui-field">
+                                    <input id="bookReturnDetailDate" style="width: 100px">
+                                </span>
+                                <span class="dropdown">
+                                    <button id="bookReturnDetailMark" class="btn btn-default dropdown-toggle"
+                                            type="button"
+                                            data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="true">Zustand als Note<span
+                                            class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" id="bookReturnDetailMarkUL">
+                                        <li><a href="#" data-value="1 (wie neu)">1 (wie neu)</a></li>
+                                        <li><a href="#"
+                                               data-value="2 (leichte Abnutzungsspuren)">2 (leichte
+                                            Abnutzungsspuren)</a>
+                                        </li>
+                                        <li><a href="#" data-value="3 (stark abgenutzt)">3 (stark abgenutzt)</a>
+                                        </li>
+                                        <li><a href="#" data-value="4 (leicht beschädigt)">4 (leicht beschädigt)</a>
+                                        </li>
+                                        <li><a href="#"
+                                               data-value="5 (mittelschwer beschädigt)">5 (mittelschwer beschädigt)</a>
+                                        </li>
+                                        <li><a href="#" data-value="6 (schwer beschädigt)">6 (schwer beschädigt)</a>
+                                        </li>
+                                    </ul>
+                                </span>
+                                <div style="height: 5px"></div>
+                                <button id="bookReturnDetailButton" class="btn btn-default">Hinzufügen</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default" class="col-md-12" style="padding: 0">
+                        <div class="panel-heading" id="bookReturnPaymentsHeader">Zahlungen</div>
+                        <div class="panel-body" style="padding: 5px">
+
+                            <div id="bookReturnPaymentsList" style="height: 150px; width: 100%;
+                            margin-bottom: 10px; overflow: auto"></div>
+
+                            <table>
+                                <tr>
+                                    <td>
+                                        <label for="bookReturnAmount">Betrag für obiges Buch:</label></td>
+                                    <td><input type="text" pattern="[0-9]+([,|\.][0-9][0-9]?)? ?\u20AC?"
+                                               class="form-control clearfix"
+                                               id="bookReturnAmount" style="width: 100px; margin: 0 10px"></td>
+                                    <td>
+                                        <button id="bookReturnUpdatePaymentButton" class="btn btn-default"
+                                                style="margin: 0 10px">Erfassen
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button id="bookReturnDeletePaymentButton" class="btn btn-default"
+                                                style="margin: 0 10px">Löschen
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr style="height: 15px"></tr>
+                                <tr>
+                                    <td><label for="bookReturnSumAmount">Ausstehend gesamt:</label></td>
+                                    <td><input type="text" class="form-control" id="bookReturnSumAmount"
+                                               style="width: 100px; margin: 0 10px" readonly></td>
+                                    <td>
+                                        <button id="bookReturnPaymentDoneButton" class="btn btn-default"
+                                                style="margin: 0 10px">Gezahlt
+                                        </button>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="libraryReturnRight" class="col-md-6">
+                <div id="libraryReturnerList" class="col-md-12"
+                     style="height: 350px; padding:0; margin-bottom: 15px"></div>
+                <div id="libraryReturnBooksList" class="col-md-12" style="height: 350px; padding:0"></div>
+            </div>
+        </div>
+
+        <!-- Admonition -->
+
+        <div id="libraryAdmonition" class="tab-pane fade">
+            <h3>Mahnwesen</h3>
+            <p>Some content in menu 2.</p>
+        </div>
+
+        <!-- Reports -->
+
+        <div id="libraryReports" class="tab-pane fade" width="100%" style="padding: 10px">
+            <table cellpadding="10" style="width: 100%">
+                <tr>
+                    <td style="vertical-align: top; padding: 5px">
+                        <div id="entitychooser">
+                            <div class="btn-group" data-toggle="buttons" >
+                                <label class="btn btn-default active">
+                                    <input type="radio"
+                                           id="reportsSchuelerSelected" autocomplete="off" checked>Schüler/innen
+                                </label>
+                                <label class="btn btn-default">
+                                    <input type="radio"
+                                           id="reportsLehrerSelected" autocomplete="off" >Lehrkräfte
+                                </label>
+                                <label class="btn btn-default">
+                                    <input type="radio" id="reportsKlassenSelected" autocomplete="off">Klassen
+                                </label>
+                                <label class="btn btn-default">
+                                    <input type="radio" id="reportsBuecherSelected" autocomplete="off">Bücher
+                                </label>
+                                <label class="btn btn-default">
+                                    <input type="radio" id="reportsAndereSelected" autocomplete="off">Andere
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <form name="startReportForm" href="/library/reports/start" target="_blank">
+                            <textarea id="reportParameterTextarea" name="reportParameters" style="visibility: hidden; width: 0; height: 0"></textarea>
+                            <button id="reportsStart" class="btn btn-default" type="submit"
+                                    style="margin: 0 10px; float: right">Start
+                                <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top; margin-top: 10px; padding: 5px">
+                        <div id="libraryReportsDataNavigator" style="height: 300px; width: 100%">
+                        </div>
+                    </td>
+                    <td style="vertical-align: top; padding: 5px">
+                        <div class="panel panel-default" id="reportsChooser">
+                            <div id="reportsListHeading" class="panel-heading">Bericht wählen:</div>
+                            <div class="panel-body" style="padding: 10px">
+
+                                <div id="reportsList" style="width: 100%; overflow: auto; height: 300px"></div>
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </div>

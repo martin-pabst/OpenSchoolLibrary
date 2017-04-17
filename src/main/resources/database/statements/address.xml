@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<statementlist praefix="address">
+
+	<statement name="getAll">
+		select * from address
+	</statement>
+
+	<statement name="insert">
+		insert into address(leading_address_text, street_name, house_number,
+		postal_code, city, country, post_office_box, box_postal_code, salutation_text)
+		values (:leading_address_text, :street_name, :house_number, :postal_code,
+		:city, :country, :post_office_box, :box_postal_code, :salutation_text )
+	</statement>
+
+	<statement name="update">
+
+		update address set
+		leading_address_text = :leading_address_text,
+		street_name = :street_name,
+		house_number = :house_number,
+		postal_code = :postal_code,
+		city = :city,
+		country = :country,
+		post_office_box = :post_office_box,
+		box_postal_code = :box_postal_code,
+		salutation_text = :salutation_text
+		where id = :id
+	</statement>
+
+	<statement name="delete">
+		delete from address
+		where id = :id
+	</statement>
+
+	<statement name="findById">
+		select * from address
+		where id = :id
+	</statement>
+
+</statementlist>
+

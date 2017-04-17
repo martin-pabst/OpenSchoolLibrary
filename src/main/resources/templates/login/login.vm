@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="icon" href="/public/modules/login/favicon.ico">
+    <title>Scheinerportal - Login</title>
+    <head>
+        <link rel="stylesheet"
+              href="/public/lib/bootstrap/css/bootstrap.min.css">
+        <script type="text/javascript" src="/public/lib/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="/public/lib/bootstrap/js/bootstrap.min.js"></script>
+
+        <style type="text/css">
+            body, .ui-widget {
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                font-size: 13px;
+            }
+        </style>
+        <style type="text/css">
+            .outer {
+                display: table;
+                position: absolute;
+                height: 100%;
+                width: 100%;
+            }
+
+            .middle {
+                display: table-cell;
+                vertical-align: middle;
+            }
+
+            .inner {
+                margin-left: auto;
+                margin-right: auto;
+                width: 350px;
+            }
+        </style>
+
+
+        <script type="text/javascript">
+            $(function () {
+                //		$('<input>').puiinputtext();
+                //		$('#panel').puipanel();
+                //		$('#ok').puibutton();
+            });
+        </script>
+<body style="background-color: #eee">
+
+<img style="position: absolute" src="/public/modules/login/csg_logo.png" width="300px">
+
+<div class="outer">
+    <div class="middle">
+        <div class="inner" id="panel" title="Scheinerportal - Login">
+            <form action="/login" method="post">
+
+                <h2>$TS.get("login.heading_text")</h2>
+                <label for="username" class="sr-only">$TS.get("login.username")</label>
+                <input type="text" id="username" name="username" class="form-control"
+                       placeholder="Benutzername" required autofocus>
+                <label for="password" class="sr-only">$TS.get("login.password")</label>
+                <input type="password" name="password" id="password" class="form-control"
+                       placeholder="$TS.get("login.password")" >
+                <div style="height: 2em"></div>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">$TS.get("login.ok")</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,3 @@
+<div id="userData" style="display: none">
+<span id="userName">$user.name</span>
+</div>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+
+	<statement name="library.getClassList">
+		select class.id, class.name, count(*) as size from class
+			JOIN school_term on class.school_term_id = school_term.id
+			JOIN student_school_term on student_school_term.class_id = class.id
+		WHERE
+			school_term.id = :school_term_id
+		GROUP BY
+			class.id, class.name
+	</statement>
+
+	<statement name="library.getBorrowerStudentList">
+		select
+		student.id as student_id, class.name as
+		class_name, class.year_of_school, class.form_id,
+		student.firstname,
+		student.surname,
+		subject.id
+		as language_id, subject.shortname as language_name,
+		languageskill.from_year, languageskill.to_year, languageskill.id as
+		languageskill_id,
+		curriculum_value.abbreviation as curriculum_name,
+		curriculum_value.id as curriculum_id,
+		student.exit_date
+		from
+		student
+		left join student_school_term on student_school_term.student_id =
+		student.id and student_school_term.school_term_id = :school_term_id
+		left
+		join languageskill on languageskill.student_id = student.id
+		left join
+		subject on languageskill.subject_id = subject.id
+		left join value as
+		curriculum_value on student_school_term.curriculum_id =
+		curriculum_value.id
+		left join class on student_school_term.class_id =
+		class.id
+		where
+		student.school_id = :school_id
+	</statement>
+
+	<statement name="library.getBorrowerTeacherList">
+		select
+		teacher.id as teacher_id, teacher.firstname,teacher.surname
+		from
+		teacher
+		where
+		teacher.school_id = :school_id
+	</statement>
+
+	<statement name="library.getBookFormStore">
+
+		select
+		book.id as book_id, book.title,
+		book.author,
+		book_form.id as book_form_id, book.subject_id as
+		subject_id,
+		formvalue.id as form_id, formvalue.abbreviation as
+		form_name,
+		curriculumvalue.id as curriculum_id,
+		curriculumvalue.abbreviation as curriculum_name,
+		subject.shortname as
+		subject,
+		book_form.languageyear
+		from
+		book
+		join book_form on
+		book_form.book_id = book.id
+		left join value as formvalue on
+		book_form.form_id = formvalue.id
+		left join value as curriculumvalue on
+		book_form.curriculum_id =
+		curriculumvalue.id
+		left join subject on
+		book.subject_id = subject.id
+		where
+		book.school_id = :school_id
+	</statement>
+
+
+	<statement name="library.getBorrowedBooksForStudent">
+		select book_copy.id, title, author, book.id
+		as book_id,
+		subject.shortname as subject,
+		book_copy.barcode, borrows.id as borrows_id,
+		borrows.begindate, borrows.enddate, borrows.return_date,
+		fee.amount
+		from
+		borrows
+		join book_copy on borrows.book_copy_id = book_copy.id
+		join book on book_copy.book_id = book.id
+		left join subject on book.subject_id = subject.id
+		left join fee on fee.borrows_id = borrows.id and fee.paid_date is null
+		where borrows.student_id = :student_id
+		and borrows.return_date is null
+	</statement>
+
+	<statement name = "library.getBorrowedBooksForTeacher">
+		select book_copy.id, title, author, book.id
+		as book_id,
+		subject.shortname as subject,
+		book_copy.barcode, borrows.id as borrows_id,
+		borrows.begindate, borrows.enddate, borrows.return_date,
+		fee.amount
+		from
+		borrows
+		join book_copy on borrows.book_copy_id = book_copy.id
+		join book on book_copy.book_id = book.id
+		left join subject on book.subject_id = subject.id
+		left join fee on fee.borrows_id = borrows.id and fee.paid_date is null
+		where borrows.teacher_id = :teacher_id
+		and borrows.return_date is null
+	</statement>
+
+	<statement name="library.getBarcodeInfo">
+		select 
+			book_copy.id as book_copy_id,
+			book.id
+			as book_id, book.title, book.author, book.subject_id,
+			subject.shortname as subject,
+			borrows.id as borrows_id,
+			borrows.begindate,
+			borrows.enddate,
+			borrows.return_date,
+			student.firstname as student_firstname,
+			student.surname as student_surname, student.id
+			as student_id,
+			teacher.firstname as teacher_firstname, teacher.surname as
+			teacher_surname, teacher.id
+			as teacher_id
+		from 
+			book_copy
+			join book on
+			book_copy.book_id = book.id
+			left join subject on book.subject_id = subject.id
+			left join borrows on borrows.book_copy_id =
+			book_copy.id and borrows.return_date is null
+			left join student on borrows.student_id = student.id
+			left
+			join teacher on borrows.teacher_id = teacher.id
+		where 
+		barcode = :barcode
+		and book.school_id = :school_id
+	</statement>
+
+	<statement name="library.getLastClassname">
+		select class.name from student
+		join student_school_term on student_school_term.student_id = student.id
+		join school_term on student_school_term.school_term_id =
+		school_term.id
+		join term on school_term.term_id = term.id
+		join class on student_school_term.class_id = class.id
+		where student.id = :student_id
+		order by term.begindate desc
+	</statement>
+	
+	<statement name="library.getReturnerStudentList">
+		select
+		student.id as student_id, class.name as
+		class_name, 
+		student.firstname,
+		student.surname,
+		( select count(*) from borrows 
+			where 
+				borrows.student_id = student.id and
+				borrows.return_date is null
+		) as numberOfBorrowedBooks,
+		student.exit_date
+		from
+		student
+		left join student_school_term on student_school_term.student_id =
+		student.id and student_school_term.school_term_id = :school_term_id
+		left join class on student_school_term.class_id =
+		class.id
+		where
+		student.school_id = :school_id 
+	</statement>
+
+	<statement name="library.getReturnerTeacherList">
+	select teacher.id as teacher_id, teacher.firstname, teacher.surname,  
+		( select count(*) from borrows 
+			where 
+				borrows.teacher_id = teacher.id and
+				borrows.return_date is null
+		) as numberOfBorrowedBooks
+	from teacher
+	where
+		teacher.school_id = :school_id
+	</statement>
+	
+	
+
+	
+</statementlist>

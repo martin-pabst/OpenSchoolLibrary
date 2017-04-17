@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+	<!-- Table school -->
+
+	<statement name="fee.getAll">
+		select * from fee;
+	</statement>
+
+	<statement name="fee.insert">
+		insert into fee (borrows_id, amount, remarks,
+		paid_date)
+		values (:borrows_id, :amount, :remarks, :paid_date)
+	</statement>
+
+	<statement name="fee.update">
+		update fee
+		set borrows_id = :borrows_id,
+		amount = :amount,
+		remarks = :remarks,
+		paid_date = :paid_date
+		where id = :id
+	</statement>
+
+
+	<statement name="fee.delete">
+		delete from fee where id = :id
+	</statement>
+
+	<statement name="fee.findByBorrowsId">
+		select fee.id as fee_id, borrows.id as
+		borrows_id, fee.amount, fee.remarks,
+		fee.paid_date,
+		book_id, book.title,
+		book.author, book_copy_id, barcode
+		from fee
+		join borrows on
+		fee.borrows_id = borrows.id
+		join book_copy on borrows.book_copy_id =
+		book_copy.id
+		join book on book_copy.book_id = book.id
+		where borrows.id =
+		:borrows_id
+	</statement>
+
+
+	<statement name="fee.findByStudentId">
+		select fee.id as fee_id, borrows.id as
+		borrows_id, fee.amount, fee.remarks, fee.paid_date,
+		book_id,
+		book.title, book.author, book_copy_id, barcode
+		from fee
+		join borrows on
+		fee.borrows_id = borrows.id
+		join book_copy on borrows.book_copy_id =
+		book_copy.id
+		join book on book_copy.book_id = book.id
+		where
+		borrows.student_id = :student_id
+	</statement>
+
+	<statement name="fee.findByTeacherId">
+		select fee.id as fee_id, borrows.id as
+		borrows_id, fee.amount, fee.remarks, fee.paid_date,
+		book_id,
+		book.title, book.author, book_copy_id, barcode
+		from fee
+		join borrows on
+		fee.borrows_id = borrows.id
+		join book_copy on borrows.book_copy_id =
+		book_copy.id
+		join book on book_copy.book_id = book.id
+		where
+		borrows.teacher_id = :teacher_id
+	</statement>
+
+
+	<statement name="fee.getSchoolForFee">
+		select school.id as school_id from fee
+		join
+		borrows on fee.borrows_id = borrows.id
+		join book_copy on
+		borrows.book_copy_id = book_copy.id
+		join book on book_copy.book_id =
+		book.id
+		join school on book.school_id = school.id
+		where fee.id = :fee_id
+	</statement>
+
+	<statement name="fee.paymentsDone">
+		update fee
+		set paid_date = :paid_date
+		where id in (
+		select fee.id from fee
+		join borrows on fee.borrows_id = borrows.id
+		join
+		book_copy on borrows.book_copy_id = book_copy.id
+		join book on
+		book_copy.book_id = book.id
+		where borrows.teacher_id = :teacher_id
+		or
+		borrows.student_id = :student_id
+		)
+	</statement>
+
+</statementlist>

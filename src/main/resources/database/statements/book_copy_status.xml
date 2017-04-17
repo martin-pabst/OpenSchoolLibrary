@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+	<!-- Table book -->
+
+	<statement name="book_copy_status.getAll">
+		select * from book_copy_status
+	</statement>
+
+	<statement name="book_copy_status.insert">
+		insert into book_copy_status (book_copy_id, statusdate, evidence, username, borrowername, mark, picture_filenames, event)
+		values (:book_copy_id, :statusdate, :evidence, :username, :borrowername, :mark, :picture_filenames, :event)
+	</statement>
+
+	<statement name="book_copy_status.delete">
+		delete from book_copy_status where id = :id
+	</statement>
+
+	<statement name="book_copy_status.findByBarcodeAndSchool">
+		select book_copy_status.* from
+			book_copy_status
+			join book_copy on book_copy_status.book_copy_id = book_copy.id
+			join book on book_copy.book_id = book.id
+			where 
+				book_copy.barcode = :barcode and
+				book.school_id = :school_id
+	</statement>
+
+	<statement name="book_copy_status.findById">
+		select * from
+			book_copy_status
+			where 
+				book_copy_id = :book_copy_id;
+	</statement>
+
+
+</statementlist>

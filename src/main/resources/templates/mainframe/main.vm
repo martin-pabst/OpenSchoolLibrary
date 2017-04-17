@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="icon" href="/public/modules/login/favicon.ico">
+    <title>Scheinerportal</title>
+
+    <link rel="stylesheet" href="/public/lib/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/public/lib/w2ui/1.4.3/w2ui.css">
+    <link rel="stylesheet" href="/public/lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/mainframe/css/main.css">
+    $cssImportStatements
+
+    <script type="text/javascript">
+            $schoolIdCode
+    </script>
+
+    <script type="text/javascript" src="/public/lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/public/lib/handlebars/handlebars-v4.0.5.js"></script>
+    <script type="text/javascript" src="/public/lib/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/public/lib/bootstrap/bootstrap-modal.js"></script>
+    <script type="text/javascript" src="/mainframe/js/tools.js"></script>
+    <script type="text/javascript" src="/mainframe/js/main.js"></script>
+    <script type="text/javascript" src="/public/lib/w2ui/1.4.3/w2ui.js"></script>
+    $jsImportStatements
+
+    <script type="text/javascript">
+        $(function () {
+
+        });
+    </script>
+</head>
+<body style="background-color: #fff; padding-top: 50px;">
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#"><img alt="Brand" src="/public/modules/login/csg_logo_klein.png"
+                                                  height="25px"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+
+                $menuLeft
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+
+                $menuRight
+
+                <!-- choose school and term -->
+
+                <li  class = "dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <span class="menuitemtext" id="schooltermMenuCaption">-------</span><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li class = "dropdown-submenu pull-left" id = "menuSchool">
+                            <a tabindex = "-1" href="#"><i class="fa fa-home fa-fw"></i><span class="menuitemtext">Schule</span></a>
+                            <ul class="dropdown-menu" id = "schooltermMenuSchoolSubmenu">
+                                <!-- submenu inserted by client:
+                                <li>
+                                    <a onclick="App.chooseSchool('CSG')">
+                                        <span class="menuitemtext">CSG</span></a>
+                                </li>
+                                -->
+                            </ul>
+                        </li>
+                        <li class = "dropdown-submenu pull-left" id = "menuTerm">
+                            <a tabindex = "-1" href = "#"><i class="fa fa-history fa-fw"></i><span class="menuitemtext">Schuljahr</span></a>
+                            <ul class="dropdown-menu" id = "schooltermMenuTermSubmenu">
+                                <!-- submenu inserted by client:
+                                <li>
+                                    <a onclick="App.chooseTerm('2016/17')">
+                                        <span class="menuitemtext">2016/17</span></a>
+                                </li>
+                                -->
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- End of "choose school and term" -->
+
+
+
+
+
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div id="mainContent">
+
+</div>
+
+<div id="invisibleForm" style="display:none"></div>
+
+
+<!-- Modal window to display Ajax progress bar -->
+<div id="modalProgressbarWindow" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="z-index: 2000">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Bitte warten...</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="progress">
+                    <div id="modalProgressbar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 1%;">
+                        0 %
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+              <!--  <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button> -->
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+</html>

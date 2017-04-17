@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+	<!-- Table book -->
+
+	<statement name="book.getAll">
+		select id, school_id, title,
+		author, isbn, publisher, remarks, subject_id, price from book
+	</statement>
+
+	<statement name="book.insert">
+		insert into book (school_id, title, author,
+		isbn, publisher, remarks, subject_id, price)
+		values (:school_id, :title, :author, :isbn, :publisher, :remarks,
+		:subject_id, :price)
+	</statement>
+
+	<statement name="book.delete">
+		delete from book where id = :id
+	</statement>
+
+	<statement name="book.deleteBook_form">
+		delete from book_form where book_id = :book_id
+	</statement>
+
+	<statement name="book.deleteBook_copy">
+		delete from book_copy where book_id = :book_id
+	</statement>
+
+	<statement name="book.deleteBorrows">
+		delete from borrows where book_copy_id in (select id from book_copy where book_id = :book_id)
+	</statement>
+
+
+	<statement name="book.inventoryList">
+		select book.id as id, title, author, publisher, remarks, isbn, price,
+		       subject.shortname as subject_name, subject.id as subject_id, 
+		       book_form.id as book_form_id,
+		       form.id as form_id, form.abbreviation as form_name,
+		       curriculum.id as curriculum_id, curriculum.abbreviation as curriculum_name, 
+		       languageyear
+		from book
+			left join book_form on book_form.book_id = book.id
+			left join value as form on form.id = book_form.form_id
+			left join value as curriculum on curriculum.id = book_form.curriculum_id
+			left join subject on subject.id = book.subject_id
+		where
+			book.school_id = :school_id
+	</statement>
+	
+	<statement name="book.getSchoolId">
+		select school_id from book
+		where id = :book_id
+	</statement>
+
+</statementlist>

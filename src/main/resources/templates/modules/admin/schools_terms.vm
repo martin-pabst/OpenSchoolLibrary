@@ -1,0 +1,11 @@
+<div>
+
+    <div id="school_terms_left" class="col-md-6">
+        <div id="schoolList" class="col-md-12" style="height: 450px; padding:0; margin-bottom: 15px"></div>
+    </div>
+
+    <div id="school_terms_right" class="col-md-6">
+        <div id="termList" class="col-md-12" style="height: 450px; padding:0; margin-bottom: 15px"></div>
+    </div>
+
+</div>

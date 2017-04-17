@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+	<!-- Table users -->
+
+	<statement name="users.getUserByName">
+		select * from users where username = :username
+	</statement>
+
+	<statement name="users.insert">
+		insert into users (username, name, hash, salt, languageCode, last_selected_school_term_id, is_admin) 
+		values (:username, :name, :hash, :salt, :languageCode, :last_selected_school_term_id, :is_admin)
+	</statement>
+
+	<statement name="users.update">
+		update users 
+		set username = :username,
+		name = :name,
+		languageCode = :languageCode,
+		last_selected_school_term_id = :last_selected_school_term_id,
+		is_admin = :is_admin
+		where 
+		id = :id
+	</statement>
+
+	<statement name="users.remove">
+		delete from users where id = :id
+	</statement>
+
+	<statement name="users.getAll">
+		select * from users
+	</statement>
+
+	<!-- Table role -->
+
+	<statement name="role.getAll">
+		select id, name, remark, permissions, school_id from role
+	</statement>
+
+	<statement name="role.insert">
+		insert into role (name, remark, school_id, permissions) values (:name, :remark, :school_id, :permissions)
+	</statement>
+
+	<statement name="role.remove">
+		delete from role where id = :id
+	</statement>
+
+	<!-- Table user_role -->
+	<statement name="user_role.getAll">
+		select id, user_id, role_id from user_role
+	</statement>
+
+	<statement name="user_role.insert">
+		insert into user_role (user_id, role_id) values (:user_id, :role_id)
+	</statement>
+
+	<statement name="user_role.remove">
+		delete from user_role where id = :id
+	</statement>
+
+
+</statementlist>

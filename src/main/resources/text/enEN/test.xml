@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<textresourcefile>
+	<textresources path="test" language="en-EN">
+		<text path="text2">Only for testing purposes - 2</text>
+	</textresources>
+</textresourcefile>

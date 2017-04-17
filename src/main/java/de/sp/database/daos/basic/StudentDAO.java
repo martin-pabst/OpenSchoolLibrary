@@ -1,0 +1,113 @@
+package de.sp.database.daos.basic;
+
+import java.util.Date;
+import java.util.List;
+
+import org.sql2o.Connection;
+
+import de.sp.database.model.Student;
+import de.sp.database.statements.StatementStore;
+
+public class StudentDAO {
+
+	public static List<Student> getAll(Connection con) {
+
+		String sql = StatementStore.getStatement("student.getAll");
+		List<Student> studentlist = con.createQuery(sql).executeAndFetch(
+				Student.class);
+		return studentlist;
+
+	}
+
+	public static List<Student> findBySchoolId(Long school_id, Connection con) {
+
+		String sql = StatementStore.getStatement("student.findBySchoolID");
+		List<Student> studentlist = con.createQuery(sql)
+				.addParameter("school_id", school_id)
+				.executeAndFetch(Student.class);
+		return studentlist;
+
+	}
+
+	public static Student insert(Long school_id, Date dateofbirth,
+			String surname, String firstname, String christian_names,
+			String before_surname, String after_surname, Integer sex_key,
+			String external_id, Date exit_date, Connection con)
+			throws Exception {
+
+		String sql = StatementStore.getStatement("student.insert");
+
+		Long id = con.createQuery(sql, true)
+				.addParameter("school_id", school_id)
+				.addParameter("dateofbirth", dateofbirth)
+				.addParameter("surname", surname)
+				.addParameter("firstname", firstname)
+				.addParameter("christian_names", christian_names)
+				.addParameter("before_surname", before_surname)
+				.addParameter("after_surname", after_surname)
+				.addParameter("sex_key", sex_key)
+				.addParameter("external_id", external_id)
+				.addParameter("exit_date", exit_date).executeUpdate()
+				.getKey(Long.class);
+
+		return new Student(id, school_id, dateofbirth, surname, firstname,
+				christian_names, before_surname, after_surname, sex_key,
+				external_id, exit_date);
+
+	}
+
+	public static void delete(Student student, Connection con) {
+
+		String sql = StatementStore.getStatement("student.delete");
+
+		con.createQuery(sql)
+
+		.addParameter("id", student.getId())
+
+		.executeUpdate();
+
+	}
+
+	public static void update(Student student, Connection con) {
+
+		String sql = StatementStore.getStatement("student.update");
+
+		con.createQuery(sql)
+
+		.addParameter("id", student.getId())
+				.addParameter("school_id", student.getSchool_id())
+				.addParameter("dateofbirth", student.getDateofbirth())
+				.addParameter("surname", student.getSurname())
+				.addParameter("firstname", student.getFirstname())
+				.addParameter("christian_names", student.getChristian_names())
+				.addParameter("before_surname", student.getBefore_surname())
+				.addParameter("after_surname", student.getAfter_surname())
+				.addParameter("sex_key", student.getSex_key())
+				.addParameter("external_id", student.getExternal_id())
+				.addParameter("exit_date", student.getExit_date())
+				.executeUpdate();
+
+	}
+
+	public static Long getSchoolId(Long student_id, Connection con) {
+
+		String sql = StatementStore.getStatement("student.getSchoolId");
+
+		return con.createQuery(sql).addParameter("student_id", student_id)
+				.executeAndFetchFirst(Long.class);
+
+	}
+
+	public static void setAddressId(Long student_id, Long address_id,
+			Connection con) {
+		
+		String sql = StatementStore.getStatement("student.setAddressId");
+
+		con.createQuery(sql).addParameter("student_id", student_id)
+				.addParameter("address_id", address_id)
+				.executeUpdate();
+
+		
+	}
+
+}

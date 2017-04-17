@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<textresourcefile>
+	<textresources path="login" language="de-DE">
+		<text path="heading_text">Bitte anmelden</text>
+		<text path="username">Benutzer</text>
+		<text path="password">Passwort</text>
+		<text path="ok">ok</text>
+	</textresources>
+</textresourcefile>
+

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<textresourcefile>
+	<textresources path="asvsst" language="de-DE">
+		<text path="moduleName">ASV-Schnittstelle</text>
+	</textresources>
+	<textresources path="asvsst.menu" language="de-DE">
+		<text path="main">ASV-Schnittstelle</text>
+	</textresources>
+	<textresources path="testmodule.permissions" language="de-DE">
+		<text path="main">ASV-Schnittstelle starten</text>
+	</textresources>
+</textresourcefile>

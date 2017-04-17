@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+	<!-- Table school -->
+
+	<statement name="borrows.getAll">
+		select id, book_copy_id,
+		student_id, teacher_id, begindate, enddate, return_date, remarks from
+		borrows
+	</statement>
+
+	<statement name="borrows.insert">
+		insert into borrows (book_copy_id,
+		student_id, teacher_id, begindate, enddate, return_date, remarks)
+		values (:book_copy_id, :student_id, :teacher_id, :begindate, :enddate,
+		:return_date, :remarks)
+	</statement>
+
+	<statement name="borrows.delete">
+		delete from borrows where id = :id
+	</statement>
+
+	<statement name="borrows.findSchoolId">
+		select book.school_id from borrows
+		join book_copy on borrows.book_copy_id = book_copy.id
+		join book on book_copy.book_id = book.id
+		where borrows.id = :borrows_id
+	</statement>
+
+	<statement name="borrows.setReturnDate">
+		update borrows
+		set return_date = :return_date
+		where id = :borrows_id
+  	</statement>
+
+</statementlist>

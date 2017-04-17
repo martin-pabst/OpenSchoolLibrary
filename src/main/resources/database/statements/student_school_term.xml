@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+<!-- Table student_school_term -->
+
+	<statement name="student_school_term.getAll" >
+		select id, student_id, school_term_id, class_id, curriculum_id from student_school_term
+	</statement>
+	
+	<statement name="student_school_term.insert">
+		insert into student_school_term (student_id, school_term_id, class_id, curriculum_id) 
+		values (:student_id, :school_term_id, :class_id, :curriculum_id)
+	</statement>
+
+	<statement name="student_school_term.delete">
+		delete from student_school_term where id = :id
+	</statement>
+	
+	<statement name="student_school_term.update" >
+		
+		update student_school_term
+		set student_id = :student_id,
+		    school_term_id = :school_term_id,
+		    class_id = :class_id, 
+		    curriculum_id = :curriculum_id
+		where id = :id
+	</statement>
+	
+	<statement name="student_school_term.findByStudentAndSchoolTerm" >
+		select id, student_id, school_term_id, class_id, curriculum_id 
+		from student_school_term
+		where student_id = :student_id and
+		school_term_id = :school_term_id
+	</statement>
+
+
+	
+</statementlist>

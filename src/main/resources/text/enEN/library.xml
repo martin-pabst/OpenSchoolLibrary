@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<textresourcefile>
+
+	<textresources path="library" language="en-EN">
+		<text path="moduleName">Library</text>
+	</textresources>
+
+	<textresources path="library.menu" language="en-EN">
+		<text path="library">Library</text>
+		<text path="borrow">Borrow</text>
+		<text path="return">Return</text>
+		<text path="inventory">Inventory</text>
+		<text path="booksPerLevel">Books per Level</text>
+		<text path="admonition">Admonition</text>
+	</textresources>
+
+	<textresources path="library.permissions" language="en-EN">
+		<text path="main">Open library module</text>
+	</textresources>
+
+</textresourcefile>

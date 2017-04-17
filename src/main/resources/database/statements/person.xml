@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<statementlist praefix="person">
+
+	<statement name="getAll">
+		select * from person
+	</statement>
+
+	<statement name="insert">
+		insert into person(surname, firstname, before_surname, after_surname, grade,
+		student_id, person_type_id, address_id, is_legal_parent, is_primary_legal_parent)
+		values (:surname, :firstname, :before_surname, :after_surname, :grade,
+		:student_id, :person_type_id, :address_id, :is_legal_parent, :is_primary_legal_parent )
+	</statement>
+
+	<statement name="update">
+
+		update person set
+		surname = :surname,
+		firstname = :firstname,
+		before_surname = :before_surname,
+		after_surname = :after_surname,
+		grade = :grade,
+		student_id = :student_id,
+		person_type_id = :person_type_id,
+		address_id = :address_id,
+		is_legal_parent = :is_legal_parent,
+		is_primary_legal_parent = :is_primary_legal_parent
+		where id = :id
+	</statement>
+
+	<statement name="delete">
+		delete from person
+		where id = :id
+	</statement>
+
+	<statement name="findById">
+		select * from person
+		where id = :id
+	</statement>
+
+	<statement name="findByStudentId">
+		select * from person
+		where student_id = :student_id
+	</statement>
+
+</statementlist>
+

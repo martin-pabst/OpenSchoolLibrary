@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="scheinerportal">
+
+	<!-- School, term -->
+
+	<table name="school">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="name" type="varchar" length="200" />
+		<column name="number" type="varchar" length="10" />
+		<column name="abbreviation" type="varchar" length="20" />
+	</table>
+
+	<table name="term">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="name" type="varchar" length="20" />
+		<column name="begindate" type="date" />
+		<column name="enddate" type="date" />
+	</table>
+
+	<table name="school_term">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="school_id" type="bigint">
+			<references table="school" column="id" />
+		</column>
+		<column name="term_id" type="bigint">
+			<references table="term" column="id" />
+		</column>
+	</table>
+
+
+	<!-- Users, Roles, permissions -->
+
+	<table name="users">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="username" type="varchar" length="30" />
+		<column name="name" type="varchar" length="200" />
+		<column name="salt" type="varchar" length="256" />
+		<column name="hash" type="varchar" length="256" />
+		<column name="languageCode" type="varchar" length="20" />
+		<column name="last_selected_school_term_id" type="bigint">
+			<references table="school_term" column="id" />
+		</column>
+		<column name="is_admin" type="bool"/>
+	</table>
+
+	<table name="user_role">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="user_id" type="bigint">
+			<references table="users" column="id" />
+		</column>
+		<column name="role_id" type="bigint">
+			<references table="role" column="id" />
+		</column>
+	</table>
+
+	<table name="role">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="name" type="varchar" length="40" />
+		<column name="remark" type="varchar" length="500" />
+		<column name="school_id" type="bigint">
+			<references table="school" column="id" />
+		</column>
+		<column name="permissions" type="text" />
+	</table>
+
+	<!-- Teachers, classes, students -->
+
+	<table name="teacher">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="school_id" type="bigint">
+			<references table="school" column="id" />
+		</column>
+		<column name="user_id" type="bigint">
+			<references table="users" column="id" />
+		</column>
+		<column name="surname" type="varchar" length="300" />
+		<column name="firstname" type="varchar" length="300" />
+		<column name="before_surname" type="varchar" length="100" />
+		<column name="after_surname" type="varchar" length="100" />
+
+		<column name="abbreviation" type="varchar" length="10" />
+		<column name="external_id" type="varchar" length="100" />
+		<column name="grade" type="varchar" length="40" />
+	</table>
+
+	<table name="student">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="school_id" type="bigint">
+			<references table="school" column="id" />
+		</column>
+		<!-- only if pupil lives not with his parents: -->
+		<column name="address_id" type="bigint">
+			<references table="address" column="id" />
+		</column>
+		<column name="dateofbirth" type="date" />
+		<column name="surname" type="varchar" length="300" />
+		<column name="firstname" type="varchar" length="100" />
+		<column name="christian_names" type="varchar" length="300" />
+		<column name="before_surname" type="varchar" length="100" />
+		<column name="after_surname" type="varchar" length="100" />
+		<column name="sex_key" type="integer" />
+		<column name="external_id" type="varchar" length="100" />
+		<column name="exit_date" type="date" />
+	</table>
+
+	<table name="student_school_term">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="student_id" type="bigint">
+			<references table="student" column="id" />
+		</column>
+		<column name="school_term_id" type="bigint">
+			<references table="school_term" column="id" />
+		</column>
+		<column name="class_id" type="bigint">
+			<references table="class" column="id" />
+		</column>
+		<column name="curriculum_id" type="bigint"> <!-- Bildungsgang -->
+			<references table="value" column="id" />
+		</column>
+	</table>
+
+	<table name="class">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="school_term_id" type="bigint">
+			<references table="school_term" column="id" />
+		</column>
+		<column name="name" type="varchar" length="20" />
+		<column name="year_of_school" type="integer" />
+		<column name="form_id" type="bigint">
+			<references table="value" column="id" />
+		</column>
+	</table>
+
+	<table name="languageskill">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="student_id" type="bigint">
+			<references table="student" column="id" />
+		</column>
+		<column name="subject_id" type="bigint">
+			<references table="subject" column="id" />
+		</column>
+		<column name="from_year" type="integer" />
+		<column name="to_year" type="integer" />
+	</table>
+
+	<table name="subject">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="shortname" type="varchar" length="10" />
+		<column name="longname" type="varchar" length="80" />
+		<column name="school_id" type="bigint">
+			<references table="school" column="id" />
+		</column>
+		<column name="key1" type="varchar" length="20" /> <!-- e.g. ASV-Key -->
+		<column name="key2" type="varchar" length="20" />
+	</table>
+
+	<!-- Adresses, persons -->
+	<table name="address">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+
+		<!-- e.g. "Mr. Arthur Weasley\nMrs. Molly Weasley"  -->
+		<column name="leading_address_text" type="varchar" length="256" />
+		
+		<!-- e.g. "Dear Mrs Weasley,\ndear Mr. Weasley" -->
+		<column name="salutation_text" type="varchar" length="500" />
+		
+		<column name="street_name" type="varchar" length="80" />
+		<column name="house_number" type="varchar" length="10" />
+		<column name="postal_code" type="varchar" length="10" />
+		<column name="city" type="varchar" length="80" />
+		<column name="country" type="varchar" length="120" />
+
+		<column name="post_office_box" type="varchar" length="10" />
+		<column name="box_postal_code" type="varchar" length="10" />
+	</table>
+
+	<table name="person">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+
+		<column name="surname" type="varchar" length="300" />
+		<column name="firstname" type="varchar" length="300" />
+		<column name="before_surname" type="varchar" length="100" />
+		<column name="after_surname" type="varchar" length="100" />
+		<column name="grade" type="varchar" length="40" />
+
+		<column name="student_id" type="bigint" index="true">
+			<references table="student" column="id" />
+		</column>
+
+		<column name="person_type_id" type="bigint">
+			<references table="value" column="id" />
+		</column>
+
+		<column name="address_id" type="bigint">
+			<references table="address" column="id" />
+		</column>
+
+		<column name="is_legal_parent" type="bool" />
+		
+		<column name="is_primary_legal_parent" type="bool" />
+
+	</table>
+
+	<table name="contact">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+
+		<column name="text" type="varchar" length="100" />
+		<column name="name" type="varchar" length="100" />		
+		<column name="remark" type="varchar" length="100" />
+		<column name="order_number" type="integer" />
+
+		<column name="contact_type_id" type="bigint">
+			<references table="value" column="id" />
+		</column>
+
+		<column name="person_id" type="bigint" index="true">
+			<references table="person" column="id" />
+		</column>
+
+		<column name="student_id" type="bigint" index="true">
+			<references table="student" column="id" />
+		</column>
+
+		<column name="teacher_id" type="bigint">
+			<references table="teacher" column="id" />
+		</column>
+
+
+	</table>
+
+
+
+
+	<!-- Library management -->
+
+	<!-- Remark: distiguish book (abstract, only data) from book_copy (physical)! -->
+	<table name="book">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="school_id" type="bigint">
+			<references table="school" column="id" />
+		</column>
+		<column name="title" type="varchar" length="300" />
+		<column name="author" type="varchar" length="300" />
+		<column name="isbn" type="varchar" length="13" />
+		<column name="publisher" type="varchar" length="200" />
+		<column name="remarks" type="varchar" length="2000" />
+		<column name="subject_id" type="bigint">
+			<references table="subject" column="id" />
+		</column>
+		<column name="price" type="decimal" digits="10" decimals="2" />
+	</table>
+
+	<table name="book_form">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="book_id" type="bigint">
+			<references table="book" column="id" />
+		</column>
+		<column name="form_id" type="bigint">
+			<references table="value" column="id" />
+		</column>
+		<column name="curriculum_id" type="bigint">
+			<references table="value" column="id" />
+		</column>
+		<column name="languageyear" type="integer">
+		</column>
+	</table>
+
+
+	<table name="book_copy">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="book_id" type="bigint">
+			<references table="book" column="id" />
+		</column>
+		<column name="edition" type="varchar" length="10" />
+		<column name="barcode" type="varchar" length="50" />
+		<column name="sorted_out_date" type="date" />
+	</table>
+
+	<table name="book_copy_status">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="book_copy_id" type="bigint">
+			<references table="book_copy" column="id" />
+		</column>
+		<column name="statusdate" type="date" />
+		<column name="evidence" type="text" />
+		<column name="username" type="varchar" length="30" />
+		<column name="borrowername" type="varchar" length="300" />
+		<column name="mark" type="varchar" length="50" />
+		<column name="picture_filenames" type="text" />
+		<column name="event" type="varchar" length="15" />
+	</table>
+
+	<table name="borrows">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="book_copy_id" type="bigint">
+			<references table="book_copy" column="id" />
+		</column>
+		<!-- Either student_id != null or teacher_id != null -->
+		<column name="student_id" type="bigint">
+			<references table="student" column="id" />
+		</column>
+		<column name="teacher_id" type="bigint">
+			<references table="teacher" column="id" />
+		</column>
+		<column name="begindate" type="date" />
+		<column name="enddate" type="date" />
+		<column name="return_date" type="date" />
+		<column name="remarks" type="varchar" length="1000" />
+	</table>
+
+	<table name="fee">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="borrows_id" type="bigint">
+			<references table="borrows" column="id" />
+		</column>
+		<column name="amount" type="decimal" digits="8" decimals="2" />
+		<column name="remarks" type="varchar" length="2000" />
+		<column name="paid_date" type="date" />
+	</table>
+
+
+	<!-- Technical entities -->
+
+	<table name="value">
+		<column name="id" type="bigint" autoincrement="true"
+			primarykey="true" />
+		<column name="valuestore_key" type="bigint" notnull="true" />
+		<column name="school_id" type="bigint">
+			<references table="school" column="id" />
+		</column>
+		<column name="name" type="varchar" length="100" />
+		<column name="abbreviation" type="varchar" length="20" />
+		<column name="external_key" type="varchar" length="50" />
+	</table>
+
+
+
+</database>

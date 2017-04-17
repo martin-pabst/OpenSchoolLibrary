@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<statementlist praefix="contact">
+
+	<statement name="getAll">
+		select * from contact
+	</statement>
+
+	<statement name="insert">
+        insert into contact(text, name, remark, order_number, contact_type_id, person_id, student_id, teacher_id)
+        values (:text, :name, :remark, :order_number, :contact_type_id, :person_id, :student_id, :teacher_id        )
+    </statement>
+
+	<statement name="update">
+
+        update contact set 
+           text = :text,
+           name = :name,
+           remark = :remark,
+           order_number = :order_number,
+           contact_type_id = :contact_type_id,
+           person_id = :person_id,
+           student_id = :student_id,
+           teacher_id = :teacher_id
+ 		where id = :id
+     </statement>
+
+	<statement name="delete">
+		delete from contact
+		where id = :id
+	</statement>
+
+	<statement name="findById">
+		select * from contact
+		where id = :id
+	</statement>
+
+	<statement name="deleteByPersonId">
+		delete from contact
+		where person_id = :person_id;
+	</statement>
+
+	<statement name="deleteByStudentId">
+		delete from contact
+		where student_id = :student_id;
+	</statement>
+
+</statementlist>
+

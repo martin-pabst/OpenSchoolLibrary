@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<textresourcefile>
+	<textresources path="install" language="de-DE">
+		<text path="continue">Weiter</text>
+		<text path="username">Benutzer</text>
+		<text path="password">Passwort</text>
+		<text path="textcontinue">
+		<![CDATA[Bitte setzen Sie unten Benutzername und Passwort des Scheinerportal-Administrators fest. Nach Klick auf "Weiter"
+        werden die Tabellen in der Datenbank angelegt und mit initialen Werten befüllt. Insbesondere werden die Zugangsdaten des Administrators gespeichert.
+        <br />
+        Danach werden sie automatisch zum Hauptbildschirm der Anwendung umgeleitet.]]>
+        </text>
+	</textresources>
+</textresourcefile>
+

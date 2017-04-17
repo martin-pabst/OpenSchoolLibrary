@@ -1,0 +1,11 @@
+.idea/
+ASV_Schnittstelle/logs
+ASV_Schnittstelle/Testdaten
+ASV_Schnittstelle/target
+ASV_Schnittstelle/ASV_Schnittstelle.iml
+OpenSchoolPlatform.iml
+Postgres/
+logs/
+start_postgres.bat.lnk
+target/
+temp/

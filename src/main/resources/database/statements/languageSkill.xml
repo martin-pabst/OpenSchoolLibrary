@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+<!-- Table school -->
+
+	<statement name="languageskill.getAll" >
+		select id, student_id, subject_id, from_year, to_year from languageskill
+	</statement>
+	
+	<statement name="languageskill.insert">
+		insert into languageskill (student_id, subject_id, from_year, to_year) 
+		values (:student_id, :subject_id, :from_year, :to_year)
+	</statement>
+
+	<statement name="languageskill.delete">
+		delete from languageskill where id = :id
+	</statement>
+	
+	<statement name="languageskill.findByStudentID" >
+		select id, student_id, subject_id, from_year, to_year 
+		from languageskill
+		where student_id = :student_id
+	</statement>
+	
+	<statement name="languageskill.update">
+		update languageskill set 
+		student_id = :student_id,
+		subject_id = :subject_id, 
+		from_year = :from_year, 
+		to_year = :to_year
+		where id = :id
+	</statement>
+
+
+	
+</statementlist>

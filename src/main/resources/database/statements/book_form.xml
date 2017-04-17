@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+<!-- Table book_form -->
+
+	<statement name="book_form.getAll" >
+		select id, book_id, form_id, curriculum_id, languageyear from book_form
+	</statement>
+	
+	<statement name="book_form.insert">
+		insert into book_form (book_id, form_id, curriculum_id, languageyear) 
+		values (:book_id, :form_id, :curriculum_id, :languageyear)
+	</statement>
+
+	<statement name="book_form.delete">
+		delete from book_form where id = :id
+	</statement>
+		
+	<statement name="book_form.getSchoolId">
+		select book.school_id from
+		book_form join book on book_form.book_id = book.id
+		where book_form.id = :book_form_id
+	</statement>	
+		
+</statementlist>

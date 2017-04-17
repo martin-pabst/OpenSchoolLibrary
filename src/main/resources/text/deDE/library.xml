@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<textresourcefile>
+	<textresources path="library" language="de-DE">
+		<text path="moduleName">Bibliothek</text>
+	</textresources>
+	<textresources path="library.menu" language="de-DE">
+		<text path="library">Bibliothek</text>
+		<text path="borrow">Ausleihen</text>
+		<text path="return">Rückgabe</text>
+		<text path="inventory">Bestand</text>
+		<text path="booksPerLevel">Bücher je Jgst.</text>
+		<text path="admonition">Mahnungen</text>
+		<text path="reports">Berichte</text>
+	</textresources>
+	<textresources path="library.permissions" language="de-DE">
+		<text path="library">Lernmittelbibliotheksmodul öffnen und alle Daten lesen</text>
+		<text path="inventory">Bestand der Lernmittelbibliothek bearbeiten</text>
+		<text path="borrow">Bücher der Lernmittelbibliothek entleihen</text>
+		<text path="return">Bücherrückgabe der Lernmittelbiliothek</text>
+		<text path="examine">Bücher der Lernmittelbibliothek begutachten</text>
+		<text path="reports">Berichte im Bereich Lernmittelbibliothek ausgeben</text>
+		<text path="admonition">Mahnwesen der Lernmittelbibliothek bearbeiten</text>
+	</textresources>
+</textresourcefile>

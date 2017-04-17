@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+	<!-- Table teacher -->
+
+	<statement name="teacher.getAll">
+		select 
+		id, school_id, user_id, surname, firstname, 
+		before_surname, after_surname, abbreviation, external_id, 
+		grade 
+		from teacher
+	</statement>
+
+	<statement name="teacher.insert">
+		insert into teacher (school_id, user_id, surname, firstname, 
+		before_surname, after_surname, abbreviation, external_id, 
+		grade)
+		values (:school_id, :user_id, :surname, :firstname, 
+		:before_surname, :after_surname, :abbreviation, :external_id, 
+		:grade)
+	</statement>
+
+	<statement name="teacher.delete">
+		delete from teacher where id = :id
+	</statement>
+
+	<statement name="teacher.findBySchool">
+		select 
+		id, school_id, user_id, surname, firstname, 
+		before_surname, after_surname, abbreviation, external_id, 
+		grade 
+		from teacher
+		where 
+		school_id = :school_id
+	</statement>
+	
+	<statement name="teacher.update">
+	update teacher
+	set 
+	surname = :surname,
+	firstname = :firstname,
+	abbreviation = :abbreviation,
+	external_id = :external_id,
+	grade = :grade
+	where id = :id	
+	</statement>
+	
+	<statement name = "teacher.getSchoolId">
+		select school_id from teacher 
+		where id = :teacher_id
+	</statement>
+
+</statementlist>

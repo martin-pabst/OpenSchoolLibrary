@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<statementlist praefix="report">
+
+	<statement name="getAll">
+		select * from report
+	</statement>
+
+	<statement name="insert">
+		insert into report(name, global_id,
+		description, template, permissions,
+		module, meta, version, school_id)
+		values (:name, :global_id, :description, :template, :permissions,
+		:module,
+		:meta, :version, :school_id )
+	</statement>
+
+	<statement name="update">
+
+		update report set
+		name = :name,
+		global_id =
+		:global_id,
+		description = :description,
+		template = :template,
+		permissions = :permissions,
+		module = :module,
+		meta = :meta,
+		version =
+		:version,
+		school_id = :school_id
+		where id = :id
+	</statement>
+
+	<statement name="delete">
+		delete from report
+		where id = :id
+	</statement>
+
+	<statement name="findById">
+		select * from report
+		where id = :id
+	</statement>
+
+	<statement name="getAllWithoutTemplatesForSchool">
+		select name, global_id, description,
+		permissions,
+		module, meta, version, school_id
+		from report
+		whre school_id = :school_id
+	</statement>
+
+
+	<statement name="fetchTemplate">
+		select template from report
+		where id = :id
+	</statement>
+
+</statementlist>
+

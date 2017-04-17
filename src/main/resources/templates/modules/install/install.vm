@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="icon" href="/public/modules/login/favicon.ico">
+    <title>Scheinerportal - Installation</title>
+
+    <link rel="stylesheet"
+          href="/public/lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/lib/w2ui/1.4.3/w2ui.css">
+    <link rel="stylesheet" href="/public/lib/font-awesome/css/font-awesome.min.css">
+
+    <script type="text/javascript" src="/public/lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/public/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/public/lib/w2ui/1.4.3/w2ui.js"></script>
+    <script type="text/javascript" src="/public/modules/install/js/install.js"></script>
+
+
+    <style type="text/css">
+        body, .ui-widget {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 13px;
+        }
+    </style>
+
+<body style="background-color: #fff; padding: 15px">
+
+<img style="float: right" src="/public/modules/login/csg_logo.png" width="300px">
+
+<div class="page-header" style="clear: right"><h1>Installation</h1></div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Voraussetzungen</h3>
+    </div>
+    <div class="panel-body">
+        TODO: Auflisten
+    </div>
+</div>
+
+<div class="panel panel-default" id="mainPanel">
+    <div class="panel-heading">
+        <h3 class="panel-title">Nächste Schritte</h3>
+    </div>
+    <div class="panel-body">
+        $TS.get("install.textcontinue")
+
+        <div style="height: 3em"></div>
+
+        <div style="width: 25em; padding: 10px; margin-left: auto; margin-right: auto">
+
+        <div class="input-group" style="width: 100%">
+            <input type="text" id="username" class="form-control" placeholder="$TS.get("install.username")" aria-describedby="basic-addon2">
+        </div>
+
+        <br />
+
+        <div class="input-group" style="width: 100%">
+            <input type="text" id="name" class="form-control" placeholder="$TS.get("install.name")" aria-describedby="basic-addon2">
+        </div>
+
+        <br />
+
+        <div class="input-group" style="width: 100%">
+            <input type="password" id="password" class="form-control" placeholder="$TS.get("install.password")" aria-describedby="basic-addon2">
+        </div>
+
+            <div style="margin-top: 3em; margin-left: 10px; width: auto; float: right">
+            <button class="btn btn-lg btn-primary btn-block" id="continueButton">$TS.get("install.continue")</button>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+<!-- Modal window to display Ajax progress bar -->
+<div id="modalProgressbarWindow" class="modal fade" role="dialog">
+    <div class="modal-dialog" style="z-index: 2000">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Bitte warten...</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="progress">
+                    <div id="modalProgressbar" class="progress-bar" role="progressbar" aria-valuenow="0"
+                         aria-valuemin="0" aria-valuemax="100" style="width: 1%;">
+                        0 %
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <!--  <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button> -->
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
