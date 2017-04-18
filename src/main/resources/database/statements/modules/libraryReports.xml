@@ -4,6 +4,7 @@
     <statement name="libraryReports.schuelerBorrowedBooks">
 
         SELECT
+            student.id as student_id, class.id as class_id,
             class.name AS class_name,
             student.firstname,
             student.surname,

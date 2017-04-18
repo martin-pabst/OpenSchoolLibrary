@@ -1,6 +1,23 @@
 
 /* css for library module */
 
-.h1 {
-    color:#428bca;
+body{
+    font-family: sans-serif;
+}
+
+table{
+    margin-bottom: 1cm;
+}
+
+td{
+    padding: 5px;
+}
+
+h1 {
+    color: #346092;
+}
+
+.tableheading{
+    font-size: 120%;
+    font-weight: bold;
 }

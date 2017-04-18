@@ -5,8 +5,10 @@ import java.util.Date;
 /**
  * Created by Martin on 17.04.2017.
  */
-public class BorrowedBooksRecord {
+public class BorrowedBooksRecord implements Comparable<BorrowedBooksRecord> {
 
+    public Long class_id;
+    public Long student_id;
     public String class_name;
     public String firstname;
     public String surname;
@@ -40,6 +42,34 @@ public class BorrowedBooksRecord {
 
     public Date getBegindate() {
         return begindate;
+    }
+
+    @Override
+    public int compareTo(BorrowedBooksRecord o) {
+
+        if(class_name != null && o.class_name != null){
+            if(!class_name.equals(o.class_name)){
+                return class_name.compareTo(o.class_name);
+            }
+        }
+
+        if(surname != null && o.surname != null){
+            if(!surname.equals(o.surname)){
+                return surname.compareTo(o.surname);
+            }
+        }
+
+        if(firstname != null && o.firstname != null){
+            if(!firstname.equals(o.firstname)){
+                return firstname.compareTo(o.firstname);
+            }
+        }
+
+        if(title != null && o.title != null){
+            return title.compareTo(o.title);
+        }
+
+        return 0;
     }
 
     /*

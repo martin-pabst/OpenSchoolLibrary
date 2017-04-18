@@ -23,6 +23,8 @@ abstract public class BaseReport {
 
     private int id;
 
+    protected StringBuilder html;
+
     public int getId() {
         return id;
     }
@@ -66,7 +68,11 @@ abstract public class BaseReport {
 
     }
 
-    protected void appendHtmlHeader(StringBuilder html) {
+    protected void beginHtml(){
+        html = new StringBuilder();
+    }
+
+    protected void appendHtmlHeader() {
 
         html.append("<!DOCTYPE html>\n");
         html.append("<html lang=\"de\">");
@@ -80,10 +86,45 @@ abstract public class BaseReport {
 
     }
 
-    protected void appendHtmlFooter(StringBuilder html) {
+    protected void beginHtmlTable(){
+        html.append("<table>\n");
+    }
+
+    protected void endHtmlTable(){
+        html.append("</table>\n");
+    }
+
+    protected void beginHtmlRow(){
+        html.append("<tr>\n");
+    }
+
+    protected void endHtmlRow(){
+        html.append("</tr>\n");
+    }
+
+    protected void beginHtmlCell(){
+        html.append("<td>");
+    }
+
+    protected void beginHtmlCell(int colspan){
+        html.append("<td colspan = \"");
+        html.append(colspan);
+        html.append("\">");
+    }
+
+
+    protected void endHtmlCell(){
+        html.append("</td>\n");
+    }
+
+    protected void appendHtmlFooter() {
 
         html.append("</body>");
         html.append("</html>");
 
     }
+
+
+
+
 }

@@ -148,7 +148,7 @@
                                     returnerGrid.select(returner.id);
                                     returnerGrid.scrollIntoView();
                                     returnerGrid.onSelect = onSelect;
-                                    $('#bookReturnPaymentsHeader').html("Zahlungen von " + returner.name + ":");
+                                    $('#bookReturnPaymentsHeader').html("Ausstehene Zahlungen von " + returner.name + ":");
                                 }
 
                             });
