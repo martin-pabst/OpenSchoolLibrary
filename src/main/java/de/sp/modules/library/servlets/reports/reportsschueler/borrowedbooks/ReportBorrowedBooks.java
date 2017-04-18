@@ -136,7 +136,9 @@ public class ReportBorrowedBooks extends BaseReport {
             beginHtmlCell();
             html.append(br.title);
             endHtmlCell();beginHtmlCell();
-            html.append(sdf.format(br.begindate));
+            if(br.begindate != null) {
+                html.append(sdf.format(br.begindate));
+            }
             endHtmlCell();
             endHtmlRow();
 
