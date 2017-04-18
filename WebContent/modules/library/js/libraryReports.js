@@ -63,7 +63,7 @@
         // $($('#reportsList .active')[0]).data() = {id: 0}
         // $($('#reportsList .active')[1]).data() = {contenttype: "pdf"}
 
-        var selectedRows = gridObj.getSelection(true);
+        var selectedRows = gridObj.getSelection(false);
 
         var reportElement = $('#reportsList').find('a.active:first');
         var reportId = reportElement.data().id;

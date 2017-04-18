@@ -632,7 +632,6 @@
 
             showBookCopyDetails();
 
-
         }, "json");
 
     }
@@ -649,7 +648,7 @@
             out += '<li class="list-group-item">Keine Einträge</li>';
             }
 
-            bookCopyDetailsData.forEach(function (record){
+            bookCopyDetailsData.statusList.forEach(function (record){
                out += '<li class="list-group-item"><span style="color: blue">' + record.statusdate + ':</span> ';
 
                if(record.event == "borrow"){
@@ -738,7 +737,7 @@
 
                 if (data.status == "success") {
 
-                    bookCopyDetailsData.push(bookDetail);
+                    bookCopyDetailsData.statusList.push(bookDetail);
 
                     showBookCopyDetails();
 

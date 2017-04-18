@@ -80,7 +80,7 @@ public class LibraryNavigatorDataServlet extends BaseServlet {
 		String json = gson.toJson(navigatorDataResponse);
 		json = json.replace("\"xx\"", ReportManager.getInstance().toJSon());
 
-		System.out.println(json);
+//		System.out.println(json);
 
 		return json;
 

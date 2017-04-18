@@ -15,12 +15,11 @@
             LEFT JOIN student_school_term ON student_school_term.student_id = student.id
                                              AND student_school_term.school_term_id = :school_term_id
             LEFT JOIN class ON student_school_term.class_id = class.id
-            LEFT JOIN borrows ON borrows.student_id = student.id AND NOT borrows.return_date IS NULL
-            LEFT JOIN book_copy ON borrows.book_copy_id = book_copy_id
+            LEFT JOIN borrows ON borrows.student_id = student.id AND borrows.return_date IS NULL
+            LEFT JOIN book_copy ON borrows.book_copy_id = book_copy.id
             LEFT JOIN book ON book_copy.book_id = book.id
         WHERE
-            student.school_id = :school_id AND
-            student_school_term.id = :school_term_id AND
+            student.school_id = :school_id and
             student.id IN :ids
 
     </statement>

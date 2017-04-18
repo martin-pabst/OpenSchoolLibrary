@@ -14,6 +14,7 @@ import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.sql2o.Connection;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,7 +25,6 @@ import java.util.Map;
  * Created by Martin on 17.04.2017.
  */
 public class ReportBorrowedBooks extends BaseReport {
-
 
 
     @Override
@@ -39,22 +39,22 @@ public class ReportBorrowedBooks extends BaseReport {
 
     @Override
     public String getDescription() {
-        return "Gibt je Schüler/in die Liste der entliehenen Bücher aus";
+        return "Gibt die Liste der entliehenen Bücher aus, gruppiert je Klasse und Schüler/in";
     }
 
     @Override
     public List<ContentType> getContentTypes() {
-        return Arrays.asList(ContentType.pdf);
+        return Arrays.asList(ContentType.pdf, ContentType.html);
     }
 
     @Override
     public String getFilename() {
-        return "Entliehene_Buecher";
+        return "Entliehene Bücher";
     }
 
     @Override
-    public byte[] execute(ContentType contentType, List<Long> ids, Long school_id,
-                          Long school_term_id, Connection con) throws IOException, JRException {
+    public void execute(ContentType contentType, List<Long> ids, Long school_id,
+                        Long school_term_id, Connection con, HttpServletResponse response) throws IOException, JRException {
 
         String sql = StatementStore.getStatement("libraryReports.schuelerBorrowedBooks");
 
@@ -65,6 +65,33 @@ public class ReportBorrowedBooks extends BaseReport {
                 .addParameter("school_term_id", school_term_id)
                 .executeAndFetch(BorrowedBooksRecord.class);
 
+        switch (contentType) {
+            case pdf:
+                writePdf(response, borrowedBooks);
+                break;
+            case html:
+                writeHtml(response, borrowedBooks);
+                break;
+        }
+
+
+    }
+
+    private void writeHtml(HttpServletResponse response, List<BorrowedBooksRecord> borrowedBooks) throws IOException {
+
+        StringBuilder html = new StringBuilder();
+
+        appendHtmlHeader(html);
+
+        html.append("<h1>Test!</h1>");
+
+
+        appendHtmlFooter(html);
+
+        response.getWriter().println(html.toString());
+    }
+
+    private void writePdf(HttpServletResponse response, List<BorrowedBooksRecord> borrowedBooks) throws IOException, JRException {
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(borrowedBooks);
 
         JasperReport jasperReport = null;
@@ -77,7 +104,7 @@ public class ReportBorrowedBooks extends BaseReport {
         jasperReport = JasperCompileManager.compileReport(jasperDesign);
         byte[] byteStream = JasperRunManager.runReportToPdf(jasperReport, parameters, ds);
 
-        return byteStream;
+        writeBytes(byteStream, response);
     }
 
 }

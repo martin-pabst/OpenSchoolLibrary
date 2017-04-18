@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import net.sf.jasperreports.engine.JRException;
 import org.sql2o.Connection;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,10 +31,14 @@ abstract public class BaseReport {
         this.id = id;
     }
 
-    abstract public byte[] execute(ContentType contentType, List<Long> ids, Long school_id,
-                                   Long school_term_id, Connection con) throws IOException, JRException;
+    abstract public void execute(ContentType contentType, List<Long> ids, Long school_id,
+                                   Long school_term_id, Connection con, HttpServletResponse response) throws IOException, JRException;
 
     protected String getSQLList(List<Long> ids){
+
+        if(ids.size() == 0){
+            return "(" + Integer.MAX_VALUE + ") AND (1 = 0)"; // " ... IN ( )" is not allowed in Postgresql
+        }
 
         return ids.stream().map( i -> i.toString()).collect(Collectors.joining(", ", "(", ")"));
 
@@ -53,4 +59,31 @@ abstract public class BaseReport {
     }
 
 
+    protected void writeBytes(byte[] byteStream, HttpServletResponse response) throws IOException {
+        OutputStream outStream = response.getOutputStream();
+        response.setContentLength(byteStream.length);
+        outStream.write(byteStream,0,byteStream.length);
+
+    }
+
+    protected void appendHtmlHeader(StringBuilder html) {
+
+        html.append("<!DOCTYPE html>\n");
+        html.append("<html lang=\"de\">");
+        html.append("<head>");
+        html.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
+        html.append(" <link rel=\"icon\" href=\"/public/modules/login/favicon.ico\">");
+        html.append("<title>" + getFilename() + "</title>");
+        html.append("<link rel=\"stylesheet\" href=\"/modules/library/css/libraryReports.css\">\n");
+        html.append("</head>");
+        html.append("<body>");
+
+    }
+
+    protected void appendHtmlFooter(StringBuilder html) {
+
+        html.append("</body>");
+        html.append("</html>");
+
+    }
 }

@@ -45,22 +45,19 @@ public class LibraryReportServlet extends BaseServlet {
 					executeReportRequest.school_id);
 
 			BaseReport report = ReportManager.getInstance().getReport(executeReportRequest.getDataType(), executeReportRequest.getReportId());
-			byte[] reportData = executeReport(report, executeReportRequest, con);
 
-			con.commit();
-
-			response.setContentType(executeReportRequest.getContentTypeEnum().getContentType());
 			response.setStatus(HttpServletResponse.SC_OK);
-			OutputStream outStream = response.getOutputStream();
 
 			ContentType contentType = executeReportRequest.getContentTypeEnum();
+			response.setContentType(contentType.getContentType());
 
 			if(!(contentType == ContentType.html)) {
-//				response.setHeader("Content-Disposition", "attachment, filename=\"" + report.getFilename() + "." + contentType.getFileEnding() + "\"");
+				response.setHeader("Content-Disposition", "filename=\"" + report.getFilename() + "." + contentType.getFileEnding() + "\"");
 			}
 
-			response.setContentLength(reportData.length);
-			outStream.write(reportData,0,reportData.length);
+			executeReport(report, executeReportRequest, con, response);
+
+			con.rollback();
 
 		} catch (Exception ex) {
 			logger.error(this.getClass().toString() + ": Error serving data",
@@ -78,10 +75,11 @@ public class LibraryReportServlet extends BaseServlet {
 
 	}
 
-	private byte[] executeReport(BaseReport report, ExecuteReportRequest executeReportRequest, Connection con) throws IOException, JRException {
+	private void executeReport(BaseReport report, ExecuteReportRequest executeReportRequest, Connection con, HttpServletResponse response) throws IOException, JRException {
 
-		return report.execute(executeReportRequest.getContentTypeEnum(), executeReportRequest.selectedRows, executeReportRequest.school_id,
-				executeReportRequest.school_term_id, con);
+		report.execute(executeReportRequest.getContentTypeEnum(), executeReportRequest.selectedRows,
+				executeReportRequest.school_id,
+				executeReportRequest.school_term_id, con, response);
 
 	}
 
