@@ -5,13 +5,14 @@
 
 	<statement name="book.getAll">
 		select id, school_id, title,
-		author, isbn, publisher, remarks, subject_id, price from book
+		author, isbn, publisher, remarks, approval_code, edition, subject_id, price from book
 	</statement>
 
 	<statement name="book.insert">
 		insert into book (school_id, title, author,
-		isbn, publisher, remarks, subject_id, price)
+		isbn, publisher, remarks, approval_code, edition, subject_id, price)
 		values (:school_id, :title, :author, :isbn, :publisher, :remarks,
+			:approval_code, :edition,
 		:subject_id, :price)
 	</statement>
 
@@ -33,7 +34,7 @@
 
 
 	<statement name="book.inventoryList">
-		select book.id as id, title, author, publisher, remarks, isbn, price,
+		select book.id as id, title, author, publisher, remarks, approval_code, edition, isbn, price,
 		       subject.shortname as subject_name, subject.id as subject_id, 
 		       book_form.id as book_form_id,
 		       form.id as form_id, form.abbreviation as form_name,

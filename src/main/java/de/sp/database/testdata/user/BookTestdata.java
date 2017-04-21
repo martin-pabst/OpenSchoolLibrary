@@ -37,10 +37,12 @@ public class BookTestdata {
 
 			Book book1 = BookDAO.insert(school_id, "Pippi Langstrumpf",
 					"Astrid Lindgren", "1111-2222", "Beispielverlag",
-					"Bemerkungen", mathematik.getId(), 16.44d, con);
+					"Bemerkungen", "ED-988-f", "2. Auflage",
+					mathematik.getId(), 16.44d, con);
 			Book book2 = BookDAO.insert(school_id,
 					"Harry Potter and the philosoper's Stone", "J. K. Rowling",
 					"2222-3333", "XXXYYY-Verlag", "Bemerkungen2",
+					"YN-7899", "1. Auflage",
 					englisch.getId(), 20.99d, con);
 
 			Value jgst5 = ValueDAO.findBySchoolAndValueStoreAndExternalKey(
