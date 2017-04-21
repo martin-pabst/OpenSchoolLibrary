@@ -240,7 +240,24 @@
                     resizable: true,
                     editable: {type: 'money'},
                     render: 'money'
+                },
+                {
+                    field: 'approval_code',
+                    caption: 'Zulassungs-Nr.',
+                    size: '60',
+                    sortable: true,
+                    resizable: true,
+                    editable: {type: 'text'}
+                },
+                {
+                    field: 'edition',
+                    caption: 'Auflage',
+                    size: '40',
+                    sortable: true,
+                    resizable: true,
+                    editable: {type: 'text'}
                 }
+
                 //{ field: 'remarks', caption: 'Bemerkungen', size: '120px', resizable: true },
             ],
             searches: [
@@ -252,7 +269,7 @@
             sortData: [{field: 'grade', direction: 'asc'}, {field: 'subject', direction: 'asc'}, {
                 field: 'title',
                 direction: 'asc'
-            }],
+            }, {field: 'edition', direction: 'asc'}],
 
             onChange: function (event) {
 
@@ -588,6 +605,18 @@
                 '        </div>' +
                 '    </div>' +
                 '    <div class="w2ui-field">' +
+                '        <label>Zulassungs-Nr.:</label>' +
+                '        <div>' +
+                '            <input name="approval_code" type="text" maxlength="30" style="width: 250px"/>' +
+                '        </div>' +
+                '    </div>' +
+                '    <div class="w2ui-field">' +
+                '        <label>Auflage:</label>' +
+                '        <div>' +
+                '            <input name="edition" type="text" maxlength="30" style="width: 250px"/>' +
+                '        </div>' +
+                '    </div>' +
+                '    <div class="w2ui-field">' +
                 '        <label>Preis:</label>' +
                 '        <div>' +
                 '            <input name="price" type="text" maxlength="20" style="width: 250px"/>' +
@@ -604,6 +633,8 @@
                     {field: 'publisher', type: 'text', required: false},
                     {field: 'subject', type: 'list', options: {items: app.globalDefinitions().subjectList}, showNone: true, required: false},
                     {field: 'isbn', type: 'text', required: false},
+                    {field: 'approval_code', type: 'text', required: false},
+                    {field: 'edition', type: 'text', required: false},
                     {field: 'price', type: 'money', required: false}
                 ],
                 actions: {

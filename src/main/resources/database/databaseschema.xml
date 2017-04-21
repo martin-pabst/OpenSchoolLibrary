@@ -260,6 +260,8 @@
 		<column name="isbn" type="varchar" length="13" />
 		<column name="publisher" type="varchar" length="200" />
 		<column name="remarks" type="varchar" length="2000" />
+		<column name="approval_code" type="varchar" length="30" />
+		<column name="edition" type="varchar" length="30" />
 		<column name="subject_id" type="bigint">
 			<references table="subject" column="id" />
 		</column>

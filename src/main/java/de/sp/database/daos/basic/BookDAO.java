@@ -1,11 +1,10 @@
 package de.sp.database.daos.basic;
 
-import java.util.List;
-
-import org.sql2o.Connection;
-
 import de.sp.database.model.Book;
 import de.sp.database.statements.StatementStore;
+import org.sql2o.Connection;
+
+import java.util.List;
 
 public class BookDAO {
 	public static List<Book> getAll(Connection con) {
@@ -17,7 +16,7 @@ public class BookDAO {
 	}
 
 	public static Book insert(Long school_id, String title, String author,
-			String isbn, String publisher, String remarks, Long subject_id,
+			String isbn, String publisher, String remarks, String approval_code, String edition, Long subject_id,
 			Double price, Connection con) throws Exception {
 
 		String sql = StatementStore.getStatement("book.insert");
@@ -28,11 +27,14 @@ public class BookDAO {
 				.addParameter("isbn", isbn)
 				.addParameter("publisher", publisher)
 				.addParameter("remarks", remarks)
+				.addParameter("approval_code", approval_code)
+				.addParameter("edition", edition)
 				.addParameter("subject_id", subject_id)
 				.addParameter("price", price).executeUpdate()
 				.getKey(Long.class);
 
 		return new Book(id, school_id, title, author, isbn, publisher, remarks,
+				approval_code, edition,
 				subject_id, price);
 
 	}

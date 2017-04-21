@@ -65,6 +65,11 @@
 
         var selectedRows = gridObj.getSelection(false);
 
+        if(selectedRows.length === 0){
+            selectedRows = gridObj.selectAll();
+            selectedRows = gridObj.getSelection(false);
+        }
+
         var reportElement = $('#reportsList').find('a.active:first');
         var reportId = reportElement.data().id;
         var contentType = reportElement.find('label.active:first').data().contenttype;

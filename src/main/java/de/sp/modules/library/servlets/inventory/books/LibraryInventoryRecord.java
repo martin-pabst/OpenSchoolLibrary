@@ -17,6 +17,10 @@ public class LibraryInventoryRecord {
 
 	private String remarks;
 
+	private String approval_code;
+
+	private String edition;
+
 	private Double price;
 
 	private String subject_name;
@@ -66,6 +70,10 @@ public class LibraryInventoryRecord {
 	public String getRemarks() {
 		return remarks;
 	}
+
+	public String getApproval_code() { return approval_code; }
+
+	public String getEdition() { return edition; }
 
 	public Double getPrice() {
 		return price;

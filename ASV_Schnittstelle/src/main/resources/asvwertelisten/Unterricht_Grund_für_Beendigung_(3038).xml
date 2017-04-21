@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<werteliste bezeichnung="Unterricht Grund für Beendigung" pl_key="3038">
+  <eintrag>
+    <schluessel><![CDATA[01]]></schluessel>
+    <kurzform><![CDATA[Kr]]></kurzform>
+    <anzeigeform><![CDATA[Krankheit]]></anzeigeform>
+    <langform><![CDATA[Krankheit]]></langform>
+    <bemerkung><![CDATA[]]></bemerkung>
+    <gueltig_von><![CDATA[2008-08-01]]></gueltig_von>
+    <gueltig_bis><![CDATA[]]></gueltig_bis>
+  </eintrag>
+  <eintrag>
+    <schluessel><![CDATA[02]]></schluessel>
+    <kurzform><![CDATA[Ab]]></kurzform>
+    <anzeigeform><![CDATA[Abmeldung]]></anzeigeform>
+    <langform><![CDATA[Abmeldung]]></langform>
+    <bemerkung><![CDATA[]]></bemerkung>
+    <gueltig_von><![CDATA[2008-08-01]]></gueltig_von>
+    <gueltig_bis><![CDATA[]]></gueltig_bis>
+  </eintrag>
+</werteliste>

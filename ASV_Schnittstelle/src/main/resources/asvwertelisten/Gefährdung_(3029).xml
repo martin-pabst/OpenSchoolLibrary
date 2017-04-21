@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<werteliste bezeichnung="Gefährdung" pl_key="3029">
+  <eintrag>
+    <schluessel><![CDATA[04]]></schluessel>
+    <kurzform><![CDATA[G]]></kurzform>
+    <anzeigeform><![CDATA[gefährdet]]></anzeigeform>
+    <langform><![CDATA[Das Vorrücken in die nächsthöhere Jahrgangsstufe ist gefährdet.]]></langform>
+    <bemerkung><![CDATA[#kuerzel_alt=G#]]></bemerkung>
+    <gueltig_von><![CDATA[2008-08-01]]></gueltig_von>
+    <gueltig_bis><![CDATA[]]></gueltig_bis>
+  </eintrag>
+  <eintrag>
+    <schluessel><![CDATA[05]]></schluessel>
+    <kurzform><![CDATA[S]]></kurzform>
+    <anzeigeform><![CDATA[sehr gefährdet]]></anzeigeform>
+    <langform><![CDATA[Das Vorrücken in die nächsthöhere Jahrgangsstufe ist sehr gefährdet.]]></langform>
+    <bemerkung><![CDATA[#kuerzel_alt=S#]]></bemerkung>
+    <gueltig_von><![CDATA[2008-08-01]]></gueltig_von>
+    <gueltig_bis><![CDATA[]]></gueltig_bis>
+  </eintrag>
+  <eintrag>
+    <schluessel><![CDATA[06]]></schluessel>
+    <kurzform><![CDATA[V]]></kurzform>
+    <anzeigeform><![CDATA[nicht mehr erreichbar]]></anzeigeform>
+    <langform><![CDATA[Das Klassenziel ist nicht mehr erreichbar.]]></langform>
+    <bemerkung><![CDATA[#kuerzel_alt=V#]]></bemerkung>
+    <gueltig_von><![CDATA[2008-08-01]]></gueltig_von>
+    <gueltig_bis><![CDATA[2013-07-31]]></gueltig_bis>
+  </eintrag>
+  <eintrag>
+    <schluessel><![CDATA[03]]></schluessel>
+    <kurzform><![CDATA[W]]></kurzform>
+    <anzeigeform><![CDATA[bei weit. Absinken gefährdet]]></anzeigeform>
+    <langform><![CDATA[Bei weiterem Absinken der Leistungen ist das Vorrücken in die nächsthöhere Jahrgangsstufe gefährdet.]]></langform>
+    <bemerkung><![CDATA[]]></bemerkung>
+    <gueltig_von><![CDATA[2008-08-01]]></gueltig_von>
+    <gueltig_bis><![CDATA[]]></gueltig_bis>
+  </eintrag>
+  <eintrag>
+    <schluessel><![CDATA[01]]></schluessel>
+    <kurzform><![CDATA[N]]></kurzform>
+    <anzeigeform><![CDATA[nicht gefährdet]]></anzeigeform>
+    <langform><![CDATA[Das Erreichen des Klassenziels ist nicht gefährdet.]]></langform>
+    <bemerkung><![CDATA[#kuerzel_alt=-#]]></bemerkung>
+    <gueltig_von><![CDATA[2008-08-01]]></gueltig_von>
+    <gueltig_bis><![CDATA[2013-07-31]]></gueltig_bis>
+  </eintrag>
+  <eintrag>
+    <schluessel><![CDATA[02]]></schluessel>
+    <kurzform><![CDATA[B]]></kurzform>
+    <anzeigeform><![CDATA[bei Absinken gefährdet]]></anzeigeform>
+    <langform><![CDATA[Bei Absinken der Leistungen ist das Vorrücken in die nächsthöhere Jahrgangsstufe gefährdet.]]></langform>
+    <bemerkung><![CDATA[#kuerzel_alt=B#]]></bemerkung>
+    <gueltig_von><![CDATA[2008-08-01]]></gueltig_von>
+    <gueltig_bis><![CDATA[]]></gueltig_bis>
+  </eintrag>
+</werteliste>

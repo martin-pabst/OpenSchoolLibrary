@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<werteliste bezeichnung="Störung/Schwäche" pl_key="2154">
+  <eintrag>
+    <schluessel><![CDATA[3]]></schluessel>
+    <kurzform><![CDATA[IRSt]]></kurzform>
+    <anzeigeform><![CDATA[isolierte Rechtschreibstörung]]></anzeigeform>
+    <langform><![CDATA[isolierte Rechtschreibstörung]]></langform>
+    <bemerkung><![CDATA[]]></bemerkung>
+    <gueltig_von><![CDATA[2015-08-01]]></gueltig_von>
+    <gueltig_bis><![CDATA[]]></gueltig_bis>
+  </eintrag>
+  <eintrag>
+    <schluessel><![CDATA[4]]></schluessel>
+    <kurzform><![CDATA[ILSt]]></kurzform>
+    <anzeigeform><![CDATA[isolierte Lesestörung]]></anzeigeform>
+    <langform><![CDATA[isolierte Lesestörung]]></langform>
+    <bemerkung><![CDATA[]]></bemerkung>
+    <gueltig_von><![CDATA[2015-08-01]]></gueltig_von>
+    <gueltig_bis><![CDATA[]]></gueltig_bis>
+  </eintrag>
+  <eintrag>
+    <schluessel><![CDATA[5]]></schluessel>
+    <kurzform><![CDATA[LS]]></kurzform>
+    <anzeigeform><![CDATA[Leseschwäche]]></anzeigeform>
+    <langform><![CDATA[Leseschwäche]]></langform>
+    <bemerkung><![CDATA[]]></bemerkung>
+    <gueltig_von><![CDATA[2015-08-01]]></gueltig_von>
+    <gueltig_bis><![CDATA[]]></gueltig_bis>
+  </eintrag>
+  <eintrag>
+    <schluessel><![CDATA[6]]></schluessel>
+    <kurzform><![CDATA[RS]]></kurzform>
+    <anzeigeform><![CDATA[Rechtschreibschwäche]]></anzeigeform>
+    <langform><![CDATA[Rechtschreibschwäche]]></langform>
+    <bemerkung><![CDATA[]]></bemerkung>
+    <gueltig_von><![CDATA[2015-08-01]]></gueltig_von>
+    <gueltig_bis><![CDATA[]]></gueltig_bis>
+  </eintrag>
+  <eintrag>
+    <schluessel><![CDATA[1]]></schluessel>
+    <kurzform><![CDATA[LRSt]]></kurzform>
+    <anzeigeform><![CDATA[Legasthenie - L. u. RS-Störung]]></anzeigeform>
+    <langform><![CDATA[Legasthenie - Lese- und Rechtschreibstörung]]></langform>
+    <bemerkung><![CDATA[]]></bemerkung>
+    <gueltig_von><![CDATA[2007-07-18]]></gueltig_von>
+    <gueltig_bis><![CDATA[]]></gueltig_bis>
+  </eintrag>
+  <eintrag>
+    <schluessel><![CDATA[2]]></schluessel>
+    <kurzform><![CDATA[LRS]]></kurzform>
+    <anzeigeform><![CDATA[Lese- und Rechtschreibschwäche]]></anzeigeform>
+    <langform><![CDATA[Lese- und Rechtschreibschwäche]]></langform>
+    <bemerkung><![CDATA[]]></bemerkung>
+    <gueltig_von><![CDATA[2007-07-18]]></gueltig_von>
+    <gueltig_bis><![CDATA[]]></gueltig_bis>
+  </eintrag>
+</werteliste>
