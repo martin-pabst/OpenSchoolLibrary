@@ -62,8 +62,11 @@
 
                 var selection = w2ui['libraryInventoryBooks'].getSelection(false);
                 if (selection.length < 1) {
-                    w2alert("Bitte wählen Sie zuerst in der linken Tabelle ein Buch aus.")
-                } else {
+                    w2alert("Bitte wählen Sie zuerst in der linken Tabelle ein Buch aus.");
+                    $('#libraryInventoryAddCopy').blur();
+                } else
+                  if(barcode !== "")
+                    {
 
                     showUpdateMessage(w2ui['libraryInventoryCopies']);
 

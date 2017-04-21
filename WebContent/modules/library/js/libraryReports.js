@@ -65,7 +65,7 @@
 
         var selectedRows = gridObj.getSelection(false);
 
-        if(selectedRows.length === 0){
+        if (selectedRows.length === 0) {
             selectedRows = gridObj.selectAll();
             selectedRows = gridObj.getSelection(false);
         }
@@ -73,6 +73,29 @@
         var reportElement = $('#reportsList').find('a.active:first');
         var reportId = reportElement.data().id;
         var contentType = reportElement.find('label.active:first').data().contenttype;
+        var reports = reportData.reports[dataType];
+        var parameterValues = [];
+
+        for(var i = 0; i < reports.length; i++) {
+
+            var report = reports[i];
+            if (report.id === reportId) {
+
+                for(var j = 0; j < report.parameters.length; j++){
+
+                    var parameter = report.parameters[j];
+                    var inputElement = $("#" + parameter.inputID);
+                    if(parameter.type === "boolean"){
+                        parameterValues.push(inputElement.is(":checked") ? "true" : "false");
+                    } else {
+                        parameterValues.push(inputElement.val());
+                    }
+                }
+
+            }
+
+        }
+
 
         var requestData = {
             selectedRows: selectedRows,
@@ -80,7 +103,8 @@
             contentType: contentType,
             dataType: dataType,
             school_id: global_school_id,
-            school_term_id: global_school_term_id
+            school_term_id: global_school_term_id,
+            parameterValues: parameterValues
         };
 
         var text = JSON.stringify(requestData);
@@ -100,7 +124,7 @@
         html += '<div>' + report.description + "</div>";
         html += '</span>';
         html += '<span style="display: inline-block; float: right">';
-        html += '<div class="btn-group" data-toggle="buttons" >'
+        html += '<div class="btn-group" data-toggle="buttons" >';
 
         for (var i = 0; i < report.contentTypes.length; i++) {
             var contentType = report.contentTypes[i];
@@ -112,16 +136,59 @@
         }
 
         html += '</div></span>';
+
+        //Parameters
+        if (report.parameters.length > 0) {
+            html += '<div class="form-inline">';
+            for (var j = 0; j < report.parameters.length; j++) {
+
+                var parameter = report.parameters[j];
+
+                switch (parameter.type) {
+                    case 'boolean':
+                        html += '<div class="form-group" style="margin-right: 10px">';
+                        html += '<label>';
+                        html += '<input type="checkbox" value="" id="report_parameter_' + inputID + '">' + parameter.text + '</label>';
+                        html += '</div>';
+                        break;
+                    case 'int':
+                        html += '<div class="form-group">';
+                        html += '<label for="report_parameter_' + inputID + '">' + parameter.text + ':</label>';
+                        html += '<input type= "number" class="form-control" id="report_parameter_'
+                            + inputID + '" name="' + parameter.name + '" style="margin-left: 3px; width: 5em">';
+                        html += '</div>';
+                        break;
+                    case 'String':
+                        html += '<div class="form-group">';
+                        html += '<label for="report_parameter_' + inputID + '">' + parameter.text + ':</label>';
+                        html += '<input type= "text" class="form-control" id="report_parameter_'
+                            + inputID + '" name="' + parameter.name + '" style="margin-left: 3px">';
+                        html += '</div>';
+                        break;
+                }
+
+                parameter.inputID = "report_parameter_" + inputID;
+                inputID++;
+
+
+                html += '</span>';
+            }
+            html += "</div>";
+        }
+
         html += '</a>';
 
         return html;
     }
+
+    var inputID;
 
     function initReportsList() {
 
 //    e.g. reports = {1: [{dataType: 1, name: "Liste der \"entliehenen Bücher", description: "Gibt je Schüler/in die Liste der entliehenen Bücher aus", contentTypes: [pdf]}], 2: [], 3: [], 4: [], 5: []}
 
         var reports = reportData.reports;
+        inputID = 0;
 
         for (var dt in reports) { // dt = 1, 2, 3, 4, 5
             if (reports.hasOwnProperty(dt)) {

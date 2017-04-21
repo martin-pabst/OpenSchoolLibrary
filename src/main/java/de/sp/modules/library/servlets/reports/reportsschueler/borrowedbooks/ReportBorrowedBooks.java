@@ -1,9 +1,7 @@
 package de.sp.modules.library.servlets.reports.reportsschueler.borrowedbooks;
 
 import de.sp.database.statements.StatementStore;
-import de.sp.modules.library.servlets.reports.model.BaseReport;
-import de.sp.modules.library.servlets.reports.model.ContentType;
-import de.sp.modules.library.servlets.reports.model.DataType;
+import de.sp.modules.library.servlets.reports.model.*;
 import de.sp.tools.file.FileTool;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -49,13 +47,28 @@ public class ReportBorrowedBooks extends BaseReport {
     }
 
     @Override
+    public List<ReportParameter> getParameters() {
+        return Arrays.asList(new ReportParameter(ParameterType.typeBoolean, "Schüler ohne fehlende Bücher weglassen",
+                "Hier das Häkchen setzen, wenn Schüler ohne fehlende Bücher gar nicht im Report erscheinen sollen", true),
+                new ReportParameter(ParameterType.typeInteger, "Anzahl", "Anzahl der Exemplare", true));
+    }
+
+    @Override
     public String getFilename() {
         return "Entliehene Bücher";
     }
 
     @Override
     public void execute(ContentType contentType, List<Long> ids, Long school_id,
-                        Long school_term_id, Connection con, HttpServletResponse response) throws IOException, JRException {
+                        Long school_term_id, List<String> paramerterValues, Connection con, HttpServletResponse response) throws IOException, JRException {
+
+        boolean schuelerOhneFehlendeBuecherWeglassen = true;
+        if(paramerterValues != null && paramerterValues.size() == getParameters().size()){
+            String parameter = paramerterValues.get(0);
+            if(parameter != null && parameter.equals("false")){
+                schuelerOhneFehlendeBuecherWeglassen = false;
+            }
+        }
 
         String sql = StatementStore.getStatement("libraryReports.schuelerBorrowedBooks");
 
@@ -68,17 +81,17 @@ public class ReportBorrowedBooks extends BaseReport {
 
         switch (contentType) {
             case pdf:
-                writePdf(response, borrowedBooks);
+                writePdf(response, borrowedBooks, schuelerOhneFehlendeBuecherWeglassen);
                 break;
             case html:
-                writeHtml(response, borrowedBooks);
+                writeHtml(response, borrowedBooks, schuelerOhneFehlendeBuecherWeglassen);
                 break;
         }
 
 
     }
 
-    private void writeHtml(HttpServletResponse response, List<BorrowedBooksRecord> borrowedBooks) throws IOException {
+    private void writeHtml(HttpServletResponse response, List<BorrowedBooksRecord> borrowedBooks, boolean omitPupilsWithoutMissingBooks) throws IOException {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -117,23 +130,25 @@ public class ReportBorrowedBooks extends BaseReport {
             }
 
             if (!br.student_id.equals(last_student_id)) {
-                last_student_id = br.student_id;
+                if (!omitPupilsWithoutMissingBooks || br.title != null) {
+                    last_student_id = br.student_id;
 
-                beginHtmlRow();
-                if(firstRow){
-                    beginHtmlCell();
-                } else {
-                    beginHtmlCell(2);
-                }
-                html.append("<span class=\"tableheading\">").append(br.surname).append(", ").append(br.firstname).append("</span>\n");
-                endHtmlCell();
-                if(firstRow){
-                    beginHtmlCell();
-                    html.append("<span class=\"tableheading\">Ausleihdatum</span>");
+                    beginHtmlRow();
+                    if(firstRow){
+                        beginHtmlCell();
+                    } else {
+                        beginHtmlCell(2);
+                    }
+                    html.append("<span class=\"tableheading\">").append(br.surname).append(", ").append(br.firstname).append("</span>\n");
                     endHtmlCell();
-                    firstRow = false;
+                    if(firstRow){
+                        beginHtmlCell();
+                        html.append("<span class=\"tableheading\">Ausleihdatum</span>");
+                        endHtmlCell();
+                        firstRow = false;
+                    }
+                    endHtmlRow();
                 }
-                endHtmlRow();
             }
 
             if (br.title != null) {
@@ -172,7 +187,7 @@ public class ReportBorrowedBooks extends BaseReport {
         return id1.equals(id2);
     }
 
-    private void writePdf(HttpServletResponse response, List<BorrowedBooksRecord> borrowedBooks) throws IOException, JRException {
+    private void writePdf(HttpServletResponse response, List<BorrowedBooksRecord> borrowedBooks, boolean schuelerOhneFehlendeBuecherDrucken) throws IOException, JRException {
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(borrowedBooks);
 
         JasperReport jasperReport = null;

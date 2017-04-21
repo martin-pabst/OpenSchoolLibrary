@@ -19,6 +19,8 @@ abstract public class BaseReport {
     abstract public String getName();
     abstract public String getDescription();
     abstract public List<ContentType> getContentTypes();
+    abstract public List<ReportParameter> getParameters();
+
     abstract public String getFilename();
 
     private int id;
@@ -34,7 +36,7 @@ abstract public class BaseReport {
     }
 
     abstract public void execute(ContentType contentType, List<Long> ids, Long school_id,
-                                   Long school_term_id, Connection con, HttpServletResponse response) throws IOException, JRException;
+                                 Long school_term_id, List<String> paramerterValues, Connection con, HttpServletResponse response) throws IOException, JRException;
 
     protected String getSQLList(List<Long> ids){
 
@@ -54,7 +56,8 @@ abstract public class BaseReport {
         sb.append("\"dataType\": " + getDataType().getId() + ", ");
         sb.append("\"name\": " + gson.toJson(getName()) + ", ");
         sb.append("\"description\": " + gson.toJson(getDescription()) + ", ");
-        sb.append("\"contentTypes\": " + getContentTypes().stream().map(t -> "\"" + t.toString() + "\"").collect(Collectors.joining(", ", "[", "]")));
+        sb.append("\"contentTypes\": " + getContentTypes().stream().map(t -> "\"" + t.toString() + "\"").collect(Collectors.joining(", ", "[", "]")) + ", ");
+        sb.append("\"parameters\": " + getParameters().stream().map(t -> t.toJson() ).collect(Collectors.joining(", ", "[", "]")) );
         sb.append("}");
 
         return sb.toString();

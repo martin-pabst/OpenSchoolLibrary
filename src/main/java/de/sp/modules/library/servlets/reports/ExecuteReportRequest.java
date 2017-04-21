@@ -18,6 +18,7 @@ public class ExecuteReportRequest {
     public Long dataType;
     public Long school_id;
     public Long school_term_id;
+    public List<String> parameterValues;
 
     public DataType getDataType(){
         return DataType.findById(dataType);
@@ -27,8 +28,11 @@ public class ExecuteReportRequest {
         return ContentType.valueOf(contentType);
     }
 
-
     public Long getReportId() {
         return reportId;
+    }
+
+    public List<String> getParameterValues() {
+        return parameterValues;
     }
 }

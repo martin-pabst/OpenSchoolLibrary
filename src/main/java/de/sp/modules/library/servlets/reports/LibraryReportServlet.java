@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URLDecoder;
 
 public class LibraryReportServlet extends BaseServlet {
@@ -79,7 +78,7 @@ public class LibraryReportServlet extends BaseServlet {
 
 		report.execute(executeReportRequest.getContentTypeEnum(), executeReportRequest.selectedRows,
 				executeReportRequest.school_id,
-				executeReportRequest.school_term_id, con, response);
+				executeReportRequest.school_term_id, executeReportRequest.getParameterValues(),  con, response);
 
 	}
 
