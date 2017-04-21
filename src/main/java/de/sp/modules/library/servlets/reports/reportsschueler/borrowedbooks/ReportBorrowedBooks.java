@@ -88,14 +88,14 @@ public class ReportBorrowedBooks extends BaseReport {
 
         html.append("<h1>Entliehene Bücher</h1>\n");
 
-        Long last_class_id = null;
+        Long last_class_id = Long.MAX_VALUE;
         Long last_student_id = null;
         boolean table_open = false;
         boolean firstRow = true;
 
         for (BorrowedBooksRecord br : borrowedBooks) {
 
-            if (!br.class_id.equals(last_class_id)) {
+            if (!secureEquals(br.class_id, last_class_id)) {
 
                 if(table_open){
                     endHtmlTable();
@@ -105,7 +105,11 @@ public class ReportBorrowedBooks extends BaseReport {
                     html.append("<div style = \"page-break-after:always\"></div>");
                 }
                 last_class_id = br.class_id;
-                html.append("<h2>Klasse ").append(br.class_name).append("</h2>\n");
+                if (br.class_name != null) {
+                    html.append("<h2>Klasse ").append(br.class_name).append("</h2>\n");
+                } else {
+                    html.append("<h2>Ohne Klasse</h2>");
+                }
                 last_student_id = null;
                 beginHtmlTable();
                 table_open = true;
@@ -132,15 +136,18 @@ public class ReportBorrowedBooks extends BaseReport {
                 endHtmlRow();
             }
 
-            beginHtmlRow();
-            beginHtmlCell();
-            html.append(br.title);
-            endHtmlCell();beginHtmlCell();
-            if(br.begindate != null) {
-                html.append(sdf.format(br.begindate));
+            if (br.title != null) {
+                beginHtmlRow();
+                beginHtmlCell();
+                html.append(br.title);
+                endHtmlCell();
+                beginHtmlCell();
+                if(br.begindate != null) {
+                    html.append(sdf.format(br.begindate));
+                }
+                endHtmlCell();
+                endHtmlRow();
             }
-            endHtmlCell();
-            endHtmlRow();
 
         }
 
@@ -151,6 +158,18 @@ public class ReportBorrowedBooks extends BaseReport {
         appendHtmlFooter();
 
         response.getWriter().println(html.toString());
+    }
+
+    private boolean secureEquals(Long id1, Long id2){
+        if(id1 == null){
+            return id2 == null;
+        }
+
+        if(id2 == null){
+            return false;
+        }
+
+        return id1.equals(id2);
     }
 
     private void writePdf(HttpServletResponse response, List<BorrowedBooksRecord> borrowedBooks) throws IOException, JRException {

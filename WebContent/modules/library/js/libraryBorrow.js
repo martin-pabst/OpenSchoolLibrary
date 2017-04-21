@@ -23,7 +23,7 @@
 
             initializeDOM();
 
-            fetchData();
+            // fetchData();
             $('#libraryBorrowTab').trigger('shown.bs.tab');
 
 
@@ -90,6 +90,9 @@
             //    initializeBorrowTables();
 
             //} else {
+
+            fetchData();
+
             w2ui['libraryBorrowerList'].resize();
             w2ui['libraryBorrowedBooksList'].resize();
             w2ui['libraryNeededBooksList'].resize();
