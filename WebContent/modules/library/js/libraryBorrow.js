@@ -55,6 +55,10 @@
                     gridObj.select(gridObj.records[0]);
                 }
 
+                libraryBorrowsOnSelectUnselect();
+
+                showBookCopyDetails();
+
                 return true;
             });
 
@@ -65,15 +69,15 @@
     function initializeDOM() {
 
 
-        $('#bookDetailDate').w2field('date',  { format: 'dd.mm.yyyy' });
+        $('#bookDetailDate').w2field('date', {format: 'dd.mm.yyyy'});
 
 
-        $('#bookDetailButton').click(function(event){
+        $('#bookDetailButton').click(function (event) {
             addBookDetail();
         });
 
 
-        $("#bookDetailMarkUL li a").click(function(){
+        $("#bookDetailMarkUL li a").click(function () {
             $(this).parents(".dropup").find('.btn').html($(this).text() + ' <span class="caret"></span>');
             $(this).parents(".dropup").find('.btn').val($(this).data('value'));
         });
@@ -288,7 +292,8 @@
                 toolbar: true,
                 selectColumn: false,
                 multiSelect: false,
-                toolbarAdd: false,
+                toolbarAdd: true,
+                toolbarEdit: true,
                 toolbarDelete: false,
                 toolbarSave: false,
                 footer: true
@@ -310,6 +315,24 @@
                 direction: 'asc'
             }, {field: 'name', direction: 'asc'}],
 
+            onAdd: function (event) {
+
+                openAddEditStudentDialog(null);
+
+            },
+
+            onEdit: function (event) {
+
+                if(this.getSelection(false).length === 1) {
+
+                    var borrower = this.get(this.getSelection(false)[0])
+
+                    openAddEditStudentDialog(borrower);
+
+                }
+
+            },
+
             onSelect: function (event) {
 
                 event.onComplete = libraryBorrowsOnSelectUnselect;
@@ -323,7 +346,6 @@
             }
 
         });
-
 
 
         $('#libraryBorrowedBooksList').w2grid({
@@ -400,7 +422,7 @@
                         this.toolbar.enable('returnBooksButton');
                     }
 
-                    if(selection.length == 1){
+                    if (selection.length == 1) {
                         var record = this.get(selection[0]);
                         getBookCopyRemarks(record);
                     } else {
@@ -490,7 +512,7 @@
 
                 libraryBorrowUpdateTables();
                 var records = borrowedGrid.records;
-                if(records.length > 0){
+                if (records.length > 0) {
                     borrowedGrid.select(records[0].id);
                 } else {
                     bookCopyDetailsData = undefined;
@@ -626,9 +648,12 @@
 
     }
 
-    function getBookCopyRemarks(record){
+    function getBookCopyRemarks(record) {
 
-        $.post('/library/bookCopyStatus/get', JSON.stringify({barcode: record.barcode, school_id: global_school_id}), function (data) {
+        $.post('/library/bookCopyStatus/get', JSON.stringify({
+            barcode: record.barcode,
+            school_id: global_school_id
+        }), function (data) {
 
             bookCopyDetailsData = data;
             bookCopyDetailsRecord = record;
@@ -639,41 +664,41 @@
 
     }
 
-    function showBookCopyDetails(){
+    function showBookCopyDetails() {
 
         var out = '<ul class="list-group" style="margin-bottom: 0">\n';
 
-        if(bookCopyDetailsData){
+        if (bookCopyDetailsData) {
 
             var lastMark = "Zustand als Note";
 
-            if(bookCopyDetailsData.length == 0){
-            out += '<li class="list-group-item">Keine Einträge</li>';
+            if (bookCopyDetailsData.length == 0) {
+                out += '<li class="list-group-item">Keine Einträge</li>';
             }
 
-            bookCopyDetailsData.statusList.forEach(function (record){
-               out += '<li class="list-group-item"><span style="color: blue">' + record.statusdate + ':</span> ';
+            bookCopyDetailsData.statusList.forEach(function (record) {
+                out += '<li class="list-group-item"><span style="color: blue">' + record.statusdate + ':</span> ';
 
-               if(record.event == "borrow"){
-                   out += "<b>Entliehen</b> an <b style='color: forestgreen'>" + record.borrowername + "</b> durch " + record.username + "</div>";
-               }
+                if (record.event == "borrow") {
+                    out += "<b>Entliehen</b> an <b style='color: forestgreen'>" + record.borrowername + "</b> durch " + record.username + "</div>";
+                }
 
-                if(record.event == "return"){
+                if (record.event == "return") {
                     out += "<b>Rückgabe</b>; Buch angenommen von " + record.username + "</div>";
                 }
 
-                if(record.event == "examine"){
+                if (record.event == "examine") {
                     var badgeHtml = '';
-                    if(record.mark && record.mark.length > 0){
+                    if (record.mark && record.mark.length > 0) {
                         badgeHtml = '<span class="badge">' + record.mark.substr(0, 1) + '</span>';
                     }
                     out += "<b>Begutachtet</b> durch " + record.username + badgeHtml + '</div>';
-                    if(record.evidence) {
+                    if (record.evidence) {
                         out += "<div style='white-space: pre'>" + Handlebars.Utils.escapeExpression(record.evidence) + "</div>";
                     }
                 }
 
-                if(record.mark){
+                if (record.mark) {
                     lastMark = record.mark;
                 }
 
@@ -682,9 +707,9 @@
 
             out += "</ul>\n"
 
-            $('#bookDetailButton').prop("disabled",false);
-            $('#bookDetailDate').prop("disabled",false);
-            $('#bookDetailText').prop("disabled",false);
+            $('#bookDetailButton').prop("disabled", false);
+            $('#bookDetailDate').prop("disabled", false);
+            $('#bookDetailText').prop("disabled", false);
             $('#bookDetailMark').removeClass("disabled");
 
             $('#bookDetailMark').val(lastMark);
@@ -692,9 +717,9 @@
             $('#bookTitle').text(' "' + bookCopyDetailsRecord.title + '"');
 
         } else {
-            $('#bookDetailButton').prop("disabled",true);
-            $('#bookDetailDate').prop("disabled",true);
-            $('#bookDetailText').prop("disabled",true);
+            $('#bookDetailButton').prop("disabled", true);
+            $('#bookDetailDate').prop("disabled", true);
+            $('#bookDetailText').prop("disabled", true);
             $('#bookDetailMark').addClass("disabled");
             $('#bookDetailText').val("");
             $('#bookDetailMark').val("");
@@ -709,9 +734,9 @@
         $('#bookDetailTextAll').html(out);
     }
 
-    function addBookDetail(){
+    function addBookDetail() {
 
-        if(bookCopyDetailsRecord) {
+        if (bookCopyDetailsRecord) {
 
             var mark = $('#bookDetailMark').val();
 
@@ -723,7 +748,7 @@
 
 //            var dateParts = $('#bookDetailDate').val().split(".");
 //            var statusdate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
-            
+
             var bookDetail = {
                 evidence: $('#bookDetailText').val(),
                 event: "examine",
@@ -751,6 +776,271 @@
             }, "json");
 
         }
+    }
+
+
+    /**
+     * Dialog for adding new Students
+     */
+    function openAddEditStudentDialog(record) {
+
+        var student_id = null;
+        var student_school_term_id = null;
+
+        if(record !== null){
+
+            student_id = record.student_id;
+            student_school_term_id = record.student_school_term_id;
+        }
+
+        if (!w2ui.libraryAddStudentDialog) {
+            $().w2form({
+                name: 'libraryAddStudentDialog',
+                style: 'border: 0px; background-color: transparent;',
+                url: '/library/students/save',
+                formHTML: '<div class="w2ui-page page-0">' +
+
+                '<div style="width: 440px; float: left; margin-right: 0px;">' +
+                '<div style="padding: 3px; font-weight: bold; color: #777;">Grunddaten</div>' +
+                '<div class="w2ui-group" style="height: 285px;">' +
+
+                '    <div class="w2ui-field w2ui-span8">' +
+                '        <label>Rufname:</label>' +
+                '        <div>' +
+                '              <input name="firstname" type="text" maxlength="100" style="width: 250px"/>' +
+                '        </div>' +
+                '    </div>' +
+                '    <div class="w2ui-field  w2ui-span8">' +
+                '        <label>Familienname:</label>' +
+                '        <div>' +
+                '           <input name="surname" type="text" maxlength="300" style="width: 250px"/>' +
+                '        </div>' +
+                '    </div>' +
+                '    <div class="w2ui-field  w2ui-span8">' +
+                '        <label>Namensbest. vorang.:</label>' +
+                '        <div>' +
+                '           <input name="before_surname" type="text" maxlength="100" style="width: 250px"/>' +
+                '        </div>' +
+                '    </div>' +
+                '    <div class="w2ui-field  w2ui-span8">' +
+                '        <label>Namensbest. nachg.:</label>' +
+                '        <div>' +
+                '           <input name="after_surname" type="text" maxlength="100" style="width: 250px"/>' +
+                '        </div>' +
+                '    </div>' +
+                '    <div class="w2ui-field  w2ui-span8">' +
+                '        <label>Geschlecht:</label>' +
+                '        <div>' +
+                '           <input name="sex" type="text" maxlength="2" style="width: 100px"/>' +
+                '        </div>' +
+                '    </div>' +
+                '    <div class="w2ui-field  w2ui-span8">' +
+                '        <label>Geburtsdatum:</label>' +
+                '        <div>' +
+                '           <input name="date_of_birth" type="text" maxlength="10" style="width: 250px"/>' +
+                '        </div>' +
+                '    </div>' +
+                '    <div class="w2ui-field  w2ui-span8">' +
+                '        <label>Klasse:</label>' +
+                '        <div>' +
+                '            <input name="classname" type="text" maxlength="20" style="width: 120px"/>' +
+                '        </div>' +
+                '    </div>' +
+
+                '    </div></div>' +
+                '<div style="width: 300px; float: right; margin-left: 0px;">' +
+                '<div style="padding: 3px; font-weight: bold; color: #777;">Schullaufbahn:</div>' +
+                '<div class="w2ui-group" style="height: 285px;">' +
+
+                '    <div class="w2ui-field  w2ui-span8">' +
+                '        <label>Ausbildungsrichtung:</label>' +
+                '        <div>' +
+                '            <input name="curriculum" type="text" maxlength="20" style="width: 80px"/>' +
+                '        </div>' +
+                '    </div>' +
+                '    <div class="w2ui-field  w2ui-span8">' +
+                '        <label>1. Femdsprache:</label>' +
+                '        <div>' +
+                '           <input name="language_1" type="text" maxlength="10" style="width: 50px"/>' +
+                '        </div>' +
+                '    </div>' +
+                '    <div class="w2ui-field  w2ui-span8">' +
+                '        <label>Von Jahrgangsstufe:</label>' +
+                '        <div>' +
+                '           <input name="from_form_1" type="text" maxlength="10" style="width: 50px"/>' +
+                '        </div>' +
+                '    </div>' +
+                '    <div class="w2ui-field  w2ui-span8">' +
+                '        <label>2. Femdsprache:</label>' +
+                '        <div>' +
+                '           <input name="language_2" type="text" maxlength="10" style="width: 50px"/>' +
+                '        </div>' +
+                '    </div>' +
+                '    <div class="w2ui-field  w2ui-span8">' +
+                '        <label>Von Jahrgangsstufe:</label>' +
+                '        <div>' +
+                '           <input name="from_form_2" type="text" maxlength="10" style="width: 50px"/>' +
+                '        </div>' +
+                '    </div>' +
+                '    <div class="w2ui-field  w2ui-span8">' +
+                '        <label>3. Femdsprache:</label>' +
+                '        <div>' +
+                '           <input name="language_3" type="text" maxlength="10" style="width: 50px"/>' +
+                '        </div>' +
+                '    </div>' +
+                '    <div class="w2ui-field  w2ui-span8">' +
+                '        <label>Von Jahrgangsstufe:</label>' +
+                '        <div>' +
+                '           <input name="from_form_3" type="text" maxlength="10" style="width: 50px"/>' +
+                '        </div>' +
+                '    </div>' +
+
+                '</div></div>' +
+
+                '</div>' +
+                '<div class="w2ui-buttons">' +
+                '    <button class="btn" name="reset">Zurücksetzen</button>' +
+                '    <button class="btn" name="save">Speichern</button>' +
+                '</div>',
+                fields: [
+                    {field: 'firstname', type: 'text', required: true},
+                    {field: 'surname', type: 'text', required: true},
+                    {field: 'before_surname', type: 'text', required: false},
+                    {field: 'after_surname', type: 'text', required: false},
+                    {
+                        field: 'sex', type: 'list',
+                        options: {items: app.globalDefinitions().sexList},
+                        showNone: false, required: true
+                    },
+                    {field: 'date_of_birth', type: 'date', format: 'dd.MM.yyyy', required: true},
+                    {
+                        field: 'classname', type: 'list',
+                        options: {items: app.globalDefinitions().classList},
+                        showNone: false, required: true
+                    },
+                    {
+                        field: 'curriculum', type: 'list',
+                        options: {items: app.globalDefinitions().curriculumList},
+                        showNone: true, required: true
+                    },
+                    {
+                        field: 'language_1', type: 'list',
+                        options: {items: app.globalDefinitions().subjectList},
+                        showNone: true, required: false
+                    },
+                    {
+                        field: 'from_form_1',
+                        type: 'int',
+                        required: false
+                    },
+                    {
+                        field: 'language_2', type: 'list',
+                        options: {items: app.globalDefinitions().subjectList},
+                        showNone: true, required: false
+                    },
+                    {
+                        field: 'from_form_2',
+                        type: 'int',
+                        required: false
+                    },
+                    {
+                        field: 'language_3', type: 'list',
+                        options: {items: app.globalDefinitions().subjectList},
+                        showNone: true, required: false
+                    },
+                    {
+                        field: 'from_form_3',
+                        type: 'int',
+                        required: false
+                    }
+                ],
+                actions: {
+                    "save": function () {
+
+                        this.submit({}, function (response) {
+
+                            w2popup.close();
+
+                            if (response.status === "success") {
+
+                                // var newRecord = response.borrowerRecord;
+                                //
+                                // w2ui['libraryBorrowerList'].add(newRecord);
+
+                                fetchData();
+
+                            } else {
+                                w2alert("Fehler beim Speichern", response.message);
+                            }
+                        });
+                    },
+                    "reset": function () {
+                        this.clear();
+                    }
+                }
+            });
+        }
+
+        w2ui.libraryAddStudentDialog.postData = {school_id: global_school_id, school_term_id: global_school_term_id,
+            student_id: student_id, student_school_term_id: student_school_term_id};
+
+
+        $().w2popup('open', {
+            title: 'Schüler/in hinzufügen',
+            body: '<div id="form" style="width: 100%; height: 100%;"></div>',
+            style: 'padding: 15px 0px 0px 0px',
+            width: 800,
+            height: 500,
+            showMax: true,
+            onToggle: function (event) {
+                $(w2ui.foo.box).hide();
+                event.onComplete = function () {
+                    $(w2ui.libraryAddStudentDialog.box).show();
+                    w2ui.libraryAddStudentDialog.resize();
+                }
+            },
+            onOpen: function (event) {
+                event.onComplete = function () {
+
+                    if(record !== null) {
+                        var rec = w2ui.libraryAddStudentDialog.record;
+
+                        rec.surname = record.surname;
+                        rec.firstname = record.firstname;
+                        rec.before_surname = record.before_surname;
+                        rec.after_surname = record.after_surname;
+                        rec.curriculum = {id: record.curriculum_id};
+                        rec.sex = {id: record.sex_key};
+                        rec.classname = {id: record.class_id};
+                        rec.date_of_birth = record.dateofbirth;
+
+                        for(var i = 1; i <= 3; i++)
+                        {
+                            if (record.languageskills.length >= i) {
+                                rec["language_" + i] = {id: record.languageskills[i - 1].subject_id};
+                                rec["from_form_" + i] = record.languageskills[i - 1].from_year;
+                            } else {
+                                rec["language_" + i] = {};
+                                rec["from_form_" + i] = null;
+                            }
+
+                        }
+                        w2ui.libraryAddStudentDialog.refresh();
+
+                    } else {
+
+                        w2ui.libraryAddStudentDialog.clear();
+
+                    }
+
+                    // specifying an onOpen handler instead is equivalent to specifying an onBeforeOpen handler, which would make this code execute too early and hence not deliver.
+                    $('#w2ui-popup #form').w2render('libraryAddStudentDialog');
+                }
+            }
+        });
+
+
+
     }
 
 

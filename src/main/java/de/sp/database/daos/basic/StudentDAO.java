@@ -1,12 +1,11 @@
 package de.sp.database.daos.basic;
 
-import java.util.Date;
-import java.util.List;
-
-import org.sql2o.Connection;
-
 import de.sp.database.model.Student;
 import de.sp.database.statements.StatementStore;
+import org.sql2o.Connection;
+
+import java.util.Date;
+import java.util.List;
 
 public class StudentDAO {
 
@@ -110,4 +109,23 @@ public class StudentDAO {
 		
 	}
 
+    public static void updateBorrower(Long student_id, Date date_of_birth,
+									  String surname, String firstname, String before_surname,
+									  String after_surname, Long sex_id, Connection con) {
+
+		String sql = StatementStore.getStatement("student.updateBorrower");
+
+		con.createQuery(sql)
+
+				.addParameter("id", student_id)
+				.addParameter("dateofbirth", date_of_birth)
+				.addParameter("surname", surname)
+				.addParameter("firstname", firstname)
+				.addParameter("before_surname", before_surname)
+				.addParameter("after_surname", after_surname)
+				.addParameter("sex_key", sex_id)
+				.executeUpdate();
+
+
+	}
 }

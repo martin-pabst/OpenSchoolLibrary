@@ -671,6 +671,7 @@
                 }
             });
         }
+
         $().w2popup('open', {
             title: 'Buch hinzufügen',
             body: '<div id="form" style="width: 100%; height: 100%;"></div>',
@@ -687,6 +688,7 @@
             },
             onOpen: function (event) {
                 event.onComplete = function () {
+                    w2ui.libraryAddBookDialog.clear();
                     // specifying an onOpen handler instead is equivalent to specifying an onBeforeOpen handler, which would make this code execute too early and hence not deliver.
                     $('#w2ui-popup #form').w2render('libraryAddBookDialog');
                 }
@@ -814,6 +816,8 @@
                 },
                 onOpen: function (event) {
                     event.onComplete = function () {
+                        w2ui.libraryAddBookFormDialog.clear();
+
                         // specifying an onOpen handler instead is equivalent to specifying an onBeforeOpen handler, which would make this code execute too early and hence not deliver.
                         $('#w2ui-popup #form').w2render('libraryAddBookFormDialog');
                     }

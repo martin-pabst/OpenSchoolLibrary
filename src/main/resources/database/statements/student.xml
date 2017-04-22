@@ -49,5 +49,17 @@
 		set address_id = :address_id
 		where id = :student_id
 	</statement>
-	
+
+	<statement name = "student.updateBorrower">
+		update student
+		set dateofbirth = :dateofbirth,
+			surname = :surname,
+			firstname = :firstname,
+			before_surname = :before_surname,
+			after_surname = :after_surname,
+			sex_key = :sex_key
+		where id = :id
+	</statement>
+
+
 </statementlist>

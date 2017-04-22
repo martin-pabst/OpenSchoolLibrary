@@ -284,6 +284,14 @@
 
             gridObj = w2ui['libraryReportsDataNavigator'];
 
+
+            var searchAll = $('#libraryReportsDataNavigator').find('.w2ui-search-all');
+
+            searchAll.keyup(function (event) {
+                this.onchange();
+            });
+
+
             var objects = [];
 
             switch (dataType) {

@@ -1,25 +1,32 @@
 package de.sp.modules.library.servlets.borrow.borrowerlist;
 
+import de.sp.database.model.Languageskill;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-
-import de.sp.database.model.Languageskill;
 
 @SuppressWarnings("unused")
 public class BorrowerRecord {
 	private String id; // "s" + student_id or "t" + teacher_id
 	
 	private Long student_id;
+	private Long student_school_term_id;
 	private Long teacher_id;
 	private boolean isStudent;
 	
 	private String class_name;
+	private Long class_id;
 	private Integer year_of_school;
 	private Long form_id;
 
-	private transient String firstname;
-	private transient String surname;
+	private String firstname;
+	private String surname;
+	private String before_surname;
+	private String after_surname;
+
+	private Date dateofbirth;
+	private Long sex_key;
 
 	private String name;
 

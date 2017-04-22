@@ -1,11 +1,10 @@
 package de.sp.database.daos.basic;
 
-import java.util.List;
-
-import org.sql2o.Connection;
-
 import de.sp.database.model.StudentSchoolTerm;
 import de.sp.database.statements.StatementStore;
+import org.sql2o.Connection;
+
+import java.util.List;
 
 public class StudentSchoolTermDAO {
 	public static List<StudentSchoolTerm> getAll(Connection con) {
@@ -81,4 +80,15 @@ public class StudentSchoolTermDAO {
 
 	}
 
+    public static void updateBorrower(Long student_school_term_id, Long curriculum_id, Long class_id, Connection con) {
+
+		String sql = StatementStore.getStatement("student_school_term.updateBorrower");
+
+		con.createQuery(sql)
+
+				.addParameter("id", student_school_term_id)
+				.addParameter("class_id", class_id)
+				.addParameter("curriculum_id",curriculum_id).executeUpdate();
+
+    }
 }

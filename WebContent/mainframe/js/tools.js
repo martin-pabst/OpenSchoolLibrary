@@ -20,6 +20,7 @@ w2utilsPhrases = {
     'of': 'von',
     'Add new': 'Hinzufügen...',
     'Delete': 'Löschen',
+    'Edit': 'Bearbeiten',
     'All Fields': 'Suchbegriff ...',
     'Add New': 'Hinzufügen',
     'Search': 'Suchen'
@@ -33,6 +34,8 @@ $(function () {
     w2utils.settings['dataType'] = 'JSON';
     w2utils.settings['currencyPrefix'] = "€";
     w2utils.settings['locale'] = 'de-de';
+    w2utils.settings.date_format = 'dd.mm.yyyy';
+
 
     /*
      * If e.g. current URL is http://localhost:8080/main#Library and user clicks on <a href = "#Library" />

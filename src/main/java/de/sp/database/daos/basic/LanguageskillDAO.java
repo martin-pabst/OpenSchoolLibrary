@@ -1,11 +1,10 @@
 package de.sp.database.daos.basic;
 
-import java.util.List;
-
-import org.sql2o.Connection;
-
 import de.sp.database.model.Languageskill;
 import de.sp.database.statements.StatementStore;
+import org.sql2o.Connection;
+
+import java.util.List;
 
 public class LanguageskillDAO {
 	public static List<Languageskill> getAll(Connection con) {
@@ -58,4 +57,16 @@ public class LanguageskillDAO {
 
 	}
 
+    public static void deleteByStudentId(Long student_id, Connection con) {
+
+		String sql = StatementStore.getStatement("languageskill.deleteByStudentID");
+
+		con.createQuery(sql)
+
+				.addParameter("student_id", student_id)
+
+				.executeUpdate();
+
+
+	}
 }

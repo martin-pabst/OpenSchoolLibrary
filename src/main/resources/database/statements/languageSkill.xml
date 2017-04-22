@@ -31,6 +31,10 @@
 		where id = :id
 	</statement>
 
+	<statement name="languageskill.deleteByStudentID">
+		delete from languageskill
+		where student_id = :student_id
+	</statement>
 
 	
 </statementlist>

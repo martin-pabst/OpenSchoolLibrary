@@ -25,6 +25,10 @@
 		where id = :id
 	</statement>
 
+	<statement name="class.findBySchoolTermId" >
+		select id, school_term_id, name, year_of_school, form_id from class
+		where school_term_id = :school_term_id
+	</statement>
 
 	
 </statementlist>

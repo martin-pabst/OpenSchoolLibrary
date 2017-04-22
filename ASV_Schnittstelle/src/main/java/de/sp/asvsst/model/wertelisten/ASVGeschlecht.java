@@ -26,9 +26,9 @@ public enum ASVGeschlecht {
 			return null;
 		}
 
-		for (ASVGeschlecht Klassenart : ASVGeschlecht.values()) {
-			if (Klassenart.schluessel.equals(schluessel)) {
-				return Klassenart;
+		for (ASVGeschlecht geschlecht : ASVGeschlecht.values()) {
+			if (geschlecht.schluessel.equals(schluessel)) {
+				return geschlecht;
 			}
 		}
 

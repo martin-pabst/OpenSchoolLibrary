@@ -14,10 +14,15 @@
 
 	<statement name="library.getBorrowerStudentList">
 		select
-		student.id as student_id, class.name as
-		class_name, class.year_of_school, class.form_id,
+		student.id as student_id,
+	    student_school_term.id as student_school_term_id,
+		class.name as class_name, class.year_of_school, class.form_id, class.id as class_id,
 		student.firstname,
 		student.surname,
+      	student.before_surname,
+		student.after_surname,
+		student.dateofbirth,
+      	student.sex_key,
 		subject.id
 		as language_id, subject.shortname as language_name,
 		languageskill.from_year, languageskill.to_year, languageskill.id as

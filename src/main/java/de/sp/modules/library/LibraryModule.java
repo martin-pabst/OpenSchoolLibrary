@@ -8,6 +8,7 @@ import de.sp.main.resources.templates.VelocityEngineFactory;
 import de.sp.main.resources.text.TS;
 import de.sp.modules.library.servlets.borrow.bookcopystatus.LibraryBookCopyStatusServlet;
 import de.sp.modules.library.servlets.borrow.bookformstore.LibraryBookFormStoreServlet;
+import de.sp.modules.library.servlets.borrow.borrowedbooks.addstudent.LibraryAddStudentServlet;
 import de.sp.modules.library.servlets.borrow.borrowedbooks.LibraryBorrowedBooksListServlet;
 import de.sp.modules.library.servlets.borrow.borrowedbooks.LibraryRegisterBorrowingServlet;
 import de.sp.modules.library.servlets.borrow.borrowerlist.LibraryBorrowerListServlet;
@@ -100,6 +101,7 @@ public class LibraryModule extends Module {
 		context.addServlet(ReturnerListServlet.class, "/library/returnerList/*");
 		context.addServlet(LibraryNavigatorDataServlet.class, "/library/reports/navigatordata");
 		context.addServlet(LibraryReportServlet.class, "/library/reports/start");
+		context.addServlet(LibraryAddStudentServlet.class, "/library/students/save");
 	}
 
 	@Override

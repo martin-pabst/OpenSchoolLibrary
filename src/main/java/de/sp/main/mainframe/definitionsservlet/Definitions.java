@@ -1,19 +1,16 @@
 package de.sp.main.mainframe.definitionsservlet;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.sql2o.Connection;
-
 import de.sp.database.connection.ConnectionPool;
+import de.sp.database.daos.basic.DBClassDAO;
 import de.sp.database.daos.basic.SubjectDAO;
 import de.sp.database.daos.basic.ValueDAO;
-import de.sp.database.model.School;
-import de.sp.database.model.SchoolTerm;
-import de.sp.database.model.Subject;
-import de.sp.database.model.User;
-import de.sp.database.model.Value;
+import de.sp.database.model.*;
 import de.sp.database.model.valuelists.ValueStore;
+import de.sp.database.valuelists.VLSex;
+import org.sql2o.Connection;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class Definitions {
@@ -25,7 +22,11 @@ public class Definitions {
 	private List<SimpleValueListEntry> subjectList;
 
 	private List<School> schoolList;
-	
+
+	private List<SimpleValueListEntry> classList;
+
+	private List<SimpleValueListEntry> sexList;
+
 	private String username;
 	
 	public Definitions(User user, School school, SchoolTerm schoolTerm) {
@@ -34,16 +35,22 @@ public class Definitions {
 
 		try (Connection con = ConnectionPool.open()) {
 
+
+
 			formList = getValueList(school_id, ValueStore.form, con);
 
 			curriculumList = getValueList(school_id, ValueStore.curriculum, con);
+
+			sexList = VLSex.getAsValueList();
 
 			curriculumList.add(new SimpleValueListEntry(null, "Alle"));
 
 			subjectList = getSubjectList(school_id, con);
 			
 			schoolList = user.getSchools();
-			
+
+			classList = DBClassDAO.getSimpleValueList(schoolTerm.getId(), con);
+
 			username = user.getName();
 						
 		}

@@ -1,21 +1,19 @@
 package de.sp.protocols.w2ui.grid.gridrequest;
 
-import java.io.IOException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import de.sp.database.connection.ConnectionPool;
+import de.sp.database.model.User;
+import de.sp.main.resources.text.TS;
+import de.sp.tools.server.BaseServlet;
+import org.slf4j.Logger;
+import org.sql2o.Connection;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.slf4j.Logger;
-import org.sql2o.Connection;
-
-import com.google.gson.Gson;
-
-import de.sp.database.connection.ConnectionPool;
-import de.sp.database.model.User;
-import de.sp.main.resources.text.TS;
-import de.sp.tools.server.BaseServlet;
+import java.io.IOException;
 
 public abstract class BaseGridServlet<E> extends BaseServlet {
 
@@ -25,7 +23,7 @@ public abstract class BaseGridServlet<E> extends BaseServlet {
 			User user, TS ts, String postData) throws ServletException,
 			IOException {
 
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().setDateFormat("dd.MM.yyyy").create();
 
 		String responseString = "";
 

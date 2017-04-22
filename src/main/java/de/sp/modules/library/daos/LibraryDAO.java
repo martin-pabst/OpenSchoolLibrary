@@ -73,6 +73,45 @@ public class LibraryDAO {
 
     }
 
+    public static BorrowerRecord getBorrower(Long school_id, Long school_term_id, Long student_id,
+                                                       Connection con) {
+
+        String sql1 = StatementStore
+                .getStatement("library.getBorrowerStudentList");
+
+        sql1 += " and student.id = :student_id";
+
+
+        List<BorrowerRecord> studentBorrowersRaw = con.createQuery(sql1)
+                .addParameter("school_id", school_id)
+                .addParameter("school_term_id", school_term_id)
+                .addParameter("student_id", student_id)
+                .executeAndFetch(BorrowerRecord.class);
+
+        ArrayList<BorrowerRecord> borrowersConsolidated = new ArrayList<>();
+
+        Map<Long, BorrowerRecord> studentMap = new HashMap<>();
+
+        for (BorrowerRecord br : studentBorrowersRaw) {
+
+            BorrowerRecord old = studentMap.get(br.getStudent_id());
+
+            if (old == null) {
+                borrowersConsolidated.add(br);
+                studentMap.put(br.getStudent_id(), br);
+            } else {
+                old.consolidateWith(br);
+            }
+
+        }
+
+        borrowersConsolidated.forEach(bc -> bc.initStudent());
+
+        return borrowersConsolidated.get(0);
+
+    }
+
+
     public static List<BookFormStoreRecord> getBookFormStore(Long school_id,
                                                              Connection con) {
 

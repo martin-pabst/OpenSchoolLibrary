@@ -25,7 +25,15 @@
 		    curriculum_id = :curriculum_id
 		where id = :id
 	</statement>
-	
+
+	<statement name="student_school_term.updateBorrower" >
+		update student_school_term
+		set class_id = :class_id,
+		curriculum_id = :curriculum_id
+		where id = :id
+	</statement>
+
+
 	<statement name="student_school_term.findByStudentAndSchoolTerm" >
 		select id, student_id, school_term_id, class_id, curriculum_id 
 		from student_school_term

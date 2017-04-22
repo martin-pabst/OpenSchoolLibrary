@@ -1,7 +1,9 @@
 package reports;
 
 import com.google.gson.Gson;
-import de.sp.modules.library.servlets.reports.ExecuteReportRequest;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+import de.sp.modules.library.servlets.borrow.borrowedbooks.addstudent.LibraryAddStundentRequest;
 import de.sp.modules.library.servlets.reports.model.ReportManager;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -15,9 +17,29 @@ public class ReportManagerTest {
 
 		System.out.println(ReportManager.getInstance().toJSon());
 
-		Gson gson = new Gson();
-		ExecuteReportRequest erq = gson.fromJson("{\"selectedRows\":[1,2],\"reportId\":0,\"contentType\":\"html\",\"dataType\":1,\"school_id\":1,\"school_term_id\":1,\"parameterValues\":[\"true\"]}", ExecuteReportRequest.class);
+		Gson gson = new GsonBuilder().setDateFormat("dd.MM.yyyy").create();
 
-		System.out.println(erq.getParameterValues().size());
+		LibraryAddStundentRequest re =
+				null;
+		try {
+			re = gson.fromJson("{\"cmd\":\"save-record\",\"recid\":0,\"school_id\":1,\"school_term_id\":1,\n" +
+                    "\"record\":{\n" +
+                    "\"date_of_birth\":\"12.04.2017\",\n" +
+                    "\"firstname\":\"Theodor\",\n" +
+                    "\"surname\":\"Test\",\n" +
+                    "\"before_surname\":\"von\",\n" +
+                    "\"after_surname\":\"auf der Heid\",\n" +
+                    "\"sex\":{\"id\":1,\"text\":\"m\",\"hidden\":false},\n" +
+                    "\"classname\":{\"id\":1,\"text\":\"8a\",\"hidden\":false},\n" +
+                    "\"curriculum\":{\"id\":20,\"text\":\"GY_NTG_8\",\"hidden\":false},\n" +
+                    "\"language_1\":{\"id\":131,\"text\":\"E\",\"hidden\":false},\n" +
+                    "\"from_form_1\":{\"id\":3,\"text\":\"5\",\"hidden\":false}}}", LibraryAddStundentRequest.class);
+		} catch (JsonSyntaxException e) {
+			System.out.println(e);
+			e.printStackTrace();
+		}
+
+		System.out.println(re);
+
 	}
 }
