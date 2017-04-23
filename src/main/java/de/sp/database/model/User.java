@@ -1,15 +1,11 @@
 package de.sp.database.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import de.sp.database.stores.SchoolTermStore;
 import de.sp.main.resources.modules.InsufficientPermissionException;
 import de.sp.main.resources.modules.Permission;
 import de.sp.modules.admin.AdminModule;
+
+import java.util.*;
 
 public class User {
 
@@ -145,6 +141,18 @@ public class User {
 		School school = SchoolTermStore.getInstance().getSchoolById(school_id);
 
 		return hasPermission(permission, school);
+
+	}
+
+	public boolean hasPermissionForAnySchool(String permission){
+
+		for(School school: getSchools()){
+			if(hasPermission(permission, school)){
+				return true;
+			}
+		}
+
+		return false;
 
 	}
 

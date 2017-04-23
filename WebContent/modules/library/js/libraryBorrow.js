@@ -302,12 +302,14 @@
                 {field: 'id', caption: 'ID', size: '30px', hidden: true, sortable: true},
                 {field: 'class_name', caption: 'Klasse', size: '50px', sortable: true, resizable: true},
                 {field: 'name', caption: 'Name', size: '180px', sortable: true, resizable: true},
+                {field: 'religion', caption: 'Rel.-U.', size: '70px', sortable: true, resizable: true},
                 {field: 'languages', caption: 'Sprachen', size: '70px', sortable: true, resizable: true},
                 {field: 'curriculum_name', caption: 'AR', size: '70px', sortable: true, resizable: true}
             ],
             searches: [
                 {field: 'class_name', caption: 'Klasse', type: 'text'},
                 {field: 'name', caption: 'Name', type: 'text'},
+                {field: 'languages', caption: 'Sprachenfolge', type: 'text'},
                 {field: 'curriculum_name', caption: 'Ausbildungsrichtung', type: 'text'}
             ],
             sortData: [{field: 'class_name', direction: 'asc'}, {
@@ -323,7 +325,7 @@
 
             onEdit: function (event) {
 
-                if(this.getSelection(false).length === 1) {
+                if (this.getSelection(false).length === 1) {
 
                     var borrower = this.get(this.getSelection(false)[0])
 
@@ -575,6 +577,8 @@
 
     function bookNeeded(selectedBorrower, bookFormStoreRecord) {
 
+        var religionList = app.globalDefinitions().religionList;
+
         for (var i = 0; i < bookFormStoreRecord.bookFormEntries.length; i++) {
 
             var entry = bookFormStoreRecord.bookFormEntries[i];
@@ -598,10 +602,10 @@
                 if (bookFormStoreRecord.subject_id) {
                     var languageSkillFound = false;
                     selectedBorrower.languageskills.forEach(function (ls) {
-                        if (ls.subject_id == bookFormStoreRecord.subject_id) {
+                        if (ls.subject_id === bookFormStoreRecord.subject_id) {
 
-                            if (typeof ls.from_year == "undefined" || selectedBorrower.year_of_school - ls.from_year + 1 == entry.languageyear) {
-                                if (typeof ls.to_year == "undefined" || selectedBorrower.year_of_school <= ls.to_year) {
+                            if (typeof ls.from_year === "undefined" || selectedBorrower.year_of_school - ls.from_year + 1 === entry.languageyear) {
+                                if (typeof ls.to_year === "undefined" || selectedBorrower.year_of_school <= ls.to_year) {
                                     languageSkillFound = true;
                                 }
                             }
@@ -616,6 +620,23 @@
 
                 }
 
+            }
+
+            if (bookNeeded) {
+                var isReligionBook = false;
+                // Religion?
+                for (var r = 0; r < religionList.length; r++) {
+                    if(religionList[r].id === bookFormStoreRecord.subject_id){
+                        isReligionBook = true;
+                        break;
+                    }
+                }
+
+                if(isReligionBook){
+                    if(selectedBorrower.religion_id !== bookFormStoreRecord.subject_id){
+                        bookNeeded = false;
+                    }
+                }
             }
 
             if (bookNeeded) {
@@ -787,7 +808,7 @@
         var student_id = null;
         var student_school_term_id = null;
 
-        if(record !== null){
+        if (record !== null) {
 
             student_id = record.student_id;
             student_school_term_id = record.student_school_term_id;
@@ -852,6 +873,12 @@
                 '<div style="padding: 3px; font-weight: bold; color: #777;">Schullaufbahn:</div>' +
                 '<div class="w2ui-group" style="height: 285px;">' +
 
+                '    <div class="w2ui-field  w2ui-span8">' +
+                '        <label>Besuchter Religionsunterricht:</label>' +
+                '        <div>' +
+                '            <input name="religion" type="text" maxlength="20" style="width: 80px"/>' +
+                '        </div>' +
+                '    </div>' +
                 '    <div class="w2ui-field  w2ui-span8">' +
                 '        <label>Ausbildungsrichtung:</label>' +
                 '        <div>' +
@@ -919,13 +946,18 @@
                         showNone: false, required: true
                     },
                     {
+                        field: 'religion', type: 'list',
+                        options: {items: app.globalDefinitions().religionList},
+                        showNone: true, required: true
+                    },
+                    {
                         field: 'curriculum', type: 'list',
                         options: {items: app.globalDefinitions().curriculumList},
                         showNone: true, required: true
                     },
                     {
                         field: 'language_1', type: 'list',
-                        options: {items: app.globalDefinitions().subjectList},
+                        options: {items: app.globalDefinitions().languageList},
                         showNone: true, required: false
                     },
                     {
@@ -935,7 +967,7 @@
                     },
                     {
                         field: 'language_2', type: 'list',
-                        options: {items: app.globalDefinitions().subjectList},
+                        options: {items: app.globalDefinitions().languageList},
                         showNone: true, required: false
                     },
                     {
@@ -945,7 +977,7 @@
                     },
                     {
                         field: 'language_3', type: 'list',
-                        options: {items: app.globalDefinitions().subjectList},
+                        options: {items: app.globalDefinitions().languageList},
                         showNone: true, required: false
                     },
                     {
@@ -981,8 +1013,10 @@
             });
         }
 
-        w2ui.libraryAddStudentDialog.postData = {school_id: global_school_id, school_term_id: global_school_term_id,
-            student_id: student_id, student_school_term_id: student_school_term_id};
+        w2ui.libraryAddStudentDialog.postData = {
+            school_id: global_school_id, school_term_id: global_school_term_id,
+            student_id: student_id, student_school_term_id: student_school_term_id
+        };
 
 
         $().w2popup('open', {
@@ -1002,7 +1036,7 @@
             onOpen: function (event) {
                 event.onComplete = function () {
 
-                    if(record !== null) {
+                    if (record !== null) {
                         var rec = w2ui.libraryAddStudentDialog.record;
 
                         rec.surname = record.surname;
@@ -1013,9 +1047,9 @@
                         rec.sex = {id: record.sex_key};
                         rec.classname = {id: record.class_id};
                         rec.date_of_birth = record.dateofbirth;
+                        rec.religion = {id: record.religion_id};
 
-                        for(var i = 1; i <= 3; i++)
-                        {
+                        for (var i = 1; i <= 3; i++) {
                             if (record.languageskills.length >= i) {
                                 rec["language_" + i] = {id: record.languageskills[i - 1].subject_id};
                                 rec["from_form_" + i] = record.languageskills[i - 1].from_year;
@@ -1038,7 +1072,6 @@
                 }
             }
         });
-
 
 
     }

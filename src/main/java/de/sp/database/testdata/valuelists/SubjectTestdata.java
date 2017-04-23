@@ -22,7 +22,8 @@ public class SubjectTestdata {
 				SubjectDAO.insert(asvFach.getKurzform(),
 						asvFach.getAnzeigeform(),
 						SchoolTestdata.exampleSchool.getId(),
-						asvFach.getSchluessel(), null, con);
+						asvFach.getSchluessel(), null, asvFach.isReligion(),
+						asvFach.isLanguage(), con);
 
 			}
 

@@ -1,11 +1,10 @@
 package de.sp.database.daos.basic;
 
-import java.util.List;
-
-import org.sql2o.Connection;
-
 import de.sp.database.model.Teacher;
 import de.sp.database.statements.StatementStore;
+import org.sql2o.Connection;
+
+import java.util.List;
 
 public class TeacherDAO {
 	public static List<Teacher> getAll(Connection con) {
@@ -20,6 +19,7 @@ public class TeacherDAO {
 	public static Teacher insert(Long school_id, Long user_id, String surname,
 			String firstname, String before_surname, String after_surname,
 			String abbreviation, String external_id, String grade,
+			boolean is_synchronized,
 			Connection con) throws Exception {
 
 		String sql = StatementStore.getStatement("teacher.insert");
@@ -33,11 +33,13 @@ public class TeacherDAO {
 				.addParameter("after_surname", after_surname)
 				.addParameter("abbreviation", abbreviation)
 				.addParameter("external_id", external_id)
-				.addParameter("grade", grade).executeUpdate()
+				.addParameter("grade", grade)
+				.addParameter("synchronized", is_synchronized)
+				.executeUpdate()
 				.getKey(Long.class);
 
 		return new Teacher(id, school_id, user_id, surname, firstname,
-				before_surname, after_surname, abbreviation, external_id, grade);
+				before_surname, after_surname, abbreviation, external_id, grade, is_synchronized);
 
 	}
 
@@ -73,7 +75,9 @@ public class TeacherDAO {
 				.addParameter("abbreviation", t.getAbbreviation())
 				.addParameter("external_id", t.getExternal_id())
 				.addParameter("grade", t.getGrade())
-				.addParameter("id", t.getId()).executeUpdate();
+				.addParameter("id", t.getId())
+				.addParameter("synchronized", t.isSynchronized())
+				.executeUpdate();
 
 	}
 
@@ -85,5 +89,16 @@ public class TeacherDAO {
 				.executeAndFetchFirst(Long.class);
 
 	}
+
+	public static void setSynchronizedForAll(Long school_id, boolean is_synchronized,
+													 Connection con){
+		String sql = StatementStore.getStatement("teacher.setSynchronized");
+
+		con.createQuery(sql)
+				.addParameter("school_id", school_id)
+				.addParameter("synchronized", is_synchronized)
+				.executeUpdate();
+	}
+
 
 }

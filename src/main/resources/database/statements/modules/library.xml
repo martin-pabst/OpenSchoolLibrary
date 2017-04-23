@@ -23,13 +23,15 @@
 		student.after_surname,
 		student.dateofbirth,
       	student.sex_key,
-		subject.id
-		as language_id, subject.shortname as language_name,
+		language.id as language_id,
+		language.shortname as language_name,
 		languageskill.from_year, languageskill.to_year, languageskill.id as
 		languageskill_id,
 		curriculum_value.abbreviation as curriculum_name,
 		curriculum_value.id as curriculum_id,
-		student.exit_date
+		student.exit_date,
+		student.religion_id,
+		religion.shortname as religion
 		from
 		student
 		left join student_school_term on student_school_term.student_id =
@@ -37,12 +39,13 @@
 		left
 		join languageskill on languageskill.student_id = student.id
 		left join
-		subject on languageskill.subject_id = subject.id
+		subject language on languageskill.subject_id = language.id
 		left join value as
 		curriculum_value on student_school_term.curriculum_id =
 		curriculum_value.id
 		left join class on student_school_term.class_id =
 		class.id
+		left join subject religion on student.religion_id = religion.id
 		where
 		student.school_id = :school_id
 	</statement>

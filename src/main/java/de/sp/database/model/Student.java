@@ -1,13 +1,12 @@
 package de.sp.database.model;
 
-import java.util.Date;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.sp.database.valuelists.VLSex;
 import de.sp.database.valuelists.ValueNotFoundException;
 import de.sp.main.mainframe.MainFrameServlet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Date;
 
 public class Student {
 
@@ -33,13 +32,17 @@ public class Student {
 	
 	private Date exit_date;
 
+	private boolean is_synchronized;
+
+	private Long religion_id;
+
 	public Student() {
 	}
 
 	public Student(Long id, Long school_id, Date dateofbirth, String surname,
 			String firstname, String christian_names, String before_surname,
 			String after_surname, Integer sex_key, String external_id,
-			Date exit_date) {
+			Date exit_date, boolean is_synchronized, Long religion_id) {
 
 		this.id = id;
 		this.school_id = school_id;
@@ -52,6 +55,7 @@ public class Student {
 		this.sex_key = sex_key;
 		this.external_id = external_id;
 		this.exit_date = exit_date;
+		this.is_synchronized = is_synchronized;
 	}
 
 	public Long getId() {
@@ -180,4 +184,19 @@ public class Student {
 		
 	}
 
+	public void setSynchronized(boolean is_synchronized){
+		this.is_synchronized = is_synchronized;
+	}
+
+    public boolean isSynchronized() {
+        return is_synchronized;
+    }
+
+	public Long getReligion_id() {
+		return religion_id;
+	}
+
+	public void setReligion_id(Long religion_id) {
+		this.religion_id = religion_id;
+	}
 }

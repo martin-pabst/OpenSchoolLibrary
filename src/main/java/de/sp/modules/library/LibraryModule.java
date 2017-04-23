@@ -33,8 +33,10 @@ public class LibraryModule extends Module {
 	public static final String PERMISSION_RETURN = "library.return";
 	public static final String PERMISSION_EXAMINE = "library.examine";
 	public static final String PERMISSION_REPORTS = "library.reports";
-	public static final String PERMISSION_ADMONITION = "library.admonition";
-	
+	public static final String PERMISSION_EDIT_STUDENTS = "library.editStudents";
+	public static final String PERMISSION_SETTINGS = "library.settings";
+
+
 	private Template template;
 	
 	public LibraryModule() {
@@ -52,7 +54,7 @@ public class LibraryModule extends Module {
 		return new String[]{
 			PERMISSION_LIBRARY, PERMISSION_INVENTORY, PERMISSION_BORROW,
 			PERMISSION_RETURN, PERMISSION_EXAMINE, PERMISSION_REPORTS,
-			PERMISSION_ADMONITION
+			PERMISSION_SETTINGS, PERMISSION_EDIT_STUDENTS
 		};
 	
 	}

@@ -88,6 +88,7 @@
 		<column name="abbreviation" type="varchar" length="10" />
 		<column name="external_id" type="varchar" length="100" />
 		<column name="grade" type="varchar" length="40" />
+		<column name="synchronized" type="bool" />
 	</table>
 
 	<table name="student">
@@ -106,9 +107,13 @@
 		<column name="christian_names" type="varchar" length="300" />
 		<column name="before_surname" type="varchar" length="100" />
 		<column name="after_surname" type="varchar" length="100" />
-		<column name="sex_key" type="integer" />
+		<column name="sex_key" type="bigint" />
 		<column name="external_id" type="varchar" length="100" />
 		<column name="exit_date" type="date" />
+		<column name="religion_id" type="bigint">
+			<references table="subject" column="id" />
+		</column>
+		<column name="synchronized" type="bool" />
 	</table>
 
 	<table name="student_school_term">
@@ -164,6 +169,8 @@
 		</column>
 		<column name="key1" type="varchar" length="20" /> <!-- e.g. ASV-Key -->
 		<column name="key2" type="varchar" length="20" />
+		<column name="is_religion" type="bool" />
+		<column name="is_language" type="bool" />
 	</table>
 
 	<!-- Adresses, persons -->
@@ -257,11 +264,11 @@
 		</column>
 		<column name="title" type="varchar" length="300" />
 		<column name="author" type="varchar" length="300" />
-		<column name="isbn" type="varchar" length="13" />
+		<column name="isbn" type="varchar" length="20" />
 		<column name="publisher" type="varchar" length="200" />
 		<column name="remarks" type="varchar" length="2000" />
-		<column name="approval_code" type="varchar" length="30" />
-		<column name="edition" type="varchar" length="30" />
+		<column name="approval_code" type="varchar" length="50" />
+		<column name="edition" type="varchar" length="50" />
 		<column name="subject_id" type="bigint">
 			<references table="subject" column="id" />
 		</column>

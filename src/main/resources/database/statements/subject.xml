@@ -4,12 +4,12 @@
 <!-- Table subject -->
 
 	<statement name="subject.getAll" >
-		select id, shortname, longname, school_id, key1, key2 from subject
+		select id, shortname, longname, school_id, key1, key2, is_religion, is_language from subject
 	</statement>
 	
 	<statement name="subject.insert">
-		insert into subject (shortname, longname, school_id, key1, key2) 
-		values (:shortname, :longname, :school_id, :key1, :key2)
+		insert into subject (shortname, longname, school_id, key1, key2, is_religion, is_language)
+		values (:shortname, :longname, :school_id, :key1, :key2, :is_religion, :is_language)
 	</statement>
 
 	<statement name="subject.delete">
@@ -17,10 +17,19 @@
 	</statement>
 	
 	<statement name="subject.findBySchoolIDAndKey1" >
-		select id, shortname, longname, school_id, key1, key2 
+		select id, shortname, longname, school_id, key1, key2, is_religion, is_language
 		from subject
 		where school_id = :school_id
 		and key1 = :key1
 	</statement>
-	
+
+	<statement name="subject.findBySchoolIDAndSubjectShortform" >
+		select id, shortname, longname, school_id, key1, key2, is_religion, is_language
+		from subject
+		where shortname = :subjectShortname
+		and school_id = :school_id
+	</statement>
+
+
+
 </statementlist>

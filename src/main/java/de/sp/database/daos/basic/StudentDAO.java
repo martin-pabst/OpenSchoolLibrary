@@ -31,7 +31,8 @@ public class StudentDAO {
 	public static Student insert(Long school_id, Date dateofbirth,
 			String surname, String firstname, String christian_names,
 			String before_surname, String after_surname, Integer sex_key,
-			String external_id, Date exit_date, Connection con)
+			String external_id, Date exit_date, boolean is_synchronized,
+								 Long religion_id, Connection con)
 			throws Exception {
 
 		String sql = StatementStore.getStatement("student.insert");
@@ -46,12 +47,15 @@ public class StudentDAO {
 				.addParameter("after_surname", after_surname)
 				.addParameter("sex_key", sex_key)
 				.addParameter("external_id", external_id)
-				.addParameter("exit_date", exit_date).executeUpdate()
+				.addParameter("exit_date", exit_date)
+				.addParameter("synchronized", is_synchronized)
+				.addParameter("religion_id", religion_id)
+				.executeUpdate()
 				.getKey(Long.class);
 
 		return new Student(id, school_id, dateofbirth, surname, firstname,
 				christian_names, before_surname, after_surname, sex_key,
-				external_id, exit_date);
+				external_id, exit_date, is_synchronized, religion_id);
 
 	}
 
@@ -84,6 +88,8 @@ public class StudentDAO {
 				.addParameter("sex_key", student.getSex_key())
 				.addParameter("external_id", student.getExternal_id())
 				.addParameter("exit_date", student.getExit_date())
+				.addParameter("synchronized", student.isSynchronized())
+				.addParameter("religion_id", student.getReligion_id())
 				.executeUpdate();
 
 	}
@@ -111,7 +117,8 @@ public class StudentDAO {
 
     public static void updateBorrower(Long student_id, Date date_of_birth,
 									  String surname, String firstname, String before_surname,
-									  String after_surname, Long sex_id, Connection con) {
+									  String after_surname, Long sex_id,
+									  Long religion_id, Connection con) {
 
 		String sql = StatementStore.getStatement("student.updateBorrower");
 
@@ -124,8 +131,18 @@ public class StudentDAO {
 				.addParameter("before_surname", before_surname)
 				.addParameter("after_surname", after_surname)
 				.addParameter("sex_key", sex_id)
+				.addParameter("religion_id", religion_id)
 				.executeUpdate();
-
-
 	}
+
+	public static void setSynchronizedForAll(Long school_id, boolean is_synchronized,
+													 Connection con){
+		String sql = StatementStore.getStatement("student.setSynchronized");
+
+		con.createQuery(sql)
+				.addParameter("school_id", school_id)
+				.addParameter("synchronized", is_synchronized)
+				.executeUpdate();
+	}
+
 }

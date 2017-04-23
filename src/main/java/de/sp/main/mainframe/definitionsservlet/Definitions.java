@@ -21,6 +21,10 @@ public class Definitions {
 
 	private List<SimpleValueListEntry> subjectList;
 
+	private List<SimpleValueListEntry> languageList;
+
+	private List<SimpleValueListEntry> religionList;
+
 	private List<School> schoolList;
 
 	private List<SimpleValueListEntry> classList;
@@ -45,7 +49,7 @@ public class Definitions {
 
 			curriculumList.add(new SimpleValueListEntry(null, "Alle"));
 
-			subjectList = getSubjectList(school_id, con);
+			getSubjectList(school_id, con);
 			
 			schoolList = user.getSchools();
 
@@ -74,19 +78,29 @@ public class Definitions {
 		return ret;
 	}
 
-	private List<SimpleValueListEntry> getSubjectList(Long school_id,
+	private void getSubjectList(Long school_id,
 			Connection con) {
 
 		List<Subject> list = SubjectDAO.getAll(con);
 
-		ArrayList<SimpleValueListEntry> ret = new ArrayList<>();
+		subjectList = new ArrayList<>();
+		languageList = new ArrayList<>();
+		religionList = new ArrayList<>();
 
 		for (Subject subject : list) {
-			ret.add(new SimpleValueListEntry(subject.getId(), subject
-					.getShortname()));
-		}
+			SimpleValueListEntry sve = new SimpleValueListEntry(subject.getId(), subject
+					.getShortname());
 
-		return ret;
+			subjectList.add(sve);
+
+			if(subject.isIs_language()){
+				languageList.add(sve);
+			}
+
+			if(subject.isIs_religion()){
+				religionList.add(sve);
+			}
+		}
 	}
 
 }

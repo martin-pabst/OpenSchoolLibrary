@@ -1,39 +1,26 @@
 package de.sp.asvsst.databasewriter;
 
+import de.sp.asvsst.database.daos.ASVSStDAO;
+import de.sp.asvsst.model.*;
+import de.sp.asvsst.model.asvwlstore.ASVWlStore;
+import de.sp.asvsst.model.wertelisten.ASVBesuchterReligionsunterricht;
+import de.sp.asvsst.model.wertelisten.ASVJahrgangsstufe;
+import de.sp.database.connection.ConnectionPool;
+import de.sp.database.daos.basic.*;
+import de.sp.database.model.*;
+import de.sp.database.model.valuelists.ValueStore;
+import de.sp.database.stores.SchoolTermStore;
+import de.sp.main.StartServer;
+import de.sp.tools.server.progressServlet.ProgressServlet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sql2o.Connection;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.sql2o.Connection;
-
-import de.sp.asvsst.database.daos.ASVSStDAO;
-import de.sp.asvsst.model.ASVExport;
-import de.sp.asvsst.model.ASVKlasse;
-import de.sp.asvsst.model.ASVKlassengruppe;
-import de.sp.asvsst.model.ASVSchuelerin;
-import de.sp.asvsst.model.ASVSchule;
-import de.sp.asvsst.model.asvwlstore.ASVWlStore;
-import de.sp.asvsst.model.wertelisten.ASVJahrgangsstufe;
-import de.sp.database.connection.ConnectionPool;
-import de.sp.database.daos.basic.DBClassDAO;
-import de.sp.database.daos.basic.SchoolTermDAO;
-import de.sp.database.daos.basic.StudentDAO;
-import de.sp.database.daos.basic.TermDAO;
-import de.sp.database.daos.basic.ValueDAO;
-import de.sp.database.model.DBClass;
-import de.sp.database.model.School;
-import de.sp.database.model.SchoolTerm;
-import de.sp.database.model.Student;
-import de.sp.database.model.Term;
-import de.sp.database.model.Value;
-import de.sp.database.model.valuelists.ValueStore;
-import de.sp.database.stores.SchoolTermStore;
-import de.sp.main.StartServer;
-import de.sp.tools.server.progressServlet.ProgressServlet;
 
 public class ASVToDatabaseWriter {
 
@@ -76,6 +63,8 @@ public class ASVToDatabaseWriter {
 									+ asvSchule.dienststellenname + "("
 									+ asvSchule.schulnummer + ")\n\n", true,
 									"#0000ff", 0);
+
+							ASVBesuchterReligionsunterricht.init(con, school.getId());
 
 							importSchool(asvSchule, school, asvExport, con);
 

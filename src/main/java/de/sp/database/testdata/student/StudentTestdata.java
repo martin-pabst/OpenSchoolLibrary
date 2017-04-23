@@ -50,6 +50,12 @@ public class StudentTestdata {
 			Subject latein = SubjectDAO.findFirstBySchoolIDAndKey1(school_id,
 					ASVUnterrichtsfach.L.getSchluessel(), con);
 
+			Subject kath = SubjectDAO.findFirstBySchoolIDAndKey1(school_id,
+					ASVUnterrichtsfach.K.getSchluessel(), con);
+
+			Subject ev = SubjectDAO.findFirstBySchoolIDAndKey1(school_id,
+					ASVUnterrichtsfach.Ev.getSchluessel(), con);
+
 			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
 			DBClass achtA = DBClassDAO.insert(school_term_id, "8a", 8,
@@ -58,7 +64,7 @@ public class StudentTestdata {
 			Student benno_beispiel = StudentDAO.insert(school_id,
 					sdf.parse("03.09.2001"), "Beispiel", "Benno",
 					"Benno Ludwig", "von", "auf der Schanz",
-					VLSex.male.getKey(), "", null, con);
+					VLSex.male.getKey(), "", null, false, kath.getId(), con);
 
 			StudentSchoolTerm benno_beispiel_st = StudentSchoolTermDAO.insert(
 					benno_beispiel.getId(), school_term_id, achtA.getId(),
@@ -70,7 +76,7 @@ public class StudentTestdata {
 			Student felicitas_fleissig = StudentDAO.insert(school_id,
 					sdf.parse("03.09.2001"), "Fleißig", "Felicitas",
 					"", "", "",
-					VLSex.female.getKey(), "", null, con);
+					VLSex.female.getKey(), "", null, false, ev.getId(), con);
 
 			StudentSchoolTerm felicitas_fleissig_st = StudentSchoolTermDAO.insert(
 					felicitas_fleissig.getId(), school_term_id, achtA.getId(),

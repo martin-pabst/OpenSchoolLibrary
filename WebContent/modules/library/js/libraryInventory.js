@@ -49,6 +49,12 @@
 
             w2ui['libraryInventoryBooks'].load('/library/inventoryBooks/get');
 
+            var searchAll = $('#libraryInventoryBooks').find('.w2ui-search-all');
+
+            searchAll.keyup(function (event) {
+                this.onchange();
+            });
+
 
         });
 
@@ -221,6 +227,7 @@
                     caption: 'Fach',
                     size: '40px',
                     resizable: true,
+                    sortable: true,
                     editable: {type: 'list', items: app.globalDefinitions().subjectList, showNone: true},
                     render: function (record, index, col_index) {
                         var html = this.getCellValue(index, col_index).text;
@@ -355,7 +362,8 @@
 
                 var json = {
                     cmd: "delete-records",
-                    selected: this.getSelection(false)
+                    selected: this.getSelection(false),
+                    school_id: global_school_id
                 };
 
                 commitW2GridDelete(this, json, "/library/inventoryBooks/delete",

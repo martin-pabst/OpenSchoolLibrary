@@ -18,6 +18,8 @@ public class LibraryAddStudentRequestRecord {
     public SimpleValueListRespoonse classname;
     public SimpleValueListRespoonse curriculum;
 
+    public SimpleValueListRespoonse religion;
+
     public SimpleValueListRespoonse language_1;
     public Integer from_form_1;
 

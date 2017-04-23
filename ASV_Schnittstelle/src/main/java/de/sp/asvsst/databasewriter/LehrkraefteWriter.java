@@ -1,10 +1,5 @@
 package de.sp.asvsst.databasewriter;
 
-import java.util.HashMap;
-import java.util.List;
-
-import org.sql2o.Connection;
-
 import de.sp.asvsst.model.ASVExport;
 import de.sp.asvsst.model.ASVLehrkraftSchuleSchuljahr;
 import de.sp.asvsst.model.ASVLehrkraftSchuljahr;
@@ -17,6 +12,10 @@ import de.sp.database.model.SchoolTerm;
 import de.sp.database.model.Teacher;
 import de.sp.database.model.User;
 import de.sp.tools.server.progressServlet.ProgressServlet;
+import org.sql2o.Connection;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class LehrkraefteWriter {
 	
@@ -50,6 +49,11 @@ public class LehrkraefteWriter {
 		int lkZaehler = 0;
 
 		asvToDBWriter.protocolAdd("Importiere Lehrkräfte", true, "0000ff", 2);
+
+
+		// Reset synchronized-attribute. For all teachers found in ASV this attribute
+		// is set again later in this process
+		TeacherDAO.setSynchronizedForAll(school.getId(), false, con);
 
 		// Mappt XML-Ids auf die LehrkraftSchuljahr-Elemente
 		HashMap<Integer, ASVLehrkraftSchuljahr> asvLehrkraftSchuljahrMap = new HashMap<>();
@@ -116,13 +120,14 @@ public class LehrkraefteWriter {
 						lk.familienname, lk.rufname,
 						lk.namensbestandteil_vorangestellt,
 						lk.namensbestandteil_nachgestellt, asvLk.namenskuerzel,
-						lk.lokales_differenzierungsmerkmal, azKurzform, con);
+						lk.lokales_differenzierungsmerkmal, azKurzform, true, con);
 			} else {
 				teacher.setSurname(lk.familienname);
 				teacher.setFirstname(lk.rufname);
 				teacher.setAbbreviation(asvLk.namenskuerzel);
 				teacher.setGrade(azKurzform);
 				teacher.setExternal_id(lk.lokales_differenzierungsmerkmal);
+				teacher.setSynchronized(true);
 
 				TeacherDAO.update(teacher, con);
 			}

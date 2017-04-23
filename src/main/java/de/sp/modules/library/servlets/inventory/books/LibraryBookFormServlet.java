@@ -1,21 +1,14 @@
 package de.sp.modules.library.servlets.inventory.books;
 
-import java.util.List;
-import java.util.Map;
-
-import org.sql2o.Connection;
-
 import de.sp.database.daos.basic.BookDAO;
 import de.sp.database.daos.basic.BookFormDAO;
 import de.sp.database.model.BookForm;
 import de.sp.modules.library.LibraryModule;
-import de.sp.protocols.w2ui.grid.gridrequest.BaseGridServlet;
-import de.sp.protocols.w2ui.grid.gridrequest.GridRequestDelete;
-import de.sp.protocols.w2ui.grid.gridrequest.GridRequestSave;
-import de.sp.protocols.w2ui.grid.gridrequest.GridRequestUpdate;
-import de.sp.protocols.w2ui.grid.gridrequest.GridResponseSave;
-import de.sp.protocols.w2ui.grid.gridrequest.GridResponseStatus;
-import de.sp.protocols.w2ui.grid.gridrequest.GridResponseUpdateDelete;
+import de.sp.protocols.w2ui.grid.gridrequest.*;
+import org.sql2o.Connection;
+
+import java.util.List;
+import java.util.Map;
 
 public class LibraryBookFormServlet extends BaseGridServlet<Object> {
 
@@ -71,8 +64,12 @@ public class LibraryBookFormServlet extends BaseGridServlet<Object> {
 			break;
 		case "curriculum":
 			Long curriculumID = null;
-			if (!((Map) value).get("id").toString().equals("Alle")) {
-				curriculumID = (long) ((double) ((Map) value).get("id"));
+			try {
+				if (!((Map) value).get("id").toString().equals("Alle")) {
+					curriculumID = (long) ((double) ((Map) value).get("id"));
+				}
+			} catch(Exception ex){
+
 			}
 
 			statement = "update book_form set curriculum_id = :curriculum_id "

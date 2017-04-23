@@ -9,71 +9,149 @@ import de.sp.database.model.Book;
 import de.sp.database.model.Subject;
 import de.sp.database.model.Value;
 import de.sp.database.model.valuelists.ValueStore;
-import de.sp.database.testdata.valuelists.ASVBildungsgang;
-import de.sp.database.testdata.valuelists.ASVJahrgangsstufe;
+import de.sp.tools.file.FileTool;
+import de.sp.tools.string.FormTool;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sql2o.Connection;
 
+import java.io.InputStream;
+import java.util.List;
+
 public class BookTestdata {
+
+	private List<Value> jahrgangsstufen;
+
+	private List<Value> ausbildungsrichtungen;
+
+	private DataFormatter dataFormatter = new DataFormatter();
+
 
 	public void test() throws Exception {
 
 		Logger logger = LoggerFactory.getLogger(this.getClass());
-		logger.info("Inserting book testdata...");
+		logger.info("Inserting CSG books");
 
 
 		try (Connection con = ConnectionPool.open()) {
 
+
 			Long school_id = SchoolTestdata.exampleSchool.getId();
 
-			Subject mathematik = SubjectDAO.findFirstBySchoolIDAndKey1(
-					school_id, "0300400100", con);
-			Subject englisch = SubjectDAO.findFirstBySchoolIDAndKey1(school_id,
-					"0100600100", con);
-			@SuppressWarnings("unused")
-			Subject deutsch = SubjectDAO.findFirstBySchoolIDAndKey1(school_id,
-					"0100500100", con);
+			jahrgangsstufen = ValueDAO.findBySchoolAndValueStore(school_id, ValueStore.form.getKey(), con);
 
-			Book book1 = BookDAO.insert(school_id, "Pippi Langstrumpf",
-					"Astrid Lindgren", "1111-2222", "Beispielverlag",
-					"Bemerkungen", "ED-988-f", "2. Auflage",
-					mathematik.getId(), 16.44d, con);
-			Book book2 = BookDAO.insert(school_id,
-					"Harry Potter and the philosoper's Stone", "J. K. Rowling",
-					"2222-3333", "XXXYYY-Verlag", "Bemerkungen2",
-					"YN-7899", "1. Auflage",
-					englisch.getId(), 20.99d, con);
+			ausbildungsrichtungen = ValueDAO.findBySchoolAndValueStore(school_id, ValueStore.curriculum.getKey(), con);
 
-			Value jgst5 = ValueDAO.findBySchoolAndValueStoreAndExternalKey(
-					school_id, ValueStore.form.getKey(),
-					ASVJahrgangsstufe.jgst5.getSchluessel(), con);
-			Value jgst6 = ValueDAO.findBySchoolAndValueStoreAndExternalKey(
-					school_id, ValueStore.form.getKey(),
-					ASVJahrgangsstufe.jgst6.getSchluessel(), con);
-			Value jgst7 = ValueDAO.findBySchoolAndValueStoreAndExternalKey(
-					school_id, ValueStore.form.getKey(),
-					ASVJahrgangsstufe.jgst7.getSchluessel(), con);
-			Value jgst8 = ValueDAO.findBySchoolAndValueStoreAndExternalKey(
-					school_id, ValueStore.form.getKey(),
-					ASVJahrgangsstufe.jgst8.getSchluessel(), con);
+			String pathname = "/database/testdata/Buecher_CSG.xlsx";
 
-			Value ntg8 = ValueDAO.findBySchoolAndValueStoreAndExternalKey(
-					school_id, ValueStore.curriculum.getKey(),
-					ASVBildungsgang.GY_NTG_8.getSchluessel(), con);
-			
-			Value sg8 = ValueDAO.findBySchoolAndValueStoreAndExternalKey(
-					school_id, ValueStore.curriculum.getKey(),
-					ASVBildungsgang.GY_SG_8.getSchluessel(), con);
+			logger.info("Hole Daten der Scheiner-Bücher aus der Datei " + pathname);
 
-			BookFormDAO.insert(book1.getId(), jgst5.getId(), ntg8.getId(), null, con);
-			BookFormDAO.insert(book1.getId(), jgst6.getId(), sg8.getId(), null, con);
+			InputStream fis = FileTool.getInputStream(pathname);
 
-			BookFormDAO.insert(book2.getId(), jgst7.getId(), ntg8.getId(), 2, con);
-			BookFormDAO.insert(book2.getId(), jgst8.getId(), sg8.getId(), 3, con);
-			
-			
+			XSSFWorkbook wb = new XSSFWorkbook(fis);
+
+			XSSFSheet sh = wb.getSheet("Tabelle1");
+
+			int lastRowNum = sh.getLastRowNum();
+
+			for(int i = 1; i <= lastRowNum; i++){
+
+				Row row = sh.getRow(i);
+
+				int c = 0;
+				String jahrgangsstufe = getSafeCellvalue(row, c++);
+				String fach = getSafeCellvalue(row, c++);
+				String verlag = getSafeCellvalue(row, c++);
+				String titel = getSafeCellvalue(row, c++);
+				String kurztitel = getSafeCellvalue(row, c++);
+				String author = getSafeCellvalue(row, c++);
+				String vbn = getSafeCellvalue(row, c++);
+				String auflage = getSafeCellvalue(row, c++);
+				String preis = getSafeCellvalue(row, c++);
+				String zulassungsnummer = getSafeCellvalue(row, c++);
+				String ausbildungsrichtung = getSafeCellvalue(row, c++);
+				String lernjahr = getSafeCellvalue(row, c++);
+
+				Subject subject = SubjectDAO.findFirstBySchoolIDAndSubjectShortform(school_id, fach, con);
+
+				Long subject_id = subject == null ? null : subject.getId();
+
+				Long jahrgangsstufe_id = getJahrgangsstufe_id(jahrgangsstufe);
+
+				Long ausbildungsrichtung_id = getAusbildungsrichtung_id(ausbildungsrichtung);
+
+				Double preisDouble = null;
+
+				if(preis != null){
+					preisDouble = Double.parseDouble(preis.replace(',', '.'));
+				}
+
+				Integer sprachenJahr = FormTool.formToInteger(lernjahr);
+				if(sprachenJahr == 0){
+					sprachenJahr = null;
+				}
+
+				Book book = BookDAO.insert(school_id, titel,
+						author, vbn, verlag,
+						"Eintrag automatisch aus Excelliste generiert", zulassungsnummer,
+						auflage,
+						subject_id, preisDouble , con);
+
+				BookFormDAO.insert(book.getId(), jahrgangsstufe_id, ausbildungsrichtung_id, sprachenJahr, con);
+
+			}
+
+			wb.close();
+
+
 		}
+	}
+
+	private Long getAusbildungsrichtung_id(String ausbildungsrichtung) {
+
+		if(ausbildungsrichtung == null){
+			return null;
+		}
+
+		for(Value value: ausbildungsrichtungen){
+			if(value.getAbbreviation().equalsIgnoreCase(ausbildungsrichtung)){
+				return value.getId();
+			}
+		}
+
+		return null;
+	}
+
+	private String getSafeCellvalue(Row row, int column) {
+
+		Cell cell = row.getCell(column);
+		if(cell == null){
+			return "";
+		} else {
+			return dataFormatter.formatCellValue(cell);
+		}
+
+	}
+
+	
+	private Long getJahrgangsstufe_id(String jahrgangsstufe) {
+
+		int jgstInt = FormTool.formToInteger(jahrgangsstufe);
+
+		for(Value jgstValue: jahrgangsstufen){
+			Integer j1 = FormTool.formToInteger(jgstValue.getAbbreviation());
+			if(j1 != null && jgstInt == j1){
+				return jgstValue.getId();
+			}
+		}
+
+		return null;
+
 	}
 
 }

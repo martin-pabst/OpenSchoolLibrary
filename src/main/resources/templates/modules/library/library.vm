@@ -13,13 +13,15 @@
             <i class="fa fa-reply-all fa-fw" aria-hidden="true"></i>
             <span class="menuitemtext">${ts.get("library.menu.return")}</span></a></li>
 
-        <li role="presentation"><a data-toggle="tab" href="#libraryAdmonition" id="libraryAdmonitionTab">
-            <i class="fa fa-warning fa-fw" aria-hidden="true"></i>
-            <span class="menuitemtext">${ts.get("library.menu.admonition")}</span></a></li>
-
         <li role="presentation"><a data-toggle="tab" href="#libraryReports" id="libraryReportsTab">
             <i class="fa fa-print fa-fw" aria-hidden="true"></i>
             <span class="menuitemtext">${ts.get("library.menu.reports")}</span></a></li>
+
+        #if($user.hasPermissionForAnySchool("library.settings"))
+            <li role="presentation"><a data-toggle="tab" href="#librarySettings" id="librarySettingsTab">
+                <i class="fa fa-wrench fa-fw" aria-hidden="true"></i>
+                <span class="menuitemtext">Einstellungen/Datenpflege</span></a></li>
+        #end
     </ul>
 
     <div class="tab-content">
@@ -226,13 +228,6 @@
             </div>
         </div>
 
-        <!-- Admonition -->
-
-        <div id="libraryAdmonition" class="tab-pane fade">
-            <h3>Mahnwesen</h3>
-            <p>Some content in menu 2.</p>
-        </div>
-
         <!-- Reports -->
 
         <div id="libraryReports" class="tab-pane fade" width="100%" style="padding: 10px">
@@ -240,14 +235,14 @@
                 <tr>
                     <td style="vertical-align: top; padding: 5px">
                         <div id="entitychooser">
-                            <div class="btn-group" data-toggle="buttons" >
+                            <div class="btn-group" data-toggle="buttons">
                                 <label class="btn btn-default active">
                                     <input type="radio"
                                            id="reportsSchuelerSelected" autocomplete="off" checked>Schüler/innen
                                 </label>
                                 <label class="btn btn-default">
                                     <input type="radio"
-                                           id="reportsLehrerSelected" autocomplete="off" >Lehrkräfte
+                                           id="reportsLehrerSelected" autocomplete="off">Lehrkräfte
                                 </label>
                                 <label class="btn btn-default">
                                     <input type="radio" id="reportsKlassenSelected" autocomplete="off">Klassen
@@ -263,7 +258,8 @@
                     </td>
                     <td>
                         <form name="startReportForm" action="/library/reports/start" target="_blank" method="post">
-                            <textarea id="reportParameterTextarea" name="reportParameters" style="visibility: hidden; width: 0; height: 0"></textarea>
+                            <textarea id="reportParameterTextarea" name="reportParameters"
+                                      style="visibility: hidden; width: 0; height: 0"></textarea>
                             <button id="reportsStart" class="btn btn-default" type="submit"
                                     style="margin: 0 10px; float: right">Start
                                 <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
@@ -290,4 +286,13 @@
             </table>
 
         </div>
+
+        <!-- Clean -->
+
+        <div id="librarySettings" class="tab-pane fade">
+            <h3>Datenppflege</h3>
+            <p>Some content...</p>
+        </div>
+
+
     </div>

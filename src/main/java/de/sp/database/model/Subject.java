@@ -15,6 +15,9 @@ public class Subject{
 
    private String key2;
 
+   private  boolean is_religion;
+
+   private boolean is_language;
 
 
    public Subject(){
@@ -22,7 +25,8 @@ public class Subject{
 
 
 
-   public Subject(Long id, String shortname, String longname, Long school_id, String key1, String key2){
+   public Subject(Long id, String shortname, String longname, Long school_id, String key1, String key2,
+                  boolean is_religion, boolean is_language){
 
       this.id = id;
       this.shortname = shortname;
@@ -30,6 +34,8 @@ public class Subject{
       this.school_id = school_id;
       this.key1 = key1;
       this.key2 = key2;
+      this.is_religion = is_religion;
+      this.is_language = is_language;
 }
 
    public Long getId(){
@@ -68,4 +74,11 @@ public class Subject{
 
    }
 
+   public boolean isIs_religion() {
+      return is_religion;
+   }
+
+   public boolean isIs_language() {
+      return is_language;
+   }
 }

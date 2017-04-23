@@ -27,6 +27,8 @@ public class BorrowerRecord {
 
 	private Date dateofbirth;
 	private Long sex_key;
+	private Long religion_id;
+	private String religion;
 
 	private String name;
 
@@ -117,6 +119,7 @@ public class BorrowerRecord {
 		class_name = "L";
 		languages = "---";
 		curriculum_name = "---";
+		religion = "---";
 	}
 
 	public Long getStudent_id() {

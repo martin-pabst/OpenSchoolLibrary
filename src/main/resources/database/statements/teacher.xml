@@ -7,17 +7,17 @@
 		select 
 		id, school_id, user_id, surname, firstname, 
 		before_surname, after_surname, abbreviation, external_id, 
-		grade 
+		grade, synchronized
 		from teacher
 	</statement>
 
 	<statement name="teacher.insert">
 		insert into teacher (school_id, user_id, surname, firstname, 
 		before_surname, after_surname, abbreviation, external_id, 
-		grade)
+		grade, synchronized)
 		values (:school_id, :user_id, :surname, :firstname, 
 		:before_surname, :after_surname, :abbreviation, :external_id, 
-		:grade)
+		:grade, :synchronized)
 	</statement>
 
 	<statement name="teacher.delete">
@@ -28,7 +28,7 @@
 		select 
 		id, school_id, user_id, surname, firstname, 
 		before_surname, after_surname, abbreviation, external_id, 
-		grade 
+		grade, synchronized
 		from teacher
 		where 
 		school_id = :school_id
@@ -41,13 +41,20 @@
 	firstname = :firstname,
 	abbreviation = :abbreviation,
 	external_id = :external_id,
-	grade = :grade
-	where id = :id	
+	grade = :grade,
+	synchronized = :synchronized
+	where id = :id
 	</statement>
 	
 	<statement name = "teacher.getSchoolId">
 		select school_id from teacher 
 		where id = :teacher_id
+	</statement>
+
+	<statement name="teacher.setSynchronized">
+		update teacher
+			set synchronized = :synchronized
+			where school_id = :school_id
 	</statement>
 
 </statementlist>

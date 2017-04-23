@@ -1,11 +1,10 @@
 package de.sp.database.daos.basic;
 
-import java.util.List;
-
-import org.sql2o.Connection;
-
 import de.sp.database.model.Subject;
 import de.sp.database.statements.StatementStore;
+import org.sql2o.Connection;
+
+import java.util.List;
 
 public class SubjectDAO {
 
@@ -25,7 +24,8 @@ public class SubjectDAO {
 	 * @throws Exception
 	 */
 	public static Subject insert(String shortname, String longname,
-			Long school_id, String key1, String key2, Connection con)
+			Long school_id, String key1, String key2,
+			boolean is_religion, boolean is_language, Connection con)
 			throws Exception {
 
 		String sql = StatementStore.getStatement("subject.insert");
@@ -35,9 +35,11 @@ public class SubjectDAO {
 				.addParameter("longname", longname)
 				.addParameter("school_id", school_id)
 				.addParameter("key1", key1).addParameter("key2", key2)
+				.addParameter("is_religion", is_religion)
+				.addParameter("is_language", is_language)
 				.executeUpdate().getKey(Long.class);
 
-		return new Subject(id, shortname, longname, school_id, key1, key2);
+		return new Subject(id, shortname, longname, school_id, key1, key2, is_religion, is_language);
 
 	}
 
@@ -76,4 +78,20 @@ public class SubjectDAO {
 		return null;
 	}
 
+	public static Subject findFirstBySchoolIDAndSubjectShortform(Long school_id, String subjectShortname, Connection con) {
+
+		String sql = StatementStore
+				.getStatement("subject.findBySchoolIDAndSubjectShortform");
+
+		List<Subject> subjectlist = con.createQuery(sql)
+				.addParameter("school_id", school_id)
+				.addParameter("subjectShortname", subjectShortname)
+				.executeAndFetch(Subject.class);
+
+		if(subjectlist.size() == 1){
+			return subjectlist.get(0);
+		}
+
+		return null;
+	}
 }

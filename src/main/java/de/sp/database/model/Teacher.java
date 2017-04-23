@@ -21,14 +21,16 @@ public class Teacher {
 	private String external_id;
 
 	private String grade;
-	
+
+	private boolean is_synchronized;
+
 	public Teacher() {
 	}
 
 
 	public Teacher(Long id, Long school_id, Long user_id, String surname,
 			String firstname, String before_surname, String after_surname,
-			String abbreviation, String external_id, String grade) {
+			String abbreviation, String external_id, String grade, boolean is_synchronized) {
 		super();
 		this.id = id;
 		this.school_id = school_id;
@@ -40,6 +42,7 @@ public class Teacher {
 		this.abbreviation = abbreviation;
 		this.external_id = external_id;
 		this.grade = grade;
+		this.is_synchronized = is_synchronized;
 	}
 
 
@@ -147,6 +150,12 @@ public class Teacher {
 		this.grade = grade;
 	}
 
-	
-	
+	public void setSynchronized(boolean is_synchronized){
+		this.is_synchronized = is_synchronized;
+	}
+
+
+    public boolean isSynchronized() {
+        return is_synchronized;
+    }
 }

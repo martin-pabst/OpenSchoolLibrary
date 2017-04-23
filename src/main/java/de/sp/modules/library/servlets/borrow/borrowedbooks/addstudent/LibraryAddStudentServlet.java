@@ -44,14 +44,15 @@ public class LibraryAddStudentServlet extends BaseServlet {
 
 			LibraryAddStudentRequestRecord record = lasr.record;
 
-			user.checkPermission(LibraryModule.PERMISSION_INVENTORY, lasr.school_id);
+			user.checkPermission(LibraryModule.PERMISSION_EDIT_STUDENTS, lasr.school_id);
 
 			Long student_id = lasr.student_id;
 
 			if(student_id == null){
 
 				Student student = StudentDAO.insert(lasr.school_id,record.date_of_birth, record.surname, record.firstname, record.firstname,
-						record.before_surname, record.after_surname, record.sex.id.intValue(), "", null, con);
+						record.before_surname, record.after_surname, record.sex.id.intValue(), "", null, false,
+						record.religion.id, con);
 
 				student_id = student.getId();
 
@@ -61,7 +62,8 @@ public class LibraryAddStudentServlet extends BaseServlet {
 
 				StudentDAO.updateBorrower(lasr.student_id,
 						record.date_of_birth, record.surname, record.firstname,
-						record.before_surname, record.after_surname, record.sex.id, con);
+						record.before_surname, record.after_surname, record.sex.id,
+						record.religion.id, con);
 
 				StudentSchoolTermDAO.updateBorrower(lasr.student_school_term_id, record.curriculum.id, record.classname.id, con);
 

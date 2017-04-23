@@ -1,5 +1,15 @@
 package de.sp.main.resources.modules;
 
+import de.sp.database.model.User;
+import de.sp.main.mainframe.menu.MenuItem;
+import de.sp.main.resources.text.TS;
+import de.sp.tools.file.FileTool;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.file.Files;
@@ -7,17 +17,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import de.sp.database.model.User;
-import de.sp.main.mainframe.menu.MenuItem;
-import de.sp.main.resources.text.TS;
-import de.sp.tools.file.FileTool;
 
 public abstract class Module {
 
@@ -174,6 +173,8 @@ public abstract class Module {
 
 	protected void renderTemplate(Template template, TS ts, User user,
 			StringBuilder sb) {
+
+
 
 		VelocityContext context = new VelocityContext();
 		context.put("ts", ts); // language
