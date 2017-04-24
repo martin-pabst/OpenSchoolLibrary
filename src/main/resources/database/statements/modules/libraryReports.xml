@@ -22,6 +22,11 @@
         WHERE
             student.school_id = :school_id and
             student.id IN :ids
+        order by class_name, student.surname, student.firstname, book.title
+
+    </statement>
+
+    <statement name="libraryReports.neededBooksHelper">
 
     </statement>
 

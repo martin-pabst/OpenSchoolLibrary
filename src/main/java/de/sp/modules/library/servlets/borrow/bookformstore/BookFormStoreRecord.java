@@ -38,4 +38,47 @@ public class BookFormStoreRecord {
 		return book_id;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public Long getSubject_id() {
+		return subject_id;
+	}
+
+	public Long getBook_form_id() {
+		return book_form_id;
+	}
+
+	public Long getForm_id() {
+		return form_id;
+	}
+
+	public String getForm_name() {
+		return form_name;
+	}
+
+	public Long getCurriculum_id() {
+		return curriculum_id;
+	}
+
+	public String getCurriculum_name() {
+		return curriculum_name;
+	}
+
+	public Integer getLanguageyear() {
+		return languageyear;
+	}
+
+	public List<BookFormEntry> getBookFormEntries() {
+		return bookFormEntries;
+	}
 }

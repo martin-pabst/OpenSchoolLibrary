@@ -81,7 +81,7 @@ public class Definitions {
 	private void getSubjectList(Long school_id,
 			Connection con) {
 
-		List<Subject> list = SubjectDAO.getAll(con);
+		List<Subject> list = SubjectDAO.getAll(con, school_id);
 
 		subjectList = new ArrayList<>();
 		languageList = new ArrayList<>();
@@ -97,7 +97,7 @@ public class Definitions {
 				languageList.add(sve);
 			}
 
-			if(subject.isIs_religion()){
+			if(subject.is_religion()){
 				religionList.add(sve);
 			}
 		}

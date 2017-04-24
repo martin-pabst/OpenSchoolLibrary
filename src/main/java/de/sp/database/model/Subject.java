@@ -74,7 +74,7 @@ public class Subject{
 
    }
 
-   public boolean isIs_religion() {
+   public boolean is_religion() {
       return is_religion;
    }
 

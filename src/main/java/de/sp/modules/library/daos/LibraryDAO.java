@@ -20,7 +20,7 @@ import java.util.Map;
 public class LibraryDAO {
 
     public static List<BorrowerRecord> getBorrowerList(Long school_id, Long school_term_id,
-                                                       Connection con) {
+                                                       Connection con, boolean withTeachers) {
 
 		/*
          * Students
@@ -53,20 +53,22 @@ public class LibraryDAO {
 
         borrowersConsolidated.forEach(bc -> bc.initStudent());
 
+        if (withTeachers) {
 		/*
 		 * Teachers
 		 */
 
-        String sql2 = StatementStore
-                .getStatement("library.getBorrowerTeacherList");
+            String sql2 = StatementStore
+                    .getStatement("library.getBorrowerTeacherList");
 
-        List<BorrowerRecord> teacherBorrowers = con.createQuery(sql2)
-                .addParameter("school_id", school_id)
-                .executeAndFetch(BorrowerRecord.class);
+            List<BorrowerRecord> teacherBorrowers = con.createQuery(sql2)
+                    .addParameter("school_id", school_id)
+                    .executeAndFetch(BorrowerRecord.class);
 
-        teacherBorrowers.forEach(bc -> bc.initTeacher());
+            teacherBorrowers.forEach(bc -> bc.initTeacher());
 
-        borrowersConsolidated.addAll(teacherBorrowers);
+            borrowersConsolidated.addAll(teacherBorrowers);
+        }
 
 
         return borrowersConsolidated;

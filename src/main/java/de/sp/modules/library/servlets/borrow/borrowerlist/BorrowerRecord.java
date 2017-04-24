@@ -130,6 +130,111 @@ public class BorrowerRecord {
 		return teacher_id;
 	}
 
+	public Long getStudent_school_term_id() {
+		return student_school_term_id;
+	}
 
+	public boolean isStudent() {
+		return isStudent;
+	}
 
+	public String getClass_name() {
+		return class_name;
+	}
+
+	public Long getClass_id() {
+		return class_id;
+	}
+
+	public Integer getYear_of_school() {
+		return year_of_school;
+	}
+
+	public Long getForm_id() {
+		return form_id;
+	}
+
+	public String getFirstname() {
+		return firstname;
+	}
+
+	public String getSurname() {
+		return surname;
+	}
+
+	public String getBefore_surname() {
+		return before_surname;
+	}
+
+	public String getAfter_surname() {
+		return after_surname;
+	}
+
+	public Date getDateofbirth() {
+		return dateofbirth;
+	}
+
+	public Long getSex_key() {
+		return sex_key;
+	}
+
+	public Long getReligion_id() {
+		return religion_id;
+	}
+
+	public String getReligion() {
+		return religion;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getTerm_name() {
+		return term_name;
+	}
+
+	public Long getTerm_id() {
+		return term_id;
+	}
+
+	public Long getLanguage_id() {
+		return language_id;
+	}
+
+	public String getLanguage_name() {
+		return language_name;
+	}
+
+	public Integer getFrom_year() {
+		return from_year;
+	}
+
+	public Integer getTo_year() {
+		return to_year;
+	}
+
+	public Long getLanguageskill_id() {
+		return languageskill_id;
+	}
+
+	public ArrayList<Languageskill> getLanguageskills() {
+		return languageskills;
+	}
+
+	public String getLanguages() {
+		return languages;
+	}
+
+	public String getCurriculum_name() {
+		return curriculum_name;
+	}
+
+	public Long getCurriculum_id() {
+		return curriculum_id;
+	}
+
+	public Date getExit_date() {
+		return exit_date;
+	}
 }

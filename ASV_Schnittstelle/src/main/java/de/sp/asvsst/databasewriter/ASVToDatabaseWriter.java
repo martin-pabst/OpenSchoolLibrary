@@ -105,7 +105,9 @@ public class ASVToDatabaseWriter {
 		if (progressCode != null) {
 			ProgressServlet.publishProgress(min, max, now, text, completed, result, progressCode);
 		} else {
-		    System.out.println("Stand: " + now + ", " + text);
+
+			int percent = (int)((double)now/(double)max * 100);
+		    System.out.println("" + percent + "%: " + text);
         }
 
 	}

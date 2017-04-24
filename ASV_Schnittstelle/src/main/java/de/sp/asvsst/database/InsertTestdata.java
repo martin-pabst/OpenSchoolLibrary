@@ -1,4 +1,4 @@
-package de.sp.asvsst.database.daos;
+package de.sp.asvsst.database;
 
 import de.sp.asvsst.ASVXMLParser;
 import de.sp.asvsst.databasewriter.ASVToDatabaseWriter;
@@ -8,12 +8,9 @@ import de.sp.database.model.StoreManager;
 import de.sp.database.statements.StatementStore;
 import de.sp.main.config.Configuration;
 import de.sp.main.resources.modules.ModuleManager;
-import de.sp.main.resources.modules.Permission;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by martin on 24.04.2017.
@@ -28,10 +25,10 @@ public class InsertTestdata {
 
         // read sql-statements from xml files
         StatementStore.readStatements((String) config.getDatabase().getType(),
-                (String) "C:/Vorhaben/IntelliJ/OpenSchoolPlatform/src/main/resources/database/statements");
+                (String) "./src/main/resources/database/statements");
 
         StatementStore.readStatements((String) config.getDatabase().getType(),
-                (String) "C:/Vorhaben/IntelliJ/OpenSchoolPlatform/ASV_Schnittstelle/src/main/resources/database/statements");
+                (String) "./ASV_Schnittstelle/src/main/resources/database/statements");
 
         try {
             StoreManager.getInstance().loadStoresFromDatabase(

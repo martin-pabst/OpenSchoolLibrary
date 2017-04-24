@@ -21,7 +21,7 @@ public class BorrowedBookRecord {
 		return barcode;
 	}
 
-	
-	
-
+	public Long getBook_id() {
+		return book_id;
+	}
 }
