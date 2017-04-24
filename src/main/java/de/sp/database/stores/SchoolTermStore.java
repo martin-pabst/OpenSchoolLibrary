@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sql2o.Connection;
 
 import de.sp.database.connection.ConnectionPool;
@@ -67,6 +69,9 @@ public class SchoolTermStore {
 					schoolTermIds.put(st.getId(), st);
 				}
 			}
+		} catch (Exception ex){
+			Logger logger = LoggerFactory.getLogger(this.getClass());
+			logger.error(ex.toString(), ex);
 		}
 
 	}

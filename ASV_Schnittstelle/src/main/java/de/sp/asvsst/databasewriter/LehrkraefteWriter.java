@@ -43,6 +43,17 @@ public class LehrkraefteWriter {
 		this.progressCode = progressCode;
 	}
 
+	private void publishProgress(int min, int max, int now,
+								 String text, boolean completed, Object result, String progressCode){
+
+
+		if (progressCode != null) {
+			ProgressServlet.publishProgress(min, max, now, text, completed, result, progressCode);
+		} else {
+			System.out.println("Stand: " + now + ", " + text);
+		}
+
+	}
 
 
 	public void start() throws Exception{
@@ -73,11 +84,10 @@ public class LehrkraefteWriter {
 			lkZaehler++;
 
 			if (lkZaehler % 3 == 0) {
-				ProgressServlet
-						.publishProgress(
+				publishProgress(
 								0,
 								220,
-								120 + (int) ((double) lkZaehler * 100 / (double) asvSchule.lehrkraefte
+								200 + (int) ((double) lkZaehler * 20 / (double) asvSchule.lehrkraefte
 										.size()), "Importiere " + lk.rufname
 										+ " " + lk.familienname
 										+ " in die Datenbank...", false, "",

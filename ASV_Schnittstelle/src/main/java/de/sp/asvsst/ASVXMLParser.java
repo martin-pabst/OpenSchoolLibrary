@@ -24,8 +24,10 @@ public class ASVXMLParser {
 	public ASVExport parseASVXMLData(String filename, String password,
 			String progressCode) {
 
-		ProgressServlet.publishProgress(0, 120, 2, "Entpacke und lese ASV-Daten", false, "", progressCode);
-		
+		if(progressCode != null) {
+			ProgressServlet.publishProgress(0, 120, 2, "Entpacke und lese ASV-Daten", false, "", progressCode);
+		}
+
 		try {
 
 			ZipFile zipFile = new ZipFile(filename);
@@ -64,9 +66,11 @@ public class ASVXMLParser {
 			if(e.toString().contains("Wrong Password")){
 				result = "Falsches Passwort für die Zip-Datei!";
 			}
-			
-			ProgressServlet.publishProgress(0, 100, 100, "Fehler beim Lesen der ASV-Daten", true, result, progressCode);
-			
+
+			if (progressCode != null) {
+				ProgressServlet.publishProgress(0, 100, 100, "Fehler beim Lesen der ASV-Daten", true, result, progressCode);
+			}
+
 		}
 
 		return null;

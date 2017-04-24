@@ -21,6 +21,7 @@ public class FileTool {
     public static ArrayList<String> listInternalModuleResourceFiles(String path)
             throws URISyntaxException, IOException {
 
+        try{
         URI uri = FileTool.class.getResource(path).toURI();
 
         Path myPath;
@@ -55,6 +56,11 @@ public class FileTool {
         }
 
         return filenames;
+
+        } catch(Exception ex){
+            return new ArrayList<>();
+        }
+
     }
 
     public static List<String> listFilesInsideJarFile(String jarPath,

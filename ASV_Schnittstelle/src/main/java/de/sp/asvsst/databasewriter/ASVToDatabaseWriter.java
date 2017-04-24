@@ -41,7 +41,7 @@ public class ASVToDatabaseWriter {
 
 		protocol = new StringBuilder();
 
-		ProgressServlet.publishProgress(0, 120, 20,
+		publishProgress(0, 120, 20,
 				"Schreibe die ASV-Daten in die Datenbank...", false, "",
 				progressCode);
 
@@ -92,16 +92,28 @@ public class ASVToDatabaseWriter {
 		}
 
 		ASVWlStore.releaseMemory();
-		
-		ProgressServlet.publishProgress(0, 120, 20, "Fertig!", true, result
+
+		publishProgress(0, 120, 20, "Fertig!", true, result
 				+ protocol.toString(), progressCode);
+
+	}
+
+	private void publishProgress(int min, int max, int now,
+								 String text, boolean completed, Object result, String progressCode){
+
+
+		if (progressCode != null) {
+			ProgressServlet.publishProgress(min, max, now, text, completed, result, progressCode);
+		} else {
+		    System.out.println("Stand: " + now + ", " + text);
+        }
 
 	}
 
 	private void importSchool(ASVSchule asvSchule, School school,
 			ASVExport asvExport, Connection con) throws Exception {
 
-		ProgressServlet.publishProgress(0, 120, 20,
+		publishProgress(0, 120, 20,
 				"Schreibe die ASV-Daten von Schule "
 						+ asvSchule.dienststellenname + " in die Datenbank...",
 				false, "", progressCode);
@@ -233,11 +245,10 @@ public class ASVToDatabaseWriter {
 				
 				schuelerZaehler++;
 				if (schuelerZaehler % 5 == 0) {
-					ProgressServlet
-							.publishProgress(
+					publishProgress(
 									0,
 									220,
-									20 + (int) ((double) schuelerZaehler * 100 / (double) schuelerAnzahl),
+									20 + (int) ((double) schuelerZaehler * 180 / (double) schuelerAnzahl),
 									"Importiere Schüler/in " + schuelerin.rufname + " "
 											+ schuelerin.familienname + ", Klasse "
 											+ klasse.klassenname
