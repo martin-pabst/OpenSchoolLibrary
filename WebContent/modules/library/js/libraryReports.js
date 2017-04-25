@@ -118,7 +118,7 @@
          description: "Gibt je Schüler/in die Liste der entliehenen Bücher aus", contentTypes: [pdf]}
          */
 
-        var html = '<a href="#" class="list-group-item active" data-id="' + report.id + '">';
+        var html = '<a href="#" class="list-group-item" data-id="' + report.id + '">';
         html += '<span style="display: inline-block">';
         html += '<div style="font-weight: bold; color: black">' + report.name + "</div>";
         html += '<div>' + report.description + "</div>";
@@ -364,6 +364,10 @@
         initDataTable();
 
         $('#reportsList').html('<div class="list-group">\n' + getReportsList() + '\n</div>');
+        $('#reportsList').find('.list-group-item').click(function(e){
+            $('#reportsList').find('.list-group-item').removeClass('active');
+            $(this).addClass('active');
+        });
 
     }
 

@@ -15,6 +15,7 @@ import java.util.*;
  */
 public class NeededBooksHelper {
 
+    private boolean schuelerOhneBenoetigteBuecherWeglassen;
     private Connection con;
     private Long school_id;
     private List<BookFormStoreRecord> bookFormStore;
@@ -22,9 +23,10 @@ public class NeededBooksHelper {
     private Map<Long, Subject> subjectMap = new HashMap<>();
 
 
-    public NeededBooksHelper(Long school_id, Connection con) {
+    public NeededBooksHelper(Long school_id, Connection con, boolean schuelerOhneBenoetigteBuecherWeglassen) {
         this.school_id = school_id;
         this.con = con;
+        this.schuelerOhneBenoetigteBuecherWeglassen = schuelerOhneBenoetigteBuecherWeglassen;
         init();
     }
 
@@ -39,6 +41,8 @@ public class NeededBooksHelper {
     }
 
     public List<NeededBookRecord> getNeededBooks(BorrowerRecord br, HashSet<Long> borrowedBooksIds) {
+
+        boolean mindestensEinBenoetigtesBuch = false;
 
         ArrayList<NeededBookRecord> neededBooks = new ArrayList<>();
 
@@ -58,6 +62,12 @@ public class NeededBooksHelper {
                     }
                 }
 
+                if(br.getCurriculum_id() != null && bookFormStoreRecord.getCurriculum_id() != null){
+                    if(!br.getCurriculum_id().equals(bookFormStoreRecord.getCurriculum_id())){
+                        continue;
+                    }
+                }
+
                 if (bookFormStoreRecord.getLanguageyear() != null) {
 
                     boolean ok = false;
@@ -68,7 +78,7 @@ public class NeededBooksHelper {
                             continue;
                         }
 
-                        if (br.getYear_of_school() - languageskill.getFrom_year() == bookFormStoreRecord.getLanguageyear()) {
+                        if (br.getYear_of_school() - languageskill.getFrom_year() + 1 == bookFormStoreRecord.getLanguageyear()) {
                             ok = true;
                             break;
                         }
@@ -87,9 +97,17 @@ public class NeededBooksHelper {
                 continue;
             }
 
-            neededBooks.add(new NeededBookRecord(br.getClass_name(), br.getName(), bookFormStoreRecord.getSubject(), bookFormStoreRecord.getTitle(),
+            neededBooks.add(new NeededBookRecord(br, br.getClass_name(), br.getClass_id(),
+                    br.getName(), br.getStudent_id(), bookFormStoreRecord.getSubject(), bookFormStoreRecord.getTitle(),
                     bookFormStoreRecord.getBook_id()));
 
+            mindestensEinBenoetigtesBuch = true;
+        }
+
+        if(!mindestensEinBenoetigtesBuch && !schuelerOhneBenoetigteBuecherWeglassen){
+            neededBooks.add(new NeededBookRecord(br, br.getClass_name(), br.getClass_id(),
+                    br.getName(), br.getStudent_id(), null, null,
+                    null));
         }
 
         return neededBooks;

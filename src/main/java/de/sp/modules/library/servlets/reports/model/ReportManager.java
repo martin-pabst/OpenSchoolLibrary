@@ -1,6 +1,7 @@
 package de.sp.modules.library.servlets.reports.model;
 
 import de.sp.modules.library.servlets.reports.reportsschueler.borrowedbooks.ReportBorrowedBooks;
+import de.sp.modules.library.servlets.reports.reportsschueler.neededbooks.ReportNeededBooks;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ public class ReportManager {
     private ReportManager() {
 
         addReport(new ReportBorrowedBooks());
+        addReport(new ReportNeededBooks());
 
     }
 

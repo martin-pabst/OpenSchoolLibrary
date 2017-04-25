@@ -1,11 +1,9 @@
 package de.sp.modules.library.servlets.reports.reportsschueler.neededbooks;
 
-import de.sp.database.statements.StatementStore;
 import de.sp.modules.library.daos.LibraryDAO;
 import de.sp.modules.library.servlets.borrow.borrowedbooks.BorrowedBookRecord;
 import de.sp.modules.library.servlets.borrow.borrowerlist.BorrowerRecord;
 import de.sp.modules.library.servlets.reports.model.*;
-import de.sp.modules.library.servlets.reports.reportsschueler.borrowedbooks.BorrowedBooksRecord;
 import de.sp.tools.file.FileTool;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -18,7 +16,6 @@ import org.sql2o.Connection;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -71,21 +68,28 @@ public class ReportNeededBooks extends BaseReport {
             }
         }
 
+        HashSet<Long> selectedStudentIds = new HashSet<>();
+
+        ids.forEach(selectedStudentIds::add);
+
         List<BorrowerRecord> schuelerList = LibraryDAO.getBorrowerList(school_id, school_term_id, con, false);
 
         List<NeededBookRecord> neededBooks = new ArrayList<>();
 
-        NeededBooksHelper neededBooksHelper = new NeededBooksHelper(school_id, con);
+        NeededBooksHelper neededBooksHelper = new NeededBooksHelper(school_id, con, schuelerOhneBenoetigteBuecherWeglassen);
 
         for(BorrowerRecord br: schuelerList){
 
-            List<BorrowedBookRecord> borrowedBooks = LibraryDAO.getBorrowedBooksForStudent(br.getStudent_id(), con);
+            if (selectedStudentIds.contains(br.getStudent_id())) {
 
-            HashSet<Long> borrowedBooksIds = new HashSet<>();
+                List<BorrowedBookRecord> borrowedBooks = LibraryDAO.getBorrowedBooksForStudent(br.getStudent_id(), con);
 
-            borrowedBooks.forEach(bb -> borrowedBooksIds.add(bb.getBook_id()));
+                HashSet<Long> borrowedBooksIds = new HashSet<>();
 
-            neededBooks.addAll(neededBooksHelper.getNeededBooks(br, borrowedBooksIds));
+                borrowedBooks.forEach(bb -> borrowedBooksIds.add(bb.getBook_id()));
+
+                neededBooks.addAll(neededBooksHelper.getNeededBooks(br, borrowedBooksIds));
+            }
 
         }
 
@@ -106,22 +110,18 @@ public class ReportNeededBooks extends BaseReport {
 
     private void writeHtml(HttpServletResponse response, List<NeededBookRecord> neededBooks, boolean omitPupilsWithoutMissingBooks) throws IOException {
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-
         beginHtml();
 
         appendHtmlHeader();
 
-        html.append("<h1>Entliehene Bücher</h1>\n");
-
-        String last_classname = "";
+        Long last_class_id = null;
         Long last_student_id = null;
         boolean table_open = false;
         boolean firstRow = true;
 
         for (NeededBookRecord br : neededBooks) {
 
-            if (!secureEquals(br.getClassname(), last_classname)) {
+            if (!secureEquals(br.getClass_id(), last_class_id)) {
 
                 if(table_open){
                     endHtmlTable();
@@ -130,11 +130,11 @@ public class ReportNeededBooks extends BaseReport {
                 if (last_class_id != null) {
                     html.append("<div style = \"page-break-after:always\"></div>");
                 }
-                last_class_id = br.class_id;
-                if (br.class_name != null) {
-                    html.append("<h2>Klasse ").append(br.class_name).append("</h2>\n");
+                last_class_id = br.getClass_id();
+                if (br.getClass_name() != null) {
+                    html.append("<h2>Benötigte Bücher Klasse ").append(br.getClass_name()).append("</h2>\n");
                 } else {
-                    html.append("<h2>Ohne Klasse</h2>");
+                    html.append("<h2>Benötigte Bücher von Schüler/innen ohne Klassenzuordnung</h2>");
                 }
                 last_student_id = null;
                 beginHtmlTable();
@@ -142,9 +142,9 @@ public class ReportNeededBooks extends BaseReport {
                 firstRow = true;
             }
 
-            if (!br.student_id.equals(last_student_id)) {
-                if (!omitPupilsWithoutMissingBooks || br.title != null) {
-                    last_student_id = br.student_id;
+            if (!br.getStudent_id().equals(last_student_id)) {
+                if (!omitPupilsWithoutMissingBooks || br.getBook() != null) {
+                    last_student_id = br.getStudent_id();
 
                     beginHtmlRow();
                     if(firstRow){
@@ -152,11 +152,14 @@ public class ReportNeededBooks extends BaseReport {
                     } else {
                         beginHtmlCell(2);
                     }
-                    html.append("<span class=\"tableheading\">").append(br.surname).append(", ").append(br.firstname).append("</span>\n");
+                    html.append("<span class=\"tableheading\">").append(br.getStudentname())
+                            .append(" ")
+                            .append(br.getLanguagesReligionCurriculum())
+                            .append("</span>\n");
                     endHtmlCell();
                     if(firstRow){
                         beginHtmlCell();
-                        html.append("<span class=\"tableheading\">Ausleihdatum</span>");
+                        html.append("<span class=\"tableheading\">Fach</span>");
                         endHtmlCell();
                         firstRow = false;
                     }
@@ -164,14 +167,14 @@ public class ReportNeededBooks extends BaseReport {
                 }
             }
 
-            if (br.title != null) {
+            if (br.getBook() != null) {
                 beginHtmlRow();
                 beginHtmlCell();
-                html.append(br.title);
+                html.append(br.getBook());
                 endHtmlCell();
                 beginHtmlCell();
-                if(br.begindate != null) {
-                    html.append(sdf.format(br.begindate));
+                if(br.getSubject() != null) {
+                    html.append(br.getSubject());
                 }
                 endHtmlCell();
                 endHtmlRow();
@@ -207,14 +210,12 @@ public class ReportNeededBooks extends BaseReport {
         JasperDesign jasperDesign = null;
         Map parameters = new HashMap();
 
-        // TODO
-        String jrxml = FileTool.readFile("reporttemplates/borrowedBooks.jrxml");
-
-        jasperDesign = JRXmlLoader.load(FileTool.getInputStream("reporttemplates/borrowedBooks.jrxml"));
+        jasperDesign = JRXmlLoader.load(FileTool.getInputStream("reporttemplates/neededBooks.jrxml"));
         jasperReport = JasperCompileManager.compileReport(jasperDesign);
         byte[] byteStream = JasperRunManager.runReportToPdf(jasperReport, parameters, ds);
 
         writeBytes(byteStream, response);
     }
+
 
 }

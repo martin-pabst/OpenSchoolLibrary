@@ -194,8 +194,6 @@ public class ReportBorrowedBooks extends BaseReport {
         JasperDesign jasperDesign = null;
         Map parameters = new HashMap();
 
-        String jrxml = FileTool.readFile("reporttemplates/borrowedBooks.jrxml");
-
         jasperDesign = JRXmlLoader.load(FileTool.getInputStream("reporttemplates/borrowedBooks.jrxml"));
         jasperReport = JasperCompileManager.compileReport(jasperDesign);
         byte[] byteStream = JasperRunManager.runReportToPdf(jasperReport, parameters, ds);

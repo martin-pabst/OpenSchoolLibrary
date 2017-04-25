@@ -64,7 +64,7 @@ public class BorrowerRecord {
 		
 		languageskills.forEach(ls -> languages += ls.getLanguage_name() + " ");
 		
-		languages.trim();
+		languages = languages.trim();
 		
 		if(class_name == null){
 			if(exit_date == null){
