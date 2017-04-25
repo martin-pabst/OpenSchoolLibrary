@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-04-21T07:30:35 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="borrowedBooks" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f1c190c4-e104-4638-9c70-b2dea1d1003d">
+<!-- 2017-04-25T20:23:12 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="borrowedBooks" columnCount="2" printOrder="Horizontal" pageWidth="595" pageHeight="842" columnWidth="275" columnSpacing="5" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f1c190c4-e104-4638-9c70-b2dea1d1003d">
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -16,24 +16,12 @@
 		<groupHeader>
 			<band height="52">
 				<textField>
-					<reportElement x="0" y="23" width="243" height="20" uuid="bcd9c0fd-47c7-4e1a-80d0-a6d81799f928"/>
+					<reportElement x="0" y="0" width="554" height="20" uuid="bcd9c0fd-47c7-4e1a-80d0-a6d81799f928"/>
 					<textElement>
 						<font size="14" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Klasse " + $F{class_name}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Klasse " + $F{class_name} + ": Entliehene Bücher"]]></textFieldExpression>
 				</textField>
-				<staticText>
-					<reportElement x="445" y="29" width="100" height="14" uuid="dce143e4-ee18-4de0-bc48-20f90e6154c7"/>
-					<textElement textAlignment="Right"/>
-					<text><![CDATA[Entleihbeginn]]></text>
-				</staticText>
-				<staticText>
-					<reportElement x="9" y="0" width="536" height="24" uuid="5e1301f1-9348-4e91-9a8d-335ee4b737a5"/>
-					<textElement textAlignment="Center">
-						<font size="18"/>
-					</textElement>
-					<text><![CDATA[Entliehene Bücher]]></text>
-				</staticText>
 			</band>
 		</groupHeader>
 	</group>
@@ -66,20 +54,20 @@
 		<band height="16" splitType="Stretch">
 			<printWhenExpression><![CDATA[$F{title} != null]]></printWhenExpression>
 			<textField>
-				<reportElement x="0" y="0" width="444" height="13" uuid="947ac548-95aa-406f-9870-96b8309412d6"/>
+				<reportElement x="0" y="0" width="220" height="13" uuid="947ac548-95aa-406f-9870-96b8309412d6"/>
 				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd.MM.yyyy" isBlankWhenNull="true">
-				<reportElement x="444" y="0" width="100" height="13" uuid="a04846ae-5ae1-4dda-a44b-a8ae9efc0f53"/>
+				<reportElement x="220" y="0" width="55" height="13" uuid="a04846ae-5ae1-4dda-a44b-a8ae9efc0f53"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{begindate}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="50">
+		<band height="29">
 			<textField>
-				<reportElement x="454" y="20" width="100" height="30" uuid="3ae665d2-0ce2-4543-b2ee-0518a5e0896b"/>
+				<reportElement x="454" y="10" width="100" height="14" uuid="3ae665d2-0ce2-4543-b2ee-0518a5e0896b"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Seite " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>

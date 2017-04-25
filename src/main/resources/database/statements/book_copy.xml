@@ -8,6 +8,13 @@
 		book_copy
 	</statement>
 
+	<statement name="book_copy.findAvailableCopiesBySchool">
+		select bc.id, book_id, bc.edition, barcode
+			from book_copy bc join book on bc.book_id = book.id
+			where book.school_id = :school_id AND
+				not exists (select id from borrows where borrows.book_copy_id = bc.id)
+	</statement>
+
 	<statement name="book_copy.insert">
 		insert into book_copy (book_id, edition,
 		barcode)

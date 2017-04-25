@@ -14,7 +14,9 @@ public class BorrowedBooksRecord implements Comparable<BorrowedBooksRecord> {
     public String surname;
     public Date exit_date;
     public String title;
+    public Long book_id;
     public Date begindate;
+    public String barcode;
 
     public BorrowedBooksRecord(){
 

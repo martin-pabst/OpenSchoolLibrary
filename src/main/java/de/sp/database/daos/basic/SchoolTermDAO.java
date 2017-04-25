@@ -1,14 +1,13 @@
 package de.sp.database.daos.basic;
 
-import java.util.List;
-import java.util.Map;
-
-import org.sql2o.Connection;
-
 import de.sp.database.model.School;
 import de.sp.database.model.SchoolTerm;
 import de.sp.database.model.Term;
 import de.sp.database.statements.StatementStore;
+import org.sql2o.Connection;
+
+import java.util.List;
+import java.util.Map;
 
 public class SchoolTermDAO {
 
@@ -22,6 +21,33 @@ public class SchoolTermDAO {
 		return schoolTermlist;
 
 	}
+
+	public static SchoolTerm findBySchoolIdAndTermName(Connection con, Long school_id, String term_name) {
+
+		String sql = StatementStore.getStatement("school_term.findBySchoolIdAndTermName");
+
+		List<SchoolTerm> schoolTermlist = con.createQuery(sql)
+				.addParameter("school_id", school_id)
+				.addParameter("term_name", term_name)
+				.executeAndFetch(SchoolTerm.class);
+
+		if(schoolTermlist.size() == 0){
+			return null;
+		}
+
+		return schoolTermlist.get(0);
+
+	}
+
+	/*
+		<statement name="school_term.findBySchoolIdAndTermName" >
+	select st.id, st.school_id, st.term_id from school
+	join school_term st on school.id = st.school_id
+	join term on school_term.term_id = term.id
+	WHERE school_id = :school_id and term.name = :term_name
+			</statement>
+*/
+
 
 	public static void joinSchoolsWithTerms(Map<Long, School> schools,
 			Map<Long, Term> terms, Connection con) {

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-04-25T23:26:34 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BarcodeTestsheet" columnCount="4" printOrder="Horizontal" pageWidth="595" pageHeight="842" columnWidth="135" columnSpacing="5" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f1c190c4-e104-4638-9c70-b2dea1d1003d">
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="class_name" class="java.lang.String"/>
+	<field name="studentname" class="java.lang.String"/>
+	<field name="book" class="java.lang.String"/>
+	<field name="barcode" class="java.lang.String"/>
+	<field name="needed" class="java.lang.Boolean"/>
+	<group name="Klasse" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{class_name}]]></groupExpression>
+		<groupHeader>
+			<band height="52">
+				<textField>
+					<reportElement stretchType="ContainerBottom" x="-2" y="9" width="556" height="24" uuid="55ae3cfa-fc5b-47eb-9162-6a7eb80680d3"/>
+					<textElement textAlignment="Center">
+						<font size="16"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Klasse " + $F{class_name}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="Schueler" keepTogether="true">
+		<groupExpression><![CDATA[$F{studentname}]]></groupExpression>
+		<groupHeader>
+			<band height="33">
+				<textField>
+					<reportElement x="0" y="7" width="554" height="20" uuid="d09082f6-e56e-4fda-90d4-af5280fc119d"/>
+					<textElement>
+						<font size="14"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{studentname}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="NeededGroup" keepTogether="true">
+		<groupExpression><![CDATA[$F{needed}]]></groupExpression>
+		<groupHeader>
+			<band height="24">
+				<textField>
+					<reportElement x="0" y="4" width="182" height="16" uuid="e2ea67f8-b4ab-46c4-aa34-0af76f0428e9"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{needed} ? "Noch benötigte Bücher:" : "Derzeit ausgeliehene Bücher"]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="21" width="556" height="1" uuid="7bf3ad1c-a70d-42d6-8cae-800303cfef4d">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					</reportElement>
+				</line>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="68" splitType="Stretch">
+			<componentElement>
+				<reportElement x="17" y="0" width="100" height="46" uuid="afe3ab44-a3e4-4512-85d0-4e2a1216d12d"/>
+				<jr:EAN13 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<jr:codeExpression><![CDATA[$F{barcode}]]></jr:codeExpression>
+				</jr:EAN13>
+			</componentElement>
+			<textField>
+				<reportElement x="0" y="46" width="135" height="14" uuid="c681fc53-cc44-40a2-b750-1e81a002e254"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{book}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="29">
+			<textField>
+				<reportElement x="454" y="10" width="100" height="14" uuid="3ae665d2-0ce2-4543-b2ee-0518a5e0896b"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Seite " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

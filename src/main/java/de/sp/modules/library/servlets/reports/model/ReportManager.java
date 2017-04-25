@@ -1,5 +1,6 @@
 package de.sp.modules.library.servlets.reports.model;
 
+import de.sp.modules.library.servlets.reports.reportsschueler.BarcodeTestsheet.ReportBarcodeTestsheet;
 import de.sp.modules.library.servlets.reports.reportsschueler.borrowedbooks.ReportBorrowedBooks;
 import de.sp.modules.library.servlets.reports.reportsschueler.neededbooks.ReportNeededBooks;
 
@@ -21,6 +22,7 @@ public class ReportManager {
 
         addReport(new ReportBorrowedBooks());
         addReport(new ReportNeededBooks());
+        addReport(new ReportBarcodeTestsheet());
 
     }
 

@@ -9,4 +9,5 @@ public class ObjectTool {
 		
 		return o1.equals(o2);
 	}
+
 }

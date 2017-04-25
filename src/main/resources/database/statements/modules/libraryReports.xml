@@ -10,7 +10,9 @@
             student.surname,
             student.exit_date,
             book.title,
-            borrows.begindate
+            book.id as book_id,
+            borrows.begindate,
+            book_copy.barcode
         FROM
             student
             LEFT JOIN student_school_term ON student_school_term.student_id = student.id
@@ -23,10 +25,6 @@
             student.school_id = :school_id and
             student.id IN :ids
         order by class_name, student.surname, student.firstname, book.title
-
-    </statement>
-
-    <statement name="libraryReports.neededBooksHelper">
 
     </statement>
 

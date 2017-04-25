@@ -1,15 +1,16 @@
 package de.sp.database.daos.basic;
 
+import de.sp.database.model.School;
+import de.sp.database.statements.StatementStore;
+import org.sql2o.Connection;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.sql2o.Connection;
-
-import de.sp.database.model.School;
-import de.sp.database.statements.StatementStore;
-
 public class SchoolDAO {
+
+
 
 	public static List<School> getAll(Connection con) {
 
@@ -19,6 +20,22 @@ public class SchoolDAO {
 				School.class);
 
 		return schoollist;
+
+	}
+
+	public static School findByNumber(Connection con, String schoolNumber) {
+
+		String sql = StatementStore.getStatement("school.findByNumber");
+
+		List<School> schoollist = con.createQuery(sql)
+				.addParameter("number", schoolNumber)
+				.executeAndFetch(School.class);
+
+		if(schoollist.size() == 0){
+			return null;
+		}
+
+		return schoollist.get(0);
 
 	}
 

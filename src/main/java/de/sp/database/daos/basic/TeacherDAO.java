@@ -57,7 +57,7 @@ public class TeacherDAO {
 
 	public static List<Teacher> findBySchool(Long school_id, Connection con) {
 
-		String sql = StatementStore.getStatement("teacher.findBySchool");
+		String sql = StatementStore.getStatement("teacher.findAvailableCopiesBySchool");
 
 		List<Teacher> teacherlist = con.createQuery(sql)
 				.addParameter("school_id", school_id)

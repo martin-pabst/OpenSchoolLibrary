@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 public class BookCopyDAO {
+
 	public static List<BookCopy> getAll(Connection con) {
 
 		String sql = StatementStore.getStatement("book_copy.getAll");
@@ -18,6 +19,18 @@ public class BookCopyDAO {
 		return book_copylist;
 
 	}
+
+	public static List<BookCopy> findAvailableCopiesBySchool(Connection con, Long school_id) {
+
+		String sql = StatementStore.getStatement("book_copy.findAvailableCopiesBySchool");
+
+		return  con.createQuery(sql)
+				.addParameter("school_id", school_id)
+				.executeAndFetch(BookCopy.class);
+
+	}
+
+
 
 	public static BookCopy insert(Long book_id, String edition, String barcode,
 			Connection con) throws Exception {
