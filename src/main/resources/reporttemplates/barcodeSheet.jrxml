@@ -7,6 +7,7 @@
 	</queryString>
 	<field name="class_name" class="java.lang.String"/>
 	<field name="studentname" class="java.lang.String"/>
+	<field name="languagesReligionCurriculum" class="java.lang.String"/>
 	<field name="book" class="java.lang.String"/>
 	<field name="barcode" class="java.lang.String"/>
 	<field name="needed" class="java.lang.Boolean"/>
@@ -33,7 +34,7 @@
 					<textElement>
 						<font size="14"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{studentname}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{studentname} + " " + $F{languagesReligionCurriculum}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>

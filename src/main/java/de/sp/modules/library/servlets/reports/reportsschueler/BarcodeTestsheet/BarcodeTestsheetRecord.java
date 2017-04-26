@@ -9,6 +9,7 @@ public class BarcodeTestsheetRecord implements Comparable<BarcodeTestsheetRecord
     private Long class_id;
     private String studentname;
     private Long student_id;
+    private String languagesReligionCurriculum;
     private String book;
     private Long book_id;
 
@@ -17,11 +18,12 @@ public class BarcodeTestsheetRecord implements Comparable<BarcodeTestsheetRecord
 
 
     public BarcodeTestsheetRecord(String class_name, Long class_id, String studentname, Long student_id,
-                                  String book, Long book_id, String barcode, Boolean needed) {
+                                  String languagesReligionCurriculum, String book, Long book_id, String barcode, Boolean needed) {
         this.class_name = class_name;
         this.class_id = class_id;
         this.studentname = studentname;
         this.student_id = student_id;
+        this.languagesReligionCurriculum = languagesReligionCurriculum;
         this.book = book;
         this.book_id = book_id;
         this.needed = needed;
@@ -91,5 +93,9 @@ public class BarcodeTestsheetRecord implements Comparable<BarcodeTestsheetRecord
 
         return needed.compareTo(r.needed);
 
+    }
+
+    public String getLanguagesReligionCurriculum() {
+        return languagesReligionCurriculum;
     }
 }

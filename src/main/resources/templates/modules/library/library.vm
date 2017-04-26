@@ -290,8 +290,28 @@
         <!-- Clean -->
 
         <div id="librarySettings" class="tab-pane fade">
-            <h3>Datenppflege</h3>
-            <p>Some content...</p>
+
+            <div class="row">
+
+                <!-- Navigation Buttons -->
+                <div class="col-md-3">
+                    <ul class="nav nav-pills nav-stacked" id="myTabs">
+                        <li class="active"><a href="#home" data-toggle="pill">Zurückgegebene Bücher löschen</a></li>
+                        <li><a href="#profile" data-toggle="pill">Ausgetretene Schüler/LK löschen</a></li>
+                        <li><a href="#messages" data-toggle="pill">Schüler zusammenführen</a></li>
+                    </ul>
+                </div>
+
+                <!-- Content -->
+                <div class="col-md-9">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="home">Zurückgegebene Bücher löschen</div>
+                        <div class="tab-pane" id="profile">Ausgetretene Schüler/LK löschen</div>
+                        <div class="tab-pane" id="messages">Schüler zusammenführen</div>
+                    </div>
+                </div>
+
+            </div>
         </div>
 
 

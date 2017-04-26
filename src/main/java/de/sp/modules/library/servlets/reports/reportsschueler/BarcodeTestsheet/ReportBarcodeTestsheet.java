@@ -72,11 +72,15 @@ public class ReportBarcodeTestsheet extends BaseReport {
 
         ArrayList<BarcodeTestsheetRecord> barcodeRecordList = new ArrayList<>();
 
+        LanguagesCurriculumHelper languagesCurriculumHelper = new LanguagesCurriculumHelper(school_id, school_term_id, con);
+
         for (BorrowedBooksRecord bb : borrowedBooks) {
 
             if (bb.book_id != null) {
                 barcodeRecordList.add(new BarcodeTestsheetRecord(bb.class_name, bb.class_id,
-                        bb.getFirstname() + " " + bb.getSurname(), bb.student_id, bb.getTitle(), bb.book_id,
+                        bb.getFirstname() + " " + bb.getSurname(), bb.student_id,
+                        languagesCurriculumHelper.getLanguageReligionCurriculum(bb.student_id),
+                        bb.getTitle(), bb.book_id,
                         bb.barcode, false));
             }
 
@@ -91,7 +95,9 @@ public class ReportBarcodeTestsheet extends BaseReport {
 
                 barcodeRecordList.add(new BarcodeTestsheetRecord(nb.getClass_name(), nb.getClass_id(),
                         nb.getBorrower().getFirstname() + " " + nb.getBorrower().getSurname(),
-                        nb.getStudent_id(), nb.getBook(), nb.getBook_id(), barcode, true));
+                        nb.getStudent_id(),
+                        nb.getLanguagesReligionCurriculum(),
+                        nb.getBook(), nb.getBook_id(), barcode, true));
             }
         }
 
@@ -138,14 +144,19 @@ public class ReportBarcodeTestsheet extends BaseReport {
     }
 
     private List<BorrowedBooksRecord> getBorrowedBooks(List<Long> ids, Long school_term_id, Connection con) {
+        
         String sql = StatementStore.getStatement("libraryReports.schuelerBorrowedBooks");
 
         sql = sql.replace(":ids", getSQLList(ids));
 
-        return con.createQuery(sql)
+        List<BorrowedBooksRecord> books = con.createQuery(sql)
                 .addParameter("school_id", school_term_id)
                 .addParameter("school_term_id", school_term_id)
                 .executeAndFetch(BorrowedBooksRecord.class);
+
+      return books;
+
+
     }
 
 

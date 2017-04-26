@@ -16,7 +16,7 @@
         FROM
             student
             LEFT JOIN student_school_term ON student_school_term.student_id = student.id
-                                             AND student_school_term.school_term_id = :school_term_id
+            AND student_school_term.school_term_id = :school_term_id
             LEFT JOIN class ON student_school_term.class_id = class.id
             LEFT JOIN borrows ON borrows.student_id = student.id AND borrows.return_date IS NULL
             LEFT JOIN book_copy ON borrows.book_copy_id = book_copy.id
@@ -26,6 +26,27 @@
             student.id IN :ids
         order by class_name, student.surname, student.firstname, book.title
 
+    </statement>
+
+
+    <statement name="libraryReports.studentsLanguagesCurriculum">
+
+        SELECT
+          student.id as student_id,
+          curriculum_id,
+          subject_id,
+          cur.abbreviation as curriculum,
+            reli.shortname as religion,
+            lang.shortname as language        FROM student
+        LEFT JOIN student_school_term on student.id = student_school_term.student_id
+        and student_school_term.school_term_id = :school_term_id
+        LEFT JOIN languageskill ls on student.id = ls.student_id
+        LEFT JOIN value cur on student_school_term.curriculum_id = cur.id
+        LEFT JOIN subject lang on ls.subject_id = lang.id
+        LEFT JOIN subject reli on student.religion_id = reli.id
+        WHERE
+            student.school_id = :school_id
+        order BY ls.from_year
     </statement>
 
 
