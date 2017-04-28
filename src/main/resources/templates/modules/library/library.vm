@@ -34,12 +34,13 @@
             </div>
             <div class="col-md-7">
                 <div id="libraryBorrowBarcodeFields" class="col-md-12" style="padding: 0">
-                    <h4 id="libraryBorrowBorrower" style="height: 20px; margin-bottom: 5px"></h4>
                     <div class="input-group">
                         <span class="input-group-addon" id="basic-addon3">Ausleihen:</span>
                         <input id="libraryBorrowBarcodeField" type="text" class="form-control" placeholder="Barcode"
                                aria-describedby="basic-addon3">
                     </div>
+                    <div id="libraryBorrowErrorList" class="alert alert-danger" role="alert"
+                         style="display: none; height: 4em; overflow-y: auto; margin: 10px 0 5px 0"></div>
                 </div>
 
                 <div class="col-md-12" style="padding: 0">
@@ -296,18 +297,29 @@
                 <!-- Navigation Buttons -->
                 <div class="col-md-3">
                     <ul class="nav nav-pills nav-stacked" id="myTabs">
-                        <li class="active"><a href="#home" data-toggle="pill">Zurückgegebene Bücher löschen</a></li>
-                        <li><a href="#profile" data-toggle="pill">Ausgetretene Schüler/LK löschen</a></li>
-                        <li><a href="#messages" data-toggle="pill">Schüler zusammenführen</a></li>
+                        <li class="active"><a href="#library.settings.deleteOldBookings" data-toggle="pill">Alte Buchungen löschen</a></li>
+                        <li><a href="#library.settings.deleteResignedStudents" data-toggle="pill">Ausgetretene Schüler/innen löschen</a></li>
+                        <li><a href="#library.settings.MergeStudentRecords" data-toggle="pill">Schülerdatensätze zusammenführen</a></li>
                     </ul>
                 </div>
 
                 <!-- Content -->
                 <div class="col-md-9">
                     <div class="tab-content">
-                        <div class="tab-pane active" id="home">Zurückgegebene Bücher löschen</div>
-                        <div class="tab-pane" id="profile">Ausgetretene Schüler/LK löschen</div>
-                        <div class="tab-pane" id="messages">Schüler zusammenführen</div>
+                        <div class="tab-pane active settingsPane" id="library.settings.deleteOldBookings">
+                            <p>Alle Ausleihvorgänge löschen, bei denen die Bücher bis zum
+                                <input type="text" maxlength="100" style="width: 90px">
+                            bereits zurückgegeben worden sind.
+                            </p>
+                            <div style="float: right">
+                                <button type="button" class="btn btn-default btn-lg">
+                                    Start
+                                    <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                                </button>
+                            </div>
+
+                        <div class="tab-pane" id="library.settings.deleteResignedStudents">Ausgetretene Schüler/LK löschen</div>
+                        <div class="tab-pane" id="library.settings.MergeStudentRecords">Schüler zusammenführen</div>
                     </div>
                 </div>
 

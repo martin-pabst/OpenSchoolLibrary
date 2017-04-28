@@ -1,0 +1,55 @@
+Punkt Library->Settings (Einstellungen/Datenpflege):
+ - Untermenü auf der linken Seite
+   - Alte Buchungen löschen: Alle Ausleihvorgänge für Bücher, bei denen
+     das Buch vor dem ... bereits zurückgegeben worden ist.
+    - Button "Start"
+    - Grüner/Roter Meldungsblock,
+
+   - Ausgetretene Schüler/innen löschen (Alle S + L, die im letzten ASV-Import nicht
+     enthalten waren und keine Bücher mehr ausgeliehen haben
+     - Button Start,
+     - Grüner/Roter Meldungsblock
+   - Doppelte Schülerdatensätze zusammenführen
+    - links und rechts Schülernavigator mit Ankreuzfeldern
+    - darunter Panels, die alle bekannten Details anzeigen
+    - wieder darunter Panel mit zwei Radiobuttons:
+      "Die zwei Schülerdatensätze sollen zusammengeführt werden. Die persönlichen Daten (Name, Adressen usw.) werden
+      übernommen vom ..."
+      RButton 1: "Linken Schüler"; RButton 2: "Rechten Schüler"
+    - Wieder darunter: Button "Start"
+    - Wieder darunter: Grüner/Roter Meldungsblock
+
+
+Modul Benutzer/Rechte
+ - Tab "Benutzer"
+ - Links Tabelle mit den Benutzern
+   - Rufname, Familienname, Benutzername, isAdmin, inaktiv, Gruppe (Freitext)
+   - Buttons "Neu", "Löschen"
+   - Update per Überschreiben von Attributen in den Tabellenzellen
+ - Rechts Tabelle mit den Rollen
+   - Bezeichnung, Beschreibung
+   - Ankreuzfeld
+ - Tab "Rollen"
+   - Links Tabelle mit den Rollen
+    - Bezeichnung, Beschreibung
+    - Buttons "Neu", "Löschen"
+    - Update per Überschreiben von Attributen in den Tabellenzellen
+   - Rechts Tabelle mit allen Rechten
+    - Bezeichnung, Beschreibung
+    - Ankreuzfeld
+    - später vielleicht: Anzeige in Baumstruktur mit 1.5'er w2ui-Version
+
+
+
+Code-Snippets:
+
+<input id="datefield" type="text" maxlength="100" style="width: 90px">
+
+$(function () {
+	$('#datefield').w2field('date');
+});
+
+        <div class="alert alert-success" role="alert">...</div>
+        <div class="alert alert-info" role="alert">...</div>
+        <div class="alert alert-warning" role="alert">...</div>
+        <div class="alert alert-danger" role="alert">...</div>

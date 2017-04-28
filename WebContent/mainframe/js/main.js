@@ -2,6 +2,12 @@
  * Created by martin on 13.08.2016.
  */
 
+// Stop Chrome from opening download-page when scanning barcodes
+document.addEventListener('keydown', function(event) {
+    if( event.keyCode === 17 || event.keyCode === 74 )
+        event.preventDefault();
+});
+
 /**
  * Every action (e.g. menu-item click) is implemented as <a href="#exampleAction">. This triggers window.onHashchange
  * which in turn looks into the following Object, which holds an object

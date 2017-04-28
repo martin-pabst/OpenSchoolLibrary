@@ -114,6 +114,8 @@
 
                 var barcode = $('#libraryReturnBarcodeField').val();
 
+                barcode = "0" + barcode;
+
                 var returnerGrid = w2ui['libraryReturnerList'];
                 var booksGrid = w2ui['libraryReturnBooksList'];
 

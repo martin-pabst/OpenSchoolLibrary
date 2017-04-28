@@ -53,7 +53,7 @@ public class LibraryRegisterBorrowingServlet extends BaseServlet {
 				
 				if (bir == null) {
 					bir = new BarcodeInfoRecord(BarcodeInfoStatus.error,
-							"Unbekannter Barcode.");
+							"Unbekannter Barcode: " + rbr.getBarcode().replace("<", "&lt;"));
 				} else if (bir.bookIsAlreadyBorrowed()
 						&& !rbr.isUnbookFromPreviousBorrower()) {
 					bir.setStatusAlreadyBorrowed();

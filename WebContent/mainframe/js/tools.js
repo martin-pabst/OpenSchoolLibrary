@@ -259,6 +259,8 @@ function commitW2GridDelete(gridObject, json, url, callBackIfSuccessful, confirm
                                 callBackIfSuccessful();
                             }
 
+
+
                         }
                     },
                     error: function (jqXhr, textStatus, errorThrown) {

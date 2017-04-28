@@ -4,6 +4,8 @@ import de.sp.database.model.BookCopy;
 import de.sp.database.statements.StatementStore;
 import de.sp.modules.library.servlets.inventory.copies.BookCopyInfoRecord;
 import de.sp.modules.library.servlets.inventory.copies.LibraryInventoryCopiesRecord;
+import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
+import org.krysalis.barcode4j.impl.upcean.UPCEANLogicImpl;
 import org.sql2o.Connection;
 
 import java.util.Date;
@@ -34,6 +36,12 @@ public class BookCopyDAO {
 
 	public static BookCopy insert(Long book_id, String edition, String barcode,
 			Connection con) throws Exception {
+
+		while(barcode.length() < 12){
+			barcode = "0" + barcode;
+		}
+
+		barcode = addCheckSum(barcode);
 
 		String sql = StatementStore.getStatement("book_copy.insert");
 
@@ -133,4 +141,12 @@ public class BookCopyDAO {
 				.executeAndFetchFirst(Long.class);
 	}
 
+
+
+    public static String addCheckSum (String codigo) {
+        EAN13Bean generator = new EAN13Bean();
+        UPCEANLogicImpl impl = generator.createLogicImpl();
+        codigo += impl.calcChecksum(codigo);
+        return codigo;
+    }
 }
