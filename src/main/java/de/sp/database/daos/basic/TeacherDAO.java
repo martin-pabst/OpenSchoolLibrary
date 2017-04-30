@@ -4,7 +4,9 @@ import de.sp.database.model.Teacher;
 import de.sp.database.statements.StatementStore;
 import org.sql2o.Connection;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TeacherDAO {
 	public static List<Teacher> getAll(Connection con) {
@@ -98,6 +100,29 @@ public class TeacherDAO {
 				.addParameter("school_id", school_id)
 				.addParameter("synchronized", is_synchronized)
 				.executeUpdate();
+	}
+
+	public static void deleteCascadingByTeacherList(List<Teacher> teachers, Connection con){
+
+		List<Long> ids = new ArrayList<>();
+
+		teachers.forEach(teacher -> ids.add(teacher.getId()));
+
+		deleteCascading(ids, con);
+	}
+
+	public static void deleteCascading(List<Long> teacher_ids, Connection con){
+		String ids =
+				teacher_ids.stream().map(id -> id.toString()).collect(Collectors.joining(", "));
+
+		for (String sql : StatementStore.getStatements("teacher.deleteCascading")) {
+
+			sql = sql.replace(":ids", ids);
+
+			con.createQuery(sql).executeUpdate();
+
+		}
+
 	}
 
 

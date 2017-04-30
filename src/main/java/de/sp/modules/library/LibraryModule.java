@@ -20,6 +20,7 @@ import de.sp.modules.library.servlets.reports.LibraryReportServlet;
 import de.sp.modules.library.servlets.returnbooks.returnerlist.ReturnerListServlet;
 import de.sp.modules.library.servlets.returnbooks.scanbarcodeservlet.FeeServlet;
 import de.sp.modules.library.servlets.returnbooks.scanbarcodeservlet.LibraryReturnBookServlet;
+import de.sp.modules.library.servlets.settings.LibrarySettingsServlet;
 import org.apache.velocity.Template;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
@@ -104,6 +105,7 @@ public class LibraryModule extends Module {
 		context.addServlet(LibraryNavigatorDataServlet.class, "/library/reports/navigatordata");
 		context.addServlet(LibraryReportServlet.class, "/library/reports/start");
 		context.addServlet(LibraryAddStudentServlet.class, "/library/students/save");
+		context.addServlet(LibrarySettingsServlet.class, "/library/settings/*");
 	}
 
 	@Override

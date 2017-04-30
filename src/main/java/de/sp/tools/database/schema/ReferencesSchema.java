@@ -9,6 +9,9 @@ public class ReferencesSchema {
 	
 	@Attribute
 	private String column;
+
+	@Attribute(required = false)
+	private String ondelete;
 	
 
 	public String getTable() {
@@ -19,4 +22,7 @@ public class ReferencesSchema {
 		return column;
 	}
 
+	public String getOndelete() {
+		return ondelete;
+	}
 }

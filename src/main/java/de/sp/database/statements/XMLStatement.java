@@ -8,10 +8,10 @@ public class XMLStatement {
 	@Attribute(required = false)
 	private String database;
 
-	@Attribute
+	@Attribute(required = false)
 	private String name;
 
-	@Text
+	@Text(required = false)
 	private String text;
 
 	public String getDatabase() {
@@ -25,5 +25,6 @@ public class XMLStatement {
 	public String getText() {
 		return text;
 	}
+
 
 }

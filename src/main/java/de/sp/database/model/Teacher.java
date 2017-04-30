@@ -158,4 +158,26 @@ public class Teacher {
     public boolean isSynchronized() {
         return is_synchronized;
     }
+
+	public String getFullName() {
+		String name = "";
+
+		if(grade != null && !grade.isEmpty()){
+			name += grade + " ";
+		}
+
+		if(before_surname != null && !before_surname.isEmpty()){
+			name += before_surname + " ";
+		}
+
+		name += surname;
+
+		if(after_surname != null && !after_surname.isEmpty()){
+			name += " " + after_surname;
+		}
+
+		name += ", " + firstname;
+
+		return name;
+	}
 }

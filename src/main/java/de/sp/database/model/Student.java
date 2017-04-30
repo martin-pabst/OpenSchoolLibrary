@@ -36,6 +36,8 @@ public class Student {
 
 	private Long religion_id;
 
+	private Long address_id;
+
 	public Student() {
 	}
 
@@ -199,4 +201,22 @@ public class Student {
 	public void setReligion_id(Long religion_id) {
 		this.religion_id = religion_id;
 	}
+
+    public String getFullName() {
+        String name = "";
+        
+        if(before_surname != null && !before_surname.isEmpty()){
+        	name += before_surname + " ";
+		}
+		
+		name += surname;
+
+		if(after_surname != null && !after_surname.isEmpty()){
+			name += " " + after_surname;
+		}
+
+		name += ", " + firstname;
+
+		return name;
+    }
 }

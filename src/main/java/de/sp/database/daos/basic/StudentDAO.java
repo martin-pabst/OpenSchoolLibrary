@@ -4,8 +4,10 @@ import de.sp.database.model.Student;
 import de.sp.database.statements.StatementStore;
 import org.sql2o.Connection;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StudentDAO {
 
@@ -68,6 +70,29 @@ public class StudentDAO {
 		.addParameter("id", student.getId())
 
 		.executeUpdate();
+
+	}
+
+	public static void deleteCascadingByStudentList(List<Student> students, Connection con){
+
+		List<Long> ids = new ArrayList<>();
+
+		students.forEach(student -> ids.add(student.getId()));
+
+		deleteCascading(ids, con);
+	}
+
+	public static void deleteCascading(List<Long> student_ids, Connection con){
+		String ids =
+				student_ids.stream().map(id -> id.toString()).collect(Collectors.joining(", "));
+
+		for (String sql : StatementStore.getStatements("student.deleteCascading")) {
+
+			sql = sql.replace(":ids", ids);
+
+			con.createQuery(sql).executeUpdate();
+
+		}
 
 	}
 

@@ -1,11 +1,11 @@
 package de.sp.tools.database.schema;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
+
+import java.nio.file.Path;
+import java.util.ArrayList;
 
 @Root(name = "database")
 public class DatabaseSchema {
@@ -86,6 +86,10 @@ public class DatabaseSchema {
 						statement += " foreign key (" + columnSchema.getName()
 								+ ") references " + rs.getTable() + "("
 								+ rs.getColumn() + ")";
+
+						if(rs.getOndelete() != null && !rs.getOndelete().isEmpty()){
+							statement += " on delete " + rs.getOndelete();
+						}
 
 						statements.add(statement);
 					}

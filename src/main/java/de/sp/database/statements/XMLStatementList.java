@@ -1,16 +1,25 @@
 package de.sp.database.statements;
 
-import java.util.List;
-
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import java.util.List;
+
 @Root(name = "statementlist")
 public class XMLStatementList {
 
-	@ElementList(inline = true, entry = "statement")
+	@Attribute(required = false)
+	private String database;
+
+	@Attribute(required = false)
+	private String name;
+
+	@ElementList(inline = true, entry = "statement", required = false)
 	private List<XMLStatement> statements;
+
+	@ElementList(inline = true, entry = "statementlist", required = false)
+	private List<XMLStatementList> statementLists;
 
 	@Attribute(required = false)
 	private String praefix;
@@ -23,4 +32,15 @@ public class XMLStatementList {
 		return praefix;
 	}
 
+	public String getDatabase() {
+		return database;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public List<XMLStatementList> getStatementLists() {
+		return statementLists;
+	}
 }

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+    <statement name="librarySettings.getOldBookingsSize">
+    <![CDATA[
+        SELECT count(*)
+        FROM borrows
+            JOIN book_copy ON borrows.book_copy_id = book_copy.id
+            JOIN book ON book_copy.book_id = book.id
+        WHERE
+            book.school_id = :school_id AND
+            NOT borrows.return_date IS NULL AND
+            borrows.return_date <= :date_from AND
+            (
+                select count(*) from fee
+                where borrows_id = borrows.id
+            ) = 0
+        ]]>
+    </statement>
+
+    <statement name="librarySettings.deleteOldBookings">
+        <![CDATA[
+        DELETE FROM borrows
+        WHERE id IN (
+            SELECT borrows.id
+            FROM borrows
+                JOIN book_copy ON borrows.book_copy_id = book_copy.id
+                JOIN book ON book_copy.book_id = book.id
+            WHERE
+                book.school_id = :school_id AND
+                NOT borrows.return_date IS NULL AND
+                borrows.return_date <= :date_from AND
+        (
+            select count(*) from fee
+            where borrows_id = borrows.id
+        ) = 0
+        )
+        ]]>
+    </statement>
+
+    <statement name="librarySettings.getResignedStudents">
+        <![CDATA[
+        SELECT student.*
+        FROM student
+        WHERE school_id = :school_id AND
+              NOT exit_date IS NULL AND
+              exit_date <= :date_from AND (
+                                              SELECT count(*)
+                                              FROM borrows
+                                              WHERE student_id = student.id AND
+                                                    return_date IS NULL
+                                          ) = 0
+        AND (
+            select count(*) from borrows join fee on borrows.id = fee.borrows_id
+            where borrows.student_id = student.id
+              ) = 0
+        ]]>
+    </statement>
+
+    <statement name="librarySettings.getResignedTeachers">
+        <![CDATA[
+        SELECT teacher.*
+        FROM teacher
+        WHERE school_id = :school_id AND
+              NOT synchronized AND (
+                                       SELECT count(*)
+                                       FROM borrows
+                                       WHERE teacher_id = teacher.id
+                                             AND return_date IS NULL
+                                   ) = 0
+        ]]>
+    </statement>
+
+    <statement name="librarySettings.mergeStudents">
+        UPDATE borrows
+          set student_id = :id1 where student_id = :id2
+    </statement>
+
+    <statement name="librarySettings.mergeStudentsGetBorrowCount">
+          SELECT count(*) FROM borrows WHERE student_id = :id
+    </statement>
+
+
+</statementlist>

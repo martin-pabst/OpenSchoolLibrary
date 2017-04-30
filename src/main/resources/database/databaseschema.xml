@@ -23,10 +23,10 @@
 		<column name="id" type="bigint" autoincrement="true"
 			primarykey="true" />
 		<column name="school_id" type="bigint">
-			<references table="school" column="id" />
+			<references table="school" column="id" ondelete="cascade" />
 		</column>
 		<column name="term_id" type="bigint">
-			<references table="term" column="id" />
+			<references table="term" column="id"  ondelete="cascade" />
 		</column>
 	</table>
 
@@ -42,7 +42,7 @@
 		<column name="hash" type="varchar" length="256" />
 		<column name="languageCode" type="varchar" length="20" />
 		<column name="last_selected_school_term_id" type="bigint">
-			<references table="school_term" column="id" />
+			<references table="school_term" column="id" ondelete="set null"/>
 		</column>
 		<column name="is_admin" type="bool"/>
 	</table>
@@ -51,10 +51,10 @@
 		<column name="id" type="bigint" autoincrement="true"
 			primarykey="true" />
 		<column name="user_id" type="bigint">
-			<references table="users" column="id" />
+			<references table="users" column="id"  ondelete="cascade" />
 		</column>
 		<column name="role_id" type="bigint">
-			<references table="role" column="id" />
+			<references table="role" column="id"  ondelete="cascade" />
 		</column>
 	</table>
 
@@ -64,7 +64,7 @@
 		<column name="name" type="varchar" length="40" />
 		<column name="remark" type="varchar" length="500" />
 		<column name="school_id" type="bigint">
-			<references table="school" column="id" />
+			<references table="school" column="id"  ondelete="cascade" />
 		</column>
 		<column name="permissions" type="text" />
 	</table>
@@ -75,10 +75,10 @@
 		<column name="id" type="bigint" autoincrement="true"
 			primarykey="true" />
 		<column name="school_id" type="bigint">
-			<references table="school" column="id" />
+			<references table="school" column="id"  ondelete="cascade" />
 		</column>
 		<column name="user_id" type="bigint">
-			<references table="users" column="id" />
+			<references table="users" column="id" ondelete="set null"/>
 		</column>
 		<column name="surname" type="varchar" length="300" />
 		<column name="firstname" type="varchar" length="300" />
@@ -95,11 +95,11 @@
 		<column name="id" type="bigint" autoincrement="true"
 			primarykey="true" />
 		<column name="school_id" type="bigint">
-			<references table="school" column="id" />
+			<references table="school" column="id"  ondelete="cascade" />
 		</column>
 		<!-- only if pupil lives not with his parents: -->
 		<column name="address_id" type="bigint">
-			<references table="address" column="id" />
+			<references table="address" column="id" ondelete="set null"/>
 		</column>
 		<column name="dateofbirth" type="date" />
 		<column name="surname" type="varchar" length="300" />
@@ -111,7 +111,7 @@
 		<column name="external_id" type="varchar" length="100" />
 		<column name="exit_date" type="date" />
 		<column name="religion_id" type="bigint">
-			<references table="subject" column="id" />
+			<references table="subject" column="id" ondelete="set null" />
 		</column>
 		<column name="synchronized" type="bool" />
 	</table>
@@ -120,16 +120,16 @@
 		<column name="id" type="bigint" autoincrement="true"
 			primarykey="true" />
 		<column name="student_id" type="bigint">
-			<references table="student" column="id" />
+			<references table="student" column="id"  ondelete="cascade" />
 		</column>
 		<column name="school_term_id" type="bigint">
-			<references table="school_term" column="id" />
+			<references table="school_term" column="id" ondelete="cascade" />
 		</column>
 		<column name="class_id" type="bigint">
-			<references table="class" column="id" />
+			<references table="class" column="id" ondelete="set null" />
 		</column>
 		<column name="curriculum_id" type="bigint"> <!-- Bildungsgang -->
-			<references table="value" column="id" />
+			<references table="value" column="id" ondelete="set null"/>
 		</column>
 	</table>
 
@@ -137,12 +137,12 @@
 		<column name="id" type="bigint" autoincrement="true"
 			primarykey="true" />
 		<column name="school_term_id" type="bigint">
-			<references table="school_term" column="id" />
+			<references table="school_term" column="id" ondelete="cascade"/>
 		</column>
 		<column name="name" type="varchar" length="20" />
 		<column name="year_of_school" type="integer" />
 		<column name="form_id" type="bigint">
-			<references table="value" column="id" />
+			<references table="value" column="id" ondelete="cascade"/>
 		</column>
 	</table>
 
@@ -150,10 +150,10 @@
 		<column name="id" type="bigint" autoincrement="true"
 			primarykey="true" />
 		<column name="student_id" type="bigint">
-			<references table="student" column="id" />
+			<references table="student" column="id" ondelete="cascade"/>
 		</column>
 		<column name="subject_id" type="bigint">
-			<references table="subject" column="id" />
+			<references table="subject" column="id" ondelete="cascade"/>
 		</column>
 		<column name="from_year" type="integer" />
 		<column name="to_year" type="integer" />
@@ -165,7 +165,7 @@
 		<column name="shortname" type="varchar" length="10" />
 		<column name="longname" type="varchar" length="80" />
 		<column name="school_id" type="bigint">
-			<references table="school" column="id" />
+			<references table="school" column="id" ondelete="cascade"/>
 		</column>
 		<column name="key1" type="varchar" length="20" /> <!-- e.g. ASV-Key -->
 		<column name="key2" type="varchar" length="20" />
@@ -205,15 +205,15 @@
 		<column name="grade" type="varchar" length="40" />
 
 		<column name="student_id" type="bigint" index="true">
-			<references table="student" column="id" />
+			<references table="student" column="id" ondelete="cascade"/>
 		</column>
 
 		<column name="person_type_id" type="bigint">
-			<references table="value" column="id" />
+			<references table="value" column="id" ondelete="set null"/>
 		</column>
 
 		<column name="address_id" type="bigint">
-			<references table="address" column="id" />
+			<references table="address" column="id" ondelete="set null"/>
 		</column>
 
 		<column name="is_legal_parent" type="bool" />
@@ -232,19 +232,19 @@
 		<column name="order_number" type="integer" />
 
 		<column name="contact_type_id" type="bigint">
-			<references table="value" column="id" />
+			<references table="value" column="id" ondelete="cascade"/>
 		</column>
 
 		<column name="person_id" type="bigint" index="true">
-			<references table="person" column="id" />
+			<references table="person" column="id" ondelete="cascade" />
 		</column>
 
 		<column name="student_id" type="bigint" index="true">
-			<references table="student" column="id" />
+			<references table="student" column="id" ondelete="cascade"/>
 		</column>
 
 		<column name="teacher_id" type="bigint">
-			<references table="teacher" column="id" />
+			<references table="teacher" column="id" ondelete="cascade"/>
 		</column>
 
 
@@ -260,7 +260,7 @@
 		<column name="id" type="bigint" autoincrement="true"
 			primarykey="true" />
 		<column name="school_id" type="bigint">
-			<references table="school" column="id" />
+			<references table="school" column="id" ondelete="cascade"/>
 		</column>
 		<column name="title" type="varchar" length="300" />
 		<column name="author" type="varchar" length="300" />
@@ -270,7 +270,7 @@
 		<column name="approval_code" type="varchar" length="50" />
 		<column name="edition" type="varchar" length="50" />
 		<column name="subject_id" type="bigint">
-			<references table="subject" column="id" />
+			<references table="subject" column="id" ondelete="set null"/>
 		</column>
 		<column name="price" type="decimal" digits="10" decimals="2" />
 	</table>
@@ -279,13 +279,13 @@
 		<column name="id" type="bigint" autoincrement="true"
 			primarykey="true" />
 		<column name="book_id" type="bigint">
-			<references table="book" column="id" />
+			<references table="book" column="id" ondelete="cascade" />
 		</column>
 		<column name="form_id" type="bigint">
-			<references table="value" column="id" />
+			<references table="value" column="id" ondelete="cascade"/>
 		</column>
 		<column name="curriculum_id" type="bigint">
-			<references table="value" column="id" />
+			<references table="value" column="id" ondelete="cascade"/>
 		</column>
 		<column name="languageyear" type="integer">
 		</column>
@@ -296,7 +296,7 @@
 		<column name="id" type="bigint" autoincrement="true"
 			primarykey="true" />
 		<column name="book_id" type="bigint">
-			<references table="book" column="id" />
+			<references table="book" column="id" ondelete="cascade"/>
 		</column>
 		<column name="edition" type="varchar" length="10" />
 		<column name="barcode" type="varchar" length="50" />
@@ -307,7 +307,7 @@
 		<column name="id" type="bigint" autoincrement="true"
 			primarykey="true" />
 		<column name="book_copy_id" type="bigint">
-			<references table="book_copy" column="id" />
+			<references table="book_copy" column="id" ondelete="cascade"/>
 		</column>
 		<column name="statusdate" type="date" />
 		<column name="evidence" type="text" />
@@ -322,14 +322,14 @@
 		<column name="id" type="bigint" autoincrement="true"
 			primarykey="true" />
 		<column name="book_copy_id" type="bigint">
-			<references table="book_copy" column="id" />
+			<references table="book_copy" column="id" ondelete="cascade"/>
 		</column>
 		<!-- Either student_id != null or teacher_id != null -->
 		<column name="student_id" type="bigint">
-			<references table="student" column="id" />
+			<references table="student" column="id" ondelete="set null"/>
 		</column>
 		<column name="teacher_id" type="bigint">
-			<references table="teacher" column="id" />
+			<references table="teacher" column="id" ondelete="set null"/>
 		</column>
 		<column name="begindate" type="date" />
 		<column name="enddate" type="date" />
@@ -341,7 +341,7 @@
 		<column name="id" type="bigint" autoincrement="true"
 			primarykey="true" />
 		<column name="borrows_id" type="bigint">
-			<references table="borrows" column="id" />
+			<references table="borrows" column="id" ondelete="cascade"/>
 		</column>
 		<column name="amount" type="decimal" digits="8" decimals="2" />
 		<column name="remarks" type="varchar" length="2000" />

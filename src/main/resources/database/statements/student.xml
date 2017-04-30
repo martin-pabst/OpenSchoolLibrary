@@ -1,78 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <statementlist>
 
-<!-- Table school -->
+    <!-- Table school -->
 
-	<statement name="student.getAll" >
-		select id, school_id, dateofbirth, surname, firstname, christian_names, 
-		before_surname, after_surname, sex_key, external_id, exit_date, synchronized,
-			religion_id
-		from student
-	</statement>
-	
-	<statement name="student.insert">
-		insert into student (school_id, dateofbirth, surname, firstname, christian_names, before_surname, after_surname,
-							 sex_key, external_id, exit_date, synchronized, religion_id)
-		values (:school_id, :dateofbirth, :surname, :firstname, :christian_names,
-				:before_surname, :after_surname, :sex_key, :external_id, :exit_date,
-							:synchronized, :religion_id)
-	</statement>
+    <statement name="student.getAll">
+        SELECT
+            id,
+            school_id,
+            dateofbirth,
+            surname,
+            firstname,
+            christian_names,
+            before_surname,
+            after_surname,
+            sex_key,
+            external_id,
+            exit_date,
+            synchronized,
+            religion_id
+        FROM student
+    </statement>
 
-	<statement name="student.remove">
-		delete from student where id = :id
-	</statement>
-	
-	<statement name="student.findBySchoolID" >
-		select id, school_id, dateofbirth, surname, firstname, christian_names, before_surname, after_surname,
-			sex_key, external_id, exit_date, synchronized, religion_id
-		from student
-		where school_id = :school_id
-	</statement>
-	
-	<statement name="student.update">
-		update student set 
-		school_id = :school_id,
-		dateofbirth = :dateofbirth,
-		surname = :surname, 
-		firstname = :firstname,
-		christian_names = :christian_names,
-		before_surname = :before_surname,
-		after_surname = :after_surname, 
-		sex_key = :sex_key,
-		external_id = :external_id,
-		exit_date = :exit_date,
-		synchronized = :synchronized,
-			religion_id = :religion_id
-		where id = :id
-	</statement>
+    <statement name="student.insert">
+        INSERT INTO student (school_id, dateofbirth, surname, firstname, christian_names, before_surname, after_surname,
+                             sex_key, external_id, exit_date, synchronized, religion_id)
+        VALUES (:school_id, :dateofbirth, :surname, :firstname, :christian_names,
+                            :before_surname, :after_surname, :sex_key, :external_id, :exit_date,
+                            :synchronized, :religion_id)
+    </statement>
 
-	<statement name = "student.getSchoolId">
-		select school_id from student 
-		where id = :student_id
-	</statement>
-	
-	<statement name = "student.setAddressId">
-		update student 
-		set address_id = :address_id
-		where id = :student_id
-	</statement>
+    <statement name="student.remove">
+        DELETE FROM student
+        WHERE id = :id
+    </statement>
 
-	<statement name = "student.updateBorrower">
-		update student
-		set dateofbirth = :dateofbirth,
-			surname = :surname,
-			firstname = :firstname,
-			before_surname = :before_surname,
-			after_surname = :after_surname,
-			sex_key = :sex_key,
-			religion_id = :religion_id
-		where id = :id
-	</statement>
+    <statement name="student.findBySchoolID">
+        SELECT
+            id,
+            school_id,
+            dateofbirth,
+            surname,
+            firstname,
+            christian_names,
+            before_surname,
+            after_surname,
+            sex_key,
+            external_id,
+            exit_date,
+            synchronized,
+            religion_id
+        FROM student
+        WHERE school_id = :school_id
+    </statement>
 
-	<statement name="student.setSynchronized">
-		update student
-			set synchronized = :synchronized
-			where school_id = :school_id
-	</statement>
+    <statement name="student.update">
+        UPDATE student
+        SET
+            school_id       = :school_id,
+            dateofbirth     = :dateofbirth,
+            surname         = :surname,
+            firstname       = :firstname,
+            christian_names = :christian_names,
+            before_surname  = :before_surname,
+            after_surname   = :after_surname,
+            sex_key         = :sex_key,
+            external_id     = :external_id,
+            exit_date       = :exit_date,
+            synchronized    = :synchronized,
+            religion_id     = :religion_id
+        WHERE id = :id
+    </statement>
+
+    <statement name="student.getSchoolId">
+        SELECT school_id
+        FROM student
+        WHERE id = :student_id
+    </statement>
+
+    <statement name="student.setAddressId">
+        UPDATE student
+        SET address_id = :address_id
+        WHERE id = :student_id
+    </statement>
+
+    <statement name="student.updateBorrower">
+        UPDATE student
+        SET dateofbirth    = :dateofbirth,
+            surname        = :surname,
+            firstname      = :firstname,
+            before_surname = :before_surname,
+            after_surname  = :after_surname,
+            sex_key        = :sex_key,
+            religion_id    = :religion_id
+        WHERE id = :id
+    </statement>
+
+    <statement name="student.setSynchronized">
+        UPDATE student
+        SET synchronized = :synchronized
+        WHERE school_id = :school_id
+    </statement>
+
+    <statementlist name="student.deleteCascading">
+        <statement>
+				<![CDATA[
+            DELETE FROM address
+            WHERE id IN (
+                SELECT address_id
+                FROM student
+                WHERE id IN (
+                    :ids
+                )
+            )
+            ]]>
+		</statement>
+        <statement>
+			<![CDATA[
+            DELETE FROM student
+            WHERE id IN (
+                :ids
+            )
+            ]]>
+		</statement>
+    </statementlist>
 
 </statementlist>
