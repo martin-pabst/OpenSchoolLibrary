@@ -12,15 +12,15 @@ import de.sp.main.resources.text.TS;
 public class AdminModule extends Module {
 
 	public static final String PERMISSIONADMIN = "admin";
-	private Template adminTemplate;
+	private Template userAdministrationTemplate;
 
 	public AdminModule() {
 
 		setMayGetDeactivated(true);
 		setInstalled(true);
 
-		adminTemplate = VelocityEngineFactory.getVelocityEngine().getTemplate(
-				"templates/modules/admin/admin.vm");
+		userAdministrationTemplate = VelocityEngineFactory.getVelocityEngine().getTemplate(
+				"templates/modules/admin/userAdministration.vm");
 
 	}
 
@@ -48,10 +48,15 @@ public class AdminModule extends Module {
 				new String[] { PERMISSIONADMIN }, PERMISSIONADMIN,
 				MenuItemSide.right, 100);
 
-		m.addItem(new MenuItem("admin.menu.schools", "", "", null,
-				new String[] { PERMISSIONADMIN }, PERMISSIONADMIN,
+		m.addItem(new MenuItem("admin.menu.useradministration", "startUserAdministration", "fa-institution",
+				null, new String[] { PERMISSIONADMIN }, PERMISSIONADMIN,
 				10));
-		
+
+		m.addItem(new MenuItem("admin.menu.schools", "", "fa-institution", null,
+				new String[] { PERMISSIONADMIN }, PERMISSIONADMIN,
+				20));
+
+
 		return new MenuItem[] { m };
 
 	}
@@ -66,8 +71,8 @@ public class AdminModule extends Module {
 			StringBuilder sb) {
 
 		switch (fragmentId) {
-		case "xxx": // TODO
-			renderTemplate(adminTemplate, ts, user, sb);
+		case "startUserAdministration":
+			renderTemplate(userAdministrationTemplate, ts, user, sb);
 			break;
 
 		default:

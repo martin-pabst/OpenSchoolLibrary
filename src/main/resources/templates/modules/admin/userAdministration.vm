@@ -1,0 +1,42 @@
+<div id="admin.user">
+
+    <ul class="nav nav-tabs" style="background-color: white">
+        <li role="presentation" class="active"><a data-toggle="tab" href="#userAdministrationUsers" 
+                                                  id="userAdministrationUsersTab">
+            <i class="fa fa-users fa-fw" aria-hidden="true"></i>
+            <span class="menuitemtext">${ts.get("admin.useradministration.users")}</span></a></li>
+
+        <li role="presentation"><a data-toggle="tab" href="#userAdministrationRoles"
+                                                  id="userAdministrationRolesTab">
+            <i class="fa fa-users fa-fw" aria-hidden="true"></i>
+            <span class="menuitemtext">${ts.get("admin.useradministration.roles")}</span></a></li>
+    </ul>
+
+    <div class="tab-content">
+
+        <!-- Users -->
+
+        <div id="userAdministrationUsers" class="tab-pane fade active in" style="margin-top: 10px">
+            <h1>Benutzer</h1>
+            <div style="width: 50%; padding: 5px">
+                <div id="adminUsersUserList" style="height: 760px"></div>
+            </div>
+            <div style="width: 50%; padding: 5px">
+                <div id="adminUsersRoleList" style="height: 760px"></div>
+            </div>
+        </div>
+
+        <!-- Roles -->
+
+        <div id="userAdministrationRoles" class="tab-pane fade active in" style="margin-top: 10px">
+            <h1>Rollen</h1>
+            <div style="width: 50%; padding: 5px">
+                <div id="adminRolesRoleList" style="height: 760px"></div>
+            </div>
+            <div style="width: 50%; padding: 5px">
+                <div id="adminRolesPermissionList" style="height: 760px"></div>
+            </div>
+        </div>
+
+
+    </div>

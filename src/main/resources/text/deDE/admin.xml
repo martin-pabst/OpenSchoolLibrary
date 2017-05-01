@@ -7,6 +7,11 @@
 		<text path="main"> </text>
 		<text path="asvimport">Datenimport aus ASV</text>
 		<text path="schools">Schulen verwalten</text>
+		<text path="useradministration">Benutzer/Rollen</text>
+	</textresources>
+	<textresources path="admin.useradministration" language="de-DE">
+		<text path="users">Benutzer</text>
+		<text path="roles">Rollen</text>
 	</textresources>
 	<textresources path="admin.permissions" language="de-DE">
 		<text path="main">Administratormodul öffnen</text>

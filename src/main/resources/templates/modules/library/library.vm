@@ -52,43 +52,51 @@
                     </div>
                 </div>
                 <div class="col-md-12" style="padding: 0">
-                    <h4 style="margin-top: 10px">Zustand des Buchs<span id="bookTitle"
-                                                                        style="font-weight: bold"></span>:</h4>
 
-                    <div id="bookDetailTextAll" style="height: 130px; width: 100%;
+                    <div class="panel panel-default" style="margin-top: 10px">
+                        <div class="panel-heading" id="bookReturnTitle">Zustand des Buchs<span id="bookTitle"></span>:
+                        </div>
+                        <div class="panel-body" style="padding: 5px">
+
+                            <div id="bookDetailTextAll" style="height: 130px; width: 100%;
                     margin-bottom: 4px; overflow: auto"></div>
 
-                    <div class="col-md-8" style="padding-left: 0; padding-right: 0">
+                            <div class="col-md-8" style="padding-left: 0; padding-right: 0">
                         <textarea id="bookDetailText" style="height: 90px; width: 100%"
                                   placeholder="Beschreibung des Buchzustands hier eingeben..."></textarea>
-                    </div>
-                    <div class="col-md-4" style="padding-right: 0; padding-top: 0">
-                        <div class="w2ui-field">
-                            <input id="bookDetailDate">
+                            </div>
+                            <div class="col-md-4" style="padding-right: 0; padding-top: 0">
+                                <div class="w2ui-field">
+                                    <input id="bookDetailDate">
+                                </div>
+                                <div style="height: 5px"></div>
+                                <div class="dropup">
+                                    <button id="bookDetailMark" class="btn btn-default dropdown-toggle" type="button"
+                                            data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="true">Zustand als Note<span
+                                            class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" id="bookDetailMarkUL">
+                                        <li><a href="#" data-value="1 (wie neu)">1 (wie neu)</a></li>
+                                        <li><a href="#"
+                                               data-value="2 (leichte Abnutzungsspuren)">2 (leichte
+                                            Abnutzungsspuren)</a></li>
+                                        <li><a href="#" data-value="3 (stark abgenutzt)">3 (stark abgenutzt)</a>
+                                        </li>
+                                        <li><a href="#" data-value="4 (leicht beschädigt)">4 (leicht beschädigt)</a>
+                                        </li>
+                                        <li><a href="#"
+                                               data-value="5 (mittelschwer beschädigt)">5 (mittelschwer beschädigt)</a>
+                                        </li>
+                                        <li><a href="#" data-value="6 (schwer beschädigt)">6 (schwer beschädigt)</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div style="height: 5px"></div>
+                                <button id="bookDetailButton" class="btn btn-default">Hinzufügen</button>
+                            </div>
+
                         </div>
-                        <div style="height: 5px"></div>
-                        <div class="dropup">
-                            <button id="bookDetailMark" class="btn btn-default dropdown-toggle" type="button"
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="true">Zustand als Note<span
-                                    class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" id="bookDetailMarkUL">
-                                <li><a href="#" data-value="1 (wie neu)">1 (wie neu)</a></li>
-                                <li><a href="#"
-                                       data-value="2 (leichte Abnutzungsspuren)">2 (leichte Abnutzungsspuren)</a></li>
-                                <li><a href="#" data-value="3 (stark abgenutzt)">3 (stark abgenutzt)</a>
-                                </li>
-                                <li><a href="#" data-value="4 (leicht beschädigt)">4 (leicht beschädigt)</a>
-                                </li>
-                                <li><a href="#"
-                                       data-value="5 (mittelschwer beschädigt)">5 (mittelschwer beschädigt)</a></li>
-                                <li><a href="#" data-value="6 (schwer beschädigt)">6 (schwer beschädigt)</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div style="height: 5px"></div>
-                        <button id="bookDetailButton" class="btn btn-default">Hinzufügen</button>
                     </div>
 
                 </div>
@@ -301,7 +309,8 @@
                         </li>
                         <li><a href="#ls_deleteResignedStudentsTeachers" data-toggle="pill">Ausgetretene
                             Schüler/Lehrkräfte löschen</a></li>
-                        <li><a href="#ls_mergeStudentRecords" data-toggle="pill" id="mergeStudentRecordsTab">Schülerdatensätze zusammenführen</a>
+                        <li><a href="#ls_mergeStudentRecords" data-toggle="pill" id="mergeStudentRecordsTab">Schülerdatensätze
+                            zusammenführen</a>
                         </li>
                     </ul>
                 </div>
@@ -368,15 +377,22 @@
                                  style="height: 25em; width: 95%"></div>
                             <div style="margin-top: 10px">
                                 <p>Bitte wählen Sie nachfolgend aus, welcher der beien Datensätze gelöscht werden soll.
-                                    Die ausgeliehenen Bücher werden vorher natürlich auf den anderen Datensatz übertragen.</p>
+                                    Die ausgeliehenen Bücher werden vorher natürlich auf den anderen Datensatz
+                                    übertragen.</p>
                                 <table style="margin-bottom: 5px">
-                                    <tr style="color: blue; font-weight: bold"><td>Datensatz 1</td><td>Datensatz 2</td></tr>
-                                    <tr><td id="ls_merge_student_1"></td><td id="ls_merge_student_2"></td></tr>
+                                    <tr style="color: blue; font-weight: bold">
+                                        <td>Datensatz 1</td>
+                                        <td>Datensatz 2</td>
+                                    </tr>
                                     <tr>
-                                        <td><input type="radio" id="ls_deleteStudent1" name="ls_deleteStudentRB" >
-                                        <label for="ls_deleteStudent1"> Datensatz 1 löschen</label></td>
-                                        <td><input type="radio" id="ls_deleteStudent2"  name="ls_deleteStudentRB" >
-                                        <label for="ls_deleteStudent2"> Datensatz 2 löschen</label></td>
+                                        <td id="ls_merge_student_1"></td>
+                                        <td id="ls_merge_student_2"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="radio" id="ls_deleteStudent1" name="ls_deleteStudentRB">
+                                            <label for="ls_deleteStudent1"> Datensatz 1 löschen</label></td>
+                                        <td><input type="radio" id="ls_deleteStudent2" name="ls_deleteStudentRB">
+                                            <label for="ls_deleteStudent2"> Datensatz 2 löschen</label></td>
                                     </tr>
                                 </table>
                             </div>
