@@ -2,6 +2,7 @@ package de.sp.main.login;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.List;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -9,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.sp.database.model.School;
+import de.sp.database.model.StoreManager;
+import de.sp.database.stores.SchoolTermStore;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.slf4j.Logger;
@@ -40,6 +44,28 @@ public class LoginServlet extends BaseServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 
+		School school = null;
+
+		List<School> schools = SchoolTermStore.getInstance().getSchools();
+		if(schools.size() == 1){
+			school = schools.get(0);
+		} else {
+			// find school
+			String schoolNumber = getLastURLPart(request);
+			if(!schoolNumber.isEmpty()){
+				for (School school1 : schools) {
+					if(school1.getNumber().equals(schoolNumber)){
+						school = school1;
+						break;
+					}
+				}
+			}
+		}
+
+		if(school == null){
+			throw new ServletException("No school found");
+		}
+
 		boolean credentialsOK = false;
 
 		User user = null;
@@ -50,8 +76,8 @@ public class LoginServlet extends BaseServlet {
 
 			try {
 
-				user = UserRolePermissionStore.getInstance().getUserByName(
-						username);
+				user = UserRolePermissionStore.getInstance().getUserBySchoolIdAndName(
+					school.getId(),	username);
 
 				if (user != null) {
 

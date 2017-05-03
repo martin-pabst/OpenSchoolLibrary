@@ -1,6 +1,6 @@
 package de.sp.modules.admin.servlets;
 
-import de.sp.main.resources.permissions.Permission;
+import de.sp.main.resources.modules.Permission;
 import de.sp.main.resources.text.TS;
 
 /**
@@ -10,25 +10,25 @@ public class PermissionData {
 
     public String module;
 
-    public String identifier;
+    public String name;
 
-    public String description;
+    public String remark;
 
 
     public PermissionData(TS ts, Permission permission){
 
-        identifier = permission.getIdentifier();
-        description = ts.get(permission.getDescription());
+        name = permission.getName();
+        remark = ts.get(permission.getRemark());
 
-        int i = identifier.indexOf('.');
+        int i = name.indexOf('.');
 
-        String moduleIdentifier = identifier;
+        String modulename = name;
 
         if (i > 0){
-            moduleIdentifier = identifier.substring(0, i);
+            modulename = name.substring(0, i);
         }
 
-        module = ts.get(moduleIdentifier);
+        module = ts.get(modulename);
 
     }
 

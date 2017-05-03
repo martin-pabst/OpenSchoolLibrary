@@ -1,5 +1,7 @@
 package de.sp.modules.admin;
 
+import de.sp.modules.admin.servlets.AdminUserAdministrationServlet;
+import de.sp.modules.library.servlets.inventory.books.LibraryInventoryBooksServlet;
 import org.apache.velocity.Template;
 
 import de.sp.database.model.User;
@@ -8,10 +10,13 @@ import de.sp.main.mainframe.menu.MenuItemSide;
 import de.sp.main.resources.modules.Module;
 import de.sp.main.resources.templates.VelocityEngineFactory;
 import de.sp.main.resources.text.TS;
+import org.eclipse.jetty.servlet.ServletContextHandler;
 
 public class AdminModule extends Module {
 
 	public static final String PERMISSIONADMIN = "admin";
+	public static final String PERMISSIONADMINUSERADMINISTRATION = "admin.userAdministration";
+
 	private Template userAdministrationTemplate;
 
 	public AdminModule() {
@@ -27,7 +32,7 @@ public class AdminModule extends Module {
 	@Override
 	public String[] getPermissionNames() {
 
-		return new String[] { PERMISSIONADMIN };
+		return new String[] { PERMISSIONADMIN, PERMISSIONADMINUSERADMINISTRATION };
 
 	}
 
@@ -83,7 +88,12 @@ public class AdminModule extends Module {
 
 	@Override
 	public String[] addFragmentIds() {
-		return new String[] {};
+		return new String[] {"startUserAdministration"};
 	}
 
-}
+    @Override
+    public void addServlets(ServletContextHandler context) {
+        context.addServlet(AdminUserAdministrationServlet.class, "/admin/userAdministration/getLists");
+    }
+
+    }

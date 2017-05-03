@@ -22,7 +22,7 @@ public class TS {
 																			// loaded
 	private static HashMap<String, LanguageConfig> codeToLanguageConfigMap = new HashMap<String, LanguageConfig>();
 
-	private static ArrayList<LanguageConfig> fallbackLanguages = new ArrayList<>();
+	private ArrayList<LanguageConfig> fallbackLanguages = new ArrayList<>();
 
 	private LanguageConfig currentLanguage = null;
 
@@ -171,8 +171,7 @@ public class TS {
 
 			if (fallbackConfig != null) {
 
-				fallbackLanguages.add(codeToLanguageConfigMap
-						.get(fallback.languageCode));
+				fallbackLanguages.add(fallbackConfig);
 
 			}
 		}

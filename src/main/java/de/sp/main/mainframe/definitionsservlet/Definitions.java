@@ -6,10 +6,12 @@ import de.sp.database.daos.basic.SubjectDAO;
 import de.sp.database.daos.basic.ValueDAO;
 import de.sp.database.model.*;
 import de.sp.database.model.valuelists.ValueStore;
+import de.sp.database.stores.SchoolTermStore;
 import de.sp.database.valuelists.VLSex;
 import org.sql2o.Connection;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -51,7 +53,7 @@ public class Definitions {
 
 			getSubjectList(school_id, con);
 			
-			schoolList = user.getSchools();
+			schoolList = Arrays.asList(SchoolTermStore.getInstance().getSchoolById(user.getSchool_id()));
 
 			classList = DBClassDAO.getSimpleValueList(schoolTerm.getId(), con);
 

@@ -51,7 +51,7 @@
 <div class="outer">
     <div class="middle">
         <div class="inner" id="panel" title="Scheinerportal - Login">
-            <form action="/login" method="post">
+            <form method="post">
 
                 <h2>$TS.get("login.heading_text")</h2>
                 <label for="username" class="sr-only">$TS.get("login.username")</label>

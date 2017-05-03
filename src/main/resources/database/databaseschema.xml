@@ -44,6 +44,9 @@
 		<column name="last_selected_school_term_id" type="bigint">
 			<references table="school_term" column="id" ondelete="set null"/>
 		</column>
+		<column name="school_id" type="bigint">
+			<references table="school" column="id" ondelete="cascade"/>
+		</column>
 		<column name="is_admin" type="bool"/>
 	</table>
 

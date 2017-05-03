@@ -78,7 +78,7 @@ public class InitDBServlet extends BaseServlet {
 					try (Connection con = ConnectionPool.open()) {
 					
 						User user1 = UserDAO.insert(requestData.username, requestData.name, requestData.password,
-								config.getLanguagesConfig().defaultCode, null, true, con);
+								config.getLanguagesConfig().defaultCode, null, true, null, con);
 						
 						session.setAttribute(LoginServlet.USER, user1);
 

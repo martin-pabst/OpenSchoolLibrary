@@ -8,7 +8,7 @@
 
         <li role="presentation"><a data-toggle="tab" href="#userAdministrationRoles"
                                                   id="userAdministrationRolesTab">
-            <i class="fa fa-users fa-fw" aria-hidden="true"></i>
+            <i class="fa fa-id-badge fa-fw" aria-hidden="true"></i>
             <span class="menuitemtext">${ts.get("admin.useradministration.roles")}</span></a></li>
     </ul>
 
@@ -18,12 +18,13 @@
 
         <div id="userAdministrationUsers" class="tab-pane fade active in" style="margin-top: 10px">
             <h1>Benutzer</h1>
-            <div style="width: 50%; padding: 5px">
-                <div id="adminUsersUserList" style="height: 760px"></div>
+            <div style="width: 50%; padding: 5px" style="float: left">
+                <div id="adminUsersUserList" ></div>
             </div>
-            <div style="width: 50%; padding: 5px">
-                <div id="adminUsersRoleList" style="height: 760px"></div>
+            <div style="width: 50%; padding: 5px" style="float: right">
+                <div id="adminUsersRoleList" ></div>
             </div>
+            <div style="clear: both">
         </div>
 
         <!-- Roles -->
@@ -31,10 +32,10 @@
         <div id="userAdministrationRoles" class="tab-pane fade active in" style="margin-top: 10px">
             <h1>Rollen</h1>
             <div style="width: 50%; padding: 5px">
-                <div id="adminRolesRoleList" style="height: 760px"></div>
+                <div id="adminRolesRoleList"></div>
             </div>
             <div style="width: 50%; padding: 5px">
-                <div id="adminRolesPermissionList" style="height: 760px"></div>
+                <div id="adminRolesPermissionList"></div>
             </div>
         </div>
 

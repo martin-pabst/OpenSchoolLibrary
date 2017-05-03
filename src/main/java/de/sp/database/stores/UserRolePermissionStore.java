@@ -30,7 +30,7 @@ public class UserRolePermissionStore {
 
 	private List<User> users = new ArrayList<>();
 	private Map<Long, User> userKeys = new HashMap<>();
-	private Map<String, User> userNameMap = new HashMap<>();
+	private Map<Long, Map<String, User>> schoolUserNameMap = new HashMap<>();
 
 	private List<Role> roles = new ArrayList<>();
 	private Map<Long, Role> roleKeys = new HashMap<>();
@@ -81,6 +81,14 @@ public class UserRolePermissionStore {
 
 		users.add(user);
 		userKeys.put(user.getId(), user);
+
+		Map<String, User> userNameMap = schoolUserNameMap.get(user.getSchool_id());
+
+		if(userNameMap == null){
+			userNameMap = new HashMap<>();
+			schoolUserNameMap.put(user.getSchool_id(), userNameMap);
+		}
+
 		userNameMap.put(user.getUsername(), user);
 
 	}
@@ -98,7 +106,13 @@ public class UserRolePermissionStore {
 
 	}
 
-	public User getUserByName(String username) {
+	public User getUserBySchoolIdAndName(Long school_id, String username) {
+
+		Map<String, User> userNameMap = schoolUserNameMap.get(school_id);
+
+		if(userNameMap == null){
+			return null;
+		}
 
 		return userNameMap.get(username);
 

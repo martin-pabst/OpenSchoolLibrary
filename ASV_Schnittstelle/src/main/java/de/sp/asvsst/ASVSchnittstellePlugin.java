@@ -12,7 +12,8 @@ import de.sp.main.resources.text.TS;
 
 public class ASVSchnittstellePlugin extends Plugin {
 
-	public static final String PERMISSIONASVSST = "asvsst";
+	public static final String ASVSST = "asvsst";
+	public static final String PERMISSIONASVSSTOPEN = "asvsst.open";
 	private Template template;
 
 	public ASVSchnittstellePlugin() {
@@ -27,13 +28,13 @@ public class ASVSchnittstellePlugin extends Plugin {
 	@Override
 	public String[] getPermissionNames() {
 
-		return new String[] { PERMISSIONASVSST };
+		return new String[] {PERMISSIONASVSSTOPEN};
 
 	}
 
 	@Override
 	public String getIdentifier() {
-		return PERMISSIONASVSST;
+		return ASVSST;
 	}
 
 	@Override
@@ -44,8 +45,8 @@ public class ASVSchnittstellePlugin extends Plugin {
 	@Override
 	public MenuItem[] getMenuItems() {
 		MenuItem m = new MenuItem("asvsst.menu.main", "startAdminASVImport",
-				"fa-download", null, new String[] { PERMISSIONASVSST },
-				PERMISSIONASVSST, 2000);
+				"fa-download", null, new String[] {PERMISSIONASVSSTOPEN},
+				PERMISSIONASVSSTOPEN, 2000);
 
 		m.setInsertBelowThisId("admin");
 

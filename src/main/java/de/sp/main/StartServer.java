@@ -111,7 +111,7 @@ public class StartServer {
 		}
 
 		// register basic builtin servlets
-		context.addServlet(LoginServlet.class, "/login");
+		context.addServlet(LoginServlet.class, "/login/*");
 		context.addServlet(MainFrameServlet.class, "/main/*"); // e.g.
 																// /main/st125#startLibrary
 																// for

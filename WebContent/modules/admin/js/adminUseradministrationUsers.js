@@ -55,7 +55,7 @@
     function initializeDOM() {
 
 
-        $('#libraryBorrowTab').on('shown.bs.tab', function (e) {
+        $('#userAdministrationUsersTab').on('shown.bs.tab', function (e) {
 
 
             fetchData();
@@ -83,7 +83,7 @@
     function initializeTables() {
 
         /**
-         * Table left top which shows Books
+         * Table left top which shows Users
          */
 
         $('#adminUsersUserList').w2grid({
@@ -92,36 +92,30 @@
             //url		: 'library/inventoryBooks',
             buffered: 2000,
             recid: 'id',
-            postData: {school_id: global_school_id, school_term_id: global_school_term_id},
+            postData: {},
             show: {
-                header: false,
+                header: true,
                 toolbar: true,
                 selectColumn: false,
                 multiSelect: false,
                 toolbarAdd: true,
                 toolbarEdit: true,
-                toolbarDelete: false,
+                toolbarDelete: true,
                 toolbarSave: false,
                 footer: true
             },
             columns: [
                 {field: 'id', caption: 'ID', size: '30px', hidden: true, sortable: true},
-                {field: 'class_name', caption: 'Klasse', size: '50px', sortable: true, resizable: true},
-                {field: 'name', caption: 'Name', size: '180px', sortable: true, resizable: true},
-                {field: 'religion', caption: 'Rel.-U.', size: '70px', sortable: true, resizable: true},
-                {field: 'languages', caption: 'Sprachen', size: '70px', sortable: true, resizable: true},
-                {field: 'curriculum_name', caption: 'AR', size: '70px', sortable: true, resizable: true}
+                {field: 'username', caption: 'Benutzername', size: '50px', sortable: true, resizable: true},
+                {field: 'name', caption: 'Echter Name', size: '180px', sortable: true, resizable: true},
+                {field: 'is_admin', caption: 'Admin', size: '50px', sortable: true, resizable: true, render: 'toggle'},
             ],
             searches: [
-                {field: 'class_name', caption: 'Klasse', type: 'text'},
-                {field: 'name', caption: 'Name', type: 'text'},
-                {field: 'languages', caption: 'Sprachenfolge', type: 'text'},
-                {field: 'curriculum_name', caption: 'Ausbildungsrichtung', type: 'text'}
+                {field: 'username', caption: 'Benutzername', type: 'text'},
+                {field: 'name', caption: 'Echter Name', type: 'text'}
             ],
-            sortData: [{field: 'class_name', direction: 'asc'}, {
-                field: 'curriculum_name',
-                direction: 'asc'
-            }, {field: 'name', direction: 'asc'}],
+            sortData: [{field: 'username', direction: 'asc'},
+                { field: 'name', direction: 'asc'}],
 
             onAdd: function (event) {
 
@@ -154,6 +148,56 @@
             }
 
         });
+
+        /**
+         * Table on the right which shows Roles
+         */
+
+        $('#adminUsersRoleList').w2grid({
+            name: 'adminUsersRoleList',
+            header: 'Rollen',
+            //url		: 'library/inventoryBooks',
+            buffered: 2000,
+            recid: 'id',
+            postData: {},
+            show: {
+                header: true,
+                toolbar: false,
+                selectColumn: true,
+                multiSelect: true,
+                toolbarAdd: false,
+                toolbarEdit: false,
+                toolbarDelete: false,
+                toolbarSave: false,
+                footer: false
+            },
+            columns: [
+                {field: 'id', caption: 'ID', size: '30px', hidden: true, sortable: true},
+                {field: 'name', caption: 'Name', size: '50px', sortable: true, resizable: true},
+                {field: 'remark', caption: 'Bemerkung', size: '180px', sortable: true, resizable: true}
+            ],
+            searches: [
+                {field: 'name', caption: 'Name', type: 'text'},
+                {field: 'remark', caption: 'Bemerkung', type: 'text'}
+            ],
+            sortData: [{field: 'name', direction: 'asc'}],
+
+            onSelect: function (event) {
+
+                // event.onComplete = onSelectUnselectUsers;
+
+            },
+
+            onUnselect: function (event) {
+
+                // event.onComplete = onSelectUnselectUsers;
+
+            }
+
+        });
+
+
+
     }
 
 

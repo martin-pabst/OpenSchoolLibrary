@@ -22,7 +22,7 @@
 
         },
         close: function () {
-            w2ui['#librarySettingsMergeStudents'].destroy();
+            w2ui['librarySettingsMergeStudents'].destroy();
         }
     });
 

@@ -23,12 +23,15 @@ public class UserTestdata {
 
 		try (Connection con = ConnectionPool.open()) {
 
-			User martin = UserDAO.insert("martin", "Martin Pabst", "123",
-					"de-DE", null, false, con);
-			User admin = UserDAO.insert("admin", "Administrator", "123",
-					"de-DE", null, true, con);
-
 			School testSchool = SchoolTestdata.exampleSchool;
+
+			User martin = UserDAO.insert("martin", "Martin Pabst", "123",
+					"de-DE", null, false, testSchool.getId(),
+					con);
+			User admin = UserDAO.insert("admin", "Administrator", "123",
+					"de-DE", null, true, testSchool.getId(),
+					con);
+
 
 			String[] libraryPermissionList = new LibraryModule()
 					.getPermissionNames();
@@ -42,7 +45,7 @@ public class UserTestdata {
 			Role teacherRole = RoleDAO.insert("teacher", "Teacher",
 					testSchool.getId(), teacherPermissions, con);
 
-			String adminPermissions = "library|mail|calendar|admin|asvsst";
+			String adminPermissions = "library|mail|calendar|admin|asvsst.open";
 
 			Role adminRole = RoleDAO.insert("admin", "Administrator",
 					testSchool.getId(), adminPermissions, con);

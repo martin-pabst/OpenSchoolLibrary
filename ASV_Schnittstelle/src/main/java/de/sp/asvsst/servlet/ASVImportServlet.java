@@ -41,7 +41,7 @@ public class ASVImportServlet extends BaseServlet {
 		UploadResponseStatus uploadResponse;
 
 		try {
-			user.checkPermission(ASVSchnittstellePlugin.PERMISSIONASVSST,
+			user.checkPermission(ASVSchnittstellePlugin.PERMISSIONASVSSTOPEN,
 					r.getSchool_id());
 
 			if (r.isSaveRecordCommand() && r.getRecord().hasFiles()) {

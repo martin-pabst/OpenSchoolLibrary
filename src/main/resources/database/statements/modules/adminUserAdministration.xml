@@ -12,11 +12,29 @@
     public List<Long> role_ids;-->
 
     <statement name="admin.userAdministration.getUserList">
-        SELECT *
+        SELECT users.id, users.name, users.username, users.is_admin,
+               users.languagecode, role.id as role_id
         FROM users LEFT JOIN user_role ON users.id = user_role.user_id
         JOIN role ON user_role.role_id = role.id
         WHERE
-            role.school_id = :school_id
+            users.school_id = :school_id
     </statement>
+
+<!--
+    public long id;
+
+    public String name;
+
+    public String remark;
+
+    public String permissions;
+-->
+    <statement name="admin.userAdministration.getRoleList">
+        SELECT role.id, role.name, role.remark, role.permissions
+        FROM role
+        WHERE role.school_id = :school_id
+    </statement>
+
+
 
 </statementlist>
