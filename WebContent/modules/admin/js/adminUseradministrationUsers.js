@@ -38,9 +38,17 @@
         $.post('/admin/userAdministration/getLists', JSON.stringify({school_id: global_school_id}),
             function (data) {
 
-            // load data into tables
+                var userNavigator = w2ui['adminUsersUserList'];
+                var roleNavigator = w2ui['adminUsersRoleList'];
 
-        }, "json");
+                userNavigator.clear();
+                roleNavigator.clear();
+
+                userNavigator.add(data.users);
+                roleNavigator.add(data.roles);
+
+
+            }, "json");
 
     }
 

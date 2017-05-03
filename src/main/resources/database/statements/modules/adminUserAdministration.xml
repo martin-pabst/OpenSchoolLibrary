@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+<!--    public long id;
+    public String username;
+    public String name;
+    public String languageCode;
+    public Boolean is_admin = false;
+
+    public Long role_id; // Dummy for flat SQL-Statement
+
+    public List<Long> role_ids;-->
+
+    <statement name="admin.userAdministration.getUserList">
+        SELECT *
+        FROM users LEFT JOIN user_role ON users.id = user_role.user_id
+        JOIN role ON user_role.role_id = role.id
+        WHERE
+            role.school_id = :school_id
+    </statement>
+
+</statementlist>

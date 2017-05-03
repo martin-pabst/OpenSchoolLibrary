@@ -28,7 +28,7 @@ public class LibraryModule extends Module {
 
 	public static final String MODULE_IDENTIFIER = "library";
 
-	public static final String PERMISSION_LIBRARY = "library";
+	public static final String PERMISSION_LIBRARY = "library.open";
 	public static final String PERMISSION_INVENTORY = "library.inventory";
 	public static final String PERMISSION_BORROW = "library.borrow";
 	public static final String PERMISSION_RETURN = "library.return";

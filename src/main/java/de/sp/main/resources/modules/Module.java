@@ -44,7 +44,7 @@ public abstract class Module {
 			}
 			
 			
-			remarkIdentifier = moduleIdentifier + ".permissions."
+			remarkIdentifier = ".permissions." + moduleIdentifier
 					+ remarkIdentifier;
 
 			permissions[i] = new Permission(permissionName, remarkIdentifier);

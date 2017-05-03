@@ -57,6 +57,7 @@ public class StartServer {
 
 			TS.readTextResources();
 
+
 			startServer(config);
 
 		} catch (Exception ex) {

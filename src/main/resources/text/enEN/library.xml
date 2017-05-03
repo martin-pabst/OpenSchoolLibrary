@@ -14,8 +14,14 @@
 		<text path="admonition">Admonition</text>
 	</textresources>
 
-	<textresources path="library.permissions" language="en-EN">
-		<text path="main">Open library module</text>
+	<textresources path="permissions.library" language="en-EN">
+		<text path="open">Open library module</text>
+		<text path="inventory">Edit library inventory</text>
+		<text path="borrow">Borrow books</text>
+		<text path="return">Return books</text>
+		<text path="examine">Examine books</text>
+		<text path="reports">Start library reports</text>
+		<text path="admonition">Library admonition</text>
 	</textresources>
 
 </textresourcefile>

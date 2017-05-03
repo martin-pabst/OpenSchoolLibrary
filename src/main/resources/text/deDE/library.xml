@@ -12,8 +12,8 @@
 		<text path="admonition">Mahnungen</text>
 		<text path="reports">Berichte</text>
 	</textresources>
-	<textresources path="library.permissions" language="de-DE">
-		<text path="library">Lernmittelbibliotheksmodul öffnen und alle Daten lesen</text>
+	<textresources path="permissions.library" language="de-DE">
+		<text path="open">Lernmittelbibliotheksmodul öffnen und alle Daten lesen</text>
 		<text path="inventory">Bestand der Lernmittelbibliothek bearbeiten</text>
 		<text path="borrow">Bücher der Lernmittelbibliothek entleihen</text>
 		<text path="return">Bücherrückgabe der Lernmittelbiliothek</text>
