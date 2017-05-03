@@ -87,4 +87,13 @@ public class UserDAO {
 
 	}
 
+    public static User getUserById(Long user_id, Connection con) {
+
+		String sql = "select * from users where id = :user_id";
+
+		return con.createQuery(sql)
+				.addParameter("user_id", user_id)
+				.executeAndFetchFirst(User.class);
+
+	}
 }

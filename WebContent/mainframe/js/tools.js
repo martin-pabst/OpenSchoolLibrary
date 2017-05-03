@@ -23,7 +23,8 @@ w2utilsPhrases = {
     'Edit': 'Bearbeiten',
     'All Fields': 'Suchbegriff ...',
     'Add New': 'Hinzufügen',
-    'Search': 'Suchen'
+    'Search': 'Suchen',
+    'Yes': 'Ja'
 };
 
 $(function () {

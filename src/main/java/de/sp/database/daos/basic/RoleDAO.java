@@ -1,11 +1,10 @@
 package de.sp.database.daos.basic;
 
-import java.util.List;
-
-import org.sql2o.Connection;
-
 import de.sp.database.model.Role;
 import de.sp.database.statements.StatementStore;
+import org.sql2o.Connection;
+
+import java.util.List;
 
 public class RoleDAO {
 
@@ -48,5 +47,16 @@ public class RoleDAO {
 		con.createQuery(sql).addParameter("id", role.getId()).executeUpdate();
 
 	}
+
+	public static Role getRoleById(Long role_id, Connection con) {
+
+		String sql = "select * from role where id = :role_id";
+
+		return con.createQuery(sql)
+				.addParameter("role_id", role_id)
+				.executeAndFetchFirst(Role.class);
+
+	}
+
 
 }

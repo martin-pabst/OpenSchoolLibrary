@@ -1,15 +1,14 @@
 package de.sp.database.daos.basic;
 
-import java.util.List;
-import java.util.Map;
-
-import org.sql2o.Connection;
-
 import de.sp.database.model.Role;
 import de.sp.database.model.School;
 import de.sp.database.model.User;
 import de.sp.database.model.UserRole;
 import de.sp.database.statements.StatementStore;
+import org.sql2o.Connection;
+
+import java.util.List;
+import java.util.Map;
 
 public class UserRoleDAO {
 
@@ -65,4 +64,25 @@ public class UserRoleDAO {
 
 	}
 
+    public static void addRole(Long user_id, Long role_id, Connection con) {
+
+		String sql = StatementStore.getStatement("user_role.addRoleForUser");
+
+		con.createQuery(sql)
+				.addParameter("user_id", user_id)
+				.addParameter("role_id", role_id)
+				.executeUpdate();
+
+	}
+
+    public static void removeRole(Long user_id, Long role_id, Connection con) {
+
+		String sql = StatementStore.getStatement("user_role.removeRoleFromUser");
+
+		con.createQuery(sql)
+				.addParameter("user_id", user_id)
+				.addParameter("role_id", role_id)
+				.executeUpdate();
+
+	}
 }

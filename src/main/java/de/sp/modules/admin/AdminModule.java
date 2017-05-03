@@ -1,15 +1,13 @@
 package de.sp.modules.admin;
 
-import de.sp.modules.admin.servlets.AdminUserAdministrationServlet;
-import de.sp.modules.library.servlets.inventory.books.LibraryInventoryBooksServlet;
-import org.apache.velocity.Template;
-
 import de.sp.database.model.User;
 import de.sp.main.mainframe.menu.MenuItem;
 import de.sp.main.mainframe.menu.MenuItemSide;
 import de.sp.main.resources.modules.Module;
 import de.sp.main.resources.templates.VelocityEngineFactory;
 import de.sp.main.resources.text.TS;
+import de.sp.modules.admin.servlets.AdminUserAdministrationServlet;
+import org.apache.velocity.Template;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
 public class AdminModule extends Module {
@@ -93,7 +91,7 @@ public class AdminModule extends Module {
 
     @Override
     public void addServlets(ServletContextHandler context) {
-        context.addServlet(AdminUserAdministrationServlet.class, "/admin/userAdministration/getLists");
+        context.addServlet(AdminUserAdministrationServlet.class, "/admin/userAdministration/*");
     }
 
     }

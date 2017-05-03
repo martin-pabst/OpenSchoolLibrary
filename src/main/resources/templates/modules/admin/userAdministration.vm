@@ -18,20 +18,20 @@
 
         <div id="userAdministrationUsers" class="tab-pane fade active in" style="margin-top: 10px">
             <h1>Benutzer</h1>
-            <div style="width: 50%; padding: 5px" style="float: left">
+            <div style="width: 50%; padding: 5px; float: left">
                 <div id="adminUsersUserList" ></div>
             </div>
-            <div style="width: 50%; padding: 5px" style="float: right">
+            <div style="width: 50%; padding: 5px; float: right">
                 <div id="adminUsersRoleList" ></div>
             </div>
-            <div style="clear: both">
+            <div style="clear: both"></div>
         </div>
 
         <!-- Roles -->
 
-        <div id="userAdministrationRoles" class="tab-pane fade active in" style="margin-top: 10px">
+        <div id="userAdministrationRoles" class="tab-pane fade" style="margin-top: 10px">
             <h1>Rollen</h1>
-            <div style="width: 50%; padding: 5px">
+            <div style="width: 50%; padding: 5px ">
                 <div id="adminRolesRoleList"></div>
             </div>
             <div style="width: 50%; padding: 5px">

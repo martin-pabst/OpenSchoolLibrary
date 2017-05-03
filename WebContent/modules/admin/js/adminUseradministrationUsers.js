@@ -106,16 +106,22 @@
             },
             columns: [
                 {field: 'id', caption: 'ID', size: '30px', hidden: true, sortable: true},
-                {field: 'username', caption: 'Benutzername', size: '50px', sortable: true, resizable: true},
-                {field: 'name', caption: 'Echter Name', size: '180px', sortable: true, resizable: true},
-                {field: 'is_admin', caption: 'Admin', size: '50px', sortable: true, resizable: true, render: 'toggle'},
+                {field: 'username', caption: 'Benutzername', size: '20%', sortable: true, resizable: true},
+                {field: 'name', caption: 'Echter Name', size: '80%', sortable: true, resizable: true},
+                {
+                    field: 'is_admin', caption: 'Admin', size: '50px', sortable: true, resizable: true,
+                    render: function (record) {
+                        return '<div>' + (record.is_admin ?
+                                '<img src="/public/img/green_check_mark.png" style="height: 1em; display: block; margin: auto" />' : '') + '</div>';
+                    }
+                },
             ],
             searches: [
                 {field: 'username', caption: 'Benutzername', type: 'text'},
                 {field: 'name', caption: 'Echter Name', type: 'text'}
             ],
             sortData: [{field: 'username', direction: 'asc'},
-                { field: 'name', direction: 'asc'}],
+                {field: 'name', direction: 'asc'}],
 
             onAdd: function (event) {
 
@@ -155,7 +161,7 @@
 
         $('#adminUsersRoleList').w2grid({
             name: 'adminUsersRoleList',
-            header: 'Rollen',
+            header: 'Rollen des selektierten Benutzers',
             //url		: 'library/inventoryBooks',
             buffered: 2000,
             recid: 'id',
@@ -172,9 +178,9 @@
                 footer: false
             },
             columns: [
-                {field: 'id', caption: 'ID', size: '30px', hidden: true, sortable: true},
-                {field: 'name', caption: 'Name', size: '50px', sortable: true, resizable: true},
-                {field: 'remark', caption: 'Bemerkung', size: '180px', sortable: true, resizable: true}
+                {field: 'id', caption: 'ID', size: '10px', hidden: true, sortable: true},
+                {field: 'name', caption: 'Name', size: '30%', sortable: true, resizable: true},
+                {field: 'remark', caption: 'Bemerkung', size: '70%', sortable: true, resizable: true}
             ],
             searches: [
                 {field: 'name', caption: 'Name', type: 'text'},
@@ -192,10 +198,66 @@
 
                 // event.onComplete = onSelectUnselectUsers;
 
+            },
+            onDblClick: function(event){
+                event.preventDefault();
+            },
+            onClick: function (event) {
+
+                // event.originalEvent.ctrlKey = true;
+                event.preventDefault();
+
+                var recid = event.recid;
+                var selection = this.getSelection();
+
+                var isSelected = false;
+
+                for (var i = 0; i < selection.length; i++) {
+                    if (selection[i] === Number(recid)) {
+                        isSelected = true;
+                        break;
+                    }
+                }
+
+                var userGrid = w2ui['adminUsersUserList'];
+                var selectedUserList = userGrid.getSelection(false); // id of user
+
+                if (selectedUserList.length == 1) {
+
+                    var user_id = selectedUserList[0];
+                    var user = userGrid.get(user_id);
+                    var grid = this;
+
+                    $.post('/admin/userAdministration/addRemoveRole',
+                        JSON.stringify({school_id: global_school_id, user_id: user.id,
+                            role_id: recid, addRemove: isSelected ? 'remove' : 'add'}),
+                        function (data) {
+
+                            if (data.status === 'success') {
+
+                                if (isSelected) {
+                                    grid.unselect(recid);
+                                    user.role_ids.pop(recid);
+                                } else {
+                                    grid.select(recid);
+                                    user.role_ids.push(recid);
+                                }
+
+                            } else {
+                                w2alert(data.message, "Fehler beim Speichern:");
+
+                            }
+
+                        }, "json");
+
+
+                }
+
+
             }
 
-        });
 
+        });
 
 
     }
@@ -213,13 +275,18 @@
             var user_id = selectedUserList[0];
 
             var user = userGrid.get(user_id);
-            var name = user.name;
+            var role_ids = user.role_ids;
 
+            roleGrid.selectNone();
+            for (var i = 0; i < role_ids.length; i++) {
+                roleGrid.select(role_ids[i]);
+            }
+
+        } else {
+            roleGrid.selectNone();
         }
 
     }
-
-
 
 
     /**
