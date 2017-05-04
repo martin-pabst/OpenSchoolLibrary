@@ -133,9 +133,9 @@
 
                 if (this.getSelection(false).length === 1) {
 
-                    var borrower = this.get(this.getSelection(false)[0])
+                    var user = this.get(this.getSelection(false)[0])
 
-                    openAddEditUserDialog(borrower);
+                    openAddEditUserDialog(user);
 
                 }
 
@@ -302,6 +302,7 @@
         }
 
         if (!w2ui.addUserDialog) {
+
             $().w2form({
                 name: 'addUserDialog',
                 style: 'border: 0px; background-color: transparent;',
@@ -309,169 +310,41 @@
                 formHTML: '<div class="w2ui-page page-0">' +
 
                 '<div style="width: 440px; float: left; margin-right: 0px;">' +
-                '<div style="padding: 3px; font-weight: bold; color: #777;">Grunddaten</div>' +
-                '<div class="w2ui-group" style="height: 285px;">' +
 
                 '    <div class="w2ui-field w2ui-span8">' +
-                '        <label>Rufname:</label>' +
+                '        <label>Benutzername:</label>' +
                 '        <div>' +
-                '              <input name="firstname" type="text" maxlength="100" style="width: 250px"/>' +
+                '              <input name="username" type="text" maxlength="30" style="width: 250px"/>' +
                 '        </div>' +
                 '    </div>' +
                 '    <div class="w2ui-field  w2ui-span8">' +
-                '        <label>Familienname:</label>' +
+                '        <label>Echter Name:</label>' +
                 '        <div>' +
-                '           <input name="surname" type="text" maxlength="300" style="width: 250px"/>' +
+                '           <input name="name" type="text" maxlength="200" style="width: 250px"/>' +
                 '        </div>' +
                 '    </div>' +
                 '    <div class="w2ui-field  w2ui-span8">' +
-                '        <label>Namensbest. vorang.:</label>' +
+                '        <label>Ist Admin:</label>' +
                 '        <div>' +
-                '           <input name="before_surname" type="text" maxlength="100" style="width: 250px"/>' +
+                '           <input name="is_admin" type="checkbox"/>' +
                 '        </div>' +
                 '    </div>' +
-                '    <div class="w2ui-field  w2ui-span8">' +
-                '        <label>Namensbest. nachg.:</label>' +
+                '    <div class="w2ui-field w2ui-span8">' +
+                '        <label>Passwort:</label>' +
                 '        <div>' +
-                '           <input name="after_surname" type="text" maxlength="100" style="width: 250px"/>' +
+                '              <input name="password" type="password" maxlength="30" style="width: 250px" autocomplete="new-password"/>' +
                 '        </div>' +
                 '    </div>' +
-                '    <div class="w2ui-field  w2ui-span8">' +
-                '        <label>Geschlecht:</label>' +
-                '        <div>' +
-                '           <input name="sex" type="text" maxlength="2" style="width: 100px"/>' +
-                '        </div>' +
-                '    </div>' +
-                '    <div class="w2ui-field  w2ui-span8">' +
-                '        <label>Geburtsdatum:</label>' +
-                '        <div>' +
-                '           <input name="date_of_birth" type="text" maxlength="10" style="width: 250px"/>' +
-                '        </div>' +
-                '    </div>' +
-                '    <div class="w2ui-field  w2ui-span8">' +
-                '        <label>Klasse:</label>' +
-                '        <div>' +
-                '            <input name="classname" type="text" maxlength="20" style="width: 120px"/>' +
-                '        </div>' +
-                '    </div>' +
-
-                '    </div></div>' +
-                '<div style="width: 300px; float: right; margin-left: 0px;">' +
-                '<div style="padding: 3px; font-weight: bold; color: #777;">Schullaufbahn:</div>' +
-                '<div class="w2ui-group" style="height: 285px;">' +
-
-                '    <div class="w2ui-field  w2ui-span8">' +
-                '        <label>Besuchter Religionsunterricht:</label>' +
-                '        <div>' +
-                '            <input name="religion" type="text" maxlength="20" style="width: 80px"/>' +
-                '        </div>' +
-                '    </div>' +
-                '    <div class="w2ui-field  w2ui-span8">' +
-                '        <label>Ausbildungsrichtung:</label>' +
-                '        <div>' +
-                '            <input name="curriculum" type="text" maxlength="20" style="width: 80px"/>' +
-                '        </div>' +
-                '    </div>' +
-                '    <div class="w2ui-field  w2ui-span8">' +
-                '        <label>1. Femdsprache:</label>' +
-                '        <div>' +
-                '           <input name="language_1" type="text" maxlength="10" style="width: 50px"/>' +
-                '        </div>' +
-                '    </div>' +
-                '    <div class="w2ui-field  w2ui-span8">' +
-                '        <label>Von Jahrgangsstufe:</label>' +
-                '        <div>' +
-                '           <input name="from_form_1" type="text" maxlength="10" style="width: 50px"/>' +
-                '        </div>' +
-                '    </div>' +
-                '    <div class="w2ui-field  w2ui-span8">' +
-                '        <label>2. Femdsprache:</label>' +
-                '        <div>' +
-                '           <input name="language_2" type="text" maxlength="10" style="width: 50px"/>' +
-                '        </div>' +
-                '    </div>' +
-                '    <div class="w2ui-field  w2ui-span8">' +
-                '        <label>Von Jahrgangsstufe:</label>' +
-                '        <div>' +
-                '           <input name="from_form_2" type="text" maxlength="10" style="width: 50px"/>' +
-                '        </div>' +
-                '    </div>' +
-                '    <div class="w2ui-field  w2ui-span8">' +
-                '        <label>3. Femdsprache:</label>' +
-                '        <div>' +
-                '           <input name="language_3" type="text" maxlength="10" style="width: 50px"/>' +
-                '        </div>' +
-                '    </div>' +
-                '    <div class="w2ui-field  w2ui-span8">' +
-                '        <label>Von Jahrgangsstufe:</label>' +
-                '        <div>' +
-                '           <input name="from_form_3" type="text" maxlength="10" style="width: 50px"/>' +
-                '        </div>' +
-                '    </div>' +
-
-                '</div></div>' +
-
                 '</div>' +
                 '<div class="w2ui-buttons">' +
                 '    <button class="btn" name="reset">Zurücksetzen</button>' +
                 '    <button class="btn" name="save">Speichern</button>' +
                 '</div>',
                 fields: [
-                    {field: 'firstname', type: 'text', required: true},
-                    {field: 'surname', type: 'text', required: true},
-                    {field: 'before_surname', type: 'text', required: false},
-                    {field: 'after_surname', type: 'text', required: false},
-                    {
-                        field: 'sex', type: 'list',
-                        options: {items: app.globalDefinitions().sexList},
-                        showNone: false, required: true
-                    },
-                    {field: 'date_of_birth', type: 'date', format: 'dd.MM.yyyy', required: true},
-                    {
-                        field: 'classname', type: 'list',
-                        options: {items: app.globalDefinitions().classList},
-                        showNone: false, required: true
-                    },
-                    {
-                        field: 'religion', type: 'list',
-                        options: {items: app.globalDefinitions().religionList},
-                        showNone: true, required: true
-                    },
-                    {
-                        field: 'curriculum', type: 'list',
-                        options: {items: app.globalDefinitions().curriculumList},
-                        showNone: true, required: true
-                    },
-                    {
-                        field: 'language_1', type: 'list',
-                        options: {items: app.globalDefinitions().languageList},
-                        showNone: true, required: false
-                    },
-                    {
-                        field: 'from_form_1',
-                        type: 'int',
-                        required: false
-                    },
-                    {
-                        field: 'language_2', type: 'list',
-                        options: {items: app.globalDefinitions().languageList},
-                        showNone: true, required: false
-                    },
-                    {
-                        field: 'from_form_2',
-                        type: 'int',
-                        required: false
-                    },
-                    {
-                        field: 'language_3', type: 'list',
-                        options: {items: app.globalDefinitions().languageList},
-                        showNone: true, required: false
-                    },
-                    {
-                        field: 'from_form_3',
-                        type: 'int',
-                        required: false
-                    }
+                    {field: 'username', type: 'text', required: true},
+                    {field: 'name', type: 'text', required: true},
+                    {field: 'is_admin', type: 'checkbox', required: true},
+                    {field: 'password', type: 'password', required: false}
                 ],
                 actions: {
                     "save": function () {
@@ -482,9 +355,8 @@
 
                             if (response.status === "success") {
 
-                                // var newRecord = response.borrowerRecord;
-                                //
-                                // w2ui['libraryBorrowerList'].add(newRecord);
+                                var newRecord = response.record;
+                                w2ui['adminUsersUserList'].add(newRecord);
 
                                 fetchData();
 
@@ -500,14 +372,13 @@
             });
         }
 
-        w2ui.libraryAddStudentDialog.postData = {
-            school_id: global_school_id, school_term_id: global_school_term_id,
-            student_id: student_id, student_school_term_id: student_school_term_id
+        w2ui.addUserDialog.postData = {
+            school_id: global_school_id
         };
 
 
         $().w2popup('open', {
-            title: 'Schüler/in hinzufügen',
+            title: 'Benutzer hinzufügen',
             body: '<div id="form" style="width: 100%; height: 100%;"></div>',
             style: 'padding: 15px 0px 0px 0px',
             width: 800,
@@ -516,46 +387,32 @@
             onToggle: function (event) {
                 $(w2ui.foo.box).hide();
                 event.onComplete = function () {
-                    $(w2ui.libraryAddStudentDialog.box).show();
-                    w2ui.libraryAddStudentDialog.resize();
+                    $(w2ui.addUserDialog.box).show();
+                    w2ui.addUserDialog.resize();
                 }
             },
             onOpen: function (event) {
                 event.onComplete = function () {
 
-                    if (record !== null) {
-                        var rec = w2ui.libraryAddStudentDialog.record;
+                     if (record !== null) {
+                        var rec = w2ui.addUserDialog.record;
 
-                        rec.surname = record.surname;
-                        rec.firstname = record.firstname;
-                        rec.before_surname = record.before_surname;
-                        rec.after_surname = record.after_surname;
-                        rec.curriculum = {id: record.curriculum_id};
-                        rec.sex = {id: record.sex_key};
-                        rec.classname = {id: record.class_id};
-                        rec.date_of_birth = record.dateofbirth;
-                        rec.religion = {id: record.religion_id};
+                        rec.username = record.username;
+                        rec.name = record.name;
+                        rec.is_admin = record.is_admin;
+                        rec.password = "";
+                        rec.id = record.id;
 
-                        for (var i = 1; i <= 3; i++) {
-                            if (record.languageskills.length >= i) {
-                                rec["language_" + i] = {id: record.languageskills[i - 1].subject_id};
-                                rec["from_form_" + i] = record.languageskills[i - 1].from_year;
-                            } else {
-                                rec["language_" + i] = {};
-                                rec["from_form_" + i] = null;
-                            }
-
-                        }
-                        w2ui.libraryAddStudentDialog.refresh();
+                        w2ui.addUserDialog.refresh();
 
                     } else {
 
-                        w2ui.libraryAddStudentDialog.clear();
+                         w2ui.addUserDialog.clear();
 
                     }
 
                     // specifying an onOpen handler instead is equivalent to specifying an onBeforeOpen handler, which would make this code execute too early and hence not deliver.
-                    $('#w2ui-popup #form').w2render('libraryAddStudentDialog');
+                    $('#w2ui-popup #form').w2render('addUserDialog');
                 }
             }
         });

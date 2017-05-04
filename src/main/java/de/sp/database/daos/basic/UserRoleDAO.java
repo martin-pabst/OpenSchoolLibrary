@@ -64,7 +64,7 @@ public class UserRoleDAO {
 
 	}
 
-    public static void addRole(Long user_id, Long role_id, Connection con) {
+    public static void addRoleToUser(Long user_id, Long role_id, Connection con) {
 
 		String sql = StatementStore.getStatement("user_role.addRoleForUser");
 
@@ -75,7 +75,7 @@ public class UserRoleDAO {
 
 	}
 
-    public static void removeRole(Long user_id, Long role_id, Connection con) {
+    public static void removeRoleFromUser(Long user_id, Long role_id, Connection con) {
 
 		String sql = StatementStore.getStatement("user_role.removeRoleFromUser");
 

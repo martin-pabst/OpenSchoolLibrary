@@ -4,6 +4,8 @@ import de.sp.database.stores.SchoolTermStore;
 import de.sp.main.resources.modules.InsufficientPermissionException;
 import de.sp.main.resources.modules.Permission;
 import de.sp.modules.admin.AdminModule;
+import de.sp.tools.string.PasswordSecurity;
+import de.sp.tools.string.SaltAndHash;
 
 import java.util.*;
 
@@ -212,4 +214,40 @@ public class User {
 
     }
 
+    public void removeRole(Role role) {
+
+        roles.remove(role);
+        permissions.clear();
+
+        for (Role role1 : roles) {
+            addRole(role1);
+        }
+
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPassword(String password) throws Exception {
+        SaltAndHash saltAndHash = PasswordSecurity.getSaltedHash(password);
+        salt = saltAndHash.getSalt();
+        hash = saltAndHash.getHash();
+    }
+
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
+    }
+
+    public void setSchool_id(Long school_id) {
+        this.school_id = school_id;
+    }
+
+    public void setIs_admin(Boolean is_admin) {
+        this.is_admin = is_admin;
+    }
 }

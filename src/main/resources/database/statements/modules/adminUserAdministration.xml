@@ -14,8 +14,9 @@
     <statement name="admin.userAdministration.getUserList">
         SELECT users.id, users.name, users.username, users.is_admin,
                users.languagecode, role.id as role_id
-        FROM users LEFT JOIN user_role ON users.id = user_role.user_id
-        JOIN role ON user_role.role_id = role.id
+        FROM users
+            LEFT JOIN user_role ON users.id = user_role.user_id
+            LEFT JOIN role ON user_role.role_id = role.id
         WHERE
             users.school_id = :school_id
     </statement>

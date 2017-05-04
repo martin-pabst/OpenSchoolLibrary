@@ -3,11 +3,11 @@ package de.sp.modules.admin.servlets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import de.sp.database.connection.ConnectionPool;
-import de.sp.database.daos.basic.RoleDAO;
 import de.sp.database.daos.basic.UserDAO;
 import de.sp.database.daos.basic.UserRoleDAO;
 import de.sp.database.model.Role;
 import de.sp.database.model.User;
+import de.sp.database.stores.UserRolePermissionStore;
 import de.sp.main.resources.text.TS;
 import de.sp.modules.admin.AdminModule;
 import de.sp.modules.library.servlets.settings.DeleteOldRecordsResponse;
@@ -66,6 +66,22 @@ public class AdminUserAdministrationServlet extends BaseServlet {
 
                         break;
 
+                    case "saveUser":
+
+                        SaveUserRequest sur = gson.fromJson(postData, SaveUserRequest.class);
+
+                        user.checkPermission(AdminModule.PERMISSIONADMINUSERADMINISTRATION,
+                                sur.school_id);
+
+                        if(sur.record.id != null){
+                            responseString = gson.toJson(updateUser(sur, con));
+                        } else {
+                            responseString = gson.toJson(saveUser(sur, con));
+                        }
+
+
+                        break;
+
                 }
 
                 con.commit(true);
@@ -85,6 +101,69 @@ public class AdminUserAdministrationServlet extends BaseServlet {
 
     }
 
+    private SaveUserResponse updateUser(SaveUserRequest sur, Connection con) throws Exception {
+
+        UserRolePermissionStore ups = UserRolePermissionStore.getInstance();
+
+        SaveUserRecord record = sur.record;
+
+        User user = ups.getUserById(record.id);
+
+        if(user == null){
+            return new SaveUserResponse("error", "No user with given id exists.", null);
+        }
+
+        if(!user.getSchool_id().equals(sur.school_id)){
+            return new SaveUserResponse("error", "No user with given id exists in given school.", null);
+        }
+
+        User otherUserWithNewName = ups.getUserBySchoolIdAndName(sur.school_id, record.username);
+
+        if(otherUserWithNewName != null){
+            return new SaveUserResponse("error", "User with given name already exists in this school.", null);
+        }
+
+        if(record.name != null && !record.name.isEmpty()) {
+            user.setName(record.name);
+        }
+
+        if(record.username != null && !record.username.isEmpty()){
+            user.setUsername(record.username);
+        }
+
+        user.setIs_admin(record.is_admin == 1);
+
+        if(record.password != null && !record.password.isEmpty()){
+            user.setPassword(record.password);
+        }
+
+        UserDAO.update(user, con);
+        record.password = "";
+
+        return new SaveUserResponse("success", "", record);
+
+    }
+
+    private SaveUserResponse saveUser(SaveUserRequest sur, Connection con) throws Exception {
+
+        SaveUserRecord record = sur.record;
+
+        User oldUser = UserRolePermissionStore.getInstance().getUserBySchoolIdAndName(sur.school_id, record.username);
+        if(oldUser != null){
+            return new SaveUserResponse("error", "User with given name already exists.", null);
+        }
+
+        User user = UserDAO.insert(record.username, record.name,
+                    record.password, "de-DE", null, record.is_admin == 1, sur.school_id, con);
+
+        UserRolePermissionStore.getInstance().addUser(user);
+
+        record.id = user.getId();
+
+        return new SaveUserResponse("success", "", record);
+
+    }
+
     private AddRemoveRoleResponse addRemoveRole(AddRemoveRoleRequest arr, Connection con) {
     
         if(arr.addRemove == null){
@@ -92,10 +171,16 @@ public class AdminUserAdministrationServlet extends BaseServlet {
         }
         
         boolean isAddRole = arr.addRemove.equals("add");
-    
-        User user = UserDAO.getUserById(arr.user_id, con);
-        Role role = RoleDAO.getRoleById(arr.role_id, con);
-        
+
+        UserRolePermissionStore userRolePermissionStore = UserRolePermissionStore.getInstance();
+
+        User user = userRolePermissionStore.getUserById(arr.user_id);
+        Role role = userRolePermissionStore.getRoleById(arr.role_id);
+
+        if(user == null || role == null){
+            return new AddRemoveRoleResponse("error", "User or role with given id is not known.");
+        }
+
         if(!user.getSchool_id().equals(arr.school_id)){
             return new AddRemoveRoleResponse("error", "User has no Permission to alter other user from this school.");
         }
@@ -105,9 +190,11 @@ public class AdminUserAdministrationServlet extends BaseServlet {
         }
 
         if(isAddRole){
-            UserRoleDAO.addRole(arr.user_id, arr.role_id, con);
+
+            userRolePermissionStore.addRoleToUser(role, user, con);
+
         } else {
-            UserRoleDAO.removeRole(arr.user_id, arr.role_id, con);
+            userRolePermissionStore.removeRoleFromUser(role, user, con);
         }
 
         return new AddRemoveRoleResponse("success", "");

@@ -29,11 +29,11 @@ public class UserRolePermissionStore {
 	private static UserRolePermissionStore instance;
 
 	private List<User> users = new ArrayList<>();
-	private Map<Long, User> userKeys = new HashMap<>();
+	private Map<Long, User> userKeys = new HashMap<>(); // maps User.id to User
 	private Map<Long, Map<String, User>> schoolUserNameMap = new HashMap<>();
 
 	private List<Role> roles = new ArrayList<>();
-	private Map<Long, Role> roleKeys = new HashMap<>();
+	private Map<Long, Role> roleKeys = new HashMap<>(); // maps Role.id to role
 
 	private List<Permission> permissions = new ArrayList<>();
 	private Map<String, Permission> permissionNameMap = new HashMap<>();
@@ -77,7 +77,7 @@ public class UserRolePermissionStore {
 		role.setSchool(schoolKeys.get(role.getSchool_id()));
 	}
 
-	private void addUser(User user) {
+	public void addUser(User user) {
 
 		users.add(user);
 		userKeys.put(user.getId(), user);
@@ -118,4 +118,30 @@ public class UserRolePermissionStore {
 
 	}
 
+	public User getUserById(Long user_id) {
+
+		return userKeys.get(user_id);
+
+	}
+
+	public Role getRoleById(Long role_id) {
+
+		return roleKeys.get(role_id);
+
+	}
+
+	public void addRoleToUser(Role role, User user, Connection con) {
+
+		UserRoleDAO.addRoleToUser(user.getId(), role.getId(), con);
+
+		user.addRole(role);
+
+	}
+
+	public void removeRoleFromUser(Role role, User user, Connection con) {
+
+		UserRoleDAO.removeRoleFromUser(user.getId(), role.getId(), con);
+		user.removeRole(role);
+
+	}
 }
