@@ -31,7 +31,6 @@
                     </div>
                 </div>
             </div>
-            <div style="clear: both"></div>
         </div>
             <!-- Roles -->
 
@@ -50,7 +49,6 @@
                 <div style="width: 50%; padding: 5px; float: right">
                     <div id="adminRolesPermissionsList"></div>
                 </div>
-                <div style="clear: both"></div>
             </div>
 
 

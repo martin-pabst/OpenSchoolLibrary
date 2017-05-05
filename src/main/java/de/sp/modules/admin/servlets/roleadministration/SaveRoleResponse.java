@@ -1,16 +1,16 @@
-package de.sp.modules.admin.servlets;
+package de.sp.modules.admin.servlets.roleadministration;
 
 /**
  * Created by martin on 04.05.2017.
  */
-public class SaveUserResponse {
+public class SaveRoleResponse {
 
     public String status; // "error" or "success"
     public String message; // if status == "error"
 
-    public SaveUserRecord record;
+    public SaveRoleRecord record;
 
-    public SaveUserResponse(String status, String message, SaveUserRecord record) {
+    public SaveRoleResponse(String status, String message, SaveRoleRecord record) {
         this.status = status;
         this.message = message;
         this.record = record;

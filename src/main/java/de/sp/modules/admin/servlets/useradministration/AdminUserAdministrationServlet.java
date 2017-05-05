@@ -1,10 +1,9 @@
-package de.sp.modules.admin.servlets;
+package de.sp.modules.admin.servlets.useradministration;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.UserDAO;
-import de.sp.database.daos.basic.UserRoleDAO;
 import de.sp.database.model.Role;
 import de.sp.database.model.User;
 import de.sp.database.stores.UserRolePermissionStore;

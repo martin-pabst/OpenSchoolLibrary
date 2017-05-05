@@ -1,4 +1,4 @@
-package de.sp.modules.admin.servlets;
+package de.sp.modules.admin.servlets.useradministration;
 
 import java.util.List;
 

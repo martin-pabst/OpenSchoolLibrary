@@ -1,12 +1,5 @@
 package de.sp.database.stores;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.sql2o.Connection;
-
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.RoleDAO;
 import de.sp.database.daos.basic.UserDAO;
@@ -15,6 +8,12 @@ import de.sp.database.model.Role;
 import de.sp.database.model.School;
 import de.sp.database.model.User;
 import de.sp.main.resources.modules.Permission;
+import org.sql2o.Connection;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -166,4 +165,53 @@ public class UserRolePermissionStore {
 		}
 
     }
+
+    public Permission findPermissionByName(String permission_name){
+		return permissionNameMap.get(permission_name);
+	}
+
+
+	public void addPermissionToRole(Role role, Permission permission, Connection con) {
+
+    	role.addPermission(permission);
+    	RoleDAO.update(role, con);
+
+    }
+
+	public void removePermissionFromRole(Role role, Permission permission, Connection con) {
+
+    	role.removePermission(permission);
+    	RoleDAO.update(role, con);
+
+    }
+
+	public Role getRoleBySchoolIdAndName(Long school_id, String name) {
+
+    	for (Role role : roles) {
+			if(role.getName().equals(name) && role.getSchool_id() == school_id){
+				return role;
+			}
+		}
+
+		return null;
+	}
+
+	public void removeRoles(List<Role> rolesToRemove, Connection con) {
+
+		/*
+		 * If something goes wrong in database operations
+		 * we don't want to update object model. Therefore
+		 * we do two separate iterations over List rolesToRemove.
+		 */
+
+		for (Role role : rolesToRemove) {
+			RoleDAO.delete(role, con);
+		}
+
+		for (Role role : rolesToRemove) {
+			roles.remove(role);
+			roleKeys.remove(role.getId());
+		}
+
+	}
 }

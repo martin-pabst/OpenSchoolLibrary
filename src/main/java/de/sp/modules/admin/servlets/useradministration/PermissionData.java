@@ -1,4 +1,4 @@
-package de.sp.modules.admin.servlets;
+package de.sp.modules.admin.servlets.useradministration;
 
 import de.sp.main.resources.modules.Permission;
 import de.sp.main.resources.text.TS;
@@ -14,11 +14,14 @@ public class PermissionData {
 
     public String remark;
 
+    public Long id;
 
     public PermissionData(TS ts, Permission permission){
 
         name = permission.getName();
         remark = ts.get(permission.getRemark());
+
+        id = permission.getId();
 
         int i = name.indexOf('.');
 

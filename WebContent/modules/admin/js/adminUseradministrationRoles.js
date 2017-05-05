@@ -4,7 +4,8 @@
 (function (app) {
 
 
-    var userData = []; // Information about users and their roles
+    var roleToUserlistMap = {}; // Information about users and their roles
+    var permissionNameToIdMap = {};
 
     if (!app.actions['startUserAdministration']) {
         app.actions['startUserAdministration'] = [];
@@ -14,24 +15,19 @@
 
         open: function (parameters) {
 
-            var used = $("body").height() + 50;
-            $("#adminRolesPermissionsList").height($(window).height() - used - 20);
-            $("#adminRolesRolesList").height($(window).height()
-                - used - 35 - $("#adminRolesRolesList").next().height());
-
             initializeTables();
 
 
             initializeDOM();
 
-            $('#userAdministrationRoesTab').trigger('shown.bs.tab');
+            $('#userAdministrationRolesTab').trigger('shown.bs.tab');
 
 
         },
         close: function () {
             w2ui['adminRolesRolesList'].destroy();
             w2ui['adminRolesPermissionsList'].destroy();
-            userData = null;
+            roleToUserlistMap = null;
         }
     });
 
@@ -49,7 +45,14 @@
                 permissionNavigator.add(data.permissions);
                 roleNavigator.add(data.roles);
 
-                userData = data.users;
+                permissionNameToIdMap = {};
+
+                for(var i = 0; i < data.permissions.length; i++){
+                    var permission = data.permissions[i];
+                    permissionNameToIdMap[permission.name] = permission.id;
+                }
+
+                roleToUserlistMap = data.roleToUserlistMap;
 
             }, "json");
 
@@ -59,6 +62,11 @@
 
 
         $('#userAdministrationRolesTab').on('shown.bs.tab', function (e) {
+
+            var used = $("body").height() + 55;
+            $("#adminRolesPermissionsList").height($(window).height() - used - 20);
+            $("#adminRolesRolesList").height($(window).height()
+                - used - 35 - $("#adminRolesRolesList").next().height());
 
 
             fetchData();
@@ -206,12 +214,12 @@
             header: 'Berechtigungen der selektierten Rolle',
             //url		: 'library/inventoryBooks',
             buffered: 2000,
-            recid: 'name',
+            recid: 'id',
             postData: {},
             show: {
                 header: true,
                 toolbar: false,
-                selectColumn: true,
+                selectColumn: false,
                 multiSelect: true,
                 toolbarAdd: false,
                 toolbarEdit: false,
@@ -220,7 +228,7 @@
                 footer: false
             },
             columns: [
-                {field: 'name', caption: 'name', size: '10px', hidden: true, sortable: true},
+                {field: 'id', caption: 'id', size: '10px', hidden: true, sortable: true},
                 {field: 'module', caption: 'Modul', size: '30%', sortable: true, resizable: true},
                 {field: 'remark', caption: 'Bemerkung', size: '70%', sortable: true, resizable: true}
             ],
@@ -242,7 +250,7 @@
                 var isSelected = false;
 
                 for (var i = 0; i < selection.length; i++) {
-                    if (selection[i] === recid) {
+                    if (selection[i] === Number(recid)) {
                         isSelected = true;
                         break;
                     }
@@ -250,6 +258,8 @@
 
                 var roleGrid = w2ui['adminRolesRolesList'];
                 var selectedRoleList = roleGrid.getSelection(false); // id of user
+
+                var permission = this.get(recid);
 
                 if (selectedRoleList.length === 1) {
 
@@ -260,7 +270,7 @@
                     $.post('/admin/roleAdministration/addRemovePermission',
                         JSON.stringify({
                             school_id: global_school_id, role_id: role.id,
-                            permission_name: recid, addRemove: isSelected ? 'remove' : 'add'
+                            permission_name: permission.name, addRemove: isSelected ? 'remove' : 'add'
                         }),
                         function (data) {
 
@@ -271,7 +281,7 @@
 
                                     var index = -1;
                                     for(var i = 0; i < role.permissionIdentifierList.length; i++){
-                                        if(role.permissionIdentifierList[i] === recid){
+                                        if(role.permissionIdentifierList[i] === permission.name){
                                             index = i;
                                         }
                                     }
@@ -281,7 +291,7 @@
                                     }
                                 } else {
                                     grid.select(recid);
-                                    role.permissionIdentifierList.push(recid);
+                                    role.permissionIdentifierList.push(permission.name);
                                 }
 
                             } else {
@@ -303,69 +313,67 @@
 
     }
 
-    /*
-     * TODO: Hier geht's mit der Arbeit weiter...
-     */
-
     function renderRoleDetails(){
 
-        var roleGrid = w2ui['adminUsersRoleList'];
+        var roleGrid = w2ui['adminRolesRolesList'];
         var roleIds = roleGrid.getSelection(false);
+        var roleDetailsDiv = $('#UsersWithSelectedRole');
+
+
+        if(roleIds.length !== 1){
+            roleDetailsDiv.html("");
+            return;
+        }
+
+        var roleId = roleIds[0];
+
+        var userList = roleToUserlistMap[roleId];
+
 
         var html = '<ul class="list-group" style="margin-bottom: 0">\n';
 
-        for(var i = 0; i < roleIds.length; i++){
+        for(var i = 0; i < userList.length; i++){
 
-            var role = roleGrid.get(roleIds[i]);
-            html += '<li class="list-group-item"><div><span style="color: blue; font-weight: bold">';
-            html += 'Rolle ' + role.translated_name + ':</span></div>';
-            html += '<div>';
+            var user = userList[i];
 
-            for(var j = 0; j < role.permissionIdentifierList.length; j++){
-
-                var permissionId = role.permissionIdentifierList[j];
-
-                for(var k = 0; k < permissionData.length; k++){
-                    var pd = permissionData[k];
-                    if(pd.name === permissionId){
-                        html += '<div><span style="font-weight: bold">Modul ' + pd.module + ': </span>' + pd.remark + '</div>';
-                    }
-                }
-
-            }
-
-            html += '</div></li>';
+            html += '<li class="list-group-item"><span style="color: blue; font-weight: bold">';
+            html += user.username + ' (' + user.name + ')</span>';
+            html += '</li>';
 
         }
 
         html += '</ul>';
 
-        $('#UserAdministrationRoleDetails').html(html);
+        roleDetailsDiv.html(html);
     }
 
 
 
     function onSelectUnselectRoles() {
 
-        var userGrid = w2ui['adminUsersUserList'];
-        var roleGrid = w2ui['adminUsersRoleList'];
+        var permissionGrid = w2ui['adminRolesPermissionsList'];
+        var roleGrid = w2ui['adminRolesRolesList'];
 
-        var selectedUserList = userGrid.getSelection(false); // id of user
+        var selectedRolesList = roleGrid.getSelection(false); // ids of roles
 
-        if (selectedUserList.length == 1) {
+        permissionGrid.selectNone();
 
-            var user_id = selectedUserList[0];
+        if (selectedRolesList.length === 1) {
 
-            var user = userGrid.get(user_id);
-            var role_ids = user.role_ids;
+            var role_id = selectedRolesList[0];
 
-            roleGrid.selectNone();
-            for (var i = 0; i < role_ids.length; i++) {
-                roleGrid.select(role_ids[i]);
+            var role = roleGrid.get(role_id);
+            var permission_identifiers = role.permissionIdentifierList;
+
+            var idsToSelect = [];
+
+            for(var i = 0; i < permission_identifiers.length; i++){
+                var id = permissionNameToIdMap[permission_identifiers[i]];
+                if(id !== undefined){
+                    permissionGrid.select(id);
+                }
             }
 
-        } else {
-            roleGrid.selectNone();
         }
 
         renderRoleDetails();
@@ -376,51 +384,38 @@
     var old_record = null;
 
     /**
-     * Dialog for adding new users
+     * Dialog for adding new roles
      */
     function openAddEditRoleDialog(record) {
 
-        var user_id = null;
+        var role_id = null;
 
         old_record = record;
 
         if (record !== null) {
-
-            user_id = record.user_id;
+            role_id = record.id;
         }
 
-        if (!w2ui.addUserDialog) {
+        if (!w2ui.addRoleDialog) {
 
             $().w2form({
-                name: 'addUserDialog',
+                name: 'addRoleDialog',
                 style: 'border: 0px; background-color: transparent;',
-                url: '/admin/userAdministration/saveUser',
+                url: '/admin/roleAdministration/saveRole',
                 formHTML: '<div class="w2ui-page page-0">' +
 
                 '<div style="width: 440px; float: left; margin-right: 0px;">' +
 
                 '    <div class="w2ui-field w2ui-span8">' +
-                '        <label>Benutzername:</label>' +
+                '        <label>Name der Rolle:</label>' +
                 '        <div>' +
-                '              <input name="username" type="text" maxlength="30" style="width: 250px"/>' +
+                '              <input name="name" type="text" maxlength="30" style="width: 250px"/>' +
                 '        </div>' +
                 '    </div>' +
                 '    <div class="w2ui-field  w2ui-span8">' +
-                '        <label>Echter Name:</label>' +
+                '        <label>Beschreibung:</label>' +
                 '        <div>' +
-                '           <input name="name" type="text" maxlength="200" style="width: 250px"/>' +
-                '        </div>' +
-                '    </div>' +
-                '    <div class="w2ui-field  w2ui-span8">' +
-                '        <label>Ist Admin:</label>' +
-                '        <div>' +
-                '           <input name="is_admin" type="checkbox"/>' +
-                '        </div>' +
-                '    </div>' +
-                '    <div class="w2ui-field w2ui-span8">' +
-                '        <label>Passwort:</label>' +
-                '        <div>' +
-                '              <input name="password" type="password" maxlength="30" style="width: 250px" autocomplete="new-password"/>' +
+                '           <input name="remark" type="text" maxlength="200" style="width: 250px"/>' +
                 '        </div>' +
                 '    </div>' +
                 '</div>' +
@@ -429,10 +424,8 @@
                 '    <button class="btn" name="save">Speichern</button>' +
                 '</div>',
                 fields: [
-                    {field: 'username', type: 'text', required: true},
                     {field: 'name', type: 'text', required: true},
-                    {field: 'is_admin', type: 'checkbox', required: true},
-                    {field: 'password', type: 'password', required: false}
+                    {field: 'remark', type: 'text', required: true}
                 ],
                 actions: {
                     "save": function () {
@@ -446,8 +439,9 @@
                                 var newRecord = response.record;
 
                                 if (old_record !== null) {
-                                    w2ui['adminUsersUserList'].remove(old_record.id);
-                                    newRecord.role_ids = old_record.role_ids;
+                                    w2ui['adminRolesRolesList'].remove(old_record.id);
+                                    newRecord.permissions = old_record.permissions;
+                                    newRecord.permissionList = old_record.permissionList;
                                     old_record = null; // for garbage collection
                                 }
 
@@ -465,13 +459,13 @@
             });
         }
 
-        w2ui.addUserDialog.postData = {
+        w2ui.addRoleDialog.postData = {
             school_id: global_school_id
         };
 
 
         $().w2popup('open', {
-            title: 'Benutzer hinzufügen',
+            title: 'Rolle hinzufügen',
             body: '<div id="form" style="width: 100%; height: 100%;"></div>',
             style: 'padding: 15px 0px 0px 0px',
             width: 800,
@@ -480,32 +474,30 @@
             onToggle: function (event) {
                 $(w2ui.foo.box).hide();
                 event.onComplete = function () {
-                    $(w2ui.addUserDialog.box).show();
-                    w2ui.addUserDialog.resize();
+                    $(w2ui.addRoleDialog.box).show();
+                    w2ui.addRoleDialog.resize();
                 }
             },
             onOpen: function (event) {
                 event.onComplete = function () {
 
                     if (record !== null) {
-                        var rec = w2ui.addUserDialog.record;
+                        var rec = w2ui.addRoleDialog.record;
 
-                        rec.username = record.username;
                         rec.name = record.name;
-                        rec.is_admin = record.is_admin;
-                        rec.password = "";
+                        rec.remark = record.remark;
                         rec.id = record.id;
 
-                        w2ui.addUserDialog.refresh();
+                        w2ui.addRoleDialog.refresh();
 
                     } else {
 
-                        w2ui.addUserDialog.clear();
+                        w2ui.addRoleDialog.clear();
 
                     }
 
                     // specifying an onOpen handler instead is equivalent to specifying an onBeforeOpen handler, which would make this code execute too early and hence not deliver.
-                    $('#w2ui-popup #form').w2render('addUserDialog');
+                    $('#w2ui-popup #form').w2render('addRoleDialog');
                 }
             }
         });

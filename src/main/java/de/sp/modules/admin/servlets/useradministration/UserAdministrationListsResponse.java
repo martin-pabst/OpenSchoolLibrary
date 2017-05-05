@@ -1,9 +1,8 @@
-package de.sp.modules.admin.servlets;
+package de.sp.modules.admin.servlets.useradministration;
 
 import de.sp.main.resources.modules.ModuleManager;
 import de.sp.main.resources.modules.Permission;
 import de.sp.main.resources.text.TS;
-import de.sp.modules.admin.daos.UserAdministrationDAO;
 import org.sql2o.Connection;
 
 import java.util.ArrayList;

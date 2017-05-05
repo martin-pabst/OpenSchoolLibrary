@@ -1,9 +1,7 @@
-package de.sp.modules.admin.daos;
+package de.sp.modules.admin.servlets.useradministration;
 
 import de.sp.database.statements.StatementStore;
 import de.sp.main.resources.text.TS;
-import de.sp.modules.admin.servlets.RoleData;
-import de.sp.modules.admin.servlets.UserData;
 import org.sql2o.Connection;
 
 import java.util.ArrayList;

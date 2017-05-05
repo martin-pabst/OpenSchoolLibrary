@@ -58,5 +58,17 @@ public class RoleDAO {
 
 	}
 
+	public static void update(Role role, Connection con) {
 
+		String sql = StatementStore.getStatement("role.update");
+
+		con.createQuery(sql)
+				.addParameter("name", role.getName())
+				.addParameter("remark", role.getRemark())
+				.addParameter("permissions", role.getPermissions())
+				.addParameter("school_id", role.getSchool_id())
+				.addParameter("role_id", role.getId())
+				.executeUpdate();
+
+	}
 }

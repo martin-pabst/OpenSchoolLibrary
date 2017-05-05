@@ -1,8 +1,7 @@
-package de.sp.modules.admin.servlets;
+package de.sp.modules.admin.servlets.useradministration;
 
 import de.sp.main.resources.text.TS;
 
-import java.util.List;
 import java.util.regex.Pattern;
 
 /**

@@ -89,7 +89,7 @@ public class User {
 
         roles.add(role);
 
-        for (Permission p : role.getPermissions()) {
+        for (Permission p : role.getPermissionList()) {
 
             String name = p.getName();
 

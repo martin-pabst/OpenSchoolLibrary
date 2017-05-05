@@ -1,4 +1,4 @@
-package de.sp.modules.admin.servlets;
+package de.sp.modules.admin.servlets.useradministration;
 
 /**
  * Created by martin on 03.05.2017.

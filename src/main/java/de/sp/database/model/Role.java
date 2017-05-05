@@ -1,13 +1,12 @@
 package de.sp.database.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
+import de.sp.main.resources.modules.Permission;
 import org.apache.commons.lang.StringUtils;
 import org.simpleframework.xml.Transient;
 
-import de.sp.main.resources.modules.Permission;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Role {
 
@@ -62,10 +61,15 @@ public class Role {
 	public void removePermission(Permission permission) {
 		permissionList.remove(permission);
 		permissionNameMap.remove(permission);
+		permissions = StringUtils.join(permissionList, "|");
 	}
 
-	public ArrayList<Permission> getPermissions() {
+	public ArrayList<Permission> getPermissionList() {
 		return permissionList;
+	}
+
+	public String getPermissions() {
+		return permissions;
 	}
 
 	public long getId() {
@@ -109,4 +113,11 @@ public class Role {
 	
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 }

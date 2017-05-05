@@ -52,6 +52,15 @@
 		delete from role where id = :id
 	</statement>
 
+	<statement name="role.update" >
+		update role
+			set name = :name,
+				remark = :remark,
+				permissions = :permissions,
+				school_id = :school_id
+	  		WHERE id = :role_id
+	</statement>
+
 	<!-- Table user_role -->
 	<statement name="user_role.getAll">
 		select id, user_id, role_id from user_role

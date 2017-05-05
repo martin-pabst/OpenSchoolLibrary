@@ -35,6 +35,9 @@ public class ModuleManager {
 
 	private static HashMap<String, Module> htmlFragmentIdMap = new HashMap<>();
 
+	private static ArrayList<Permission> permissions = null;
+
+
 	static {
 
 		registerBuiltInModules();
@@ -290,15 +293,18 @@ public class ModuleManager {
 
 	public static List<Permission> getAllPermissions() {
 
-		ArrayList<Permission> permissions = new ArrayList<>();
+		if(permissions == null) {
 
-		modules.forEach(module -> {
+			permissions = new ArrayList<>();
 
-			for (Permission p : module.getPermissions()) {
-				permissions.add(p);
-			}
+			modules.forEach(module -> {
 
-		});
+				for (Permission p : module.getPermissions()) {
+					permissions.add(p);
+				}
+
+			});
+		}
 
 		return permissions;
 	}
