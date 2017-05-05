@@ -1,6 +1,7 @@
 package de.sp.modules.admin.daos;
 
 import de.sp.database.statements.StatementStore;
+import de.sp.main.resources.text.TS;
 import de.sp.modules.admin.servlets.RoleData;
 import de.sp.modules.admin.servlets.UserData;
 import org.sql2o.Connection;
@@ -32,7 +33,9 @@ public class UserAdministrationDAO {
             
             if(ud == null){
                 userData.role_ids = new ArrayList<>();
-                userData.role_ids.add(userData.role_id);
+                if(userData.role_id != null) {
+                    userData.role_ids.add(userData.role_id);
+                }
                 userDataList.add(userData);
                 userIdToUserMap.put(userData.id, userData);
             } else {
@@ -45,7 +48,7 @@ public class UserAdministrationDAO {
 
     }
 
-    public static List<RoleData> getRolesList(Connection con, Long school_id){
+    public static List<RoleData> getRolesList(Connection con, Long school_id, TS ts){
 
         String sql = StatementStore.getStatement("admin.userAdministration.getRoleList");
 
@@ -54,7 +57,7 @@ public class UserAdministrationDAO {
                 .executeAndFetch(RoleData.class);
 
         for (RoleData roleData : roleList) {
-            roleData.init();
+            roleData.init(ts);
         }
 
         return roleList;

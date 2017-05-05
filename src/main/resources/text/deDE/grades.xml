@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<textresourcefile>
+	<textresources path="grades" language="de-DE">
+		<text path="moduleName">Notenverwaltung</text>
+	</textresources>
+	<textresources path="roles" language="de-DE">
+		<text path="teacher">Lehrkraft</text>
+	</textresources>
+	<textresources path="grades.menu" language="de-DE">
+		<text path="main"> </text>
+	</textresources>
+</textresourcefile>

@@ -219,8 +219,11 @@ public class User {
         roles.remove(role);
         permissions.clear();
 
-        for (Role role1 : roles) {
-            addRole(role1);
+        List<Role> rolesOld = roles;
+        roles = new ArrayList<>();
+
+        for (Role role1 : rolesOld) {
+            addRole(role1); // fills ArrayList roles and fills Set permissions
         }
 
     }

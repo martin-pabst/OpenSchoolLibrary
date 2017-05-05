@@ -7,6 +7,7 @@ import de.sp.tools.string.SaltAndHash;
 import org.sql2o.Connection;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserDAO {
 
@@ -96,4 +97,19 @@ public class UserDAO {
 				.executeAndFetchFirst(User.class);
 
 	}
+
+	public static void deleteCascading(Long user_id, Connection con){
+
+		for (String sql : StatementStore.getStatements("user.deleteCascading")) {
+
+			con.createQuery(sql)
+					.addParameter("user_id", user_id)
+					.executeUpdate();
+
+		}
+
+	}
+
+
+
 }

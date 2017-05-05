@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<textresourcefile>
+	<textresources path="mail" language="de-DE">
+		<text path="moduleName">Mail</text>
+	</textresources>
+	<textresources path="mail.menu" language="de-DE">
+		<text path="main"> </text>
+	</textresources>
+</textresourcefile>

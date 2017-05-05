@@ -28,7 +28,7 @@ public class PermissionData {
             modulename = name.substring(0, i);
         }
 
-        module = ts.get(modulename);
+        module = ts.get(modulename + ".moduleName");
 
     }
 

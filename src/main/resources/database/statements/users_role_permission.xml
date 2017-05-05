@@ -32,6 +32,12 @@
 		select * from users
 	</statement>
 
+	<statementlist name="user.deleteCascading">
+		<statement>
+			delete from users where id = :user_id
+		</statement>
+	</statementlist>
+
 	<!-- Table role -->
 
 	<statement name="role.getAll">

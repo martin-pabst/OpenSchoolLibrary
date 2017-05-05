@@ -51,7 +51,7 @@ public class AdminModule extends Module {
 				new String[] { PERMISSIONADMIN }, PERMISSIONADMIN,
 				MenuItemSide.right, 100);
 
-		m.addItem(new MenuItem("admin.menu.useradministration", "startUserAdministration", "fa-institution",
+		m.addItem(new MenuItem("admin.menu.useradministration", "startUserAdministration", "fa-users",
 				null, new String[] { PERMISSIONADMIN }, PERMISSIONADMIN,
 				10));
 

@@ -21,7 +21,7 @@ public class UserAdministrationListsResponse {
     public UserAdministrationListsResponse(Connection con, TS ts, Long school_id){
 
         users = UserAdministrationDAO.getUserList(con, school_id);
-        roles = UserAdministrationDAO.getRolesList(con, school_id);
+        roles = UserAdministrationDAO.getRolesList(con, school_id, ts);
 
         List<Permission> rawPermissions = ModuleManager.getAllPermissions();
 

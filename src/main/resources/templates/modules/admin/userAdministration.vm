@@ -1,13 +1,13 @@
 <div id="admin.user">
 
     <ul class="nav nav-tabs" style="background-color: white">
-        <li role="presentation" class="active"><a data-toggle="tab" href="#userAdministrationUsers" 
+        <li role="presentation" class="active"><a data-toggle="tab" href="#userAdministrationUsers"
                                                   id="userAdministrationUsersTab">
             <i class="fa fa-users fa-fw" aria-hidden="true"></i>
             <span class="menuitemtext">${ts.get("admin.useradministration.users")}</span></a></li>
 
         <li role="presentation"><a data-toggle="tab" href="#userAdministrationRoles"
-                                                  id="userAdministrationRolesTab">
+                                   id="userAdministrationRolesTab">
             <i class="fa fa-id-badge fa-fw" aria-hidden="true"></i>
             <span class="menuitemtext">${ts.get("admin.useradministration.roles")}</span></a></li>
     </ul>
@@ -17,27 +17,41 @@
         <!-- Users -->
 
         <div id="userAdministrationUsers" class="tab-pane fade active in" style="margin-top: 10px">
-            <h1>Benutzer</h1>
             <div style="width: 50%; padding: 5px; float: left">
-                <div id="adminUsersUserList" ></div>
+                <div id="adminUsersUserList"></div>
             </div>
             <div style="width: 50%; padding: 5px; float: right">
-                <div id="adminUsersRoleList" ></div>
+                <div id="adminUsersRoleList"></div>
+                <div class="panel panel-default" style="margin: 10px 0 0 0">
+                    <div class="panel-heading">Berechtigungen des selektierten Benutzers:
+                    </div>
+                    <div class="panel-body" style="padding: 5px">
+                        <div id="UserAdministrationRoleDetails" style="height: 250px; width: 100%;
+                             margin-bottom: 4px; overflow: auto"></div>
+                    </div>
+                </div>
             </div>
             <div style="clear: both"></div>
         </div>
+            <!-- Roles -->
 
-        <!-- Roles -->
+            <div id="userAdministrationRoles" class="tab-pane fade" style="margin-top: 10px">
+                <div style="width: 50%; padding: 5px; float: left">
+                    <div id="adminRolesRolesList"></div>
+                    <div class="panel panel-default" style="margin: 10px 0 0 0">
+                        <div class="panel-heading">Benutzer mit der oben selektierten Rolle:
+                        </div>
+                        <div class="panel-body" style="padding: 5px">
+                            <div id="UsersWithSelectedRole" style="height: 250px; width: 100%;
+                                 margin-bottom: 4px; overflow: auto"></div>
+                        </div>
+                    </div>
+                </div>
+                <div style="width: 50%; padding: 5px; float: right">
+                    <div id="adminRolesPermissionsList"></div>
+                </div>
+                <div style="clear: both"></div>
+            </div>
 
-        <div id="userAdministrationRoles" class="tab-pane fade" style="margin-top: 10px">
-            <h1>Rollen</h1>
-            <div style="width: 50%; padding: 5px ">
-                <div id="adminRolesRoleList"></div>
-            </div>
-            <div style="width: 50%; padding: 5px">
-                <div id="adminRolesPermissionList"></div>
-            </div>
+
         </div>
-
-
-    </div>

@@ -3,6 +3,9 @@
 	<textresources path="admin" language="de-DE">
 		<text path="moduleName">Administration</text>
 	</textresources>
+	<textresources path="roles" language="de-DE">
+		<text path="admin">Administrator</text>
+	</textresources>
 	<textresources path="admin.menu" language="de-DE">
 		<text path="main"> </text>
 		<text path="asvimport">Datenimport aus ASV</text>

@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdminUserAdministrationServlet extends BaseServlet {
 
@@ -82,6 +84,17 @@ public class AdminUserAdministrationServlet extends BaseServlet {
 
                         break;
 
+                    case "removeUsers":
+
+                        RemoveUserRequest rur = gson.fromJson(postData, RemoveUserRequest.class);
+
+                        user.checkPermission(AdminModule.PERMISSIONADMINUSERADMINISTRATION,
+                                rur.school_id);
+
+                        responseString = gson.toJson(removeUsers(rur, con));
+
+                        break;
+
                 }
 
                 con.commit(true);
@@ -98,6 +111,29 @@ public class AdminUserAdministrationServlet extends BaseServlet {
         response.setStatus(HttpServletResponse.SC_OK);
 
         response.getWriter().println(responseString);
+
+    }
+
+    private RemoveUserResponse removeUsers(RemoveUserRequest rur, Connection con) {
+
+        List<User> usersToRemove = new ArrayList<>();
+        UserRolePermissionStore ups = UserRolePermissionStore.getInstance();
+
+        //Check if users belong to correct school
+        for (Long user_id : rur.user_ids) {
+            User user = ups.getUserById(user_id);
+            if(!user.getSchool_id().equals(rur.school_id)){
+                return new RemoveUserResponse("error", "You have no permission to remove this user as he/she belongs to other school.");
+            } else {
+                usersToRemove.add(user);
+            }
+        }
+
+        for (User user : usersToRemove) {
+            ups.removeUsers(usersToRemove, con);
+        }
+
+        return new RemoveUserResponse("success", "");
 
     }
 
@@ -119,7 +155,7 @@ public class AdminUserAdministrationServlet extends BaseServlet {
 
         User otherUserWithNewName = ups.getUserBySchoolIdAndName(sur.school_id, record.username);
 
-        if(otherUserWithNewName != null){
+        if(otherUserWithNewName != user){
             return new SaveUserResponse("error", "User with given name already exists in this school.", null);
         }
 

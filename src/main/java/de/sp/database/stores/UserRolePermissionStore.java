@@ -28,14 +28,12 @@ public class UserRolePermissionStore {
 
 	private static UserRolePermissionStore instance;
 
-	private List<User> users = new ArrayList<>();
 	private Map<Long, User> userKeys = new HashMap<>(); // maps User.id to User
 	private Map<Long, Map<String, User>> schoolUserNameMap = new HashMap<>();
 
 	private List<Role> roles = new ArrayList<>();
 	private Map<Long, Role> roleKeys = new HashMap<>(); // maps Role.id to role
 
-	private List<Permission> permissions = new ArrayList<>();
 	private Map<String, Permission> permissionNameMap = new HashMap<>();
 
 	public static UserRolePermissionStore getInstance() {
@@ -79,7 +77,6 @@ public class UserRolePermissionStore {
 
 	public void addUser(User user) {
 
-		users.add(user);
 		userKeys.put(user.getId(), user);
 
 		Map<String, User> userNameMap = schoolUserNameMap.get(user.getSchool_id());
@@ -95,7 +92,6 @@ public class UserRolePermissionStore {
 
 	public void addPermission(Permission permission) {
 		if (permissionNameMap.get(permission.getName()) == null) {
-			permissions.add(permission);
 			permissionNameMap.put(permission.getName(), permission);
 		}
 	}
@@ -144,4 +140,30 @@ public class UserRolePermissionStore {
 		user.removeRole(role);
 
 	}
+
+    public void removeUsers(List<User> usersToRemove, Connection con) {
+
+		/*
+		 * If something goes wrong in database operations
+		 * we don't want to update object model. Therefore
+		 * we do two separate iterations over List usersToRemove.
+		 */
+
+		for (User user : usersToRemove) {
+			UserDAO.deleteCascading(user.getId(), con);
+		}
+
+
+		for (User user : usersToRemove) {
+			Map<String, User> userNameMap = schoolUserNameMap.get(user.getSchool_id());
+
+			if(userNameMap != null){
+				userNameMap.remove(user.getUsername());
+			}
+
+			userKeys.remove(user.getId());
+
+		}
+
+    }
 }

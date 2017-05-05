@@ -173,7 +173,7 @@ function showUpdateMessage(gridObject) {
     if (gridObject.numberOfOpenRequests == 1) {
 
         //$('.grid_toolbar_update_status').show();
-        gridObject.lock();
+        gridObject.lock('', true);
     }
 
 }

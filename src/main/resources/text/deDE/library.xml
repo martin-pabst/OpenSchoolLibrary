@@ -3,6 +3,9 @@
 	<textresources path="library" language="de-DE">
 		<text path="moduleName">Bibliothek</text>
 	</textresources>
+	<textresources path="roles" language="de-DE">
+		<text path="librarian">Bibliothekar/in</text>
+	</textresources>
 	<textresources path="library.menu" language="de-DE">
 		<text path="library">Bibliothek</text>
 		<text path="borrow">Ausleihen</text>
@@ -20,5 +23,7 @@
 		<text path="examine">Bücher der Lernmittelbibliothek begutachten</text>
 		<text path="reports">Berichte im Bereich Lernmittelbibliothek ausgeben</text>
 		<text path="admonition">Mahnwesen der Lernmittelbibliothek bearbeiten</text>
+		<text path="settings">Einstellungen der Lernmittelbibliothek bearbeiten</text>
+		<text path="editStudents">Schülerliste der Lernmittelbibliothek bearbeiten</text>
 	</textresources>
 </textresourcefile>

@@ -37,15 +37,9 @@ public abstract class Module {
 			String permissionName = permissionNames[i];
 
 			String remarkIdentifier = permissionName;
+
 			
-			if(remarkIdentifier.startsWith(moduleIdentifier + ".")){
-				remarkIdentifier = remarkIdentifier.substring(moduleIdentifier
-						.length() + 1);
-			}
-			
-			
-			remarkIdentifier = ".permissions." + moduleIdentifier
-					+ remarkIdentifier;
+			remarkIdentifier = "permissions." + remarkIdentifier;
 
 			permissions[i] = new Permission(permissionName, remarkIdentifier);
 

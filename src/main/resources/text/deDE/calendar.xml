@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<textresourcefile>
+	<textresources path="calendar" language="de-DE">
+		<text path="moduleName">Kalender</text>
+	</textresources>
+	<textresources path="calendar.menu" language="de-DE">
+		<text path="main"> </text>
+	</textresources>
+</textresourcefile>
