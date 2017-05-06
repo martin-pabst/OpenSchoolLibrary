@@ -82,11 +82,11 @@
             mergeStudents();
         });
 
-        $('#ls_deleteStudent1').click(function(event){
+        $('#ls_deleteStudent1').click(function (event) {
             librarySettingsOnSelectUnselectStudent();
         });
 
-        $('#ls_deleteStudent2').click(function(event){
+        $('#ls_deleteStudent2').click(function (event) {
             librarySettingsOnSelectUnselectStudent();
         });
 
@@ -100,12 +100,97 @@
 
         });
 
+        $('#sortOutTab').on('shown.bs.tab', function (e) {
+
+            var sortOutDiv = $('#ls_sortOut');
+
+            var dateinput = sortOutDiv.find(".dateinput");
+            dateinput.w2field('date', {format: 'dd.mm.yyyy'});
+
+            var today = w2utils.formatDate((new Date()), 'dd.MM.yyyy');
+            dateinput.val(today);
+
+            var barcodeField = $('#librarySortOutBarcodeField');
+
+            barcodeField.keypress(doSortOut);
+
+            barcodeField.focusin(function (event) {
+
+                $('body').css('backgroundColor', '#eeffee');
+
+            });
+
+            barcodeField.focusout(function (event) {
+
+                $('body').css('backgroundColor', '#ffffff');
+
+            });
+
+            barcodeField.focus();
+
+        });
 
         var searchAll1 = $('#librarySettingsMergeStudentsNavigator').find('.w2ui-search-all');
 
         searchAll1.keyup(function (event) {
             this.onchange();
         });
+
+    }
+
+    function doSortOut(event) {
+        if (event.which === 13) {
+
+            var sortOutDiv = $('#ls_sortOut');
+
+            var dateinput = sortOutDiv.find(".dateinput");
+
+            var sort_out_date = dateinput.val();
+
+            var barcode = $('#librarySortOutBarcodeField').val();
+
+            if (barcode !== "") {
+
+                while (barcode.length < 13) {
+                    barcode = '0' + barcode;
+                }
+
+                var image = sortOutDiv.find('img');
+                image.show();
+
+                $('#librarySortOutBarcodeField').val('');
+
+
+                $.post("/library/settings/sortOut", JSON.stringify(
+                    {
+                        barcode: barcode,
+                        school_id: global_school_id,
+                        sort_out_date: sort_out_date
+                    }),
+                    function (data) {
+
+                        image.hide();
+
+                        if (data.status === "success") {
+
+                            var alert = sortOutDiv.find('.alert');
+                            alert.show();
+                            var html = alert.html();
+                            html = data.message + html;
+                            alert.html(html);
+
+                        } else {
+                            w2alert("Fehler beim Aussortieren eines Buches: " + data.message);
+                        }
+                    },
+                    "json"
+                );
+
+                event.stopPropagation();
+
+                return false;
+            }
+        }
 
     }
 
@@ -208,11 +293,11 @@
 
         }
 
-        if(selectedStudentIds.length === 2){
+        if (selectedStudentIds.length === 2) {
             var deleteStudent1 = $('#ls_deleteStudent1').is(':checked');
             var deleteStudent2 = $('#ls_deleteStudent2').is(':checked');
 
-            if(deleteStudent1 !== deleteStudent2){
+            if (deleteStudent1 !== deleteStudent2) {
                 button.prop('disabled', false);
             }
         }
@@ -227,14 +312,14 @@
         var animatedGif = mergeStudentsDiv.find('img');
 
 
-        if(selectedStudents.length === 2){
+        if (selectedStudents.length === 2) {
 
             var deleteStudent1 = $('#ls_deleteStudent1').is(':checked');
             var deleteStudent2 = $('#ls_deleteStudent2').is(':checked');
 
             var idOfStudentToDelete = deleteStudent1 ? selectedStudents[0].id : selectedStudents[1].id;
 
-            if(deleteStudent1 !== deleteStudent2){
+            if (deleteStudent1 !== deleteStudent2) {
 
                 animatedGif.show();
 
@@ -272,12 +357,11 @@
 
         } else {
             showMessage(alertDiv, 'danger', 'In der Tabelle oben sind ' + selectedStudents.length + ' Schüler/innen'
-             + 'selektiert. Es müssen aber genau zwei Schüler/innen selektiert sein, damit die Datensätze zusammengeführt werden können.');
+                + 'selektiert. Es müssen aber genau zwei Schüler/innen selektiert sein, damit die Datensätze zusammengeführt werden können.');
         }
 
 
     }
-
 
 
     /**

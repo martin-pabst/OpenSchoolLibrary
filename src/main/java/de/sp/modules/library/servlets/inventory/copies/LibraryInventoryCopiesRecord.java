@@ -20,6 +20,8 @@ public class LibraryInventoryCopiesRecord {
 
 	private String edition;
 
+	private String purchase_date;
+
 	private Date beginDate;
 
 	private String student_firstname;
@@ -129,6 +131,8 @@ public class LibraryInventoryCopiesRecord {
 	public Integer getYear_of_school() {
 		return year_of_school;
 	}
+
+	public String getPurchase_date() { return purchase_date; }
 
 	public boolean hasGreaterYearOfSchool(LibraryInventoryCopiesRecord other){
 		if(year_of_school != null && other.year_of_school != null){

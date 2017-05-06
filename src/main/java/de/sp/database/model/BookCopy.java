@@ -13,6 +13,8 @@ public class BookCopy{
 
    private String barcode;
 
+   private Date purchase_date;
+
    private Date sorted_out_date;
 
 
@@ -21,12 +23,13 @@ public class BookCopy{
 
 
 
-   public BookCopy(Long id, Long book_id, String edition, String barcode, Date sorted_out_date){
+   public BookCopy(Long id, Long book_id, String edition, String barcode, Date purchase_date, Date sorted_out_date){
 
       this.id = id;
       this.book_id = book_id;
       this.edition = edition;
       this.barcode = barcode;
+      this.purchase_date = purchase_date;
       this.sorted_out_date = sorted_out_date;
 }
 
@@ -52,6 +55,10 @@ public class BookCopy{
 
       return barcode;
 
+   }
+
+   public Date getPurchase_date() {
+      return purchase_date;
    }
 
    public Date getSorted_out_date() {

@@ -5,7 +5,6 @@
                                                   id="userAdministrationUsersTab">
             <i class="fa fa-users fa-fw" aria-hidden="true"></i>
             <span class="menuitemtext">${ts.get("admin.useradministration.users")}</span></a></li>
-
         <li role="presentation"><a data-toggle="tab" href="#userAdministrationRoles"
                                    id="userAdministrationRolesTab">
             <i class="fa fa-id-badge fa-fw" aria-hidden="true"></i>

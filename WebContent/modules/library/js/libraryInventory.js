@@ -15,7 +15,7 @@
             // });
 
             var used = $("body").height() + 50;
-            $("#libraryInventoryCopies").height($(window).height() - used - 110);
+            $("#libraryInventoryCopies").height($(window).height() - used - 160);
 
             var restHeight = $(window).height() - used - 40;
 
@@ -55,6 +55,10 @@
                 this.onchange();
             });
 
+            var dateinput = $('#libraryInventoryBarcodeFields').find('.dateinput');
+            dateinput.w2field('date', {format: 'dd.mm.yyyy'});
+            var today = w2utils.formatDate((new Date()), 'dd.MM.yyyy');
+            dateinput.val(today);
 
         });
 
@@ -62,17 +66,22 @@
 
             if (event.which == 13) {
 
+                var dateinput = $('#libraryInventoryBarcodeFields').find('.dateinput');
+                var purchase_date = dateinput.val();
+
                 var barcode = $('#libraryInventoryAddCopy').val();
                 var book_id = w2ui['libraryInventoryCopies'].postData['reference_id'];
-                var edition = "";
+                var edition = $('#libraryInventoryEdition').val();
 
                 var selection = w2ui['libraryInventoryBooks'].getSelection(false);
                 if (selection.length < 1) {
                     w2alert("Bitte wählen Sie zuerst in der linken Tabelle ein Buch aus.");
                     $('#libraryInventoryAddCopy').blur();
-                } else
-                  if(barcode !== "")
-                    {
+                } else if (barcode !== "") {
+
+                    while(barcode.length < 13){
+                        barcode = '0' + barcode;
+                    }
 
                     showUpdateMessage(w2ui['libraryInventoryCopies']);
 
@@ -82,7 +91,8 @@
                             record: {
                                 barcode: barcode,
                                 book_id: book_id,
-                                edition: edition // TODO
+                                edition: edition,
+                                purchase_date: purchase_date
                             },
                             school_id: global_school_id
                         }),
@@ -138,6 +148,10 @@
             if (event.which == 13) {
 
                 var barcode = $('#libraryInventorySelect').val();
+
+                while(barcode.length < 13){
+                    barcode = '0' + barcode;
+                }
 
                 var recordToSelect = null;
 
@@ -315,21 +329,21 @@
                             }
 
                             bf.bookFormRecord =
-                            {
-                                id: bf.id,
-                                form: {
-                                    id: bf.form_id, text: bf.form_name, valueOf: function () {
-                                        return this.text
-                                    }
-                                },
-                                curriculum: {
-                                    id: bf.curriculum_id, text: bf.curriculum_name, valueOf: function () {
-                                        return this.text
-                                    }
-                                },
-                                languageyear: bf.languageyear
+                                {
+                                    id: bf.id,
+                                    form: {
+                                        id: bf.form_id, text: bf.form_name, valueOf: function () {
+                                            return this.text
+                                        }
+                                    },
+                                    curriculum: {
+                                        id: bf.curriculum_id, text: bf.curriculum_name, valueOf: function () {
+                                            return this.text
+                                        }
+                                    },
+                                    languageyear: bf.languageyear
 
-                            }
+                                }
                         }
 
                         w2ui['libraryInventoryBookForm'].add([
@@ -519,10 +533,9 @@
                 {
                     field: 'barcode',
                     caption: 'Barcode',
-                    size: '100px',
+                    size: '120px',
                     sortable: true,
                     resizable: true,
-                    editable: {type: 'text'}
                 },
                 {
                     field: 'class_name',
@@ -530,14 +543,28 @@
                     size: '60px',
                     sortable: true,
                     resizable: true,
-                    editable: {type: 'text'}
                 },
                 {
                     field: 'borrower',
                     caption: 'Entleiher/in (bzw. Lager)',
                     size: '170px',
+                    sortable: true,
                     resizable: true,
-                    editable: {type: 'text'}
+                },
+                {
+                    field: 'edition',
+                    caption: 'Auflage',
+                    sortable: true,
+                    size: '70px',
+                    resizable: true,
+                },
+                {
+                    field: 'purchase_date',
+                    caption: 'Anschaffungsdatum',
+                    sortable: true,
+                    size: '90px',
+                    resizable: true,
+                    hidden: true
                 }
 
             ],
@@ -549,7 +576,7 @@
             sortData: [{field: 'class_name', direction: 'asc'}, {
                 field: 'borrower',
                 direction: 'asc'
-            }, {field: 'barcode', direction: 'asc'}],
+            }, {field: 'edition', direction: 'asc'}, {field: 'barcode', direction: 'asc'}],
 
             onDelete: function (event) {
 
@@ -642,7 +669,13 @@
                     {field: 'title', type: 'text', required: true},
                     {field: 'author', type: 'text', required: true},
                     {field: 'publisher', type: 'text', required: false},
-                    {field: 'subject', type: 'list', options: {items: app.globalDefinitions().subjectList}, showNone: true, required: false},
+                    {
+                        field: 'subject',
+                        type: 'list',
+                        options: {items: app.globalDefinitions().subjectList},
+                        showNone: true,
+                        required: false
+                    },
                     {field: 'isbn', type: 'text', required: false},
                     {field: 'approval_code', type: 'text', required: false},
                     {field: 'edition', type: 'text', required: false},
@@ -743,7 +776,13 @@
                 '    <button class="btn" name="save">Speichern</button>' +
                 '</div>',
                 fields: [
-                    {field: 'form', type: 'list', options: {items: app.globalDefinitions().formList}, showNone: false, required: true},
+                    {
+                        field: 'form',
+                        type: 'list',
+                        options: {items: app.globalDefinitions().formList},
+                        showNone: false,
+                        required: true
+                    },
                     {
                         field: 'curriculum',
                         type: 'list',

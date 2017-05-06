@@ -42,7 +42,7 @@ public class RoleDAO {
 	}
 
 	public static void delete(Role role, Connection con) {
-		String sql = StatementStore.getStatement("role.delete");
+		String sql = StatementStore.getStatement("role.remove");
 
 		con.createQuery(sql).addParameter("id", role.getId()).executeUpdate();
 

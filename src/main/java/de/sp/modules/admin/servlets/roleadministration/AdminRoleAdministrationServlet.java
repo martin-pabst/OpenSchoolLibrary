@@ -10,6 +10,7 @@ import de.sp.database.stores.UserRolePermissionStore;
 import de.sp.main.resources.modules.Permission;
 import de.sp.main.resources.text.TS;
 import de.sp.modules.admin.AdminModule;
+import de.sp.modules.admin.servlets.useradministration.RoleData;
 import de.sp.modules.library.servlets.settings.DeleteOldRecordsResponse;
 import de.sp.tools.server.BaseServlet;
 import org.slf4j.Logger;
@@ -84,7 +85,7 @@ public class AdminRoleAdministrationServlet extends BaseServlet {
 
                         break;
 
-                    case "removeUsers":
+                    case "removeRoles":
 
                         RemoveRoleRequest rrr = gson.fromJson(postData, RemoveRoleRequest.class);
 
@@ -141,7 +142,7 @@ public class AdminRoleAdministrationServlet extends BaseServlet {
 
         UserRolePermissionStore ups = UserRolePermissionStore.getInstance();
 
-        SaveRoleRecord record = srr.record;
+        RoleData record = srr.record;
 
         Role role = ups.getRoleById(record.id);
 
@@ -175,7 +176,7 @@ public class AdminRoleAdministrationServlet extends BaseServlet {
 
     private SaveRoleResponse saveRole(SaveRoleRequest sur, Connection con) throws Exception {
 
-        SaveRoleRecord record = sur.record;
+        RoleData record = sur.record;
 
         UserRolePermissionStore ups = UserRolePermissionStore.getInstance();
 

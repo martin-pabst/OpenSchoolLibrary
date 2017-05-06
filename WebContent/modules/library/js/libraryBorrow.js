@@ -127,7 +127,9 @@
 
                 var barcode = $('#libraryBorrowBarcodeField').val();
 
-                barcode = "0" + barcode;
+                while(barcode.length < 13){
+                    barcode = "0" + barcode;
+                }
 
                 var borrowerGrid = w2ui['libraryBorrowerList'];
                 var borrowedGrid = w2ui['libraryBorrowedBooksList'];
@@ -412,7 +414,7 @@
                 {field: 'title', caption: 'Titel', size: '200px', sortable: true, resizable: true},
                 {field: 'author', caption: 'Autor', size: '50px', hidden: true, sortable: true, resizable: true},
                 {field: 'subject', caption: 'F', size: '30px', sortable: true, resizable: true},
-                {field: 'barcode', caption: 'Barcode', size: '70px', sortable: true, resizable: true}
+                {field: 'barcode', caption: 'Barcode', size: '120px', sortable: true, resizable: true}
             ],
             searches: [
                 {field: 'title', caption: 'Titel', type: 'text'},

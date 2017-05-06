@@ -312,7 +312,6 @@
 
             }
 
-
         });
 
 
@@ -462,6 +461,7 @@
                                     old_record = null; // for garbage collection
                                 }
 
+                                newRecord.role_ids = [];
                                 w2ui['adminUsersUserList'].add(newRecord);
 
                             } else {

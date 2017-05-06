@@ -113,6 +113,13 @@
             <div id="libraryInventoryRight" class="col-md-4">
                 <div id="libraryInventoryCopies" style="height: 600px"></div>
                 <div id="libraryInventoryBarcodeFields">
+                    <div class="form-inline" style="margin-top: 10px">
+                        <input id="libraryInventoryEdition" type="text" class="form-control" placeholder="Auflage">
+                        <span style="float: right">
+                        <span>Anschaffungsdatum: </span>
+                        <input class="dateinput" type="text" maxlength="100" style="width: 90px">
+                        </span>
+                    </div>
                     <div class="input-group" style="margin-top: 10px">
                         <span class="input-group-addon" id="basic-addon1">Neu erfassen:</span>
                         <input id="libraryInventoryAddCopy" type="text" class="form-control" placeholder="Barcode"
@@ -185,14 +192,14 @@
                         </div>
                     </div>
 
-                    <div class="panel panel-default" class="col-md-12" style="padding: 0">
+                    <div class="panel panel-default" class="col-md-12" style="padding: 0; margin-bottom: 0">
                         <div class="panel-heading" id="bookReturnPaymentsHeader">Zahlungen</div>
                         <div class="panel-body" style="padding: 5px">
 
-                            <div id="bookReturnPaymentsList" style="height: 150px; width: 100%;
+                            <div id="bookReturnPaymentsList" style="height: 120px; width: 100%;
                             margin-bottom: 10px; overflow: auto"></div>
 
-                            <table>
+                            <table style="margin-bottom: 0px">
                                 <tr>
                                     <td>
                                         <label for="bookReturnAmount">Betrag für obiges Buch:</label></td>
@@ -312,6 +319,8 @@
                         <li><a href="#ls_mergeStudentRecords" data-toggle="pill" id="mergeStudentRecordsTab">Schülerdatensätze
                             zusammenführen</a>
                         </li>
+                        <li><a href="#ls_sortOut" data-toggle="pill" id="sortOutTab">Bücherexemplare ausmustern</a>
+                        </li>
                     </ul>
                 </div>
 
@@ -320,6 +329,7 @@
                     <div class="tab-content">
                         <!-- First tab: delete old bookings -->
                         <div class="tab-pane active settingsPane" id="ls_deleteOldBookings">
+                            <h2>Alte Buchungen löschen</h2>
                             <p>Alle Ausleihvorgänge löschen, bei denen die Bücher bis zum
                                 <input class="dateinput" type="text" maxlength="100" style="width: 90px">
                                 bereits zurückgegeben worden sind.
@@ -337,6 +347,7 @@
                         </div>
                         <!-- Second tab: delete resigned students/teachers -->
                         <div class="tab-pane settingsPane" id="ls_deleteResignedStudentsTeachers">
+                            <h2>Ausgetretene Schüler/innen löschen</h2>
                             <div id="ls_deleteResignedStudents">
                                 <p>Alle Schüler/innen löschen, die vor dem
                                     <input class="dateinput" type="text" maxlength="100" style="width: 90px">
@@ -354,6 +365,7 @@
                                 </div>
                                 <div class="alert alert-success" role="alert" style="display: none"></div>
                             </div>
+                            <h2>Ausgetretene Lehrkräfte löschen</h2>
                             <div id="ls_deleteResignedTeachers">
                                 <p>Alle Lehrkräfte löschen, die beim letzten ASV-Import nicht übertragen wurden und
                                     bereits alle Bücher zurückgegeben haben.
@@ -370,6 +382,7 @@
                                 <div class="alert alert-success" role="alert" style="display: none"></div>
                             </div>
                         </div>
+                        <!-- third tab: merge student records -->
                         <div class="tab-pane settingsPane" id="ls_mergeStudentRecords">
                             <p>Falls es zu einem Schüler zwei Datensätze gibt, wählen Sie bitte in
                                 der folgenden Liste die beiden Datensätze aus:</p>
@@ -408,6 +421,41 @@
                             <div class="alert alert-success" role="alert" style="display: none"></div>
 
                         </div>
+                        <!-- 4. tab: sort out book copies -->
+                        <div class="tab-pane settingsPane" id="ls_sortOut">
+                            <h2>Bücherexemplare ausmustern</h2>
+                            <p>Die Bücherexemplare mit dem angegebenen Barcode werden aussortiert. Sollten noch
+                                Ausleihvorgänge darauf
+                                gebucht sein, so wird automatisch eine Rückgabe gebucht.</p>
+                            <p>Bitte platzieren sie den Cursor in das Feld für den Barcode. <span style="color: red; font-weight: bold">
+                                Vorsicht: </span>Nach dem Einscannen
+                            (oder der Eingabe von Enter) wird das Ausmustern sofort vollzogen.</p>
+##                            <div>Aussortiert am:
+##                                <input class="dateinput" type="text" maxlength="100" style="width: 90px">
+##                            </div>
+                            <div style="margin: 10px 0 10px 0">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon6">Ausgemustert am:</span>
+                                    <input type="text"
+                                           class="form-control dateinput"
+                                           aria-describedby="basic-addon6" style="width: 90px">
+                                </div>
+                            </div>
+                            <div style="margin: 10px 0 10px 0">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon5">Ausmustern:</span>
+                                    <input id="librarySortOutBarcodeField" type="text" class="form-control"
+                                           placeholder="Barcode"
+                                           aria-describedby="basic-addon5"
+                                    style="width: 20em">
+                                </div>
+                                <div style="vertical-align: middle;display: inline-block;height: 100%;">
+                                    <img src="/public/img/spiffygif_26x26.gif" style="display: none">
+                                </div>
+                            </div>
+                            <div class="alert alert-success" role="alert" style="display: none; height: 15em; overflow: auto"></div>
+                        </div>
+
                     </div>
                 </div>
 

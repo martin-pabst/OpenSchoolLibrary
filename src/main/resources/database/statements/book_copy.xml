@@ -17,8 +17,8 @@
 
 	<statement name="book_copy.insert">
 		insert into book_copy (book_id, edition,
-		barcode)
-		values (:book_id, :edition, :barcode)
+		barcode, purchase_date)
+		values (:book_id, :edition, :barcode, :purchase_date)
 	</statement>
 
 	<statement name="book_copy.delete">
@@ -44,17 +44,21 @@
 	</statement>
 
 	<statement name="book_copy.findByBarcodeAndSchool">
-	select book_copy.id as book_copy_id, book.id as book_id, book.title, book.author
+	select book_copy.id as book_copy_id, book.id as book_id, book.title, book.author,
+		book_copy.purchase_date, student.firstname, student.surname, borrows.id as borrows_id
 		from book_copy 
 			join book on book_copy.book_id = book.id
 			join school on book.school_id = school.id
+			left join borrows on book_copy.id = borrows.book_copy_id
+								 and borrows.return_date is NULL
+			left join student on borrows.student_id = student.id
 		where
 			school.id = :school_id and
 			book_copy.barcode = :barcode
 	</statement>
 
 	<statement name="book_copy.inventoryList">
-		select book_copy.id, book_copy.book_id, book_copy.barcode,
+		select book_copy.id, book_copy.book_id, book_copy.barcode, book_copy.purchase_date,
 		book_copy.edition, borrows.begindate,
 		student.firstname as student_firstname, student.surname as student_surname,
 		teacher.firstname as teacher_firstname, teacher.surname as teacher_surname,

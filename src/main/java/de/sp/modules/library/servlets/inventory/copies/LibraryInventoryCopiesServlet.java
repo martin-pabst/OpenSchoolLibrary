@@ -7,7 +7,9 @@ import de.sp.modules.library.LibraryModule;
 import de.sp.protocols.w2ui.grid.gridrequest.*;
 import org.sql2o.Connection;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -68,6 +70,15 @@ public class LibraryInventoryCopiesServlet extends
 
 		String edition = saveCastToString(record.get("edition"));
 
+		Date purchase_date = null;
+		try {
+			String dateString = saveCastToString(record.get("purchase_date"));
+			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+			purchase_date = sdf.parse(dateString);
+		} catch(Exception ex){
+
+		}
+
 		List<BookCopyInfoRecord> bookCopyInfoList = BookCopyDAO
 				.getBookCopyInInfo(saveData.getSchool_id(), barcode, con);
 
@@ -82,7 +93,7 @@ public class LibraryInventoryCopiesServlet extends
 
 		} else {
 
-			BookCopy bookCopy = BookCopyDAO.insert(book_id, edition, barcode,
+			BookCopy bookCopy = BookCopyDAO.insert(book_id, edition, barcode, purchase_date,
 					con);
 
 			return new GridResponseSave(GridResponseStatus.success, "",

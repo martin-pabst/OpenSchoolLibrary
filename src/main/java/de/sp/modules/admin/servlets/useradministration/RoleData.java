@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  */
 public class RoleData {
 
-    public long id;
+    public Long id;
 
     public String name;
 
@@ -17,9 +17,9 @@ public class RoleData {
 
     public String remark;
 
-    public String permissions;
+    public String permissions = "";
 
-    public String[] permissionIdentifierList;
+    public String[] permissionIdentifierList = new String[]{};
 
     public void init(TS ts){
 

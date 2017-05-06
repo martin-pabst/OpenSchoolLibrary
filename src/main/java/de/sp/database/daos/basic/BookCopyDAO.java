@@ -8,6 +8,7 @@ import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
 import org.krysalis.barcode4j.impl.upcean.UPCEANLogicImpl;
 import org.sql2o.Connection;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -35,22 +36,31 @@ public class BookCopyDAO {
 
 
 	public static BookCopy insert(Long book_id, String edition, String barcode,
+			Date purchase_date,
 			Connection con) throws Exception {
 
 		while(barcode.length() < 12){
 			barcode = "0" + barcode;
 		}
 
-		barcode = addCheckSum(barcode);
+		if(barcode.length() < 13) {
+			barcode = addCheckSum(barcode);
+		}
+
+		if(purchase_date == null){
+			purchase_date = Calendar.getInstance().getTime();
+		}
 
 		String sql = StatementStore.getStatement("book_copy.insert");
 
 		Long id = con.createQuery(sql, true).addParameter("book_id", book_id)
 				.addParameter("edition", edition)
-				.addParameter("barcode", barcode).executeUpdate()
+				.addParameter("barcode", barcode)
+				.addParameter("purchase_date", purchase_date)
+				.executeUpdate()
 				.getKey(Long.class);
 
-		return new BookCopy(id, book_id, edition, barcode, null);
+		return new BookCopy(id, book_id, edition, barcode, purchase_date, null);
 
 	}
 

@@ -114,7 +114,9 @@
 
                 var barcode = $('#libraryReturnBarcodeField').val();
 
-                barcode = "0" + barcode;
+                while(barcode.length < 13){
+                    barcode = '0' + barcode;
+                }
 
                 var returnerGrid = w2ui['libraryReturnerList'];
                 var booksGrid = w2ui['libraryReturnBooksList'];
@@ -300,7 +302,7 @@
                 {field: 'title', caption: 'Titel', size: '200px', sortable: true, resizable: true},
                 {field: 'author', caption: 'Autor', size: '50px', hidden: true, sortable: true, resizable: true},
                 {field: 'subject', caption: 'F', size: '30px', sortable: true, resizable: true},
-                {field: 'barcode', caption: 'Barcode', size: '70px', sortable: true, resizable: true},
+                {field: 'barcode', caption: 'Barcode', size: '120px', sortable: true, resizable: true},
                 {
                     field: 'begindate',
                     caption: 'Ausleihdatum',

@@ -166,7 +166,7 @@
                             $.post('/admin/roleAdministration/removeRoles',
                                 JSON.stringify({
                                     school_id: global_school_id,
-                                    user_ids: selectedIds
+                                    role_ids: selectedIds
                                 }),
                                 function (data) {
 
@@ -329,6 +329,11 @@
 
         var userList = roleToUserlistMap[roleId];
 
+        if(userList === undefined){
+            userList = [];
+            roleToUserlistMap[roleId] = userList;
+        }
+
 
         var html = '<ul class="list-group" style="margin-bottom: 0">\n';
 
@@ -337,7 +342,7 @@
             var user = userList[i];
 
             html += '<li class="list-group-item"><span style="color: blue; font-weight: bold">';
-            html += user.username + ' (' + user.name + ')</span>';
+            html += user.name + '</span><span style="color: black"> (' + user.username + ')</span>';
             html += '</li>';
 
         }
@@ -443,6 +448,8 @@
                                     newRecord.permissions = old_record.permissions;
                                     newRecord.permissionList = old_record.permissionList;
                                     old_record = null; // for garbage collection
+                                } else {
+                                    roleToUserlistMap[newRecord.id] = [];
                                 }
 
                                 w2ui['adminUsersUserList'].add(newRecord);

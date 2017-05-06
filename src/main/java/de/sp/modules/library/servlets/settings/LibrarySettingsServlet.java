@@ -3,6 +3,8 @@ package de.sp.modules.library.servlets.settings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import de.sp.database.connection.ConnectionPool;
+import de.sp.database.daos.basic.BookCopyDAO;
+import de.sp.database.daos.basic.BorrowsDAO;
 import de.sp.database.daos.basic.StudentDAO;
 import de.sp.database.daos.basic.TeacherDAO;
 import de.sp.database.model.Student;
@@ -12,6 +14,7 @@ import de.sp.main.resources.text.TS;
 import de.sp.modules.library.daos.LibraryDAO;
 import de.sp.modules.library.daos.LibrarySettingsDAO;
 import de.sp.modules.library.servlets.borrow.borrowerlist.BorrowerRecord;
+import de.sp.modules.library.servlets.inventory.copies.BookCopyInfoRecord;
 import de.sp.protocols.w2ui.grid.gridrequest.GridRequestGet;
 import de.sp.protocols.w2ui.grid.gridrequest.GridResponseGet;
 import de.sp.protocols.w2ui.grid.gridrequest.GridResponseStatus;
@@ -25,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -103,6 +107,16 @@ public class LibrarySettingsServlet extends BaseServlet {
 
                         break;
 
+                    case "sortOut":
+                        SortOutRequest sor = gson.fromJson(postData, SortOutRequest.class);
+
+                        user.checkPermission("library.settings",
+                                sor.school_id);
+
+                        responseString = gson.toJson(sortOutBookCopy(sor, con));
+
+                        break;
+
                 }
 
                 con.commit(true);
@@ -119,6 +133,38 @@ public class LibrarySettingsServlet extends BaseServlet {
         response.setStatus(HttpServletResponse.SC_OK);
 
         response.getWriter().println(responseString);
+
+    }
+
+    private SortOutResponse sortOutBookCopy(SortOutRequest sor, Connection con) {
+
+        List<BookCopyInfoRecord> bookCopyInfoRecords = BookCopyDAO.getBookCopyInInfo(sor.school_id, sor.barcode, con);
+
+        if(bookCopyInfoRecords.size() > 0){
+
+            if(sor.sort_out_date == null){
+                sor.sort_out_date = Calendar.getInstance().getTime();
+            }
+
+            BookCopyInfoRecord info = bookCopyInfoRecords.get(0);
+            BookCopyDAO.setSortedOutDate(info.getBook_copy_id(), sor.sort_out_date, con);
+
+            String message = "<div>Das Buch mit Barcode " + sor.barcode + " wurde ausgemustert.</div>";
+            message += "<div><span style=\"font-weight: bold\">Titel: " + info.getTitle() + "</span></div>";
+
+            if(info.getFirstname() != null && info.getSurname() != null && info.getBorrows_id() != null){
+                BorrowsDAO.setReturnDate(info.getBorrows_id(), sor.sort_out_date, con);
+                message += "<div style=\"font-weight: bold; color:#800000\"> Das Buch war an " + info.getFirstname() +
+                        " " + info.getSurname() + " entliehen. => Die Rückgabe wurde gebucht.</div>";
+            }
+
+            message += "<br />";
+
+            return new SortOutResponse("success", message);
+
+        } else {
+            return new SortOutResponse("error", "Es wurde kein Buch mit dem Barcode " + sor.barcode + " gefunden.");
+        }
 
     }
 

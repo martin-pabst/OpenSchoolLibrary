@@ -49,8 +49,9 @@ public class ReportBorrowedBooks extends BaseReport {
     @Override
     public List<ReportParameter> getParameters() {
         return Arrays.asList(new ReportParameter(ParameterType.typeBoolean, "Schüler ohne fehlende Bücher weglassen",
-                "Hier das Häkchen setzen, wenn Schüler ohne fehlende Bücher gar nicht im Report erscheinen sollen", true),
-                new ReportParameter(ParameterType.typeInteger, "Anzahl", "Anzahl der Exemplare", true));
+                "Hier das Häkchen setzen, wenn Schüler ohne fehlende Bücher gar nicht im Report erscheinen sollen", true)
+//                ,new ReportParameter(ParameterType.typeInteger, "Anzahl", "Anzahl der Exemplare", true)
+        );
     }
 
     @Override
