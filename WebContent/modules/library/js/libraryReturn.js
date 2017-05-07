@@ -139,6 +139,7 @@
 
                             bookCopyDetailsRecord = data; // Java-Type: BookReturnResponse
                             bookCopyDetailsRecord['id'] = data.book_copy_id;
+                            bookCopyDetailsRecord.barcode = barcode;
                             returnerGrid.records.forEach(function (returner) {
 
                                 if ((returner.isStudent && returner.student_id == data.student_id)

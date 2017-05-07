@@ -54,7 +54,7 @@
                 <div class="col-md-12" style="padding: 0">
 
                     <div class="panel panel-default" style="margin-top: 10px">
-                        <div class="panel-heading" id="bookReturnTitle">Zustand des Buchs<span id="bookTitle"></span>:
+                        <div class="panel-heading">Zustand des Buchs<span id="bookTitle"></span>:
                         </div>
                         <div class="panel-body" style="padding: 5px">
 
