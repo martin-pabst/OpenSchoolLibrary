@@ -33,12 +33,31 @@
                 <div id="libraryBorrowerList" style="height: 760px"></div>
             </div>
             <div class="col-md-7">
-                <div id="libraryBorrowBarcodeFields" class="col-md-12" style="padding: 0">
+
+#*
+                <div class="form-inline" style="margin-top: 10px">
+                    <input id="libraryInventoryEdition" type="text" class="form-control" placeholder="Auflage">
+                    <span style="float: right">
+                        <span>Anschaffungsdatum: </span>
+                        <input class="dateinput" type="text" maxlength="100" style="width: 90px">
+                    </span>
+                </div>
+*#
+
+
+
+                <div id="libraryBorrowBarcodeFields" class="form-inline" style="padding: 0">
                     <div class="input-group">
                         <span class="input-group-addon" id="basic-addon3">Ausleihen:</span>
                         <input id="libraryBorrowBarcodeField" type="text" class="form-control" placeholder="Barcode"
-                               aria-describedby="basic-addon3">
+                               aria-describedby="basic-addon3" style="width: 20em">
                     </div>
+                    <span style="float: right; font-weight: normal; margin-top: 0.4em">
+                        <label style="vertical-align: middle; font-weight: normal">
+                            <input id="libraryBorrowNextSchoolyear" type="checkbox" style="margin: 0; vertical-align: middle">
+                            Benötigte Bücher fürs kommende Schuljahr anzeigen
+                        </label>
+                    </span>
                     <div id="libraryBorrowErrorList" class="alert alert-danger" role="alert"
                          style="display: none; height: 4em; overflow-y: auto; margin: 10px 0 5px 0"></div>
                 </div>
