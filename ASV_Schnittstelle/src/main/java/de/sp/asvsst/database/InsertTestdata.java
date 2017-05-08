@@ -33,24 +33,36 @@ public class InsertTestdata {
         try {
             StoreManager.getInstance().loadStoresFromDatabase(
                     ModuleManager.getAllPermissions());
+
+        // Schuljahr 2016/17
+/*
+        String filename = "ASV_Schnittstelle/Testdaten/ASV-Export 24.04.2017.zip";
+        String password = "0x8E0vEe";
+
+        importFromASV(filename, password);
+*/
+
+        // Schuljahr 2017/18
+        importFromASV("ASV_Schnittstelle/Testdaten/ASV-Export 2017,18 (8.5.17).zip", "?+QGcQRS");
+
         } catch (Exception ex) {
 
         }
 
+    }
+
+    private static void importFromASV(String filename, String password) {
         ASVToDatabaseWriter asvToDatabaseWriter = new ASVToDatabaseWriter(null);
 
         ASVXMLParser importer = new ASVXMLParser();
 
-        final Path path = Paths.get("ASV_Schnittstelle/Testdaten/ASV-Export 24.04.2017.zip");
+        Path path = Paths.get(filename);
 
-        final ASVExport asvExport = importer.parseASVXMLData(
-                path.toString(), "0x8E0vEe", null);
+        ASVExport asvExport = importer.parseASVXMLData(
+               path.toString(), password, null);
 
         asvToDatabaseWriter.writeToDatabase(asvExport);
-
     }
-    
-    
-    
-    
+
+
 }

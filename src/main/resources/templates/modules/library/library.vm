@@ -50,7 +50,7 @@
                     <div class="input-group">
                         <span class="input-group-addon" id="basic-addon3">Ausleihen:</span>
                         <input id="libraryBorrowBarcodeField" type="text" class="form-control" placeholder="Barcode"
-                               aria-describedby="basic-addon3" style="width: 20em">
+                               aria-describedby="basic-addon3" style="width: 15em">
                     </div>
                     <span style="float: right; font-weight: normal; margin-top: 0.4em">
                         <label style="vertical-align: middle; font-weight: normal">
