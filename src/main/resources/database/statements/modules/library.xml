@@ -159,10 +159,9 @@
 		join student_school_term on student_school_term.student_id = student.id
 		join school_term on student_school_term.school_term_id =
 		school_term.id
-		join term on school_term.term_id = term.id
 		join class on student_school_term.class_id = class.id
 		where student.id = :student_id
-		order by term.begindate desc
+		order by school_term.begindate desc
 	</statement>
 	
 	<statement name="library.getReturnerStudentList">

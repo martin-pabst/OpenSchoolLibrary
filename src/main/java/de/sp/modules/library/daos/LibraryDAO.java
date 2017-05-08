@@ -2,7 +2,9 @@ package de.sp.modules.library.daos;
 
 import de.sp.database.daos.basic.BookCopyStatusDAO;
 import de.sp.database.daos.basic.FeeDAO;
+import de.sp.database.model.SchoolTerm;
 import de.sp.database.statements.StatementStore;
+import de.sp.database.stores.SchoolTermStore;
 import de.sp.modules.library.servlets.borrow.bookformstore.BookFormStoreRecord;
 import de.sp.modules.library.servlets.borrow.borrowedbooks.BarcodeInfoRecord;
 import de.sp.modules.library.servlets.borrow.borrowedbooks.BorrowedBookRecord;
@@ -20,11 +22,53 @@ import java.util.Map;
 public class LibraryDAO {
 
     public static List<BorrowerRecord> getBorrowerList(Long school_id, Long school_term_id,
-                                                       Connection con, boolean withTeachers) {
+                                                       Connection con, boolean withTeachers,
+                                                       boolean withDataNextSchoolTerm) {
 
-		/*
-         * Students
-		 */
+        ArrayList<BorrowerRecord> borrowersConsolidated = getBorrowerRecordsIntern(school_id, school_term_id, con, withTeachers);
+
+        SchoolTerm nextSchoolTerm = SchoolTermStore.getInstance().getNextSchoolTerm(school_id, school_term_id);
+
+        if (nextSchoolTerm != null) {
+
+            ArrayList<BorrowerRecord> borrowersConsolidatedNextSchoolTerm = getBorrowerRecordsIntern(school_id, nextSchoolTerm.getId(),
+                    con, false);
+
+            copyAttributes(borrowersConsolidated, borrowersConsolidatedNextSchoolTerm);
+        }
+
+        return borrowersConsolidated;
+
+    }
+
+    private static void copyAttributes(ArrayList<BorrowerRecord> borrowersConsolidated, ArrayList<BorrowerRecord> borrowersConsolidatedNextSchoolTerm) {
+
+        Map<Long, BorrowerRecord> studentIdToBorrowerMap = new HashMap<>();
+
+        for (BorrowerRecord br1 : borrowersConsolidated) {
+            if(br1.getStudent_id() != null){
+                studentIdToBorrowerMap.put(br1.getStudent_id(), br1);
+            }
+        }
+
+        for (BorrowerRecord br2 : borrowersConsolidatedNextSchoolTerm) {
+
+            BorrowerRecord br1 = studentIdToBorrowerMap.get(br2.getStudent_id());
+
+            if(br1 != null){
+
+                br1.copyOldAttributesFrom(br2);
+
+            }
+
+        }
+
+    }
+
+    private static ArrayList<BorrowerRecord> getBorrowerRecordsIntern(Long school_id, Long school_term_id, Connection con, boolean withTeachers) {
+    /*
+* Students
+     */
 
         String sql1 = StatementStore
                 .getStatement("library.getBorrowerStudentList");
@@ -69,10 +113,7 @@ public class LibraryDAO {
 
             borrowersConsolidated.addAll(teacherBorrowers);
         }
-
-
         return borrowersConsolidated;
-
     }
 
     public static BorrowerRecord getBorrower(Long school_id, Long school_term_id, Long student_id,

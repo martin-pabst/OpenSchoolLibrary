@@ -6,13 +6,15 @@ import de.sp.asvsst.model.asvwlstore.ASVWlStore;
 import de.sp.asvsst.model.wertelisten.ASVBesuchterReligionsunterricht;
 import de.sp.asvsst.model.wertelisten.ASVJahrgangsstufe;
 import de.sp.database.connection.ConnectionPool;
-import de.sp.database.daos.basic.*;
+import de.sp.database.daos.basic.DBClassDAO;
+import de.sp.database.daos.basic.SchoolTermDAO;
+import de.sp.database.daos.basic.StudentDAO;
+import de.sp.database.daos.basic.ValueDAO;
 import de.sp.database.model.*;
 import de.sp.database.model.valuelists.ValueStore;
 import de.sp.database.stores.SchoolTermStore;
 import de.sp.main.StartServer;
 import de.sp.tools.server.progressServlet.ProgressServlet;
-import org.apache.lucene.index.Term;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sql2o.Connection;
@@ -168,6 +170,8 @@ public class ASVToDatabaseWriter {
 			protocolAdd("Lege Schuljahr " + asvSchule.schuljahr
 					+ " in der Datenbank an.\n", false, "#0000ff", 1);
 			schoolTerm = SchoolTermDAO.insert(school, asvSchule.schuljahr, begin, end, con);
+
+			SchoolTermStore.getInstance().addSchoolTerm(schoolTerm);
 
 		}
 

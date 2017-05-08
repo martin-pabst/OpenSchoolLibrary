@@ -174,13 +174,13 @@ var App = (function () {
 
             termSubmenu += indent + '<li>\n' +
                 indent + '   <a href = "#" onclick="App.chooseSchoolTerm(' + st.id + '); return true;">\n' +
-                indent + '   ' + icon + '<span class="menuitemtext">' + st.term.name + '</span></a>\n' +
+                indent + '   ' + icon + '<span class="menuitemtext">' + st.name + '</span></a>\n' +
                 indent + '</li>\n';
 
 
         });
 
-        var termname = globalDefinitions.currentSchoolTerm.term.name;
+        var termname = globalDefinitions.currentSchoolTerm.name;
         if (termname.indexOf("20") == 0 && termname.length > 5) {
             termname = termname.substr(2);
         }
@@ -196,31 +196,31 @@ var App = (function () {
 
         var optimal_school_term = undefined;
 
-        var optimal_term_id = undefined;
+        var optimal_term_name = undefined;
 
         // find school_term_id with given school_id and same term as global_school_term_id
         if (globalDefinitions.currentSchoolTerm) {
 
-            optimal_term_id = globalDefinitions.currentSchoolTerm.term.id;
+            optimal_term_name = globalDefinitions.currentSchoolTerm.name;
         }
 
         var latest_school_term = undefined;
 
         globalDefinitions.schoolList.forEach(function (school) {
 
-            if (school.id == school_id) {
+            if (school.id === school_id) {
                 school.schoolTerms.forEach(function (st) {
 
                     if (latest_school_term) {
-                        if (st.term.id > latest_school_term.term.id) {
+                        if (st.begindate > latest_school_term.begindate) {
                             latest_school_term = st;
                         }
                     } else {
                         latest_school_term = st;
                     }
 
-                    if(optimal_term_id){
-                        if (st.term.id == optimal_term_id) {
+                    if(optimal_term_name){
+                        if (st.name === optimal_term_name) {
                             optimal_school_term = st;
                         }
                     }

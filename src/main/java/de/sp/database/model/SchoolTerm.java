@@ -1,11 +1,9 @@
 package de.sp.database.model;
 
 
-import org.apache.lucene.index.Term;
-
 import java.util.Date;
 
-public class SchoolTerm {
+public class SchoolTerm implements Comparable<SchoolTerm>{
 	
 	public long id;
 	
@@ -68,4 +66,15 @@ public class SchoolTerm {
     public Date getEnddate() {
         return enddate;
     }
+
+	@Override
+	public int compareTo(SchoolTerm st) {
+
+		if(begindate != null && st.begindate != null){
+			return begindate.compareTo(st.begindate);
+		}
+
+		return 0;
+
+	}
 }

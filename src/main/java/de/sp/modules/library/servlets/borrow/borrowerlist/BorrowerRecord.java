@@ -32,9 +32,6 @@ public class BorrowerRecord {
 
 	private String name;
 
-	private transient String term_name;
-	private transient Long term_id;
-
 	private transient Long language_id;
 	private transient String language_name;
 	private transient Integer from_year;
@@ -49,7 +46,20 @@ public class BorrowerRecord {
 	
 	private Date exit_date;
 	
-
+	// Data next school term
+	private Long nst_student_school_term_id;
+	private String nst_class_name;
+	private Long nst_class_id;
+	private Integer nst_year_of_school;
+	private Long nst_form_id;
+	private Long nst_religion_id;
+	private String nst_religion;
+	private ArrayList<Languageskill> nst_languageskills = new ArrayList<>();
+	private String nst_languages = "";
+	private String nst_curriculum_name;
+	private Long nst_curriculum_id;
+	
+	
 	public BorrowerRecord() {
 
 	}
@@ -189,15 +199,7 @@ public class BorrowerRecord {
 	public String getName() {
 		return name;
 	}
-
-	public String getTerm_name() {
-		return term_name;
-	}
-
-	public Long getTerm_id() {
-		return term_id;
-	}
-
+	
 	public Long getLanguage_id() {
 		return language_id;
 	}
@@ -236,5 +238,35 @@ public class BorrowerRecord {
 
 	public Date getExit_date() {
 		return exit_date;
+	}
+
+	// Data next school term
+/*
+	private Long nst_student_school_term_id;
+	private String nst_class_name;
+	private Long nst_class_id;
+	private Integer nst_year_of_school;
+	private Long nst_form_id;
+	private Long nst_religion_id;
+	private String nst_religion;
+	private ArrayList<Languageskill> nst_languageskills = new ArrayList<>();
+	private String nst_languages = "";
+	private String nst_curriculum_name;
+	private Long nst_curriculum_id;
+*/
+	public void copyOldAttributesFrom(BorrowerRecord br2) {
+
+		nst_student_school_term_id = br2.nst_student_school_term_id;
+		nst_class_name = br2.class_name;
+		nst_class_id = br2.class_id;
+		nst_year_of_school = br2.year_of_school;
+		nst_form_id = br2.form_id;
+		nst_religion_id = br2.religion_id;
+		nst_religion = br2.religion;
+		nst_languageskills = br2.languageskills;
+		nst_languages = br2.languages;
+		nst_curriculum_name = br2.curriculum_name;
+		nst_curriculum_id = br2.curriculum_id;
+
 	}
 }

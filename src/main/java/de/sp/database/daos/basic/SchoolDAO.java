@@ -11,7 +11,6 @@ import java.util.Map;
 public class SchoolDAO {
 
 
-
 	public static List<School> getAll(Connection con) {
 
 		String sql = StatementStore.getStatement("school.getAll");
