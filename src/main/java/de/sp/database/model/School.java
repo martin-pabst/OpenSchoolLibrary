@@ -61,18 +61,16 @@ public class School {
 
 		for (SchoolTerm st : schoolTerms) {
 
-			Term t = st.getTerm();
-
-			if ((now.after(t.getBegindate()) || now.equals(t.getBegindate()))
-					&& (now.before(t.getEnddate()) || now
-							.equals(t.getEnddate()))) {
+			if ((now.after(st.getBegindate()) || now.equals(st.getBegindate()))
+					&& (now.before(st.getEnddate()) || now
+							.equals(st.getEnddate()))) {
 				return st;
 			}
 
 			if (latestTerm == null) {
 				latestTerm = st;
 			} else {
-				if (t.getBegindate().after(latestTerm.getTerm().getEnddate())) {
+				if (st.getBegindate().after(latestTerm.getEnddate())) {
 					latestTerm = st;
 				}
 			}

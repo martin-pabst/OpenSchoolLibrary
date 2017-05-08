@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections4.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sql2o.Connection;
@@ -12,19 +13,15 @@ import org.sql2o.Connection;
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.SchoolDAO;
 import de.sp.database.daos.basic.SchoolTermDAO;
-import de.sp.database.daos.basic.TermDAO;
 import de.sp.database.model.School;
 import de.sp.database.model.SchoolTerm;
-import de.sp.database.model.Term;
 
 public class SchoolTermStore {
 
 	private List<School> schools = new ArrayList<>();
 	private Map<Long, School> schoolKeys = new HashMap<>();
 
-	private List<Term> terms = new ArrayList<>();
-	private Map<Long, Term> termKeys = new HashMap<>();
-	
+	private Map<Long, ArrayList<SchoolTerm>> schoolIdToSchoolTermListMap = new HashedMap<>();
 	private Map<Long, SchoolTerm> schoolTermIds = new HashMap<>();
 
 	private static SchoolTermStore instance;
@@ -59,14 +56,14 @@ public class SchoolTermStore {
 			schools = SchoolDAO.getAll(con);
 			schoolKeys = SchoolDAO.schoolListToKeyMap(schools);
 
-			terms = TermDAO.getAll(con);
-			termKeys = TermDAO.termListToKeyMap(terms);
 
-			SchoolTermDAO.joinSchoolsWithTerms(schoolKeys, termKeys, con);
-			
 			for(School school: schools){
+
+				ArrayList<SchoolTerm> schoolTermList = schoolIdToSchoolTermListMap.put(school.getId(), new ArrayList<>());
+
 				for(SchoolTerm st: school.getSchoolTerms()){
 					schoolTermIds.put(st.getId(), st);
+					schoolTermList.add(st);
 				}
 			}
 		} catch (Exception ex){
@@ -80,29 +77,40 @@ public class SchoolTermStore {
 		return schoolKeys.get(school_id);
 	}
 
-	public Term getTerm(String termName) {
-		for (Term term : terms) {
-			if (termName.equals(term.getName())) {
-				return term;
-			}
-		}
-		return null;
-	}
-
-	public void addTerm(Term term) {
-
-		terms.add(term);
-		termKeys.put(term.getId(), term);
-
-	}
-
-
 	public SchoolTerm getSchoolTerm(Long schoolTermId) {
 		return schoolTermIds.get(schoolTermId);
 	}
 
 	public void addSchoolTerm(SchoolTerm schoolTerm) {
+
 		schoolTermIds.put(schoolTerm.getId(), schoolTerm);
+
+		ArrayList<SchoolTerm> schoolTermList = schoolIdToSchoolTermListMap.get(schoolTerm.getSchool_id());
+
+		if(schoolTermList == null){
+			schoolTermList = new ArrayList<>();
+			schoolIdToSchoolTermListMap.put(schoolTerm.getSchool_id(), schoolTermList);
+		}
+
+		schoolTermList.add(schoolTerm);
+
 	}
 
+	public SchoolTerm getTerm(long school_Id, String termname) {
+
+		ArrayList<SchoolTerm> schoolTermList = schoolIdToSchoolTermListMap.get(school_Id);
+
+		if(schoolTermList == null){
+			return null;
+		}
+
+		for (SchoolTerm schoolTerm : schoolTermList) {
+			if(schoolTerm.name.equals(termname)){
+				return schoolTerm;
+			}
+		}
+
+		return null;
+
+	}
 }

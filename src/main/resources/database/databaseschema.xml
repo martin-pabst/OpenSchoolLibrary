@@ -11,23 +11,15 @@
 		<column name="abbreviation" type="varchar" length="20" />
 	</table>
 
-	<table name="term">
-		<column name="id" type="bigint" autoincrement="true"
-			primarykey="true" />
-		<column name="name" type="varchar" length="20" />
-		<column name="begindate" type="date" />
-		<column name="enddate" type="date" />
-	</table>
-
 	<table name="school_term">
 		<column name="id" type="bigint" autoincrement="true"
 			primarykey="true" />
 		<column name="school_id" type="bigint">
 			<references table="school" column="id" ondelete="cascade" />
 		</column>
-		<column name="term_id" type="bigint">
-			<references table="term" column="id"  ondelete="cascade" />
-		</column>
+		<column name="name" type="varchar" length="20" />
+		<column name="begindate" type="date" />
+		<column name="enddate" type="date" />
 	</table>
 
 

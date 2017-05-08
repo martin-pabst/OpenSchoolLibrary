@@ -21,40 +21,25 @@
 	</statement>
 	
 	
-<!-- Table term -->
-
-	<statement name="term.getAll" >
-		select id, name, begindate, enddate from term
-	</statement>
-	
-	<statement name="term.insert">
-		insert into term (name, begindate, enddate) 
-		values (:name, :begindate, :enddate)
-	</statement>
-
-	<statement name="term.remove">
-		delete from term where id = :id
-	</statement>
-
 
 	
 <!-- School_term -->
 
 	<statement name="school_term.findBySchoolIdAndTermName" >
-		select st.id, st.school_id, st.term_id from school
+		select st.id, st.school_id, st.name, st.begindate, st.enddate
+		from school
 			join school_term st on school.id = st.school_id
-			join term on st.term_id = term.id
-		WHERE school_id = :school_id and term.name = :term_name
+		WHERE school_id = :school_id and st.name = :term_name
 	</statement>
 
 
 	<statement name="school_term.getAll" >
-		select id, school_id, term_id from school_term
+		select id, school_id, name, begindate, enddate from school_term
 	</statement>
 	
 	<statement name="school_term.insert">
-		insert into school_term (school_id, term_id) 
-		values (:school_id, :term_id)
+		insert into school_term (school_id, name, begindate, enddate)
+		values (:school_id, :name, :begindate, :enddate)
 	</statement>
 
 	<statement name="school_term.remove">

@@ -2,10 +2,10 @@ package de.sp.database.daos.basic;
 
 import de.sp.database.model.School;
 import de.sp.database.model.SchoolTerm;
-import de.sp.database.model.Term;
 import de.sp.database.statements.StatementStore;
 import org.sql2o.Connection;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -39,49 +39,20 @@ public class SchoolTermDAO {
 
 	}
 
-	/*
-		<statement name="school_term.findBySchoolIdAndTermName" >
-	select st.id, st.school_id, st.term_id from school
-	join school_term st on school.id = st.school_id
-	join term on school_term.term_id = term.id
-	WHERE school_id = :school_id and term.name = :term_name
-			</statement>
-*/
-
-
-	public static void joinSchoolsWithTerms(Map<Long, School> schools,
-			Map<Long, Term> terms, Connection con) {
-
-		List<SchoolTerm> schoolTerms = getAll(con);
-
-		for (SchoolTerm st : schoolTerms) {
-
-			School school = schools.get(st.school_id);
-			Term term = terms.get(st.term_id);
-
-			if (school != null && term != null) {
-
-				st.setSchool(school);
-				st.setTerm(term);
-
-				school.addSchoolTerm(st);
-			}
-
-		}
-
-	}
-
-	public static SchoolTerm insert(Long school_id, Long term_id, Connection con)
+	public static SchoolTerm insert(School school, String name, Date begindate, Date enddate, Connection con)
 			throws Exception {
 
 		String sql = StatementStore.getStatement("school_term.insert");
 
 		Long id = con.createQuery(sql, true)
-				.addParameter("school_id", school_id)
-				.addParameter("term_id", term_id).executeUpdate()
+				.addParameter("school_id", school.getId())
+				.addParameter("name", name)
+				.addParameter("begindate", begindate)
+				.addParameter("enddate", enddate)
+				.executeUpdate()
 				.getKey(Long.class);
 
-		return new SchoolTerm(id, school_id, term_id);
+		return new SchoolTerm(id, school, name, begindate, enddate);
 
 	}
 

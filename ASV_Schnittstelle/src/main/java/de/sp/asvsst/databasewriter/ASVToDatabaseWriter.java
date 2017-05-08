@@ -12,6 +12,7 @@ import de.sp.database.model.valuelists.ValueStore;
 import de.sp.database.stores.SchoolTermStore;
 import de.sp.main.StartServer;
 import de.sp.tools.server.progressServlet.ProgressServlet;
+import org.apache.lucene.index.Term;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sql2o.Connection;
@@ -150,9 +151,10 @@ public class ASVToDatabaseWriter {
 
 	private SchoolTerm getOrCreateSchoolTerm(ASVSchule asvSchule,
 			School school, Connection con) throws ParseException, Exception {
-		Term term = SchoolTermStore.getInstance().getTerm(asvSchule.schuljahr);
 
-		if (term == null) {
+		SchoolTerm schoolTerm = SchoolTermStore.getInstance().getTerm(school.getId(), asvSchule.schuljahr);
+
+		if (schoolTerm == null) {
 
 			String jahr1String = asvSchule.schuljahr.substring(0, 4);
 			int jahr1 = Integer.parseInt(jahr1String);
@@ -165,30 +167,8 @@ public class ASVToDatabaseWriter {
 			Date end = sdf.parse("31.07." + jahr2);
 			protocolAdd("Lege Schuljahr " + asvSchule.schuljahr
 					+ " in der Datenbank an.\n", false, "#0000ff", 1);
-			term = TermDAO.insert(asvSchule.schuljahr, begin, end, con);
+			schoolTerm = SchoolTermDAO.insert(school, asvSchule.schuljahr, begin, end, con);
 
-			SchoolTermStore.getInstance().addTerm(term);
-		}
-
-		SchoolTerm schoolTerm = null;
-
-		for (SchoolTerm schoolTerm1 : school.getSchoolTerms()) {
-			if (schoolTerm1.getTerm() == term) {
-				schoolTerm = schoolTerm1;
-				break;
-			}
-		}
-
-		if (schoolTerm == null) {
-			protocolAdd("Lege Relation von Schule " + school.getNumber()
-					+ " zu Schuljahr " + term.getName()
-					+ " in der Datenbank an.", false, "#0000ff", 1);
-			schoolTerm = SchoolTermDAO
-					.insert(school.getId(), term.getId(), con);
-			school.addSchoolTerm(schoolTerm);
-			SchoolTermStore.getInstance().addSchoolTerm(schoolTerm);
-			schoolTerm.setTerm(term);
-			schoolTerm.setSchool(school);
 		}
 
 		return schoolTerm;
@@ -203,7 +183,7 @@ public class ASVToDatabaseWriter {
 		if (dbClass == null) {
 
 			protocolAdd("Lege Klasse " + klasse.klassenname + " im Schuljahr "
-					+ schoolTerm.getTerm().getName() + " an.", true, "#000000",
+					+ schoolTerm.getName() + " an.", true, "#000000",
 					2);
 
 			String jahrgangsstufeSchluessel = "051";
