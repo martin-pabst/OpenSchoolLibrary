@@ -357,6 +357,7 @@
 		<column name="name" type="varchar" length="100" />
 		<column name="abbreviation" type="varchar" length="20" />
 		<column name="external_key" type="varchar" length="50" />
+		<column name="sorting_order" type="integer" />
 	</table>
 
 
@@ -364,7 +365,53 @@
     <table name="calendar">
         <column name="id" type="bigint" autoincrement="true"
                 primarykey="true" />
+		<column name="title" type="varchar" length="100" />
+		<column name="description" type="varchar" length="1000" />
+		<column name="short_title" type="varchar" length="20" />
+		<column name="location" type="varchar" length="120" />
+		<column name="allDay" type="bool"/>
+		<column name="preliminary" type="bool"/>
 
+		<column name="start" type="timestamp" />
+		<column name="end" type="timestamp" />
+
+		<column name="start_period" type="integer" /> <!-- Beginn in der ... Schulstunde -->
+		<column name="end_period" type="integer" />   <!-- Ende in der ... Schulstunde -->
+
+		<column name="color" type="varchar" length="10" />
     </table>
+
+	<!-- Restrictions on calendar entries -->
+	<!-- An entry in Restriction with user_id != null (role_id != null) means:
+	     this user(role) can read the calendar entry -->
+	<table name="calendar_restriction">
+		<column name="id" type="bigint" autoincrement="true"
+				primarykey="true" />
+		<column name="calendar_id" type="bigint">
+			<references table="calendar" column="id"  ondelete="cascade" />
+		</column>
+		<column name="role_id" type="bigint">
+			<references table="role" column="id"  ondelete="cascade" />
+		</column>
+		<column name="user_id" type="bigint">
+			<references table="users" column="id"  ondelete="cascade" />
+		</column>
+	</table>
+
+	<table name="absence">
+		<column name="id" type="bigint" autoincrement="true"
+				primarykey="true" />
+		<column name="class_id" type="bigint">
+			<references table="class" column="id" ondelete="set null" />
+		</column>
+		<column name="form_id" type="bigint">
+			<references table="value" column="id" ondelete="cascade"/>
+		</column>
+		<!-- if class_id ==  null && form_id == null then absence is for whole school -->
+
+		<column name="calendar_id" type="bigint">
+			<references table="calendar" column="id"  ondelete="cascade" />
+		</column>
+	</table>
 
 </database>

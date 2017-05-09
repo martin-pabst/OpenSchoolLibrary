@@ -15,6 +15,7 @@ public class Value{
 
    private String external_key;
 
+   private Integer sorting_order;
 
 
    public Value(){
@@ -22,7 +23,8 @@ public class Value{
 
 
 
-   public Value(Long id, Long valuestore_key, Long school_id, String name, String abbreviation, String external_key){
+   public Value(Long id, Long valuestore_key, Long school_id, String name, String abbreviation,
+                String external_key, Integer sorting_order){
 
       this.id = id;
       this.valuestore_key = valuestore_key;
@@ -30,6 +32,7 @@ public class Value{
       this.name = name;
       this.abbreviation = abbreviation;
       this.external_key = external_key;
+      this.sorting_order = sorting_order;
 }
 
    public Long getId(){
@@ -66,6 +69,10 @@ public class Value{
 
       return external_key;
 
+   }
+
+   public Integer getSortingOrder() {
+      return sorting_order;
    }
 
 }

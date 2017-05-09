@@ -1,11 +1,10 @@
 package de.sp.database.daos.basic;
 
-import java.util.List;
-
-import org.sql2o.Connection;
-
 import de.sp.database.model.Value;
 import de.sp.database.statements.StatementStore;
+import org.sql2o.Connection;
+
+import java.util.List;
 
 public class ValueDAO {
 	public static List<Value> getAll(Connection con) {
@@ -19,7 +18,7 @@ public class ValueDAO {
 
 	public static Value insert(Long valuestore_key, Long school_id,
 			String name, String abbreviation, String external_key,
-			Connection con) throws Exception {
+			Integer sorting_order, Connection con) throws Exception {
 
 		String sql = StatementStore.getStatement("value.insert");
 
@@ -28,11 +27,13 @@ public class ValueDAO {
 				.addParameter("school_id", school_id)
 				.addParameter("name", name)
 				.addParameter("abbreviation", abbreviation)
-				.addParameter("external_key", external_key).executeUpdate()
+				.addParameter("external_key", external_key)
+				.addParameter("sorting_order", sorting_order)
+				.executeUpdate()
 				.getKey(Long.class);
 
 		return new Value(id, valuestore_key, school_id, name, abbreviation,
-				external_key);
+				external_key, sorting_order);
 
 	}
 
@@ -82,7 +83,7 @@ public class ValueDAO {
 
 	public static Value findOrWrite(Long school_id, Long valuestore_key,
 			String external_key, Connection con, String name,
-			String abbreviation) throws Exception {
+			String abbreviation, Integer order) throws Exception {
 
 		Value value = findBySchoolAndValueStoreAndExternalKey(school_id,
 				valuestore_key, external_key, con);
@@ -91,7 +92,7 @@ public class ValueDAO {
 			return value;
 		}
 		
-		return insert(valuestore_key, school_id, name, abbreviation, external_key, con);
+		return insert(valuestore_key, school_id, name, abbreviation, external_key, order, con);
 
 	}
 
