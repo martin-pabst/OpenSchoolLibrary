@@ -66,7 +66,7 @@ public class LibraryNavigatorDataServlet extends BaseServlet {
 		NavigatorDataResponse navigatorDataResponse = new NavigatorDataResponse();
 
 		navigatorDataResponse.schueler = LibraryDAO.getBorrowerList(
-				school_id, school_term_id, con, true);
+				school_id, school_term_id, con, true, false);
 
 		navigatorDataResponse.extractLehrerFromSchuelerList();
 

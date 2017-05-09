@@ -10,6 +10,7 @@ import de.sp.database.model.Borrows;
 import de.sp.database.model.School;
 import de.sp.database.model.SchoolTerm;
 import de.sp.database.statements.StatementStore;
+import de.sp.database.stores.SchoolTermStore;
 import de.sp.main.config.Configuration;
 import de.sp.modules.library.daos.LibraryDAO;
 import de.sp.modules.library.servlets.borrow.borrowerlist.BorrowerRecord;
@@ -32,6 +33,8 @@ public class BookGenerator {
 
         ConnectionPool.init(config);
 
+        SchoolTermStore.getInstance().loadFromDatabase();
+
         Connection con = ConnectionPool.beginTransaction();
 
         School school = SchoolDAO.findByNumber(con, "0124");
@@ -48,7 +51,7 @@ public class BookGenerator {
 
     public void execute(Long school_id, Long school_term_id, Connection con) throws Exception {
 
-        List<BorrowerRecord> studentList = LibraryDAO.getBorrowerList(school_id, school_term_id, con, false);
+        List<BorrowerRecord> studentList = LibraryDAO.getBorrowerList(school_id, school_term_id, con, false, false);
 
         ArrayList<String> classNames = new ArrayList<>();
 
@@ -73,7 +76,7 @@ public class BookGenerator {
         Long barcode = 8881000L;
 
 
-        NeededBooksHelper nbh = new NeededBooksHelper(school_id, con, false);
+        NeededBooksHelper nbh = new NeededBooksHelper(school_id, con, false, false);
 
         boolean borrowBooks = true;
 

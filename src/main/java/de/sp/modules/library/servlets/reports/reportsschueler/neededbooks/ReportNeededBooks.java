@@ -48,7 +48,10 @@ public class ReportNeededBooks extends BaseReport {
     public List<ReportParameter> getParameters() {
         return Arrays.asList(new ReportParameter(ParameterType.typeBoolean, "Schüler ohne benötigte Bücher weglassen",
                 "Hier das Häkchen setzen, wenn Schüler, die schon alle benötigten Bücher entliehen haben, " +
-                        "gar nicht im Report erscheinen sollen", true));
+                        "gar nicht im Report erscheinen sollen", true),
+                new ReportParameter(ParameterType.typeBoolean, "Benötigte Bücher fürs <span style=\"font-weight: bold\">kommende</span> Schuljahr",
+                        "Es werden die Bücher aufgelistet, die die Schülerin/der Schüler in dem Schuljahr benötigen wird, das dem rechts oben ausgewählten Schuljahr folgt.", true)
+                );
     }
 
     @Override
@@ -58,13 +61,19 @@ public class ReportNeededBooks extends BaseReport {
 
     @Override
     public void execute(ContentType contentType, List<Long> ids, Long school_id,
-                        Long school_term_id, List<String> paramerterValues, Connection con, HttpServletResponse response) throws IOException, JRException {
+                        Long school_term_id, List<String> parameterValues, Connection con, HttpServletResponse response) throws IOException, JRException {
 
         boolean schuelerOhneBenoetigteBuecherWeglassen = true;
-        if(paramerterValues != null && paramerterValues.size() == getParameters().size()){
-            String parameter = paramerterValues.get(0);
-            if(parameter != null && parameter.equals("false")){
+        boolean neededBooksForNextTerm = false;
+
+        if(parameterValues != null && parameterValues.size() == getParameters().size()){
+            String parameter1 = parameterValues.get(0);
+            if(parameter1 != null && parameter1.equals("false")){
                 schuelerOhneBenoetigteBuecherWeglassen = false;
+            }
+            String parameter2 = parameterValues.get(1);
+            if(parameter2 != null && parameter2.equals("true")){
+                neededBooksForNextTerm = true;
             }
         }
 
@@ -72,11 +81,15 @@ public class ReportNeededBooks extends BaseReport {
 
         ids.forEach(selectedStudentIds::add);
 
-        List<BorrowerRecord> schuelerList = LibraryDAO.getBorrowerList(school_id, school_term_id, con, false);
+        /**
+         * Option to print needed books for next schoolyear
+         */
+        List<BorrowerRecord> schuelerList = LibraryDAO.getBorrowerList(school_id, school_term_id, con, false, true);
 
         List<NeededBookRecord> neededBooks = new ArrayList<>();
 
-        NeededBooksHelper neededBooksHelper = new NeededBooksHelper(school_id, con, schuelerOhneBenoetigteBuecherWeglassen);
+        NeededBooksHelper neededBooksHelper =
+                new NeededBooksHelper(school_id, con, schuelerOhneBenoetigteBuecherWeglassen, neededBooksForNextTerm);
 
         for(BorrowerRecord br: schuelerList){
 

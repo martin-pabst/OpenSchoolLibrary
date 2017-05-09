@@ -192,7 +192,7 @@ public class LibrarySettingsServlet extends BaseServlet {
     private GridResponseGet<BorrowerRecord> getStudentList(GridRequestGet getData, Connection con) {
 
         List<BorrowerRecord> records = LibraryDAO.getBorrowerList(
-                getData.getSchool_id(), getData.getSchool_term_id(), con, false);
+                getData.getSchool_id(), getData.getSchool_term_id(), con, false, false);
 
         return new GridResponseGet<BorrowerRecord>(GridResponseStatus.success,
                 records.size(), records, "", null);

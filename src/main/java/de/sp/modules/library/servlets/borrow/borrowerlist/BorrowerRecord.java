@@ -96,7 +96,7 @@ public class BorrowerRecord {
 			boolean alreadySaved = false;
 
 			for (Languageskill ls : languageskills) {
-				if (ls.getId() == br.languageskill_id) {
+				if (ls.getId().equals(br.languageskill_id)) {
 					alreadySaved = true;
 				}
 			}
@@ -268,5 +268,49 @@ public class BorrowerRecord {
 		nst_curriculum_name = br2.curriculum_name;
 		nst_curriculum_id = br2.curriculum_id;
 
+	}
+
+	public Long getNst_student_school_term_id() {
+		return nst_student_school_term_id;
+	}
+
+	public String getNst_class_name() {
+		return nst_class_name;
+	}
+
+	public Long getNst_class_id() {
+		return nst_class_id;
+	}
+
+	public Integer getNst_year_of_school() {
+		return nst_year_of_school;
+	}
+
+	public Long getNst_form_id() {
+		return nst_form_id;
+	}
+
+	public Long getNst_religion_id() {
+		return nst_religion_id;
+	}
+
+	public String getNst_religion() {
+		return nst_religion;
+	}
+
+	public ArrayList<Languageskill> getNst_languageskills() {
+		return nst_languageskills;
+	}
+
+	public String getNst_languages() {
+		return nst_languages;
+	}
+
+	public String getNst_curriculum_name() {
+		return nst_curriculum_name;
+	}
+
+	public Long getNst_curriculum_id() {
+		return nst_curriculum_id;
 	}
 }

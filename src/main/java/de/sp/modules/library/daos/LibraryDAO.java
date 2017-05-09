@@ -29,7 +29,7 @@ public class LibraryDAO {
 
         SchoolTerm nextSchoolTerm = SchoolTermStore.getInstance().getNextSchoolTerm(school_id, school_term_id);
 
-        if (nextSchoolTerm != null) {
+        if (nextSchoolTerm != null && withDataNextSchoolTerm) {
 
             ArrayList<BorrowerRecord> borrowersConsolidatedNextSchoolTerm = getBorrowerRecordsIntern(school_id, nextSchoolTerm.getId(),
                     con, false);

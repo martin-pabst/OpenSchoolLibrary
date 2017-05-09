@@ -121,7 +121,8 @@ public class SchoolTermStore {
 
     public SchoolTerm getNextSchoolTerm(Long school_id, Long school_term_id) {
 
-        List<SchoolTerm> schoolTermList = schoolIdToSchoolTermListMap.get(school_id);
+        List<SchoolTerm> schoolTermList = new ArrayList<>();
+        schoolTermList.addAll(schoolIdToSchoolTermListMap.get(school_id));
 
         Collections.sort(schoolTermList);
 

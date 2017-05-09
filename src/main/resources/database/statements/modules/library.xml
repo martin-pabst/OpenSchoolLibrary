@@ -6,6 +6,7 @@
 		select class.id, class.name, count(*) as size from class
 			JOIN school_term on class.school_term_id = school_term.id
 			JOIN student_school_term on student_school_term.class_id = class.id
+			     and student_school_term.school_term_id = :school_term_id
 		WHERE
 			school_term.id = :school_term_id
 		GROUP BY

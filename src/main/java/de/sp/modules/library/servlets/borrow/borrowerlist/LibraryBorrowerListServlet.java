@@ -17,7 +17,7 @@ public class LibraryBorrowerListServlet extends BaseGridServlet<BorrowerRecord> 
 			Connection con) {
 
 		List<BorrowerRecord> records = LibraryDAO.getBorrowerList(
-				getData.getSchool_id(), getData.getSchool_term_id(), con, true);
+				getData.getSchool_id(), getData.getSchool_term_id(), con, true, true);
 
 		return new GridResponseGet<BorrowerRecord>(GridResponseStatus.success,
 				records.size(), records, "", null);

@@ -85,6 +85,10 @@
             $(this).parents(".dropup").find('.btn').val($(this).data('value'));
         });
 
+        $('#libraryBorrowNextSchoolyear').click(function(){
+            libraryBorrowUpdateTables();
+        });
+
         $('#libraryBorrowTab').on('shown.bs.tab', function (e) {
 
             // Show w2ui-tables for the first time only if they are yet visible.
@@ -600,7 +604,26 @@
 
     function bookNeeded(selectedBorrower, bookFormStoreRecord) {
 
+        var bookNeededForNextTerm = $('#libraryBorrowNextSchoolyear').is(':checked');
+
         var religionList = app.globalDefinitions().religionList;
+
+        var form_id, curriculum_id, languageskills, religion_id, year_of_school;
+
+        if(bookNeededForNextTerm){
+            form_id = selectedBorrower.nst_form_id;
+            curriculum_id = selectedBorrower.nst_curriculum_id;
+            languageskills = selectedBorrower.nst_languageskills;
+            religion_id = selectedBorrower.nst_religion_id;
+            year_of_school = selectedBorrower.nst_year_of_school;
+        } else {
+            form_id = selectedBorrower.form_id;
+            curriculum_id =selectedBorrower.curriculum_id;
+            languageskills = selectedBorrower.languageskills;
+            religion_id = selectedBorrower.religion_id;
+            year_of_school = selectedBorrower.nst_year_of_school;
+        }
+
 
         for (var i = 0; i < bookFormStoreRecord.bookFormEntries.length; i++) {
 
@@ -609,13 +632,13 @@
             var bookNeeded = true;
 
             if (entry.form_id) {
-                if (selectedBorrower.form_id !== entry.form_id) {
+                if (form_id !== entry.form_id) {
                     bookNeeded = false;
                 }
             }
 
             if (entry.curriculum_id && bookNeeded) {
-                if (selectedBorrower.curriculum_id !== entry.curriculum_id) {
+                if (curriculum_id !== entry.curriculum_id) {
                     bookNeeded = false;
                 }
             }
@@ -624,11 +647,11 @@
 
                 if (bookFormStoreRecord.subject_id) {
                     var languageSkillFound = false;
-                    selectedBorrower.languageskills.forEach(function (ls) {
+                    languageskills.forEach(function (ls) {
                         if (ls.subject_id === bookFormStoreRecord.subject_id) {
 
-                            if (typeof ls.from_year === "undefined" || selectedBorrower.year_of_school - ls.from_year + 1 === entry.languageyear) {
-                                if (typeof ls.to_year === "undefined" || selectedBorrower.year_of_school <= ls.to_year) {
+                            if (typeof ls.from_year === "undefined" || year_of_school - ls.from_year + 1 === entry.languageyear) {
+                                if (typeof ls.to_year === "undefined" || year_of_school <= ls.to_year) {
                                     languageSkillFound = true;
                                 }
                             }
@@ -656,7 +679,7 @@
                 }
 
                 if(isReligionBook){
-                    if(selectedBorrower.religion_id !== bookFormStoreRecord.subject_id){
+                    if(religion_id !== bookFormStoreRecord.subject_id){
                         bookNeeded = false;
                     }
                 }

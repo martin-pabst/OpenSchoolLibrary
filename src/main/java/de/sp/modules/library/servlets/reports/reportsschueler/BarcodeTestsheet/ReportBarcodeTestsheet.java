@@ -117,11 +117,11 @@ public class ReportBarcodeTestsheet extends BaseReport {
 
         ids.forEach(selectedStudentIds::add);
 
-        List<BorrowerRecord> schuelerList = LibraryDAO.getBorrowerList(school_id, school_term_id, con, false);
+        List<BorrowerRecord> schuelerList = LibraryDAO.getBorrowerList(school_id, school_term_id, con, false, false);
 
         List<NeededBookRecord> neededBooks = new ArrayList<>();
 
-        NeededBooksHelper neededBooksHelper = new NeededBooksHelper(school_id, con, false);
+        NeededBooksHelper neededBooksHelper = new NeededBooksHelper(school_id, con, false, false);
 
         for(BorrowerRecord br: schuelerList){
 
