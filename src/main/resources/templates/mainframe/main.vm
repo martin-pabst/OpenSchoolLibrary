@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/public/lib/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="/public/lib/w2ui/1.4.3/w2ui.css">
     <link rel="stylesheet" href="/public/lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/lib/fullcalendar/fullcalendar.css">
     <link rel="stylesheet" href="/mainframe/css/main.css">
     $cssImportStatements
 
@@ -22,6 +23,9 @@
     <script type="text/javascript" src="/mainframe/js/tools.js"></script>
     <script type="text/javascript" src="/mainframe/js/main.js"></script>
     <script type="text/javascript" src="/public/lib/w2ui/1.4.3/w2ui.js"></script>
+    <script type="text/javascript" src="/public/lib/fullcalendar/lib/moment.min.js"></script>
+    <script type="text/javascript" src="/public/lib/fullcalendar/fullcalendar.js"></script>
+    <script type="text/javascript" src="/public/lib/fullcalendar/locale/de.js"></script>
     $jsImportStatements
 
     <script type="text/javascript">

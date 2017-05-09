@@ -83,7 +83,7 @@ abstract public class BaseReport {
         html.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
         html.append(" <link rel=\"icon\" href=\"/public/modules/login/favicon.ico\">");
         html.append("<title>" + getFilename() + "</title>");
-        html.append("<link rel=\"stylesheet\" href=\"/modules/library/css/libraryReports.css\">\n");
+        html.append("<link rel=\"stylesheet\" href=\"/modules/library/css/libraryReports.css1\">\n");
         html.append("</head>");
         html.append("<body>");
 

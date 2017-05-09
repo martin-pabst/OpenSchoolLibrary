@@ -4,25 +4,34 @@ import de.sp.database.model.User;
 import de.sp.main.mainframe.menu.MenuItem;
 import de.sp.main.mainframe.menu.MenuItemSide;
 import de.sp.main.resources.modules.Module;
+import de.sp.main.resources.templates.VelocityEngineFactory;
 import de.sp.main.resources.text.TS;
+import org.apache.velocity.Template;
 
 public class CalendarModule extends Module {
 
-	public static final String PERMISSIONCALENDAR = "calendar";
+	public static final String CALENDAR = "calendar";
+	public static final String CALENDAROPEN = "calendar.open";
+
+	private Template template;
 
 	public CalendarModule() {
 		setMayGetDeactivated(false);
 		setInstalled(true);
+
+		template = VelocityEngineFactory.getVelocityEngine().getTemplate(
+				"templates/modules/calendar/calendar.vm", "utf-8");
+
 	}
 
 	@Override
 	public String[] getPermissionNames() {
-		return new String[] { PERMISSIONCALENDAR };
+		return new String[] {CALENDAROPEN};
 	}
 
 	@Override
 	public String getIdentifier() {
-		return PERMISSIONCALENDAR;
+		return CALENDAR;
 	}
 
 	@Override
@@ -34,7 +43,7 @@ public class CalendarModule extends Module {
 	public MenuItem[] getMenuItems() {
 
 		MenuItem m = new MenuItem("", "startCalendar", "fa-calendar", null,
-				new String[] { PERMISSIONCALENDAR }, PERMISSIONCALENDAR,
+				new String[] {CALENDAROPEN}, CALENDAR,
 				MenuItemSide.right, 300);
 
 		return new MenuItem[] { m };
@@ -43,7 +52,7 @@ public class CalendarModule extends Module {
 
 	@Override
 	public String getMinimumPermission() {
-		return PERMISSIONCALENDAR;
+		return CALENDAROPEN;
 	}
 
 	@Override
@@ -51,8 +60,8 @@ public class CalendarModule extends Module {
 			StringBuilder sb) {
 
 		switch (fragmentId) {
-		case "startCalendar": // TODO
-			// renderTemplate(adminTemplate, ts, user, sb);
+		case "startCalendar":
+			renderTemplate(template, ts, user, sb);
 			break;
 
 		default:

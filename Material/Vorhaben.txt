@@ -1,33 +1,31 @@
-Modul Benutzer/Rechte
- - Tab "Benutzer"
- - Links Tabelle mit den Benutzern
-   - Rufname, Familienname, Benutzername, isAdmin, inaktiv, Gruppe (Freitext)
-   - Buttons "Neu", "Löschen"
-   - Update per Überschreiben von Attributen in den Tabellenzellen
- - Rechts Tabelle mit den Rollen
-   - Bezeichnung, Beschreibung
-   - Ankreuzfeld
- - Tab "Rollen"
-   - Links Tabelle mit den Rollen
-    - Bezeichnung, Beschreibung
-    - Buttons "Neu", "Löschen"
-    - Update per Überschreiben von Attributen in den Tabellenzellen
-   - Rechts Tabelle mit allen Rechten
-    - Bezeichnung, Beschreibung
-    - Ankreuzfeld
-    - später vielleicht: Anzeige in Baumstruktur mit 1.5'er w2ui-Version
+Kalender
+
+ - Einträge mit von, bis, Text, Farbe
+ - Einträge nur sichtbar für einzelne Rollen (z.B. Schulleitung, Lehrkraft, ...)
+ - Einträge nur sichtbar für einzelne Personen
+ - Einträge sichtbar für automatische Gruppen (Lehrkräfte im Fach..., Klassenleiter, Lehrer der Klasse xy, ...)
+ - Anzeige mit Fullcalendar
+ - Erweiterung von Fullcalendar: Anzeige der Unterrichtsstunden und Pausen in der Tagesübersicht
+ - Kleiner Kalender für die Startseite nach dem Login
+
+ - Ferien und Feiertage als "Background events" von Fullcalendar
+
+ - Absenzen von Klassen, Jahrgangsstufen
+ - Schulaufgabenkalender
+
+ - Verwaltung von Ressourcen (Räume, Beamer, ...)
+
+Implizit:
+ - Automatische Gruppen
 
 
+Mail
+ - Wahlweise mit internem Backend oder Zugriff auf Imap-Postfach
+ - automatisch generierte Gruppen (Lehrer einer Klasse, Fachbetreuer, ...)
+ - Suche in alten Mails
 
-Code-Snippets:
+Notenverwaltung
 
-<input id="datefield" type="text" maxlength="100" style="width: 90px">
+Zeugniserstellung
 
-$(function () {
-	$('#datefield').w2field('date');
-});
-
-        <div class="alert alert-success" role="alert">...</div>
-        <div class="alert alert-info" role="alert">...</div>
-        <div class="alert alert-warning" role="alert">...</div>
-        <div class="alert alert-danger" role="alert">...</div>
+Dokumentverwaltung
