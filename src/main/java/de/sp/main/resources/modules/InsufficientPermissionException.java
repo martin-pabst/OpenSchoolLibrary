@@ -5,6 +5,10 @@ import de.sp.database.model.User;
 
 public class InsufficientPermissionException extends Exception {
 
+	public InsufficientPermissionException(String message){
+		super(message);
+	}
+
 	public InsufficientPermissionException(User user, String permission,
 			School school) {
 

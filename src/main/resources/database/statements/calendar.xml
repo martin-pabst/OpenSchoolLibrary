@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+
+    <statement name="calendar.getAllWithoutDescription">
+        select id, schoool_id, title, short_title, location, allDay, preliminary,
+            start, 'end', start_period, end_period, color
+        from calendar
+    </statement>
+
+</statementlist>

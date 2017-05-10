@@ -365,6 +365,9 @@
     <table name="calendar">
         <column name="id" type="bigint" autoincrement="true"
                 primarykey="true" />
+		<column name="school_id" type="bigint">
+			<references table="school" column="id" ondelete="cascade"/>
+		</column>
 		<column name="title" type="varchar" length="100" />
 		<column name="description" type="varchar" length="1000" />
 		<column name="short_title" type="varchar" length="20" />
@@ -372,8 +375,8 @@
 		<column name="allDay" type="bool"/>
 		<column name="preliminary" type="bool"/>
 
-		<column name="start" type="timestamp" />
-		<column name="end" type="timestamp" />
+		<column name="start_timestamp" type="timestamp" />
+		<column name="end_timestamp" type="timestamp" />
 
 		<column name="start_period" type="integer" /> <!-- Beginn in der ... Schulstunde -->
 		<column name="end_period" type="integer" />   <!-- Ende in der ... Schulstunde -->
@@ -387,6 +390,9 @@
 	<table name="calendar_restriction">
 		<column name="id" type="bigint" autoincrement="true"
 				primarykey="true" />
+		<column name="school_id" type="bigint">
+			<references table="school" column="id" ondelete="cascade"/>
+		</column>
 		<column name="calendar_id" type="bigint">
 			<references table="calendar" column="id"  ondelete="cascade" />
 		</column>
@@ -401,13 +407,19 @@
 	<table name="absence">
 		<column name="id" type="bigint" autoincrement="true"
 				primarykey="true" />
+		<column name="school_id" type="bigint">
+			<references table="school" column="id" ondelete="cascade"/>
+		</column>
 		<column name="class_id" type="bigint">
 			<references table="class" column="id" ondelete="set null" />
 		</column>
 		<column name="form_id" type="bigint">
 			<references table="value" column="id" ondelete="cascade"/>
 		</column>
-		<!-- if class_id ==  null && form_id == null then absence is for whole school -->
+		<!-- if class_id ==  null && form_id == null then absence is for whole school and school_id is set -->
+
+		<column name="no_written_tests" type="bool"/>
+		<column name="no_tests" type="bool"/>
 
 		<column name="calendar_id" type="bigint">
 			<references table="calendar" column="id"  ondelete="cascade" />

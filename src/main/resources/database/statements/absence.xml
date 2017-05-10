@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+
+    <statement name="absence.getAll">
+      select id, school_id, class_id, form_id, no_written_test, no_tests, calendar_id
+        from absence
+    </statement>
+
+</statementlist>

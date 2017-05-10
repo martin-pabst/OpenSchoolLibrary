@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+
+    <statement name="calendar_restriction.getAll">
+      select id, school_id, calendar_id, role_id, user_id
+        from calendar_restriction
+    </statement>
+
+</statementlist>

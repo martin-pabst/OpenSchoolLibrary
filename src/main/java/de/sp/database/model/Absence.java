@@ -6,39 +6,25 @@ package de.sp.database.model;
 public class Absence {
 
     private Long id;
+    private Long school_id; // only != null if absence is for whole school
     private Long class_id;
-    private Long form_id;
+    private Long form_id; // Jahrgangsstufe
     private Long calendar_id;
 
-    transient private DBClass dbclass;
-    transient private Value form;
+    private boolean no_written_tests;
+    private boolean no_tests;
+
     transient private Calendar calendar;
 
-    public Absence(Long id, Long class_id, Long form_id, Long calendar_id) {
+    public Absence(Long id, Long school_id, Long class_id, Long form_id,
+                   boolean no_written_tests, boolean no_tests, Long calendar_id) {
         this.id = id;
+        this.school_id = school_id;
         this.class_id = class_id;
         this.form_id = form_id;
+        this.no_written_tests = no_written_tests;
+        this.no_tests = no_tests;
         this.calendar_id = calendar_id;
-    }
-
-    public Absence(Long id, DBClass dbclass, Value form, Calendar calendar) {
-        this.id = id;
-        this.dbclass = dbclass;
-        this.form = form;
-        this.calendar = calendar;
-
-        if(dbclass != null){
-            class_id = dbclass.getId();
-        }
-
-        if(form != null){
-            form_id = form.getId();
-        }
-
-        if(calendar != null){
-            calendar_id = calendar.getId();
-        }
-
     }
 
     public Long getId() {
@@ -73,27 +59,23 @@ public class Absence {
         this.calendar_id = calendar_id;
     }
 
-    public DBClass getDbclass() {
-        return dbclass;
-    }
-
-    public void setDbclass(DBClass dbclass) {
-        this.dbclass = dbclass;
-    }
-
-    public Value getForm() {
-        return form;
-    }
-
-    public void setForm(Value form) {
-        this.form = form;
-    }
-
     public Calendar getCalendar() {
         return calendar;
     }
 
     public void setCalendar(Calendar calendar) {
         this.calendar = calendar;
+    }
+
+    public Long getSchool_id() {
+        return school_id;
+    }
+
+    public boolean isNo_written_tests() {
+        return no_written_tests;
+    }
+
+    public boolean isNo_tests() {
+        return no_tests;
     }
 }
