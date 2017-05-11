@@ -11,7 +11,7 @@ import org.sql2o.Connection;
 
 import de.sp.database.daos.basic.ValueDAO;
 import de.sp.database.model.Value;
-import de.sp.database.model.valuelists.ValueStore;
+import de.sp.database.valuelists.ValueListType;
 import de.sp.tools.file.FileTool;
 
 public class ASVWlStore {
@@ -113,7 +113,7 @@ public class ASVWlStore {
 	}
 
 	public Value findOrMakeValue(String pl_key, String asv_schluessel,
-			ValueStore valueStore, Long school_id, Connection con)
+								 ValueListType valueStore, Long school_id, Connection con)
 			throws Exception {
 
 		if (asv_schluessel == null) {
@@ -128,7 +128,7 @@ public class ASVWlStore {
 
 		return ValueDAO.findOrWrite(school_id, valueStore.getKey(),
 				asv_schluessel, con, asvWlEintrag.anzeigeform,
-				asvWlEintrag.kurzform);
+				asvWlEintrag.kurzform, 100);
 
 	}
 

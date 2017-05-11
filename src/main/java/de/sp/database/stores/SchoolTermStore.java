@@ -5,20 +5,21 @@ import de.sp.database.daos.basic.SchoolDAO;
 import de.sp.database.daos.basic.SchoolTermDAO;
 import de.sp.database.model.School;
 import de.sp.database.model.SchoolTerm;
-import org.apache.commons.collections4.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sql2o.Connection;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class SchoolTermStore {
 
-    private List<School> schools = new ArrayList<>();
-    private Map<Long, School> schoolKeys = new HashMap<>();
+    private List<School> schools = new CopyOnWriteArrayList<>();
+    private Map<Long, School> schoolKeys = new ConcurrentHashMap<>();
 
-    private Map<Long, ArrayList<SchoolTerm>> schoolIdToSchoolTermListMap = new HashedMap<>();
-    private Map<Long, SchoolTerm> schoolTermIds = new HashMap<>();
+    private Map<Long, List<SchoolTerm>> schoolIdToSchoolTermListMap = new ConcurrentHashMap<>();
+    private Map<Long, SchoolTerm> schoolTermIds = new ConcurrentHashMap<>();
 
     private static SchoolTermStore instance;
 
@@ -61,10 +62,10 @@ public class SchoolTermStore {
                 schoolTerm.setSchool(school);
                 school.addSchoolTerm(schoolTerm);
 
-                ArrayList<SchoolTerm> schoolTermList = schoolIdToSchoolTermListMap.get(school.getId());
+                List<SchoolTerm> schoolTermList = schoolIdToSchoolTermListMap.get(school.getId());
 
                 if (schoolTermList == null) {
-                    schoolTermList = new ArrayList<>();
+                    schoolTermList = new CopyOnWriteArrayList<>();
                     schoolIdToSchoolTermListMap.put(school.getId(), schoolTermList);
                 }
 
@@ -90,10 +91,10 @@ public class SchoolTermStore {
 
         schoolTermIds.put(schoolTerm.getId(), schoolTerm);
 
-        ArrayList<SchoolTerm> schoolTermList = schoolIdToSchoolTermListMap.get(schoolTerm.getSchool_id());
+        List<SchoolTerm> schoolTermList = schoolIdToSchoolTermListMap.get(schoolTerm.getSchool_id());
 
         if (schoolTermList == null) {
-            schoolTermList = new ArrayList<>();
+            schoolTermList = new CopyOnWriteArrayList<>();
             schoolIdToSchoolTermListMap.put(schoolTerm.getSchool_id(), schoolTermList);
         }
 
@@ -103,7 +104,7 @@ public class SchoolTermStore {
 
     public SchoolTerm getTerm(long school_Id, String termname) {
 
-        ArrayList<SchoolTerm> schoolTermList = schoolIdToSchoolTermListMap.get(school_Id);
+        List<SchoolTerm> schoolTermList = schoolIdToSchoolTermListMap.get(school_Id);
 
         if (schoolTermList == null) {
             return null;

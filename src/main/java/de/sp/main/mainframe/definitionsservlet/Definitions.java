@@ -5,7 +5,7 @@ import de.sp.database.daos.basic.DBClassDAO;
 import de.sp.database.daos.basic.SubjectDAO;
 import de.sp.database.daos.basic.ValueDAO;
 import de.sp.database.model.*;
-import de.sp.database.model.valuelists.ValueStore;
+import de.sp.database.valuelists.ValueListType;
 import de.sp.database.stores.SchoolTermStore;
 import de.sp.database.valuelists.VLSex;
 import org.sql2o.Connection;
@@ -43,9 +43,9 @@ public class Definitions {
 
 
 
-			formList = getValueList(school_id, ValueStore.form, con);
+			formList = getValueList(school_id, ValueListType.form, con);
 
-			curriculumList = getValueList(school_id, ValueStore.curriculum, con);
+			curriculumList = getValueList(school_id, ValueListType.curriculum, con);
 
 			sexList = VLSex.getAsValueList();
 
@@ -63,7 +63,7 @@ public class Definitions {
 	}
 
 	private List<SimpleValueListEntry> getValueList(Long school_id,
-			ValueStore valueStore, Connection con) {
+													ValueListType valueStore, Connection con) {
 
 		Long valuestore_key = valueStore.getKey();
 

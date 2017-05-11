@@ -11,7 +11,7 @@ import de.sp.database.daos.basic.SchoolTermDAO;
 import de.sp.database.daos.basic.StudentDAO;
 import de.sp.database.daos.basic.ValueDAO;
 import de.sp.database.model.*;
-import de.sp.database.model.valuelists.ValueStore;
+import de.sp.database.valuelists.ValueListType;
 import de.sp.database.stores.SchoolTermStore;
 import de.sp.main.StartServer;
 import de.sp.tools.server.progressServlet.ProgressServlet;
@@ -200,7 +200,7 @@ public class ASVToDatabaseWriter {
 			// Wertelisteneintrag für die Jahrgangsstufe holen
 			Value jahrgangsstufeValue = ValueDAO
 					.findBySchoolAndValueStoreAndExternalKey(school.getId(),
-							ValueStore.form.getKey(), jahrgangsstufeSchluessel,
+							ValueListType.form.getKey(), jahrgangsstufeSchluessel,
 							con);
 
 			if (jahrgangsstufeValue == null) {
@@ -211,9 +211,9 @@ public class ASVToDatabaseWriter {
 				if (asvjgst != null) {
 
 					jahrgangsstufeValue = ValueDAO.insert(
-							ValueStore.form.getKey(), school.getId(),
+							ValueListType.form.getKey(), school.getId(),
 							asvjgst.getAnzeigeform(), asvjgst.getKurzform(),
-							asvjgst.getSchluessel(), con);
+							asvjgst.getSchluessel(), 100, con);
 				}
 			}
 

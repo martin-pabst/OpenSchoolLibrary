@@ -8,7 +8,7 @@ import de.sp.database.daos.basic.ValueDAO;
 import de.sp.database.model.Book;
 import de.sp.database.model.Subject;
 import de.sp.database.model.Value;
-import de.sp.database.model.valuelists.ValueStore;
+import de.sp.database.valuelists.ValueListType;
 import de.sp.tools.file.FileTool;
 import de.sp.tools.string.FormTool;
 import org.apache.poi.ss.usermodel.Cell;
@@ -43,9 +43,9 @@ public class BookTestdata {
 
 			Long school_id = SchoolTestdata.exampleSchool.getId();
 
-			jahrgangsstufen = ValueDAO.findBySchoolAndValueStore(school_id, ValueStore.form.getKey(), con);
+			jahrgangsstufen = ValueDAO.findBySchoolAndValueStore(school_id, ValueListType.form.getKey(), con);
 
-			ausbildungsrichtungen = ValueDAO.findBySchoolAndValueStore(school_id, ValueStore.curriculum.getKey(), con);
+			ausbildungsrichtungen = ValueDAO.findBySchoolAndValueStore(school_id, ValueListType.curriculum.getKey(), con);
 
 			String pathname = "/database/testdata/Buecher_CSG.xlsx";
 

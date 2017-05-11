@@ -2,7 +2,7 @@ package de.sp.database.testdata.valuelists;
 
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.ValueDAO;
-import de.sp.database.model.valuelists.ValueStore;
+import de.sp.database.valuelists.ValueListType;
 import de.sp.database.testdata.user.SchoolTestdata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +18,14 @@ public class FormTestdata {
 
 		try (Connection con = ConnectionPool.open()) {
 
+			int i = 0;
+
 			for (ASVJahrgangsstufe asvJgst : ASVJahrgangsstufe.values()) {
 
-				ValueDAO.insert(ValueStore.form.getKey(),
+				ValueDAO.insert(ValueListType.form.getKey(),
 						SchoolTestdata.exampleSchool.getId(),
 						asvJgst.getAnzeigeform(), asvJgst.getKurzform(),
-						asvJgst.getSchluessel(), con);
+						asvJgst.getSchluessel(), i++, con);
 
 			}
 

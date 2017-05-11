@@ -21,7 +21,7 @@ import de.sp.database.model.Address;
 import de.sp.database.model.Person;
 import de.sp.database.model.Student;
 import de.sp.database.model.Value;
-import de.sp.database.model.valuelists.ValueStore;
+import de.sp.database.valuelists.ValueListType;
 import de.sp.database.valuelists.VLPersonType;
 import de.sp.database.valuelists.VLSex;
 
@@ -59,7 +59,7 @@ public class SchuelerAnschriftenImporter {
 
 		ASVWlStore wlStore = ASVWlStore.getInstance(); 
 		
-		Value contact_type = wlStore.findOrMakeValue("2009", asvKommunikation.typSchluessel, ValueStore.contact_type, school_id, con);
+		Value contact_type = wlStore.findOrMakeValue("2009", asvKommunikation.typSchluessel, ValueListType.contact_type, school_id, con);
 		
 		ContactDAO.insert(asvKommunikation.nummer_adresse,
 				asvAnsprechpartner.name, asvKommunikation.bemerkung, order,
@@ -227,8 +227,8 @@ public class SchuelerAnschriftenImporter {
 				.findBySchluessel(asvKommunikation.typSchluessel);
 
 		Value contact_type = ValueDAO.findOrWrite(school_id,
-				ValueStore.contact_type.getKey(), asvKTyp.getSchluessel(), con,
-				asvKTyp.getName(), asvKTyp.getAbbreviation());
+				ValueListType.contact_type.getKey(), asvKTyp.getSchluessel(), con,
+				asvKTyp.getName(), asvKTyp.getAbbreviation(), 1);
 
 		ContactDAO.insert(asvKommunikation.nummer_adresse,
 				person.getFirstname() + " " + person.getSurname(),

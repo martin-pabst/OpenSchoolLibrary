@@ -8,7 +8,7 @@ import de.sp.database.daos.basic.ValueDAO;
 import de.sp.database.model.Book;
 import de.sp.database.model.Subject;
 import de.sp.database.model.Value;
-import de.sp.database.model.valuelists.ValueStore;
+import de.sp.database.valuelists.ValueListType;
 import de.sp.database.testdata.valuelists.ASVBildungsgang;
 import de.sp.database.testdata.valuelists.ASVJahrgangsstufe;
 import org.slf4j.Logger;
@@ -46,24 +46,24 @@ public class CSGBookTestdata {
 					englisch.getId(), 20.99d, con);
 
 			Value jgst5 = ValueDAO.findBySchoolAndValueStoreAndExternalKey(
-					school_id, ValueStore.form.getKey(),
+					school_id, ValueListType.form.getKey(),
 					ASVJahrgangsstufe.jgst5.getSchluessel(), con);
 			Value jgst6 = ValueDAO.findBySchoolAndValueStoreAndExternalKey(
-					school_id, ValueStore.form.getKey(),
+					school_id, ValueListType.form.getKey(),
 					ASVJahrgangsstufe.jgst6.getSchluessel(), con);
 			Value jgst7 = ValueDAO.findBySchoolAndValueStoreAndExternalKey(
-					school_id, ValueStore.form.getKey(),
+					school_id, ValueListType.form.getKey(),
 					ASVJahrgangsstufe.jgst7.getSchluessel(), con);
 			Value jgst8 = ValueDAO.findBySchoolAndValueStoreAndExternalKey(
-					school_id, ValueStore.form.getKey(),
+					school_id, ValueListType.form.getKey(),
 					ASVJahrgangsstufe.jgst8.getSchluessel(), con);
 
 			Value ntg8 = ValueDAO.findBySchoolAndValueStoreAndExternalKey(
-					school_id, ValueStore.curriculum.getKey(),
+					school_id, ValueListType.curriculum.getKey(),
 					ASVBildungsgang.GY_NTG_8.getSchluessel(), con);
 			
 			Value sg8 = ValueDAO.findBySchoolAndValueStoreAndExternalKey(
-					school_id, ValueStore.curriculum.getKey(),
+					school_id, ValueListType.curriculum.getKey(),
 					ASVBildungsgang.GY_SG_8.getSchluessel(), con);
 
 			BookFormDAO.insert(book1.getId(), jgst5.getId(), ntg8.getId(), null, con);

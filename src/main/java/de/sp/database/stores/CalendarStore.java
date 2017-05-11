@@ -7,13 +7,13 @@ import de.sp.database.daos.basic.CalendarRestrictionDAO;
 import de.sp.database.model.Absence;
 import de.sp.database.model.Calendar;
 import de.sp.database.model.CalendarRestriction;
-import de.sp.database.model.valuelists.ValueStore;
-import org.apache.commons.collections4.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sql2o.Connection;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Martin on 09.05.2017.
@@ -23,15 +23,15 @@ public class CalendarStore {
     private static CalendarStore instance;
 
     // maps 100 * year + month (january == 1) to Calendar objects
-    private Map<Integer, List<Calendar>> yearMonthToCalendarMap = new HashMap<>();
+    private Map<Integer, List<Calendar>> yearMonthToCalendarMap = new ConcurrentHashMap<>();
 
-    private Map<Long, Map<Integer,List<Absence>>> classIdToYearMonthToAbsenceList = new HashMap<>();
+    private Map<Long, Map<Integer,List<Absence>>> classIdToYearMonthToAbsenceList = new ConcurrentHashMap<>();
 
-    private Map<Long, Map<Integer,List<Absence>>> formIdToYearMonthToAbsenceList = new HashMap<>();
+    private Map<Long, Map<Integer,List<Absence>>> formIdToYearMonthToAbsenceList = new ConcurrentHashMap<>();
 
-    private Map<Long, Map<Integer,List<Absence>>> schoolIdToYearMonthToAbsenceList = new HashMap<>();
+    private Map<Long, Map<Integer,List<Absence>>> schoolIdToYearMonthToAbsenceList = new ConcurrentHashMap<>();
     
-    private Map<Long, Calendar> calendarIdToCalendarMap = new HashMap<>();
+    private Map<Long, Calendar> calendarIdToCalendarMap = new ConcurrentHashMap<>();
 
     public static CalendarStore getInstance() {
         if (instance == null) {
@@ -78,7 +78,7 @@ public class CalendarStore {
             List<Calendar> calendarList = yearMonthToCalendarMap.get(yearMonthIndex);
 
             if(calendarList == null){
-                calendarList = new ArrayList<>();
+                calendarList = new CopyOnWriteArrayList<>();
                 yearMonthToCalendarMap.put(yearMonthIndex, calendarList);
             }
 
@@ -94,7 +94,7 @@ public class CalendarStore {
         
     }
 
-    public List<Calendar> getAbsencesForclass(Long class_id, Date from, Date to){
+    public List<Calendar> getAbsencesForClass(Long class_id, Date from, Date to){
 
         return getAbsences(classIdToYearMonthToAbsenceList, class_id, from, to);
 
@@ -193,14 +193,14 @@ public class CalendarStore {
         Map<Integer,List<Absence>> yearMonthToAbsenceList = idToYearMonthToAbsenceList.get(id);
 
         if(yearMonthToAbsenceList == null){
-            yearMonthToAbsenceList = new HashMap<>();
+            yearMonthToAbsenceList = new ConcurrentHashMap<>();
             formIdToYearMonthToAbsenceList.put(id, yearMonthToAbsenceList);
         }
 
         for(Integer yearMonth: absence.getCalendar().getYearMonthList()){
             List<Absence> absenceList = yearMonthToAbsenceList.get(yearMonth);
             if(absenceList == null){
-                absenceList = new ArrayList<>();
+                absenceList = new CopyOnWriteArrayList<>();
                 yearMonthToAbsenceList.put(yearMonth, absenceList);
             }
             absenceList.add(absence);

@@ -2,7 +2,7 @@ package de.sp.database.testdata.valuelists;
 
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.ValueDAO;
-import de.sp.database.model.valuelists.ValueStore;
+import de.sp.database.valuelists.ValueListType;
 import de.sp.database.testdata.user.SchoolTestdata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,13 +18,15 @@ public class CurriculumTestdata {
 
 		try (Connection con = ConnectionPool.open()) {
 
+			int i = 0;
+
 			for (ASVBildungsgang asvBildungsgang : ASVBildungsgang.values()) {
 
-				ValueDAO.insert(ValueStore.curriculum.getKey(),
+				ValueDAO.insert(ValueListType.curriculum.getKey(),
 						SchoolTestdata.exampleSchool.getId(),
 						asvBildungsgang.getAnzeigeform(),
 						asvBildungsgang.getKurzform(),
-						asvBildungsgang.getSchluessel(), con);
+						asvBildungsgang.getSchluessel(), i++, con);
 
 			}
 

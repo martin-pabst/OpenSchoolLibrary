@@ -7,7 +7,7 @@ import de.sp.asvsst.model.wertelisten.ASVGeschlecht;
 import de.sp.asvsst.model.wertelisten.ASVUnterrichtsfach;
 import de.sp.database.daos.basic.*;
 import de.sp.database.model.*;
-import de.sp.database.model.valuelists.ValueStore;
+import de.sp.database.valuelists.ValueListType;
 import de.sp.database.valuelists.VLSex;
 import de.sp.tools.objects.ObjectTool;
 import org.sql2o.Connection;
@@ -139,15 +139,15 @@ public class SchuelerWriter {
             // Wertelisteneintrag für den Bildungsgang holen
             Value bildungsgangValue = ValueDAO
                     .findBySchoolAndValueStoreAndExternalKey(school_id,
-                            ValueStore.curriculum.getKey(),
+                            ValueListType.curriculum.getKey(),
                             asvBildungsgang.getSchluessel(), con);
 
             if (bildungsgangValue == null) {
                 bildungsgangValue = ValueDAO.insert(
-                        ValueStore.curriculum.getKey(), school_id,
+                        ValueListType.curriculum.getKey(), school_id,
                         asvBildungsgang.getAnzeigeform(),
                         asvBildungsgang.getKurzform(),
-                        asvBildungsgang.getSchluessel(), con);
+                        asvBildungsgang.getSchluessel(), 100, con);
             }
 
             bildungsgang_id = bildungsgangValue.getId();

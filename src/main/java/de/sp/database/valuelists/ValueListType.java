@@ -1,6 +1,6 @@
-package de.sp.database.model.valuelists;
+package de.sp.database.valuelists;
 
-public enum ValueStore {
+public enum ValueListType {
 	
 	curriculum("Bildungsgang", 1l), 
 	form("form", 2l), // de: "Jahrgangsstufe"
@@ -10,7 +10,7 @@ public enum ValueStore {
 	private String name;
 	private Long key;
 	
-	private ValueStore(String name, Long key) {
+	private ValueListType(String name, Long key) {
 		this.name = name;
 		this.key = key;
 	}

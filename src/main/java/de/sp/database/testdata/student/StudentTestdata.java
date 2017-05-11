@@ -3,7 +3,7 @@ package de.sp.database.testdata.student;
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.*;
 import de.sp.database.model.*;
-import de.sp.database.model.valuelists.ValueStore;
+import de.sp.database.valuelists.ValueListType;
 import de.sp.database.testdata.user.SchoolTestdata;
 import de.sp.database.testdata.valuelists.ASVBildungsgang;
 import de.sp.database.testdata.valuelists.ASVJahrgangsstufe;
@@ -30,15 +30,15 @@ public class StudentTestdata {
 			Long school_term_id = schoolTerm.getId();
 
 			Value jgst8 = ValueDAO.findBySchoolAndValueStoreAndExternalKey(
-					school_id, ValueStore.form.getKey(),
+					school_id, ValueListType.form.getKey(),
 					ASVJahrgangsstufe.jgst8.getSchluessel(), con);
 
 			Value ntg8 = ValueDAO.findBySchoolAndValueStoreAndExternalKey(
-					school_id, ValueStore.curriculum.getKey(),
+					school_id, ValueListType.curriculum.getKey(),
 					ASVBildungsgang.GY_NTG_8.getSchluessel(), con);
 			
 			Value sg8 = ValueDAO.findBySchoolAndValueStoreAndExternalKey(
-					school_id, ValueStore.curriculum.getKey(),
+					school_id, ValueListType.curriculum.getKey(),
 					ASVBildungsgang.GY_SG_8.getSchluessel(), con);
 			
 			Subject englisch = SubjectDAO.findFirstBySchoolIDAndKey1(school_id,

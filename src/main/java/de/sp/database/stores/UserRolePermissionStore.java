@@ -10,10 +10,10 @@ import de.sp.database.model.User;
 import de.sp.main.resources.modules.Permission;
 import org.sql2o.Connection;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * 
@@ -27,13 +27,13 @@ public class UserRolePermissionStore {
 
 	private static UserRolePermissionStore instance;
 
-	private Map<Long, User> userKeys = new HashMap<>(); // maps User.id to User
-	private Map<Long, Map<String, User>> schoolUserNameMap = new HashMap<>();
+	private Map<Long, User> userKeys = new ConcurrentHashMap<>(); // maps User.id to User
+	private Map<Long, Map<String, User>> schoolUserNameMap = new ConcurrentHashMap<>();
 
-	private List<Role> roles = new ArrayList<>();
-	private Map<Long, Role> roleKeys = new HashMap<>(); // maps Role.id to role
+	private List<Role> roles = new CopyOnWriteArrayList<>();
+	private Map<Long, Role> roleKeys = new ConcurrentHashMap<>(); // maps Role.id to role
 
-	private Map<String, Permission> permissionNameMap = new HashMap<>();
+	private Map<String, Permission> permissionNameMap = new ConcurrentHashMap<>();
 
 	public static UserRolePermissionStore getInstance() {
 
@@ -81,7 +81,7 @@ public class UserRolePermissionStore {
 		Map<String, User> userNameMap = schoolUserNameMap.get(user.getSchool_id());
 
 		if(userNameMap == null){
-			userNameMap = new HashMap<>();
+			userNameMap = new ConcurrentHashMap<>();
 			schoolUserNameMap.put(user.getSchool_id(), userNameMap);
 		}
 
