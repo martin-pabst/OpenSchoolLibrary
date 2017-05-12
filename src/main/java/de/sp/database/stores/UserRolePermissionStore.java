@@ -175,6 +175,7 @@ public class UserRolePermissionStore {
 
     	role.addPermission(permission);
     	RoleDAO.update(role, con);
+    	updateUserPermissions(role);
 
     }
 
@@ -182,8 +183,24 @@ public class UserRolePermissionStore {
 
     	role.removePermission(permission);
     	RoleDAO.update(role, con);
+		updateUserPermissions(role);
 
     }
+
+	/**
+	 * After given role has changed update permissions of all users with given role
+	 * @param role
+	 */
+	private void updateUserPermissions(Role role){
+		// only users of scholl to which role belongs are affected:
+		Map<String, User> nameUserMap = schoolUserNameMap.get(role.getSchool_id());
+
+		nameUserMap.forEach((name, user) -> {
+			user.registerAllPermissions();
+		});
+
+	}
+
 
 	public Role getRoleBySchoolIdAndName(Long school_id, String name) {
 

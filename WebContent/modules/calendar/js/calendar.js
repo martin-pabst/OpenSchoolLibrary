@@ -29,11 +29,36 @@
     function initializeCalendar(calendarHeight) {
         $('#fullCalendar').fullCalendar({
             height: calendarHeight,
+            customButtons: {
+                schedule: {
+                    text: 'Termine',
+                    click: function(){
+                        console.log(this);
+                        toggle(this);
+                    }
+                },
+                tests: {
+                    text: 'Prüfungen',
+                    click: function(){
+                        toggle(this);
+                    }
+                },
+                absences: {
+                    text: 'Abwesende Klassen',
+                    click: function(){
+                        toggle(this);
+                    }
+                }
+            },
             header:{
-                right: 'today month,agendaDay,agendaWeek prev,next listMonth'
+                right: 'schedule,tests,absences today month,agendaDay,agendaWeek prev,next listWeek,listMonth,listYear'
             }
         });
     }
 
+    function toggle(button){
+        $(button).parent().find('button').removeClass('fc-state-active');
+        $(button).addClass('fc-state-active');
+    }
 
 }(App));

@@ -89,6 +89,12 @@ public class User {
 
         roles.add(role);
 
+        registerPermissions(role);
+
+    }
+
+    private void registerPermissions(Role role){
+
         for (Permission p : role.getPermissionList()) {
 
             String name = p.getName();
@@ -109,6 +115,15 @@ public class User {
 
         }
 
+    }
+
+    public void registerAllPermissions(){
+
+        permissions.clear();
+
+        for (Role role : roles) {
+            registerPermissions(role);
+        }
     }
 
     public boolean hasPermission(String permission, Long school_id) {
