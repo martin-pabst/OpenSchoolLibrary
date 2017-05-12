@@ -1,6 +1,5 @@
 package de.sp.database.daos.basic;
 
-import de.sp.database.model.Calendar;
 import de.sp.database.model.CalendarRestriction;
 import de.sp.database.statements.StatementStore;
 import org.sql2o.Connection;
@@ -20,7 +19,22 @@ public class CalendarRestrictionDAO {
                 .executeAndFetch(CalendarRestriction.class);
 
     }
-    
+
+    public static void insert (CalendarRestriction calendarRestriction, Connection con){
+
+        String sql = StatementStore.getStatement("calendar_restriction.insert");
+
+        Long id = con
+                .createQuery(sql, true)
+                .bind(calendarRestriction)
+                .executeUpdate()
+                .getKey(Long.class);
+
+        calendarRestriction.setId(id);
+
+    }
+
+
 
 
 }

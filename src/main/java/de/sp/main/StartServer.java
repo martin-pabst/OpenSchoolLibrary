@@ -52,7 +52,8 @@ public class StartServer {
 				StoreManager.getInstance().loadStoresFromDatabase(
 						ModuleManager.getAllPermissions());
 			} catch (Exception ex) {
-
+				Logger logger = LoggerFactory.getLogger(StartServer.class);
+				logger.error("Error in populating stores: ", ex);
 			}
 
 			TS.readTextResources();

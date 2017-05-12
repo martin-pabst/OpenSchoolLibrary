@@ -1,21 +1,23 @@
 package de.sp.tools.server;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import de.sp.database.model.User;
+import de.sp.main.login.LoginServlet;
+import de.sp.main.mainframe.MainFrameServlet;
+import de.sp.main.resources.text.TS;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import de.sp.database.model.User;
-import de.sp.main.login.LoginServlet;
-import de.sp.main.mainframe.MainFrameServlet;
-import de.sp.main.resources.text.TS;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BaseServlet extends HttpServlet {
 
@@ -105,6 +107,27 @@ public class BaseServlet extends HttpServlet {
 			return null;
 		}
 
+	}
+
+	protected Map<String, String> decodePostParameters(String postText) throws UnsupportedEncodingException {
+
+		Map<String, String> parameters = new HashMap<>();
+
+		//school_id=1&type=schedule&start=2017-05-01&end=2017-06-12
+
+		String[] pList = postText.split("&");
+
+		for (String p : pList) {
+
+			int i = p.indexOf("=");
+			String name = URLDecoder.decode(p.substring(0, i), "UTF-8");
+			String value = URLDecoder.decode(p.substring(i + 1), "UTF-8");
+
+			parameters.put(name, value);
+
+		}
+
+		return parameters;
 	}
 
 }

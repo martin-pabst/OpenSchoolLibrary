@@ -1,5 +1,6 @@
 package de.sp.database.stores;
 
+import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.ValueDAO;
 import de.sp.database.model.Value;
 import de.sp.database.valuelists.ValueListType;
@@ -72,13 +73,18 @@ public class ValueListStore {
 
     }
 
-    public void loadFromDatabase(Connection con){
+    public void loadFromDatabase(){
 
-        List<Value> values = ValueDAO.getAll(con);
+        try (Connection con = ConnectionPool.open()) {
 
-        for (Value value : values) {
 
-            addValue(value);
+            List<Value> values = ValueDAO.getAll(con);
+
+            for (Value value : values) {
+
+                addValue(value);
+
+            }
 
         }
 
@@ -109,6 +115,8 @@ public class ValueListStore {
     /**
      *
      * Stores new Value in database and in ValueListStore
+     * If value with given external id already exists then
+     * don't store value but return existing one.
      *
      * @param school_id
      * @param valueList
@@ -128,9 +136,15 @@ public class ValueListStore {
         int maxSortingOrder = 0;
 
         for (Value value : vl) {
+
             if(value.getSortingOrder() > maxSortingOrder){
                 maxSortingOrder = value.getSortingOrder();
             }
+
+            if(value.getExternal_key() != null && external_key != null && value.getExternal_key().equals(external_key) ){
+                return value;
+            }
+
         }
 
         Value value = ValueDAO.insert(valueList.getKey(), school_id,
@@ -143,5 +157,15 @@ public class ValueListStore {
     }
 
 
+    public Value findByExernalKey(Long school_id, Long key, String schluessel) {
 
+        for (Value value : getValueList(school_id, key)) {
+            if(value.getExternal_key() != null && value.getExternal_key().equals(schluessel)){
+                return value;
+            }
+        }
+
+        return null;
+
+    }
 }

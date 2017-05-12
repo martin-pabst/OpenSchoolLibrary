@@ -3,9 +3,21 @@
 
 
     <statement name="calendar.getAllWithoutDescription">
-        select id, schoool_id, title, short_title, location, allDay, preliminary,
-            start, 'end', start_period, end_period, color
+        select id, school_id, title, short_title, location, allDay, preliminary,
+            start_timestamp, end_timestamp, start_period, end_period, color
         from calendar
     </statement>
+
+    <statement name="calendar.insert" >
+        insert into calendar
+        (school_id, title, description, short_title, location, allDay, preliminary, 
+        start_timestamp, end_timestamp, start_period, end_period, 
+        color, backgroundColor, borderColor, textColor)
+        values
+            (:school_id, :title, :description, :short_title, :location, :allDay, :preliminary,
+                        :start, :end, :start_period, :end_period,
+             :color, :backgroundColor, :borderColor, :textColor)
+    </statement>
+
 
 </statementlist>

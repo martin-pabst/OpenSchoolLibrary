@@ -7,4 +7,10 @@
         from calendar_restriction
     </statement>
 
+    <statement name="calendar_restriction.insert">
+        insert into calendar_restriction (school_id, calendar_id, role_id, user_id)
+        values (:school_id, :calendar_id, :role_id, :user_id)
+    </statement>
+
+
 </statementlist>

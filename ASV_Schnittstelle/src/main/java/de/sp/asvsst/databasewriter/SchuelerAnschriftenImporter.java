@@ -1,29 +1,23 @@
 package de.sp.asvsst.databasewriter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.sql2o.Connection;
-
-import de.sp.asvsst.model.ASVAnschrift;
-import de.sp.asvsst.model.ASVAnsprechpartner;
-import de.sp.asvsst.model.ASVKommunikation;
-import de.sp.asvsst.model.ASVPerson;
-import de.sp.asvsst.model.ASVSchuelerAnschrift;
-import de.sp.asvsst.model.ASVSchuelerin;
+import de.sp.asvsst.model.*;
 import de.sp.asvsst.model.asvwlstore.ASVWlStore;
 import de.sp.asvsst.model.wertelisten.ASVKommunikationsTyp;
 import de.sp.database.daos.basic.AddressDAO;
 import de.sp.database.daos.basic.ContactDAO;
 import de.sp.database.daos.basic.PersonDAO;
-import de.sp.database.daos.basic.ValueDAO;
 import de.sp.database.model.Address;
 import de.sp.database.model.Person;
 import de.sp.database.model.Student;
 import de.sp.database.model.Value;
-import de.sp.database.valuelists.ValueListType;
+import de.sp.database.stores.ValueListStore;
 import de.sp.database.valuelists.VLPersonType;
 import de.sp.database.valuelists.VLSex;
+import de.sp.database.valuelists.ValueListType;
+import org.sql2o.Connection;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SchuelerAnschriftenImporter {
 
@@ -226,9 +220,14 @@ public class SchuelerAnschriftenImporter {
 		ASVKommunikationsTyp asvKTyp = ASVKommunikationsTyp
 				.findBySchluessel(asvKommunikation.typSchluessel);
 
+/*
 		Value contact_type = ValueDAO.findOrWrite(school_id,
 				ValueListType.contact_type.getKey(), asvKTyp.getSchluessel(), con,
 				asvKTyp.getName(), asvKTyp.getAbbreviation(), 1);
+*/
+
+		Value contact_type = ValueListStore.getInstance().addValue(school_id, ValueListType.contact_type,
+				asvKTyp.getName(), asvKTyp.getAbbreviation(), asvKTyp.getSchluessel(), con);
 
 		ContactDAO.insert(asvKommunikation.nummer_adresse,
 				person.getFirstname() + " " + person.getSurname(),

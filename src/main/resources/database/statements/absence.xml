@@ -3,8 +3,14 @@
 
 
     <statement name="absence.getAll">
-      select id, school_id, class_id, form_id, no_written_test, no_tests, calendar_id
+      select id, school_id, class_id, form_id, no_written_tests, no_tests, calendar_id
         from absence
     </statement>
+
+    <statement name="absence.insert">
+        insert into absence (school_id, class_id, form_id, calendar_id)
+                values (:school_id, :class_id, :form_id, :calendar_id)
+    </statement>
+
 
 </statementlist>

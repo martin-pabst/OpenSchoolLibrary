@@ -3,11 +3,11 @@ package de.sp.main.mainframe.definitionsservlet;
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.DBClassDAO;
 import de.sp.database.daos.basic.SubjectDAO;
-import de.sp.database.daos.basic.ValueDAO;
 import de.sp.database.model.*;
-import de.sp.database.valuelists.ValueListType;
 import de.sp.database.stores.SchoolTermStore;
+import de.sp.database.stores.ValueListStore;
 import de.sp.database.valuelists.VLSex;
+import de.sp.database.valuelists.ValueListType;
 import org.sql2o.Connection;
 
 import java.util.ArrayList;
@@ -67,8 +67,12 @@ public class Definitions {
 
 		Long valuestore_key = valueStore.getKey();
 
+/*
 		List<Value> list = ValueDAO.findBySchoolAndValueStore(school_id,
 				valuestore_key, con);
+*/
+		List<Value> list = ValueListStore.getInstance().getValueList(school_id,
+				valuestore_key);
 
 		ArrayList<SimpleValueListEntry> ret = new ArrayList<>();
 

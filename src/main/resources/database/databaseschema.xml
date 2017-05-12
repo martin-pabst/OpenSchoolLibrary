@@ -382,6 +382,9 @@
 		<column name="end_period" type="integer" />   <!-- Ende in der ... Schulstunde -->
 
 		<column name="color" type="varchar" length="10" />
+		<column name="backgroundColor" type="varchar" length="10" />
+		<column name="borderColor" type="varchar" length="10" />
+		<column name="textColor" type="varchar" length="10" />
     </table>
 
 	<!-- Restrictions on calendar entries -->

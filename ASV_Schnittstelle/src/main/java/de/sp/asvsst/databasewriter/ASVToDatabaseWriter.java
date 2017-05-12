@@ -9,10 +9,10 @@ import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.DBClassDAO;
 import de.sp.database.daos.basic.SchoolTermDAO;
 import de.sp.database.daos.basic.StudentDAO;
-import de.sp.database.daos.basic.ValueDAO;
 import de.sp.database.model.*;
-import de.sp.database.valuelists.ValueListType;
 import de.sp.database.stores.SchoolTermStore;
+import de.sp.database.stores.ValueListStore;
+import de.sp.database.valuelists.ValueListType;
 import de.sp.main.StartServer;
 import de.sp.tools.server.progressServlet.ProgressServlet;
 import org.slf4j.Logger;
@@ -34,6 +34,8 @@ public class ASVToDatabaseWriter {
 	private int schuelerZaehler;
 	private int schuelerAnzahl;
 
+	private HashMap<String, Value> externalJahrgangsstufeKeyToValueMap;
+
 	public ASVToDatabaseWriter(String progressCode) {
 		super();
 		this.progressCode = progressCode;
@@ -41,6 +43,7 @@ public class ASVToDatabaseWriter {
 	}
 
 	public void writeToDatabase(ASVExport asvExport) {
+
 
 		protocol = new StringBuilder();
 
@@ -68,6 +71,8 @@ public class ASVToDatabaseWriter {
 									"#0000ff", 0);
 
 							ASVBesuchterReligionsunterricht.init(con, school.getId());
+
+							initMaps(school.getId());
 
 							importSchool(asvSchule, school, asvExport, con);
 
@@ -98,6 +103,19 @@ public class ASVToDatabaseWriter {
 
 		publishProgress(0, 120, 20, "Fertig!", true, result
 				+ protocol.toString(), progressCode);
+
+	}
+
+	private void initMaps(Long school_id) {
+
+		// Initialize externalJahrgangsstufeKeyToValueMap
+
+		externalJahrgangsstufeKeyToValueMap = new HashMap<>();
+
+		for (Value value : ValueListStore.getInstance().getValueList(school_id, ValueListType.form.getKey())) {
+			externalJahrgangsstufeKeyToValueMap.put(value.getExternal_key(), value);
+		}
+
 
 	}
 
@@ -198,10 +216,14 @@ public class ASVToDatabaseWriter {
 			}
 
 			// Wertelisteneintrag für die Jahrgangsstufe holen
+/*
 			Value jahrgangsstufeValue = ValueDAO
 					.findBySchoolAndValueStoreAndExternalKey(school.getId(),
 							ValueListType.form.getKey(), jahrgangsstufeSchluessel,
 							con);
+*/
+
+			Value jahrgangsstufeValue = externalJahrgangsstufeKeyToValueMap.get(jahrgangsstufeSchluessel);
 
 			if (jahrgangsstufeValue == null) {
 
@@ -210,10 +232,16 @@ public class ASVToDatabaseWriter {
 
 				if (asvjgst != null) {
 
+/*
 					jahrgangsstufeValue = ValueDAO.insert(
 							ValueListType.form.getKey(), school.getId(),
 							asvjgst.getAnzeigeform(), asvjgst.getKurzform(),
 							asvjgst.getSchluessel(), 100, con);
+*/
+
+					jahrgangsstufeValue = ValueListStore.getInstance().addValue(school.getId(), ValueListType.form, asvjgst.getAnzeigeform(), asvjgst.getKurzform(),
+							asvjgst.getSchluessel(), con);
+
 				}
 			}
 

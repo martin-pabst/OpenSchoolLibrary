@@ -23,7 +23,7 @@ public class CalendarStore {
     private static CalendarStore instance;
 
     // maps 100 * year + month (january == 1) to Calendar objects
-    private Map<Integer, List<Calendar>> yearMonthToCalendarMap = new ConcurrentHashMap<>();
+    private Map<Long, Map<Integer, List<Calendar>>> schoolIdToyearMonthToCalendarMap = new ConcurrentHashMap<>();
 
     private Map<Long, Map<Integer,List<Absence>>> classIdToYearMonthToAbsenceList = new ConcurrentHashMap<>();
 
@@ -42,7 +42,36 @@ public class CalendarStore {
     }
 
 
-    public void addAbsence(Absence absence){
+    /**
+     * Store calendar with absences and restrictions into database and into CalendarStore.
+     * @param calendar
+     * @param con
+     */
+    public void storeCalendarIntoDatabase(Calendar calendar, Connection con){
+        CalendarDAO.insert(calendar, con);
+        addCalendar(calendar);
+
+        if(calendar.hasAbsences()){
+            for (Absence absence : calendar.getAbsences()) {
+                absence.setCalendar_id(calendar.getId());
+                AbsenceDAO.insert(absence, con);
+                addAbsence(absence);
+            }
+        }
+
+        if(calendar.hasRestrictions()){
+            for (CalendarRestriction calendarRestriction : calendar.getRestrictions()) {
+                calendarRestriction.setCalendar_id(calendar.getId());
+                CalendarRestrictionDAO.insert(calendarRestriction, con);
+            }
+        }
+
+    }
+
+
+
+
+    private void addAbsence(Absence absence){
         Calendar calendar = calendarIdToCalendarMap.get(absence.getCalendar_id());
         absence.setCalendar(calendar);
         calendar.addAbsence(absence);
@@ -67,13 +96,20 @@ public class CalendarStore {
 
     }
 
-    public void addCalendar(Calendar calendar){
+    private void addCalendar(Calendar calendar){
 
         calendarIdToCalendarMap.put(calendar.getId(), calendar);
 
         List<Integer> yearMonthList = calendar.getYearMonthList();
 
         for (Integer yearMonthIndex : yearMonthList) {
+
+            Map<Integer, List<Calendar>> yearMonthToCalendarMap = schoolIdToyearMonthToCalendarMap.get(calendar.getSchool_id());
+
+            if(yearMonthToCalendarMap == null){
+                yearMonthToCalendarMap = new ConcurrentHashMap<>();
+                schoolIdToyearMonthToCalendarMap.put(calendar.getSchool_id(), yearMonthToCalendarMap);
+            }
 
             List<Calendar> calendarList = yearMonthToCalendarMap.get(yearMonthIndex);
 
@@ -133,16 +169,20 @@ public class CalendarStore {
         return calendars;
     }
 
-    public List<Calendar> getCalendarRecords(Date from, Date to){
+    public List<Calendar> getCalendarRecords(Long school_id, Date from, Date to){
 
         List<Integer> yearMonthIndexList = Calendar.getYearMonthList(from, to);
 
         List<Calendar> calendars = new ArrayList<>();
 
-        for (Integer ym : yearMonthIndexList) {
-            List<Calendar> cl = yearMonthToCalendarMap.get(ym);
-            if(cl != null){
-                calendars.addAll(cl);
+        Map<Integer, List<Calendar>> yearMonthToCalendarMap = schoolIdToyearMonthToCalendarMap.get(school_id);
+
+        if (yearMonthToCalendarMap != null) {
+            for (Integer ym : yearMonthIndexList) {
+                List<Calendar> cl = yearMonthToCalendarMap.get(ym);
+                if(cl != null){
+                    calendars.addAll(cl);
+                }
             }
         }
 
@@ -161,7 +201,7 @@ public class CalendarStore {
             List<CalendarRestriction> restrictions = CalendarRestrictionDAO.getAll(con);
             List<Absence> absences = AbsenceDAO.getAll(con);
 
-            // fill yearMonthToCalendarMap
+            // fill schoolIdToyearMonthToCalendarMap
             for (Calendar calendar : calendars) {
 
                 addCalendar(calendar);

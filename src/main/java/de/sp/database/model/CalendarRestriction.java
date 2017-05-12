@@ -22,8 +22,7 @@ public class CalendarRestriction {
         this.user_id = user_id;
     }
 
-    public CalendarRestriction(Long id, Long school_id, Long role_id, Long user_id, Calendar calendar) {
-        this.id = id;
+    public CalendarRestriction(Long school_id, Long role_id, Long user_id, Calendar calendar) {
         this.school_id = school_id;
         this.role_id = role_id;
         this.user_id = user_id;
@@ -57,5 +56,13 @@ public class CalendarRestriction {
 
     public void setCalendar(Calendar calendar) {
         this.calendar = calendar;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setCalendar_id(Long calendar_id) {
+        this.calendar_id = calendar_id;
     }
 }

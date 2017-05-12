@@ -15,6 +15,8 @@ import org.sql2o.Connection;
 
 public class UserTestdata {
 
+	public static Role teacherRole;
+
 	public void test() throws Exception {
 
 		Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -42,7 +44,7 @@ public class UserTestdata {
 
 			String teacherPermissions = "library|mail|calendar|testmodule";
 
-			Role teacherRole = RoleDAO.insert("teacher", "Teacher",
+			teacherRole = RoleDAO.insert("teacher", "Teacher",
 					testSchool.getId(), teacherPermissions, con);
 
 			String adminPermissions = "library|mail|calendar|admin|asvsst.open";

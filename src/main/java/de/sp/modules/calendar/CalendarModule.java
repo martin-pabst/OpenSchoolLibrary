@@ -6,7 +6,9 @@ import de.sp.main.mainframe.menu.MenuItemSide;
 import de.sp.main.resources.modules.Module;
 import de.sp.main.resources.templates.VelocityEngineFactory;
 import de.sp.main.resources.text.TS;
+import de.sp.modules.calendar.servlet.CalendarServlet;
 import org.apache.velocity.Template;
+import org.eclipse.jetty.servlet.ServletContextHandler;
 
 public class CalendarModule extends Module {
 
@@ -73,6 +75,11 @@ public class CalendarModule extends Module {
 	@Override
 	public String[] addFragmentIds() {
 		return new String[] { "startCalendar" };
+	}
+
+	@Override
+	public void addServlets(ServletContextHandler context) {
+		context.addServlet(CalendarServlet.class, "/calendar/*");
 	}
 
 }

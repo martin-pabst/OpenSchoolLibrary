@@ -16,9 +16,8 @@ public class Absence {
 
     transient private Calendar calendar;
 
-    public Absence(Long id, Long school_id, Long class_id, Long form_id,
+    public Absence(Long school_id, Long class_id, Long form_id,
                    boolean no_written_tests, boolean no_tests, Long calendar_id) {
-        this.id = id;
         this.school_id = school_id;
         this.class_id = class_id;
         this.form_id = form_id;

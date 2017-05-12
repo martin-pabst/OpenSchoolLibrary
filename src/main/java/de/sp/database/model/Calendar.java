@@ -18,24 +18,26 @@ public class Calendar {
     private Boolean allDay;
     private Boolean preliminary;
 
-    private Date start_timestamp;
-    private Date end_timestamp;
+    private Date start;
+    private Date end;
 
     private Integer start_period; // Unterrichtsstunde!
     private Integer end_period;
 
     private String color;
+    private String backgroundColor;
+    private String borderColor;
+    private String textColor;
 
     private ArrayList<CalendarRestriction> restrictions = null;
     private  ArrayList<Absence> absences = null;
 
 
 
-    public Calendar(Long id, Long school_id, String title, String description, String short_title,
+    public Calendar(Long school_id, String title, String description, String short_title,
                     String location, Boolean allDay,
-                    Boolean preliminary, Date start_timestamp, Date end_timestamp, Integer start_period,
-                    Integer end_period, String color) {
-        this.id = id;
+                    Boolean preliminary, Date start, Date end, Integer start_period,
+                    Integer end_period, String color, String backgroundColor, String borderColor, String textColor) {
         this.school_id = school_id;
         this.title = title;
         this.description = description;
@@ -43,11 +45,15 @@ public class Calendar {
         this.location = location;
         this.allDay = allDay;
         this.preliminary = preliminary;
-        this.start_timestamp = start_timestamp;
-        this.end_timestamp = end_timestamp;
+        this.start = start;
+        this.end = end;
         this.start_period = start_period;
         this.end_period = end_period;
         this.color = color;
+        this.backgroundColor = backgroundColor;
+        this.borderColor = borderColor;
+        this.textColor = textColor;
+
     }
 
     public Long getId() {
@@ -78,12 +84,12 @@ public class Calendar {
         return preliminary;
     }
 
-    public Date getStart_timestamp() {
-        return start_timestamp;
+    public Date getStart() {
+        return start;
     }
 
-    public Date getEnd_timestamp() {
-        return end_timestamp;
+    public Date getEnd() {
+        return end;
     }
 
     public Integer getStart_period() {
@@ -117,13 +123,13 @@ public class Calendar {
     /**
      *
      * Returns list with values 100*year + month (jan == 0) for each
-     * (year/month) in interval [start_timestamp; end_timestamp]
+     * (year/month) in interval [start; end]
      *
      * @return
      */
     public List<Integer> getYearMonthList() {
 
-        return getYearMonthList(start_timestamp, end_timestamp);
+        return getYearMonthList(start, end);
 
     }
 
@@ -166,7 +172,9 @@ public class Calendar {
             absences = new ArrayList<>();
         }
 
-        absences.add(absence);
+        if(!absences.contains(absence)){
+            absences.add(absence);
+        }
     }
 
     public void addRestriction(CalendarRestriction restriction){
@@ -174,6 +182,34 @@ public class Calendar {
             restrictions = new ArrayList<>();
         }
         restrictions.add(restriction);
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public boolean hasAbsences() {
+
+        return absences != null && absences.size() > 0;
+
+    }
+
+    public boolean hasRestrictions() {
+
+        return restrictions != null && restrictions.size() > 0;
+
+    }
+
+    public String getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public String getBorderColor() {
+        return borderColor;
+    }
+
+    public String getTextColor() {
+        return textColor;
     }
 }
 

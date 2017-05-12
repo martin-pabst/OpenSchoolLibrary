@@ -1,10 +1,12 @@
 package de.sp.database.model;
 
-import java.util.List;
-
+import de.sp.database.stores.CalendarStore;
 import de.sp.database.stores.SchoolTermStore;
 import de.sp.database.stores.UserRolePermissionStore;
+import de.sp.database.stores.ValueListStore;
 import de.sp.main.resources.modules.Permission;
+
+import java.util.List;
 
 public class StoreManager {
 	
@@ -28,7 +30,10 @@ public class StoreManager {
 		
 		UserRolePermissionStore.getInstance().addPermissions(permissions);
 		UserRolePermissionStore.getInstance().loadFromDatabase();
-		
+
+		ValueListStore.getInstance().loadFromDatabase();
+
+		CalendarStore.getInstance().loadFromDatabase();
 		
 		
 	}
