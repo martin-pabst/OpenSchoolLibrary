@@ -31,6 +31,7 @@
     function initializeCalendar(calendarHeight) {
         $('#fullCalendar').fullCalendar({
             height: calendarHeight,
+            nowIndicator: true,
             customButtons: {
                 schedule: {
                     text: 'Termine',

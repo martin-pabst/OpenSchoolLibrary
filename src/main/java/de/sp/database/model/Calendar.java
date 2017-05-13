@@ -29,6 +29,8 @@ public class Calendar {
     private String borderColor;
     private String textColor;
 
+    private boolean editable = false;
+
     private ArrayList<CalendarRestriction> restrictions = null;
     private  ArrayList<Absence> absences = null;
 
@@ -210,6 +212,15 @@ public class Calendar {
 
     public String getTextColor() {
         return textColor;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+
+    // TODO
+    public boolean isTest() {
+        return false;
     }
 }
 

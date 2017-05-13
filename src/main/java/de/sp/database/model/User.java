@@ -268,4 +268,16 @@ public class User {
     public void setIs_admin(Boolean is_admin) {
         this.is_admin = is_admin;
     }
+
+    public boolean hasRole(Long role_id) {
+
+        for (Role role : roles) {
+            if(role.getId() == role_id){
+                return true;
+            }
+        }
+
+        return false;
+
+    }
 }

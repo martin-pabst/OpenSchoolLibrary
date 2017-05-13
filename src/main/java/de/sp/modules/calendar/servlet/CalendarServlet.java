@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.model.Calendar;
+import de.sp.database.model.CalendarRestriction;
 import de.sp.database.model.User;
 import de.sp.database.stores.CalendarStore;
 import de.sp.main.resources.text.TS;
@@ -46,7 +47,7 @@ public class CalendarServlet extends BaseServlet {
                         //school_id=1&type=schedule&start=2017-05-01&end=2017-06-12
 
                         Map<String, String> parameters = decodePostParameters(postData);
-                        
+
                         GetCalendarRequest gcr = new GetCalendarRequest(parameters.get("school_id"), parameters.get("type"),
                                 parameters.get("start"), parameters.get("end"));
 
@@ -55,7 +56,7 @@ public class CalendarServlet extends BaseServlet {
                         user.checkPermission(CalendarModule.CALENDAROPEN,
                                 gcr.school_id);
 
-                        List<Calendar> gcResponse = fetchCalendarEntries(con, gcr);
+                        List<Calendar> gcResponse = fetchCalendarEntries(con, gcr, user);
 
                         Gson gson1 = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss").create();
 
@@ -83,11 +84,92 @@ public class CalendarServlet extends BaseServlet {
 
     }
 
-    private List<Calendar> fetchCalendarEntries(Connection con, GetCalendarRequest gcr) {
+    private List<Calendar> fetchCalendarEntries(Connection con, GetCalendarRequest gcr, User user) {
 
 
-        return CalendarStore.getInstance().getCalendarRecords(gcr.school_id, gcr.start, gcr.end);
+        List<Calendar> calendarEntries = CalendarStore.getInstance().getCalendarRecords(gcr.school_id, gcr.start, gcr.end);
 
+        filterByType(calendarEntries, gcr.type); // filter schedule, absences or tests
+
+        applyRestrictions(user, calendarEntries); // if restriction is set, show only entries which are allowed
+
+        // TODO: only user with permission ... may edit entries
+        for (Calendar calendarEntry : calendarEntries) {
+            calendarEntry.setEditable(true);
+        }
+
+        return calendarEntries;
+
+    }
+
+    private void filterByType(List<Calendar> calendarEntries, String type) throws IllegalArgumentException {
+
+        // throws IllegalArgumentException if value of GetCalendarRequestType with given name does not exist.
+
+        GetCalendarRequestType rt = GetCalendarRequestType.valueOf(type);
+
+        int i = 0;
+
+        while (i < calendarEntries.size()) {
+
+            Calendar entry = calendarEntries.get(i);
+
+            boolean removeEntry = false;
+
+            switch (rt) {
+                case schedule:
+                    removeEntry = (entry.hasAbsences() || entry.isTest());
+                    break;
+                case absences:
+                    removeEntry = (!entry.hasAbsences());
+                    break;
+                case tests:
+                    removeEntry = (!entry.isTest());
+                    break;
+            }
+
+            if (removeEntry) {
+                calendarEntries.remove(i);
+            } else {
+                i++;
+            }
+        }
+    }
+
+    private void applyRestrictions(User user, List<Calendar> calendarEntries) {
+        // Check for Restrictions
+        int i = 0;
+
+        while (i < calendarEntries.size()) {
+
+            Calendar entry = calendarEntries.get(i);
+
+            boolean keepEntry = true;
+
+            if (entry.hasRestrictions()) {
+
+                keepEntry = false;
+
+                for (CalendarRestriction cr : entry.getRestrictions()) {
+                    if (cr.getRole_id() != null && user.hasRole(cr.getRole_id())) {
+                        keepEntry = true;
+                        break;
+                    }
+                    if (cr.getUser_id() != null && user.getId() == cr.getUser_id()) {
+                        keepEntry = true;
+                        break;
+                    }
+                }
+
+            }
+
+            if (!keepEntry) {
+                calendarEntries.remove(i);
+            } else {
+                i++;
+            }
+
+        }
     }
 
 

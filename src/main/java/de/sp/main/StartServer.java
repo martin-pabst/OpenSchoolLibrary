@@ -75,6 +75,7 @@ public class StartServer {
 
 		Server server = new Server(8080);
 
+		//Init servlet context
 		ServletContextHandler context = new ServletContextHandler(
 				ServletContextHandler.SESSIONS);
 		context.setContextPath("/");
@@ -82,21 +83,24 @@ public class StartServer {
 				EnumSet.of(DispatcherType.REQUEST));
 
 
+		//Memory based session handling
 		SessionHandler sessionHandler = new SessionHandler();
 		sessionHandler.setSessionTrackingModes(EnumSet
 				.of(SessionTrackingMode.COOKIE));
 
 		context.setSessionHandler(sessionHandler);
 
-		// use this to set Attributes on servlet context
+		// if needed use this to set Attributes on servlet context
 		// context.setAttribute(CONNECTION_POOL, connectionPool);
 
+		// Jetty should also serve static files
 		ServletHolder staticHolder = new ServletHolder(new DefaultServlet());
 		staticHolder.setInitParameter("resourceBase", config.getDirectories()
 				.getWebcontentdirectory());
 		staticHolder.setInitParameter("pathInfoOnly", "true");
 		staticHolder.setInitParameter("dirAllowed", "false");
-		// context.addServlet(staticHolder, "/static/*");
+		// register staticHolder with same context as servlets so that
+		// Authenticationfilter is also invoked
 		context.addServlet(staticHolder, "/*");
 
 		for (Plugin plugin : ModuleManager.getPlugins()) {
