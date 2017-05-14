@@ -3,10 +3,10 @@ package de.sp.modules.calendar.servlet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import de.sp.database.connection.ConnectionPool;
-import de.sp.database.model.Calendar;
-import de.sp.database.model.CalendarRestriction;
+import de.sp.database.model.Event;
+import de.sp.database.model.EventRestriction;
 import de.sp.database.model.User;
-import de.sp.database.stores.CalendarStore;
+import de.sp.database.stores.EventStore;
 import de.sp.main.resources.text.TS;
 import de.sp.modules.calendar.CalendarModule;
 import de.sp.modules.library.servlets.settings.DeleteOldRecordsResponse;
@@ -48,15 +48,15 @@ public class CalendarServlet extends BaseServlet {
 
                         Map<String, String> parameters = decodePostParameters(postData);
 
-                        GetCalendarRequest gcr = new GetCalendarRequest(parameters.get("school_id"), parameters.get("type"),
+                        GetEventRequest gcr = new GetEventRequest(parameters.get("school_id"), parameters.get("type"),
                                 parameters.get("start"), parameters.get("end"));
 
-//                        GetCalendarRequest gcr = gson.fromJson(postData, GetCalendarRequest.class);
+//                        GetEventRequest gcr = gson.fromJson(postData, GetEventRequest.class);
 
                         user.checkPermission(CalendarModule.CALENDAROPEN,
                                 gcr.school_id);
 
-                        List<Calendar> gcResponse = fetchCalendarEntries(con, gcr, user);
+                        List<Event> gcResponse = fetchCalendarEntries(con, gcr, user);
 
                         Gson gson1 = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss").create();
 
@@ -84,25 +84,25 @@ public class CalendarServlet extends BaseServlet {
 
     }
 
-    private List<Calendar> fetchCalendarEntries(Connection con, GetCalendarRequest gcr, User user) {
+    private List<Event> fetchCalendarEntries(Connection con, GetEventRequest gcr, User user) {
 
 
-        List<Calendar> calendarEntries = CalendarStore.getInstance().getCalendarRecords(gcr.school_id, gcr.start, gcr.end);
+        List<Event> eventEntries = EventStore.getInstance().getEventRecords(gcr.school_id, gcr.start, gcr.end);
 
-        filterByType(calendarEntries, gcr.type); // filter schedule, absences or tests
+        filterByType(eventEntries, gcr.type); // filter schedule, absences or tests
 
-        applyRestrictions(user, calendarEntries); // if restriction is set, show only entries which are allowed
+        applyRestrictions(user, eventEntries); // if restriction is set, show only entries which are allowed
 
         // TODO: only user with permission ... may edit entries
-        for (Calendar calendarEntry : calendarEntries) {
-            calendarEntry.setEditable(true);
+        for (Event eventEntry : eventEntries) {
+            eventEntry.setEditable(true);
         }
 
-        return calendarEntries;
+        return eventEntries;
 
     }
 
-    private void filterByType(List<Calendar> calendarEntries, String type) throws IllegalArgumentException {
+    private void filterByType(List<Event> eventEntries, String type) throws IllegalArgumentException {
 
         // throws IllegalArgumentException if value of GetCalendarRequestType with given name does not exist.
 
@@ -110,9 +110,9 @@ public class CalendarServlet extends BaseServlet {
 
         int i = 0;
 
-        while (i < calendarEntries.size()) {
+        while (i < eventEntries.size()) {
 
-            Calendar entry = calendarEntries.get(i);
+            Event entry = eventEntries.get(i);
 
             boolean removeEntry = false;
 
@@ -129,20 +129,20 @@ public class CalendarServlet extends BaseServlet {
             }
 
             if (removeEntry) {
-                calendarEntries.remove(i);
+                eventEntries.remove(i);
             } else {
                 i++;
             }
         }
     }
 
-    private void applyRestrictions(User user, List<Calendar> calendarEntries) {
+    private void applyRestrictions(User user, List<Event> eventEntries) {
         // Check for Restrictions
         int i = 0;
 
-        while (i < calendarEntries.size()) {
+        while (i < eventEntries.size()) {
 
-            Calendar entry = calendarEntries.get(i);
+            Event entry = eventEntries.get(i);
 
             boolean keepEntry = true;
 
@@ -150,7 +150,7 @@ public class CalendarServlet extends BaseServlet {
 
                 keepEntry = false;
 
-                for (CalendarRestriction cr : entry.getRestrictions()) {
+                for (EventRestriction cr : entry.getRestrictions()) {
                     if (cr.getRole_id() != null && user.hasRole(cr.getRole_id())) {
                         keepEntry = true;
                         break;
@@ -164,7 +164,7 @@ public class CalendarServlet extends BaseServlet {
             }
 
             if (!keepEntry) {
-                calendarEntries.remove(i);
+                eventEntries.remove(i);
             } else {
                 i++;
             }

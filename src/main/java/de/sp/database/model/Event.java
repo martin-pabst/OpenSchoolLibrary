@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Martin on 09.05.2017.
  */
-public class Calendar {
+public class Event {
 
     private Long id;
     private Long school_id;
@@ -31,15 +31,15 @@ public class Calendar {
 
     private boolean editable = false;
 
-    private ArrayList<CalendarRestriction> restrictions = null;
+    private ArrayList<EventRestriction> restrictions = null;
     private  ArrayList<Absence> absences = null;
 
 
 
-    public Calendar(Long school_id, String title, String description, String short_title,
-                    String location, Boolean allDay,
-                    Boolean preliminary, Date start, Date end, Integer start_period,
-                    Integer end_period, String color, String backgroundColor, String borderColor, String textColor) {
+    public Event(Long school_id, String title, String description, String short_title,
+                 String location, Boolean allDay,
+                 Boolean preliminary, Date start, Date end, Integer start_period,
+                 Integer end_period, String color, String backgroundColor, String borderColor, String textColor) {
         this.school_id = school_id;
         this.title = title;
         this.description = description;
@@ -110,7 +110,7 @@ public class Calendar {
         return school_id;
     }
 
-    public ArrayList<CalendarRestriction> getRestrictions() {
+    public ArrayList<EventRestriction> getRestrictions() {
         return restrictions;
     }
 
@@ -179,7 +179,7 @@ public class Calendar {
         }
     }
 
-    public void addRestriction(CalendarRestriction restriction){
+    public void addRestriction(EventRestriction restriction){
         if(restrictions == null){
             restrictions = new ArrayList<>();
         }

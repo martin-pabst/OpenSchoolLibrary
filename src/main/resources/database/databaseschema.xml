@@ -362,7 +362,7 @@
 
 
 	<!-- Calendar -->
-    <table name="calendar">
+    <table name="event">
         <column name="id" type="bigint" autoincrement="true"
                 primarykey="true" />
 		<column name="school_id" type="bigint">
@@ -387,17 +387,17 @@
 		<column name="textColor" type="varchar" length="10" />
     </table>
 
-	<!-- Restrictions on calendar entries -->
+	<!-- Restrictionseventndar entries -->
 	<!-- An entry in Restriction with user_id != null (role_id != null) means:
-	     this user(role) can read the calendar entry -->
-	<table name="calendar_restriction">
+	     this user(role) can read eventndar entry -->
+	<table name="event_restriction">
 		<column name="id" type="bigint" autoincrement="true"
 				primarykey="true" />
 		<column name="school_id" type="bigint">
 			<references table="school" column="id" ondelete="cascade"/>
 		</column>
-		<column name="calendar_id" type="bigint">
-			<references table="calendar" column="id"  ondelete="cascade" />
+		<column name="event_id" type="bigint">
+			<references table="event" column="id"  ondelete="cascade" />
 		</column>
 		<column name="role_id" type="bigint">
 			<references table="role" column="id"  ondelete="cascade" />
@@ -424,8 +424,8 @@
 		<column name="no_written_tests" type="bool"/>
 		<column name="no_tests" type="bool"/>
 
-		<column name="calendar_id" type="bigint">
-			<references table="calendar" column="id"  ondelete="cascade" />
+		<column name="event_id" type="bigint">
+			<references table="event" column="id"  ondelete="cascade" />
 		</column>
 	</table>
 

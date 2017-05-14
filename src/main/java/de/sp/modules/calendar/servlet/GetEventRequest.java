@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Created by Martin on 12.05.2017.
  */
-public class GetCalendarRequest {
+public class GetEventRequest {
 
     public Long school_id;
 
@@ -16,7 +16,7 @@ public class GetCalendarRequest {
 
     public String type; // one of "schedule", "tests", "absences"
 
-    public GetCalendarRequest(String school_id, String type, String start, String end) throws ParseException {
+    public GetEventRequest(String school_id, String type, String start, String end) throws ParseException {
 
         this.school_id = Long.parseLong(school_id);
         this.type = type;

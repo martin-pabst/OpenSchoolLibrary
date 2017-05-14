@@ -2,7 +2,7 @@ package de.sp.database.testdata;
 
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.statements.StatementStore;
-import de.sp.database.testdata.calendar.CalendarTestdata;
+import de.sp.database.testdata.calendar.EventTestdata;
 import de.sp.database.testdata.student.StudentTestdata;
 import de.sp.database.testdata.user.BookTestdata;
 import de.sp.database.testdata.user.SchoolTestdata;
@@ -31,7 +31,7 @@ public class InsertAllTestdata {
 		new UserTestdata().test();
 		new BookTestdata().test();
 		new StudentTestdata().test();
-		new CalendarTestdata().test();
+		new EventTestdata().test();
 
 		teardown();
 	}

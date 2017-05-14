@@ -2,14 +2,14 @@
 <statementlist>
 
 
-    <statement name="calendar.getAllWithoutDescription">
+    <statement name="event.getAllWithoutDescription">
         select id, school_id, title, short_title, location, allDay, preliminary,
             start_timestamp, end_timestamp, start_period, end_period, color
-        from calendar
+        from event
     </statement>
 
-    <statement name="calendar.insert" >
-        insert into calendar
+    <statement name="event.insert" >
+        insert into event
         (school_id, title, description, short_title, location, allDay, preliminary, 
         start_timestamp, end_timestamp, start_period, end_period, 
         color, backgroundColor, borderColor, textColor)

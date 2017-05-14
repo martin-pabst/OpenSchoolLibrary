@@ -17,6 +17,8 @@ import java.text.SimpleDateFormat;
 
 public class StudentTestdata {
 
+	public static DBClass achtA;
+
 	public void test() throws Exception {
 
 		Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -58,7 +60,7 @@ public class StudentTestdata {
 
 			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
-			DBClass achtA = DBClassDAO.insert(school_term_id, "8a", 8,
+			achtA = DBClassDAO.insert(school_term_id, "8a", 8,
 					jgst8.getId(), con);
 
 			Student benno_beispiel = StudentDAO.insert(school_id,

@@ -1,6 +1,6 @@
 package de.sp.database.model;
 
-import de.sp.database.stores.CalendarStore;
+import de.sp.database.stores.EventStore;
 import de.sp.database.stores.SchoolTermStore;
 import de.sp.database.stores.UserRolePermissionStore;
 import de.sp.database.stores.ValueListStore;
@@ -33,7 +33,7 @@ public class StoreManager {
 
 		ValueListStore.getInstance().loadFromDatabase();
 
-		CalendarStore.getInstance().loadFromDatabase();
+		EventStore.getInstance().loadFromDatabase();
 		
 		
 	}

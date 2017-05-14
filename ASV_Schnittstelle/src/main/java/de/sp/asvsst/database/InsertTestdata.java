@@ -8,6 +8,8 @@ import de.sp.database.model.StoreManager;
 import de.sp.database.statements.StatementStore;
 import de.sp.main.config.Configuration;
 import de.sp.main.resources.modules.ModuleManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -46,7 +48,8 @@ public class InsertTestdata {
         importFromASV("ASV_Schnittstelle/Testdaten/ASV-Export 2017,18 (8.5.17).zip", "?+QGcQRS");
 
         } catch (Exception ex) {
-
+            Logger logger = LoggerFactory.getLogger(InsertTestdata.class);
+            logger.error("Fehler beim Schreiben der ASV-Testdaten:", ex);
         }
 
     }
