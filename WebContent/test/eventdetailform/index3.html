@@ -62,7 +62,7 @@
                         <li role="presentation"><a data-toggle="tab" href="#eventRessources"
                                                    id="eventRessourcesTab">
                             <i class="fa fa-shopping-basket fa-fw" aria-hidden="true"></i>
-                            <span class="menuitemtext">Abwesende Klassen</span></a></li>
+                            <span class="menuitemtext">Benötigte Ressourcen (Räume, ...)</span></a></li>
 
                     </ul>
 
@@ -90,7 +90,9 @@
                                 <label>Beginn:</label>
                                 <div class="form-group has-feedback" style="margin-right: 10px">
                                     <div class='input-group date' id='eventDateTimeFrom'>
-                                        <input type='text' class="form-control" pattern="/^(\d{2}).(\d{2}).(\d{4})$/"/>
+                                        <input type='text' class="form-control"
+                                               pattern="^(\d{2})\.(\d{2})\.(\d{2})(\d{2})? *((\d{2}):(\d{2}))?$"
+                                        required />
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
@@ -100,25 +102,30 @@
                                 <div class="form-group has-feedback" style="width: 40%">
                                     <label>Ende:</label>
                                     <div class='input-group date' id='eventDateTimeTo'>
-                                        <input type='text' class="form-control"/>
+                                        <input type='text' class="form-control" pattern="^$|^(\d{2})\.(\d{2})\.(\d{2})(\d{2})? *((\d{2}):(\d{2}))?$"/>
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
                                     </div>
                                 </div>
 
+                                <div class="checkbox">
+                                        <input type="checkbox" id="eventWholeDay"/> ganztags
+                                        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                </div>
+
                             </div>
 
 
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Password</label>
-                                <input type="password" class="form-control"
-                                       id="exampleInputPassword1" placeholder="Password"/>
+                            <div class="form-group" style="margin-top: 10px">
+                                <input type="text" class="form-control" data-maxlength="120"
+                                       id="eventLocation" placeholder="Ort"/>
+                                <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
                             </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"/> Check me out
-                                </label>
+
+                            <div class="form-group" style="margin-top: 10px">
+                                <label for="eventDescription">Beschreibung:</label>
+                                <textarea class="form-control" rows="5" id="eventDescription"></textarea>
                             </div>
 
                         </div>

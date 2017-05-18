@@ -881,8 +881,13 @@
                 if (isValid(targetMoment)) {
                     date = targetMoment;
                     viewDate = date.clone();
-                    input.val(date.format(actualFormat));
-                    element.data('date', date.format(actualFormat));
+
+                    //Martin Pabst, 18.05.2017
+                    var formattedDate = date.format(actualFormat);
+                    formattedDate = formattedDate.replace(' 00:00', '');
+
+                    input.val(formattedDate);
+                    element.data('date', formattedDate);
                     unset = false;
                     update();
                     notifyEvent({
@@ -912,6 +917,9 @@
              * Hides the widget. Possibly will emit dp.hide
              */
             hide = function () {
+
+                keyState = {};
+
                 var transitioning = false;
                 if (!widget) {
                     return picker;
@@ -1327,6 +1335,7 @@
             change = function (e) {
                 var val = $(e.target).val().trim(),
                     parsedDate = val ? parseInputDate(val) : null;
+
                 setValue(parsedDate);
                 e.stopImmediatePropagation();
                 return false;

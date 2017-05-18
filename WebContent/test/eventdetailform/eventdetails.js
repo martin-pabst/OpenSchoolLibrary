@@ -10,6 +10,9 @@ $(function(){
     });
 
     $('#myModal').on('shown.bs.modal', function (e) {
+
+        $('#eventName').focus();
+
         $('#myForm').validator();
 
         $('#eventDateTimeFrom').datetimepicker({
