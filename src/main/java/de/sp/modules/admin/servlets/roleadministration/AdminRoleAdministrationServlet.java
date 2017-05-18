@@ -48,8 +48,7 @@ public class AdminRoleAdministrationServlet extends BaseServlet {
 
                         RoleAdministrationListRequest ralr = gson.fromJson(postData, RoleAdministrationListRequest.class);
 
-                        user.checkPermission(AdminModule.PERMISSIONADMINUSERADMINISTRATION,
-                                ralr.school_id);
+                        user.checkPermission(AdminModule.PERMISSIONADMINUSERADMINISTRATION, ralr.school_id);
 
                         RoleAdministrationListsResponse ralresp = new RoleAdministrationListsResponse(con, ts, ralr.school_id);
 

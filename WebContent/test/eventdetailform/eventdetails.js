@@ -10,7 +10,35 @@ $(function(){
     });
 
     $('#myModal').on('shown.bs.modal', function (e) {
-        $('#myForm').validator()
+        $('#myForm').validator();
+
+        $('#eventDateTimeFrom').datetimepicker({
+            locale: 'de',
+            calendarWeeks: true
+        });
+
+        $('#eventDateTimeTo').datetimepicker({
+            locale: 'de',
+            calendarWeeks: true,
+            useCurrent: false
+        });
+
+        $("#eventDateTimeFrom").on("dp.change", function (e) {
+            $('#eventDateTimeTo').data("DateTimePicker").minDate(e.date);
+        });
+        
+        $("#eventDateTimeTo").on("dp.change", function (e) {
+            $('#eventDateTimeFrom').data("DateTimePicker").maxDate(e.date);
+        });
+
+
+    });
+
+    $('#calendarDetailsForm').validator().on('submit', function(e){
+        if(!e.isDefaultPrevented()){
+            alert('hier!');
+        }
+
     });
 
 });
