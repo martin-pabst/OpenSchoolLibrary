@@ -7,7 +7,8 @@
     <script type="text/javascript" src="../../public/lib/fullcalendar/lib/moment-with-locales.min.js"></script>
     <script type="text/javascript" src="../../public/lib/bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript" src="../../public/lib/bootstrap-validator/validator.js"></script>
-    <script type="text/javascript" src="../../public/lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript"
+            src="../../public/lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
     <script type="text/javascript" src="eventdetails.js"></script>
     <!--<script type="text/javascript" src="../../public/lib/bootstrap/bootstrap-modal.js"></script>-->
 
@@ -92,7 +93,7 @@
                                     <div class='input-group date' id='eventDateTimeFrom'>
                                         <input type='text' class="form-control"
                                                pattern="^(\d{2})\.(\d{2})\.(\d{2})(\d{2})? *((\d{2}):(\d{2}))?$"
-                                        required />
+                                               required/>
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
@@ -102,7 +103,8 @@
                                 <div class="form-group has-feedback" style="width: 40%">
                                     <label>Ende:</label>
                                     <div class='input-group date' id='eventDateTimeTo'>
-                                        <input type='text' class="form-control" pattern="^$|^(\d{2})\.(\d{2})\.(\d{2})(\d{2})? *((\d{2}):(\d{2}))?$"/>
+                                        <input type='text' class="form-control"
+                                               pattern="^$|^(\d{2})\.(\d{2})\.(\d{2})(\d{2})? *((\d{2}):(\d{2}))?$"/>
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
@@ -110,8 +112,8 @@
                                 </div>
 
                                 <div class="checkbox">
-                                        <input type="checkbox" id="eventWholeDay"/> ganztags
-                                        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                    <input type="checkbox" id="eventWholeDay"/> ganztags
+                                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
                                 </div>
 
                             </div>
@@ -128,9 +130,79 @@
                                 <textarea class="form-control" rows="5" id="eventDescription"></textarea>
                             </div>
 
+                            <div class="form-group">
+                                <label for="eventRestriction">Lesender Zugriff nur für:</label>
+                                <select class="form-control" id="eventRestriction">
+                                    <option value="1" style="color: green; font-weight: bold">Alle (öffentlich)</option>
+                                    <option value="2" >Lehrkräfte</option>
+                                    <option value="3" >Schulleitung</option>
+                                    <option value="4" >Benutzer (privater Termin)</option>
+                                </select>
+                            </div>
+
                         </div>
 
+
                         <div id="eventAbsence" class="tab-pane fade" style="margin-top: 10px">
+
+                            <div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" id="eventAbsencesWholeSchool">Ganze Schule</label>
+                                </div>
+                            </div>
+
+                            <div id="eventAbsencesMatrix">
+                                <div>
+                                    <button type="button" class="btn btn-primary btn-xs">
+                                        5
+                                    </button>
+
+                                    <div class="btn-group" data-toggle="buttons">
+                                        <label class="btn btn-xs btn-default">
+                                            <input type="checkbox"> 5a
+                                        </label>
+                                        <label class="btn btn-xs btn-default">
+                                            <input type="checkbox"> 5b
+                                        </label>
+                                        <label class="btn btn-xs btn-default">
+                                            <input type="checkbox"> 5c
+                                        </label>
+
+                                    </div>
+                                </div>
+
+                                <div style="margin-top: 0.5em">
+                                    <button type="button" class="btn btn-primary btn-xs">
+                                        6
+                                    </button>
+
+                                    <div class="btn-group" data-toggle="buttons">
+                                        <label class="btn btn-xs btn-default">
+                                            <input type="checkbox"> 6a
+                                        </label>
+                                        <label class="btn btn-xs btn-default">
+                                            <input type="checkbox"> 6b
+                                        </label>
+                                        <label class="btn btn-xs btn-default">
+                                            <input type="checkbox"> 6c
+                                        </label>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" id="eventAbsencesNoBigTests">Keine Schulaufgaben möglich</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" id="eventAbsencesNoSmallTests">Keine kleinen Leistungsnachweise
+                                        möglich</label>
+                                </div>
+                            </div>
+
+
                         </div>
 
                         <div id="eventRessources" class="tab-pane fade" style="margin-top: 10px">
