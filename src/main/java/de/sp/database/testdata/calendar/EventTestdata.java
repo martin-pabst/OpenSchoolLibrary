@@ -48,7 +48,7 @@ public class EventTestdata {
 
 			Event teacherCal = new Event(school_id, "Only teachers", "This is only for teachers", "April - Teachers", "Teachers' room", true,
 					false, sdf.parse("14.04.2018"), sdf.parse("15.04.2018"), null, null, "#0a0", null, null, "#ffffff");
-			teacherCal.addRestriction(new EventRestriction(school_id, UserTestdata.teacherRole.getId(), null, teacherCal));
+			teacherCal.addRestriction(new EventRestriction(UserTestdata.teacherRole.getId(), null, teacherCal));
 			cs.storeEventIntoDatabase(teacherCal, con);
 
 			Event absenceEvent = new Event(school_id, "Absence 8A", "class 8A is absent", "8a theatre", "Communal theatre", false,

@@ -6,15 +6,13 @@ package de.sp.database.model;
 public class EventRestriction {
 
     private Long id;
-    private Long school_id;
     private Long event_id;
     private Long role_id;
     private Long user_id;
 
     private transient Event event;
 
-    public EventRestriction(Long school_id, Long role_id, Long user_id, Event event) {
-        this.school_id = school_id;
+    public EventRestriction(Long role_id, Long user_id, Event event) {
         this.role_id = role_id;
         this.user_id = user_id;
         this.event = event;
@@ -39,10 +37,6 @@ public class EventRestriction {
 
     public Event getEvent() {
         return event;
-    }
-
-    public Long getSchool_id() {
-        return school_id;
     }
 
     public void setEvent(Event event) {

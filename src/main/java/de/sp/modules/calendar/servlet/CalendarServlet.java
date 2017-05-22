@@ -51,8 +51,6 @@ public class CalendarServlet extends BaseServlet {
                         GetEventRequest gcr = new GetEventRequest(parameters.get("school_id"), parameters.get("type"),
                                 parameters.get("start"), parameters.get("end"));
 
-//                        GetEventRequest gcr = gson.fromJson(postData, GetEventRequest.class);
-
                         user.checkPermission(CalendarModule.CALENDAROPEN,
                                 gcr.school_id);
 
@@ -64,6 +62,12 @@ public class CalendarServlet extends BaseServlet {
 
                         break;
 
+                    case "fetchEntryDetails":
+
+
+
+
+                        break;
 
                 }
 

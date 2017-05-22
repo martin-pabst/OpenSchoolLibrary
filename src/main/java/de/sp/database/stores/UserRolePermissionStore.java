@@ -10,6 +10,7 @@ import de.sp.database.model.User;
 import de.sp.main.resources.modules.Permission;
 import org.sql2o.Connection;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,9 +29,9 @@ public class UserRolePermissionStore {
 	private static UserRolePermissionStore instance;
 
 	private Map<Long, User> userKeys = new ConcurrentHashMap<>(); // maps User.id to User
-	private Map<Long, Map<String, User>> schoolUserNameMap = new ConcurrentHashMap<>();
+	private Map<Long, Map<String, User>> schoolIdToUserNameMap = new ConcurrentHashMap<>();
 
-	private List<Role> roles = new CopyOnWriteArrayList<>();
+	private Map<Long, List<Role>> schoolIdToRoleListMap = new ConcurrentHashMap<>();
 	private Map<Long, Role> roleKeys = new ConcurrentHashMap<>(); // maps Role.id to role
 
 	private Map<String, Permission> permissionNameMap = new ConcurrentHashMap<>();
@@ -50,10 +51,10 @@ public class UserRolePermissionStore {
 		try (Connection con = ConnectionPool.open()) {
 
 			UserDAO.getAll(con).forEach(user -> addUser(user));
-
-			RoleDAO.getAll(con).forEach(role -> addRole(role));
-
-			roles.forEach(role -> role.registerPermissions(permissionNameMap));
+			RoleDAO.getAll(con).forEach(role -> {
+				addRole(role);
+				role.registerPermissions(permissionNameMap);
+			});
 
 			Map<Long, School> schoolKeys = SchoolTermStore.getInstance()
 					.getSchoolKeys();
@@ -64,7 +65,14 @@ public class UserRolePermissionStore {
 	}
 
 	public void addRole(Role role) {
-		roles.add(role);
+
+		List<Role> roleList = schoolIdToRoleListMap.get(role.getSchool_id());
+		if(roleList == null){
+			roleList = new CopyOnWriteArrayList<>();
+			schoolIdToRoleListMap.put(role.getSchool_id(), roleList);
+		}
+		roleList.add(role);
+
 		roleKeys.put(role.getId(), role);
 		role.registerPermissions(permissionNameMap);
 
@@ -78,11 +86,11 @@ public class UserRolePermissionStore {
 
 		userKeys.put(user.getId(), user);
 
-		Map<String, User> userNameMap = schoolUserNameMap.get(user.getSchool_id());
+		Map<String, User> userNameMap = schoolIdToUserNameMap.get(user.getSchool_id());
 
 		if(userNameMap == null){
 			userNameMap = new ConcurrentHashMap<>();
-			schoolUserNameMap.put(user.getSchool_id(), userNameMap);
+			schoolIdToUserNameMap.put(user.getSchool_id(), userNameMap);
 		}
 
 		userNameMap.put(user.getUsername(), user);
@@ -103,7 +111,7 @@ public class UserRolePermissionStore {
 
 	public User getUserBySchoolIdAndName(Long school_id, String username) {
 
-		Map<String, User> userNameMap = schoolUserNameMap.get(school_id);
+		Map<String, User> userNameMap = schoolIdToUserNameMap.get(school_id);
 
 		if(userNameMap == null){
 			return null;
@@ -154,7 +162,7 @@ public class UserRolePermissionStore {
 
 
 		for (User user : usersToRemove) {
-			Map<String, User> userNameMap = schoolUserNameMap.get(user.getSchool_id());
+			Map<String, User> userNameMap = schoolIdToUserNameMap.get(user.getSchool_id());
 
 			if(userNameMap != null){
 				userNameMap.remove(user.getUsername());
@@ -193,7 +201,7 @@ public class UserRolePermissionStore {
 	 */
 	private void updateUserPermissions(Role role){
 		// only users of scholl to which role belongs are affected:
-		Map<String, User> nameUserMap = schoolUserNameMap.get(role.getSchool_id());
+		Map<String, User> nameUserMap = schoolIdToUserNameMap.get(role.getSchool_id());
 
 		nameUserMap.forEach((name, user) -> {
 			user.registerAllPermissions();
@@ -204,9 +212,12 @@ public class UserRolePermissionStore {
 
 	public Role getRoleBySchoolIdAndName(Long school_id, String name) {
 
-    	for (Role role : roles) {
-			if(role.getName().equals(name) && role.getSchool_id() == school_id){
-				return role;
+		List<Role> roleList = schoolIdToRoleListMap.get(school_id);
+		if(roleList != null){
+			for (Role role : roleList) {
+				if(role.getName().equals(name)){
+					return role;
+				}
 			}
 		}
 
@@ -226,9 +237,38 @@ public class UserRolePermissionStore {
 		}
 
 		for (Role role : rolesToRemove) {
-			roles.remove(role);
+
+			List<Role> roleList = schoolIdToRoleListMap.get(role.getSchool_id());
+			if(roleList != null){
+				roleList.remove(role);
+			}
 			roleKeys.remove(role.getId());
 		}
+
+	}
+
+	public List<Role> getRoleListBySchoolId(Long school_id) {
+
+		List<Role> roleList = schoolIdToRoleListMap.get(school_id);
+
+		if(roleList != null){
+			return roleList;
+		}
+
+		return new ArrayList<>();
+	}
+
+	public List<User> getUserListBySchoolId(Long school_id) {
+
+		Map<String, User> userNameMap = schoolIdToUserNameMap.get(school_id);
+
+		List<User> userList = new ArrayList<>();
+
+		if(userNameMap != null){
+			userNameMap.forEach((name, user) -> userList.add(user));
+		}
+
+		return userList;
 
 	}
 }

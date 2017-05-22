@@ -393,9 +393,6 @@
 	<table name="event_restriction">
 		<column name="id" type="bigint" autoincrement="true"
 				primarykey="true" />
-		<column name="school_id" type="bigint">
-			<references table="school" column="id" ondelete="cascade"/>
-		</column>
 		<column name="event_id" type="bigint">
 			<references table="event" column="id"  ondelete="cascade" />
 		</column>

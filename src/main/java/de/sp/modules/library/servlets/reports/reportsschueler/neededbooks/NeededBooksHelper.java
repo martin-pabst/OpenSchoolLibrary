@@ -36,7 +36,7 @@ public class NeededBooksHelper {
     public void init(){
 
         bookFormStore = LibraryDAO.getBookFormStore(school_id, con);
-        subjects = SubjectDAO.getAll(con, school_id);
+        subjects = SubjectDAO.getAllForSchool(con, school_id);
 
         subjects.forEach(subject -> subjectMap.put(subject.getId(), subject));
 

@@ -4,11 +4,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="icon" href="/public/modules/login/favicon.ico">
     <title>Scheinerportal</title>
-
+    
     <link rel="stylesheet" href="/public/lib/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="/public/lib/w2ui/1.4.3/w2ui.css">
     <link rel="stylesheet" href="/public/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/public/lib/fullcalendar/fullcalendar.css">
+    <link rel="stylesheet" href="/public/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="/public/lib/bootstrap-timepicker/css/timepicker.css">
     <link rel="stylesheet" href="/mainframe/css/main.css">
     $cssImportStatements
 
@@ -17,9 +19,13 @@
     </script>
 
     <script type="text/javascript" src="/public/lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/public/lib/fullcalendar/lib/moment-with-locales.min.js"></script>
     <script type="text/javascript" src="/public/lib/handlebars/handlebars-v4.0.5.js"></script>
     <script type="text/javascript" src="/public/lib/bootstrap/js/bootstrap.js"></script>
-##    <script type="text/javascript" src="/public/lib/bootstrap/bootstrap-modal.js"></script>
+    <script type="text/javascript" src="/public/lib/bootstrap-validator/validator.js"></script>
+    <script type="text/javascript" src="/public/lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="/public/lib/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+
     <script type="text/javascript" src="/mainframe/js/tools.js"></script>
     <script type="text/javascript" src="/mainframe/js/main.js"></script>
     <script type="text/javascript" src="/public/lib/w2ui/1.4.3/w2ui.js"></script>

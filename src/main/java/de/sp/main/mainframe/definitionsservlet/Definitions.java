@@ -87,7 +87,7 @@ public class Definitions {
 	private void getSubjectList(Long school_id,
 			Connection con) {
 
-		List<Subject> list = SubjectDAO.getAll(con, school_id);
+		List<Subject> list = SubjectDAO.getAllForSchool(con, school_id);
 
 		subjectList = new ArrayList<>();
 		languageList = new ArrayList<>();

@@ -7,9 +7,15 @@
 		select id, shortname, longname, school_id, key1, key2,
 			is_religion, is_language
 		from subject
-		where school_id = :school_id
 	</statement>
 	
+	<statement name="subject.getAllForSchool" >
+		select id, shortname, longname, school_id, key1, key2,
+			is_religion, is_language
+		from subject
+		where school_id = :school_id
+	</statement>
+
 	<statement name="subject.insert">
 		insert into subject (shortname, longname, school_id, key1, key2, is_religion, is_language)
 		values (:shortname, :longname, :school_id, :key1, :key2, :is_religion, :is_language)

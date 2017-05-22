@@ -3,13 +3,13 @@
 
 
     <statement name="event_restriction.getAll">
-      select id, school_id, event_id, role_id, user_id
+      select id, event_id, role_id, user_id
         from event_restriction
     </statement>
 
     <statement name="event_restriction.insert">
-        insert into event_restriction (school_id, event_id, role_id, user_id)
-        values (:school_id, :event_id, :role_id, :user_id)
+        insert into event_restriction (event_id, role_id, user_id)
+        values (:event_id, :role_id, :user_id)
     </statement>
 
 

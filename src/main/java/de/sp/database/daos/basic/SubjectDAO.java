@@ -8,9 +8,21 @@ import java.util.List;
 
 public class SubjectDAO {
 
-	public static List<Subject> getAll(Connection con, Long school_id) {
+	public static List<Subject> getAll(Connection con) {
 
 		String sql = StatementStore.getStatement("subject.getAll");
+
+		List<Subject> subjectlist = con.createQuery(sql)
+				.executeAndFetch(Subject.class);
+
+		return subjectlist;
+
+	}
+
+
+	public static List<Subject> getAllForSchool(Connection con, Long school_id) {
+
+		String sql = StatementStore.getStatement("subject.getAllForSchool");
 
 		List<Subject> subjectlist = con.createQuery(sql)
 				.addParameter("school_id", school_id)

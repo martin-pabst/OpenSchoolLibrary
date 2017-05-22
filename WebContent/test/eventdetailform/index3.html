@@ -9,12 +9,14 @@
     <script type="text/javascript" src="../../public/lib/bootstrap-validator/validator.js"></script>
     <script type="text/javascript"
             src="../../public/lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript"
+            src="../../public/lib/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
     <script type="text/javascript" src="eventdetails.js"></script>
-    <!--<script type="text/javascript" src="../../public/lib/bootstrap/bootstrap-modal.js"></script>-->
 
     <link rel="stylesheet" href="../../public/lib/font-awesome/css/font-awesome.css">
     <link rel="stylesheet" href="../../public/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../public/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="../../public/lib/bootstrap-timepicker/css/timepicker.css">
 
 
 </head>
@@ -88,11 +90,12 @@
                             </div>
 
                             <div class="form-inline" style="margin-top: 10px">
+
                                 <label>Beginn:</label>
-                                <div class="form-group has-feedback" style="margin-right: 10px">
-                                    <div class='input-group date' id='eventDateTimeFrom'>
+                                <div class="form-group has-feedback" style="margin-right: 10px; width: 12em">
+                                    <div class='input-group date' id='eventDateFrom'>
                                         <input type='text' class="form-control"
-                                               pattern="^(\d{2})\.(\d{2})\.(\d{2})(\d{2})? *((\d{2}):(\d{2}))?$"
+                                               pattern="^(\d{2})\.(\d{2})\.(\d{2})(\d{2})? *$"
                                                required/>
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
@@ -100,15 +103,27 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group has-feedback" style="width: 40%">
-                                    <label>Ende:</label>
-                                    <div class='input-group date' id='eventDateTimeTo'>
+                                <div class="input-group bootstrap-timepicker timepicker"
+                                     style="width: 8em; margin-right: 2em">
+                                    <input id="eventTimeFrom" type="text" class="form-control">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                </div>
+
+                                <label>Ende:</label>
+                                <div class="form-group has-feedback" style="margin-right: 10px; width: 12em">
+                                    <div class='input-group date' id='eventDateTo'>
                                         <input type='text' class="form-control"
-                                               pattern="^$|^(\d{2})\.(\d{2})\.(\d{2})(\d{2})? *((\d{2}):(\d{2}))?$"/>
+                                               pattern="^(\d{2})\.(\d{2})\.(\d{2})(\d{2})? *$"
+                                               required/>
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
                                     </div>
+                                </div>
+
+                                <div class="input-group bootstrap-timepicker timepicker" style="width: 8em">
+                                    <input id="eventTimeTo" type="text" class="form-control">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                                 </div>
 
                                 <div class="checkbox">
@@ -134,9 +149,9 @@
                                 <label for="eventRestriction">Lesender Zugriff nur für:</label>
                                 <select class="form-control" id="eventRestriction">
                                     <option value="1" style="color: green; font-weight: bold">Alle (öffentlich)</option>
-                                    <option value="2" >Lehrkräfte</option>
-                                    <option value="3" >Schulleitung</option>
-                                    <option value="4" >Benutzer (privater Termin)</option>
+                                    <option value="2">Lehrkräfte</option>
+                                    <option value="3">Schulleitung</option>
+                                    <option value="4">Benutzer (privater Termin)</option>
                                 </select>
                             </div>
 
@@ -152,52 +167,38 @@
                             </div>
 
                             <div id="eventAbsencesMatrix">
-                                <div>
-                                    <button type="button" class="btn btn-primary btn-xs">
-                                        5
-                                    </button>
 
-                                    <div class="btn-group" data-toggle="buttons">
-                                        <label class="btn btn-xs btn-default">
-                                            <input type="checkbox"> 5a
-                                        </label>
-                                        <label class="btn btn-xs btn-default">
-                                            <input type="checkbox"> 5b
-                                        </label>
-                                        <label class="btn btn-xs btn-default">
-                                            <input type="checkbox"> 5c
-                                        </label>
+                                <!--
+                                                                <div style="margin-top: 0.5em">
+                                                                    <button type="button" class="btn btn-primary btn-xs">
+                                                                        6
+                                                                    </button>
 
-                                    </div>
-                                </div>
+                                                                    <div class="btn-group" data-toggle="buttons">
+                                                                        <label class="btn btn-xs btn-default">
+                                                                            <input type="checkbox"> 6a
+                                                                        </label>
+                                                                        <label class="btn btn-xs btn-default">
+                                                                            <input type="checkbox"> 6b
+                                                                        </label>
+                                                                        <label class="btn btn-xs btn-default">
+                                                                            <input type="checkbox"> 6c
+                                                                        </label>
 
-                                <div style="margin-top: 0.5em">
-                                    <button type="button" class="btn btn-primary btn-xs">
-                                        6
-                                    </button>
-
-                                    <div class="btn-group" data-toggle="buttons">
-                                        <label class="btn btn-xs btn-default">
-                                            <input type="checkbox"> 6a
-                                        </label>
-                                        <label class="btn btn-xs btn-default">
-                                            <input type="checkbox"> 6b
-                                        </label>
-                                        <label class="btn btn-xs btn-default">
-                                            <input type="checkbox"> 6c
-                                        </label>
-
-                                    </div>
-                                </div>
+                                                                    </div>
+                                                                </div>
+                                -->
 
                             </div>
 
                             <div>
                                 <div class="checkbox">
-                                    <label><input type="checkbox" id="eventAbsencesNoBigTests">Keine Schulaufgaben möglich</label>
+                                    <label><input type="checkbox" id="eventAbsencesNoBigTests">Keine Schulaufgaben
+                                        möglich</label>
                                 </div>
                                 <div class="checkbox">
-                                    <label><input type="checkbox" id="eventAbsencesNoSmallTests">Keine kleinen Leistungsnachweise
+                                    <label><input type="checkbox" id="eventAbsencesNoSmallTests">Keine kleinen
+                                        Leistungsnachweise
                                         möglich</label>
                                 </div>
                             </div>
