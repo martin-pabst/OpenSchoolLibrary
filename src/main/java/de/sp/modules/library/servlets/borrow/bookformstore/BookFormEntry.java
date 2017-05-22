@@ -19,6 +19,23 @@ public class BookFormEntry {
 		this.languageyear = languageyear;
 	}
 
-	
-	
+	public Long getForm_id() {
+		return form_id;
+	}
+
+	public String getForm_name() {
+		return form_name;
+	}
+
+	public Long getCurriculum_id() {
+		return curriculum_id;
+	}
+
+	public String getCurriculum_name() {
+		return curriculum_name;
+	}
+
+	public Integer getLanguageyear() {
+		return languageyear;
+	}
 }

@@ -4,6 +4,7 @@ import de.sp.database.daos.basic.SubjectDAO;
 import de.sp.database.model.Languageskill;
 import de.sp.database.model.Subject;
 import de.sp.modules.library.daos.LibraryDAO;
+import de.sp.modules.library.servlets.borrow.bookformstore.BookFormEntry;
 import de.sp.modules.library.servlets.borrow.bookformstore.BookFormStoreRecord;
 import de.sp.modules.library.servlets.borrow.borrowerlist.BorrowerRecord;
 import org.sql2o.Connection;
@@ -77,58 +78,63 @@ public class NeededBooksHelper {
 
             Subject subject = subjectMap.get(bookFormStoreRecord.getSubject_id());
 
-            if (bookFormStoreRecord.getForm_id() != null && !bookFormStoreRecord.getForm_id().equals(form_id)) {
-                continue;
-            }
+            for (BookFormEntry bookFormEntry : bookFormStoreRecord.getBookFormEntries()) {
 
 
-            if (subject != null) {
-                if (subject.is_religion()) {
-                    if (religion_id != null && !religion_id.equals(subject.getId())) {
-                        continue;
-                    }
+                if (bookFormEntry.getForm_id() != null && !bookFormEntry.getForm_id().equals(form_id)) {
+                    continue;
                 }
 
-                if(curriculum_id != null && bookFormStoreRecord.getCurriculum_id() != null){
-                    if(!curriculum_id.equals(bookFormStoreRecord.getCurriculum_id())){
-                        continue;
+
+                if (subject != null) {
+                    if (subject.is_religion()) {
+                        if (religion_id != null && !religion_id.equals(subject.getId())) {
+                            continue;
+                        }
                     }
-                }
 
-                if (bookFormStoreRecord.getLanguageyear() != null) {
+                    if (curriculum_id != null && bookFormEntry.getCurriculum_id() != null) {
+                        if (!curriculum_id.equals(bookFormEntry.getCurriculum_id())) {
+                            continue;
+                        }
+                    }
 
-                    boolean ok = false;
+                    if (bookFormEntry.getLanguageyear() != null) {
 
-                    for (Languageskill languageskill : languageskills) {
+                        boolean ok = false;
 
-                        if (bookFormStoreRecord.getSubject_id() == null || !bookFormStoreRecord.getSubject_id().equals(languageskill.getSubject_id())) {
+                        for (Languageskill languageskill : languageskills) {
+
+                            if (bookFormStoreRecord.getSubject_id() == null || !bookFormStoreRecord.getSubject_id().equals(languageskill.getSubject_id())) {
+                                continue;
+                            }
+
+                            if (year_of_school - languageskill.getFrom_year() + 1 == bookFormEntry.getLanguageyear()) {
+                                ok = true;
+                                break;
+                            }
+
+                        }
+
+                        if (!ok) {
                             continue;
                         }
 
-                        if (year_of_school - languageskill.getFrom_year() + 1 == bookFormStoreRecord.getLanguageyear()) {
-                            ok = true;
-                            break;
-                        }
 
                     }
-
-                    if (!ok) {
-                        continue;
-                    }
-
-
                 }
+
+                if (borrowedBooksIds.contains(bookFormStoreRecord.getBook_id())) {
+                    continue;
+                }
+
+                neededBooks.add(new NeededBookRecord(br, br.getClass_name(), br.getClass_id(),
+                        br.getName(), br.getStudent_id(), bookFormStoreRecord.getSubject(), bookFormStoreRecord.getTitle(),
+                        bookFormStoreRecord.getBook_id()));
+
+                mindestensEinBenoetigtesBuch = true;
+
             }
-
-            if (borrowedBooksIds.contains(bookFormStoreRecord.getBook_id())) {
-                continue;
-            }
-
-            neededBooks.add(new NeededBookRecord(br, br.getClass_name(), br.getClass_id(),
-                    br.getName(), br.getStudent_id(), bookFormStoreRecord.getSubject(), bookFormStoreRecord.getTitle(),
-                    bookFormStoreRecord.getBook_id()));
-
-            mindestensEinBenoetigtesBuch = true;
         }
 
         if(!mindestensEinBenoetigtesBuch && !schuelerOhneBenoetigteBuecherWeglassen){

@@ -21,7 +21,9 @@ import org.slf4j.LoggerFactory;
 import org.sql2o.Connection;
 
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BookTestdata {
 
@@ -58,6 +60,8 @@ public class BookTestdata {
 			XSSFSheet sh = wb.getSheet("Tabelle1");
 
 			int lastRowNum = sh.getLastRowNum();
+
+			Map<String, Long> buchtitelToBuchIdMap = new HashMap<>();
 
 			for(int i = 1; i <= lastRowNum; i++){
 
@@ -96,13 +100,21 @@ public class BookTestdata {
 					sprachenJahr = null;
 				}
 
-				Book book = BookDAO.insert(school_id, titel,
-						author, vbn, verlag,
-						"Eintrag automatisch aus Excelliste generiert", zulassungsnummer,
-						auflage,
-						subject_id, preisDouble , con);
+				Long book_id = buchtitelToBuchIdMap.get(titel);
 
-				BookFormDAO.insert(book.getId(), jahrgangsstufe_id, ausbildungsrichtung_id, sprachenJahr, con);
+				if(book_id == null){
+
+                    Book book = BookDAO.insert(school_id, titel,
+                            author, vbn, verlag,
+                            "Eintrag automatisch aus Excelliste generiert", zulassungsnummer,
+                            auflage,
+                            subject_id, preisDouble , con);
+
+                    book_id = book.getId();
+                    buchtitelToBuchIdMap.put(titel, book_id);
+                }
+
+				BookFormDAO.insert(book_id, jahrgangsstufe_id, ausbildungsrichtung_id, sprachenJahr, con);
 
 			}
 
