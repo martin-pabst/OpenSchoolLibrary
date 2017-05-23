@@ -85,7 +85,7 @@
             $(this).parents(".dropup").find('.btn').val($(this).data('value'));
         });
 
-        $('#libraryBorrowNextSchoolyear').click(function(){
+        $('#libraryBorrowNextSchoolyear').click(function () {
             libraryBorrowUpdateTables();
         });
 
@@ -131,7 +131,7 @@
 
                 var barcode = $('#libraryBorrowBarcodeField').val();
 
-                while(barcode.length < 13){
+                while (barcode.length < 13) {
                     barcode = "0" + barcode;
                 }
 
@@ -152,7 +152,8 @@
                             unbookFromPreviousBorrower: false,
                             student_id: borrower.student_id,
                             teacher_id: borrower.teacher_id,
-                            school_id: global_school_id
+                            school_id: global_school_id,
+                            over_holidays: $('#libraryBorrowHoliday').is(':checked')
                         }),
                         function (data) {
 
@@ -166,7 +167,8 @@
                                         author: data.author,
                                         book_id: data.book_id,
                                         subject: data.subject,
-                                        barcode: barcode
+                                        barcode: barcode,
+                                        over_holidays: $('#libraryBorrowHoliday').is(':checked')
                                     }
                                 );
 
@@ -182,7 +184,7 @@
                                 var errorlist = $("#libraryBorrowErrorList");
                                 errorlist.show();
                                 var text = errorlist.html();
-                                text = time + ": " +  data.message + "<br />" + text        ;
+                                text = time + ": " + data.message + "<br />" + text;
                                 errorlist.html(text);
                                 errorBeep.play();
 
@@ -415,10 +417,36 @@
             },
             columns: [
                 {field: 'id', caption: 'ID', size: '30px', hidden: true, sortable: true, render: 'int'},
-                {field: 'title', caption: 'Titel', size: '200px', sortable: true, resizable: true},
+                {
+                    field: 'title', caption: 'Titel', size: '200px', sortable: true, resizable: true,
+                    render: function (record) {
+                        var neededBookRecords = w2ui['libraryNeededBooksList'].records;
+                        var needed = false;
+
+                        for (var i = 0; i < neededBookRecords.length; i++) {
+                            var nbr = neededBookRecords[i];
+                            if (nbr.id === record.book_id) {
+                                needed = true;
+                                break;
+                            }
+                        }
+
+                        if (needed) {
+                            return '<div>' + record.title + '</div>';
+                        } else {
+                            return '<div style="color:#ff2020;font-weight: bold">' + record.title + '</div>';
+                        }
+
+
+                    }
+                },
                 {field: 'author', caption: 'Autor', size: '50px', hidden: true, sortable: true, resizable: true},
                 {field: 'subject', caption: 'F', size: '30px', sortable: true, resizable: true},
-                {field: 'barcode', caption: 'Barcode', size: '120px', sortable: true, resizable: true}
+                {field: 'barcode', caption: 'Barcode', size: '120px', sortable: true, resizable: true},
+                {field: 'over_holidays', caption: 'FA', size: '20px', sortable: true, resizable: true,
+                    editable: {type: 'check'}
+                    }
+
             ],
             searches: [
                 {field: 'title', caption: 'Titel', type: 'text'},
@@ -485,7 +513,16 @@
                 {field: 'title', caption: 'Titel', size: '190px', sortable: true, resizable: true},
                 {field: 'author', caption: 'Autor', size: '50px', hidden: true, sortable: true, resizable: true},
                 {field: 'subject', caption: 'F', size: '30px', sortable: true, resizable: true},
-                {field: 'status', caption: 'Status', size: '60px', sortable: true, resizable: true},
+                {
+                    field: 'status', caption: 'Status', size: '60px', sortable: true, resizable: true,
+                    render: function (record) {
+                        if(record.status === 'OK'){
+                            return '<img src="/public/img/green_check_mark.png" style="height: 1em"/>';
+                        } else {
+                            return '<div style="color:#ff2020; font-weight:bold">Fehlt</div>';
+                        }
+                    }
+                }
 
             ],
             sortData: [{field: 'subject', direction: 'asc'}, {
@@ -600,6 +637,12 @@
 
         }
 
+        /**
+         * Borrowed books which are not needed are rendered in red color. This is only
+         * possible if neededGrid is rendered beforehand.
+         */
+        borrowedGrid.refresh();
+
     }
 
     function bookNeeded(selectedBorrower, bookFormStoreRecord) {
@@ -610,7 +653,7 @@
 
         var form_id, curriculum_id, languageskills, religion_id, year_of_school;
 
-        if(bookNeededForNextTerm){
+        if (bookNeededForNextTerm) {
             form_id = selectedBorrower.nst_form_id;
             curriculum_id = selectedBorrower.nst_curriculum_id;
             languageskills = selectedBorrower.nst_languageskills;
@@ -618,10 +661,10 @@
             year_of_school = selectedBorrower.nst_year_of_school;
         } else {
             form_id = selectedBorrower.form_id;
-            curriculum_id =selectedBorrower.curriculum_id;
+            curriculum_id = selectedBorrower.curriculum_id;
             languageskills = selectedBorrower.languageskills;
             religion_id = selectedBorrower.religion_id;
-            year_of_school = selectedBorrower.nst_year_of_school;
+            year_of_school = selectedBorrower.year_of_school;
         }
 
 
@@ -672,14 +715,14 @@
                 var isReligionBook = false;
                 // Religion?
                 for (var r = 0; r < religionList.length; r++) {
-                    if(religionList[r].id === bookFormStoreRecord.subject_id){
+                    if (religionList[r].id === bookFormStoreRecord.subject_id) {
                         isReligionBook = true;
                         break;
                     }
                 }
 
-                if(isReligionBook){
-                    if(religion_id !== bookFormStoreRecord.subject_id){
+                if (isReligionBook) {
+                    if (religion_id !== bookFormStoreRecord.subject_id) {
                         bookNeeded = false;
                     }
                 }
@@ -712,7 +755,7 @@
                 school_id: global_school_id
             }
             , "/library/borrowedBooks/delete",
-            function(){
+            function () {
                 libraryBorrowUpdateTables();
             }
             , message);

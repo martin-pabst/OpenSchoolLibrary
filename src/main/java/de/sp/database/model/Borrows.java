@@ -20,6 +20,8 @@ public class Borrows{
 
    private String remarks;
 
+   private Boolean over_holidays;
+
 
 
    public Borrows(){
@@ -27,7 +29,9 @@ public class Borrows{
 
 
 
-   public Borrows(Long id, Long book_copy_id, Long student_id, Long teacher_id, Date begindate, Date enddate, Date return_date, String remarks){
+   public Borrows(Long id, Long book_copy_id, Long student_id, Long teacher_id,
+                  Date begindate, Date enddate, Date return_date, String remarks,
+                  Boolean over_holidays){
 
       this.id = id;
       this.book_copy_id = book_copy_id;
@@ -37,6 +41,7 @@ public class Borrows{
       this.enddate = enddate;
       this.return_date = return_date;
       this.remarks = remarks;
+      this.over_holidays = over_holidays;
 }
 
    public Long getId(){
@@ -87,4 +92,7 @@ public class Borrows{
 
    }
 
+   public Boolean getOver_holidays() {
+      return over_holidays;
+   }
 }

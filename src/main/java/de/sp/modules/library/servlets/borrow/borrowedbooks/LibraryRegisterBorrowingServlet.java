@@ -73,7 +73,7 @@ public class LibraryRegisterBorrowingServlet extends BaseServlet {
 					
 					Borrows b = BorrowsDAO.insert(bir.getBook_Copy_id(),
 							rbr.getStudent_id(), rbr.getTeacher_id(),
-							begin_date, end_date, null, null, con);
+							begin_date, end_date, null, null, rbr.getOver_holidays(), con);
 
 					bir.setBorrows_id(b.getId());
 					bir.setBegindate(begin_date);

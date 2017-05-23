@@ -52,10 +52,14 @@
                         <input id="libraryBorrowBarcodeField" type="text" class="form-control" placeholder="Barcode"
                                aria-describedby="basic-addon3" style="width: 15em">
                     </div>
-                    <span style="float: right; font-weight: normal; margin-top: 0.4em">
+                    <span style="float: right; font-weight: normal; margin-top: 0.4em; margin-right: 1em">
+                        <label style="vertical-align: middle; font-weight: normal">
+                            <input id="libraryBorrowHoliday" type="checkbox" style="margin: 0; vertical-align: middle">
+                            Ferienausleihe
+                        </label>
                         <label style="vertical-align: middle; font-weight: normal">
                             <input id="libraryBorrowNextSchoolyear" type="checkbox" style="margin: 0; vertical-align: middle">
-                            Benötigte Bücher fürs kommende Schuljahr anzeigen
+                            Bücher des kommenden Schuljahres
                         </label>
                     </span>
                     <div id="libraryBorrowErrorList" class="alert alert-danger" role="alert"
@@ -132,10 +136,11 @@
             <div id="libraryInventoryRight" class="col-md-4">
                 <div id="libraryInventoryCopies" style="height: 600px"></div>
                 <div id="libraryInventoryBarcodeFields">
+                    <div id="libraryInventoryStatistics"></div>
                     <div class="form-inline" style="margin-top: 10px">
-                        <input id="libraryInventoryEdition" type="text" class="form-control" placeholder="Auflage">
+                        <input id="libraryInventoryEdition" type="text" class="form-control" placeholder="Auflage", style="width: 12em">
                         <span style="float: right">
-                        <span>Anschaffungsdatum: </span>
+                        <span>Kaufdatum: </span>
                         <input class="dateinput" type="text" maxlength="100" style="width: 90px">
                         </span>
                     </div>

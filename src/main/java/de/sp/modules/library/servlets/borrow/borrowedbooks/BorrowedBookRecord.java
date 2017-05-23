@@ -16,6 +16,7 @@ public class BorrowedBookRecord {
 	private Date enddate;
 	private Date return_date;
 	private Double amount; // Fee.amount
+	private Boolean over_holidays;
 	
 	public String getBarcode() {
 		return barcode;

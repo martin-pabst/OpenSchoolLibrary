@@ -20,7 +20,7 @@ public class BorrowsDAO {
 
 	public static Borrows insert(Long book_copy_id, Long student_id,
 			Long teacher_id, Date begindate, Date enddate, Date return_date,
-			String remarks, Connection con) throws Exception {
+			String remarks, Boolean over_holidays, Connection con) throws Exception {
 
 		String sql = StatementStore.getStatement("borrows.insert");
 
@@ -31,11 +31,13 @@ public class BorrowsDAO {
 				.addParameter("begindate", begindate)
 				.addParameter("enddate", enddate)
 				.addParameter("return_date", return_date)
-				.addParameter("remarks", remarks).executeUpdate()
+				.addParameter("remarks", remarks)
+				.addParameter("over_holidays", over_holidays)
+				.executeUpdate()
 				.getKey(Long.class);
 
 		return new Borrows(id, book_copy_id, student_id, teacher_id, begindate,
-				enddate, return_date, remarks);
+				enddate, return_date, remarks, over_holidays);
 
 	}
 

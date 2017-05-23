@@ -331,6 +331,7 @@
 		<column name="enddate" type="date" />
 		<column name="return_date" type="date" />
 		<column name="remarks" type="varchar" length="1000" />
+		<column name="over_holidays" type="bool"/>
 	</table>
 
 	<table name="fee">

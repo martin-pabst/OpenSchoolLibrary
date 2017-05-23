@@ -215,7 +215,7 @@
                 toolbarAdd: true,
                 toolbarDelete: true,
                 toolbarSave: false,
-                footer: true
+                footer: false
             },
             columns: [
                 {field: 'id', caption: 'ID', size: '30px', hidden: true, sortable: true, render: 'int'},
@@ -359,7 +359,25 @@
                 w2ui['libraryInventoryBookForm'].book = record;
 
                 w2ui['libraryInventoryCopies'].postData['reference_id'] = record.id;
-                w2ui['libraryInventoryCopies'].load('/library/inventoryCopies/get');
+                w2ui['libraryInventoryCopies'].load('/library/inventoryCopies/get',
+                function(){
+
+                    var imLager = 0;
+                    var entliehen = 0;
+                    var records = w2ui['libraryInventoryCopies'].records;
+
+                    for(var i = 0; i < records.length; i++){
+                        if(records[i].borrower.indexOf("Lager") !== -1){
+                            imLager++;
+                        } else {
+                            entliehen++;
+                        }
+                    }
+
+                    var text = 'Entliehen: <span style="color:red; font-weight: bold">' + entliehen + '</span>, im Lager: <span style="color:green; font-weight: bold">' + imLager;
+                    $('#grid_'+ 'libraryInventoryCopies' +'_footer').find('.w2ui-footer-center').html(text);
+
+                });
 
             },
             onSelect: function (event) {
@@ -560,7 +578,7 @@
                 },
                 {
                     field: 'purchase_date',
-                    caption: 'Anschaffungsdatum',
+                    caption: 'Kaufdatum',
                     sortable: true,
                     size: '90px',
                     resizable: true,
@@ -597,6 +615,9 @@
 
         });
 
+        w2ui['libraryInventoryCopies'].getFooterHTML = function(){
+            return '<div class="w2ui-footer-center"></div>';
+        }
 
     }
 

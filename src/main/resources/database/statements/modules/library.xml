@@ -95,7 +95,7 @@
 		as book_id,
 		subject.shortname as subject,
 		book_copy.barcode, borrows.id as borrows_id,
-		borrows.begindate, borrows.enddate, borrows.return_date,
+		borrows.begindate, borrows.enddate, borrows.return_date, borrows.over_holidays,
 		fee.amount
 		from
 		borrows
@@ -112,7 +112,7 @@
 		as book_id,
 		subject.shortname as subject,
 		book_copy.barcode, borrows.id as borrows_id,
-		borrows.begindate, borrows.enddate, borrows.return_date,
+		borrows.begindate, borrows.enddate, borrows.return_date, borrows.over_holidays,
 		fee.amount
 		from
 		borrows

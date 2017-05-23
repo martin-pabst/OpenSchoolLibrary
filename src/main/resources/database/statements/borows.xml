@@ -5,15 +5,15 @@
 
 	<statement name="borrows.getAll">
 		select id, book_copy_id,
-		student_id, teacher_id, begindate, enddate, return_date, remarks from
+		student_id, teacher_id, begindate, enddate, return_date, remarks, over_holidays from
 		borrows
 	</statement>
 
 	<statement name="borrows.insert">
 		insert into borrows (book_copy_id,
-		student_id, teacher_id, begindate, enddate, return_date, remarks)
+		student_id, teacher_id, begindate, enddate, return_date, remarks, over_holidays)
 		values (:book_copy_id, :student_id, :teacher_id, :begindate, :enddate,
-		:return_date, :remarks)
+		:return_date, :remarks, :over_holidays)
 	</statement>
 
 	<statement name="borrows.delete">

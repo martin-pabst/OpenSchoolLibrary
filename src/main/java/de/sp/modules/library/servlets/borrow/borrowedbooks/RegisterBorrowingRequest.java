@@ -12,6 +12,8 @@ public class RegisterBorrowingRequest {
 	
 	private Long school_id;
 
+	private Boolean over_holidays;
+
 	public String getBarcode() {
 		return barcode;
 	}
@@ -31,7 +33,8 @@ public class RegisterBorrowingRequest {
 	public Long getSchool_id() {
 		return school_id;
 	}
-	
-	
-	
+
+	public Boolean getOver_holidays() {
+		return over_holidays;
+	}
 }
