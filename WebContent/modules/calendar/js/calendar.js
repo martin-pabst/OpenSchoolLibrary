@@ -88,13 +88,15 @@
 
     function openEventDetailsDialog(event){
 
-        $.post('/calendar/fetchEntryDetails',
+        $.post('/calendar/fetchEventDetails',
             JSON.stringify({school_id: global_school_id,
                             school_term_id: global_school_term_id,
                             eventId: event.id}),
             function (data) {
+                
+                loadDetailValues(data);
 
-
+                $('#eventDetailsDialog').modal();
 
                 return true;
 
@@ -108,11 +110,11 @@
 
     function initializeEventDetailsDialog(){
 
-        $('#myModal').on('shown.bs.modal', function (e) {
+        $('#eventDetailsDialog').on('shown.bs.modal', function (e) {
 
             $('#eventName').focus();
 
-            $('#myForm').validator();
+            $('#eventDetailsForm').validator();
 
 
             $('#eventDateFrom').datetimepicker({
@@ -230,18 +232,33 @@
 
     function loadDetailValues(eventData) {
 
-        $('#eventName').val('Name des Events');
-        $('#eventNameShort').val('Shortname');
-        $('#eventDateFrom').data('DateTimePicker').date('17.05.2017');
-        $('#eventDateTo').data('DateTimePicker').date('18.05.2017');
+        var event = eventData.event;
 
-        $('#eventTimeFrom').timepicker('setTime', '10:00');
-        $('#eventTimeTo').timepicker('setTime', '12:00');
+        $('#eventName').val(event.title);
+        $('#eventNameShort').val(event.short_title);
 
-        $('#eventWholeDay').prop('checked', false);
-        $('#eventLocation').val('Ingolstadt');
-        $('#eventDescription').val('Beschreibung...\nNoch eine Zeile');
+        var from = moment(event.start);
+        var to = moment(event.end);
 
+        $('#eventDateFrom').data('DateTimePicker').date(from.format('DD.MM.Y'));
+        $('#eventDateTo').data('DateTimePicker').date(to.format('DD.MM.Y'));
+
+        var fromTime = '';
+        var toTime = '';
+
+        if(!event.allDay){
+            fromTime = from.format('HH:mm');
+            toTime = to.format('HH.mm');
+        }
+
+        $('#eventTimeFrom').timepicker('setTime', fromTime);
+        $('#eventTimeTo').timepicker('setTime', toTime);
+
+        $('#eventWholeDay').prop('checked', event.allDay);
+        $('#eventLocation').val(event.location);
+        $('#eventDescription').val(event.description);
+
+        //todo: set options according to data.roleRestrictions == GetEventDetailsResponse.roleRestrictions
         $('#eventRestriction').find('option[value="3"]').prop('selected', true);
 
         $('#eventAbsencesWholeSchool').prop('checked', false);

@@ -222,6 +222,31 @@ public class Event {
     public boolean isTest() {
         return false;
     }
+
+    public boolean classIsAbsent(Long classId) {
+
+        for (Absence absence : absences) {
+            if(absence.getClass_id() != null && absence.getClass_id().equals(classId)){
+                return true;
+            }
+        }
+        
+        return false;
+    
+    }
+
+    public boolean formIsAbsent(Long form_id) {
+
+        for (Absence absence : absences) {
+            if(absence.getForm_id() != null && absence.getForm_id().equals(form_id)){
+                return true;
+            }
+        }
+
+        return false;
+
+        
+    }
 }
 
 

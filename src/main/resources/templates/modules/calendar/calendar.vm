@@ -3,12 +3,12 @@
     <div id="fullCalendar"></div>
 
     <!-- Modal -->
-    <div id="myModal" class="modal fade" tabindex="-1" role="dialog"
-         aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="eventDetailsDialog" class="modal fade" tabindex="-1" role="dialog"
+         aria-labelledby="eventDetailsDialogLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
-                <form data-toggle="validator" role="form" id="calendarDetailsForm">
+                <form data-toggle="validator" role="form" id="eventDetailsForm">
 
                     <!-- Modal Header -->
                     <div class="modal-header">
@@ -17,7 +17,7 @@
                             <span aria-hidden="true">&times;</span>
                             <span class="sr-only">Schließen</span>
                         </button>
-                        <h4 class="modal-title" id="myModalLabel">
+                        <h4 class="modal-title" id="eventDetailsDialogLabel">
                             Termindetails
                         </h4>
                     </div>

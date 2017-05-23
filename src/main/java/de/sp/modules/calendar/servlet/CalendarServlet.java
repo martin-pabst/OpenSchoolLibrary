@@ -3,10 +3,12 @@ package de.sp.modules.calendar.servlet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import de.sp.database.connection.ConnectionPool;
+import de.sp.database.daos.basic.EventDAO;
 import de.sp.database.model.Event;
 import de.sp.database.model.EventRestriction;
 import de.sp.database.model.User;
 import de.sp.database.stores.EventStore;
+import de.sp.main.resources.modules.InsufficientPermissionException;
 import de.sp.main.resources.text.TS;
 import de.sp.modules.calendar.CalendarModule;
 import de.sp.modules.library.servlets.settings.DeleteOldRecordsResponse;
@@ -62,10 +64,14 @@ public class CalendarServlet extends BaseServlet {
 
                         break;
 
-                    case "fetchEntryDetails":
+                    case "fetchEventDetails":
 
+                        GetEventDetailsRequest gedr = gson.fromJson(postData, GetEventDetailsRequest.class);
 
+                        user.checkPermission(CalendarModule.CALENDAROPEN,
+                                gedr.school_id);
 
+                        responseString = gson.toJson(getEventDetailsResponse(gedr, user, con));
 
                         break;
 
@@ -88,8 +94,23 @@ public class CalendarServlet extends BaseServlet {
 
     }
 
-    private List<Event> fetchCalendarEntries(Connection con, GetEventRequest gcr, User user) {
+    private GetEventDetailsResponse getEventDetailsResponse(GetEventDetailsRequest gedr, User user, Connection con) throws InsufficientPermissionException {
 
+        Event event = EventStore.getInstance().getEventById(gedr.event_id);
+
+        EventDAO.addDescription(event, con);
+
+        if(!checkIfUserMayReadEvent(user, event)){
+            throw new InsufficientPermissionException("User must not read this event.");
+        }
+
+        GetEventDetailsResponse response = new GetEventDetailsResponse(event, gedr.school_id, gedr.school_term_id);
+
+        return response;
+
+    }
+
+    private List<Event> fetchCalendarEntries(Connection con, GetEventRequest gcr, User user) {
 
         List<Event> eventEntries = EventStore.getInstance().getEventRecords(gcr.school_id, gcr.start, gcr.end);
 
@@ -148,24 +169,7 @@ public class CalendarServlet extends BaseServlet {
 
             Event entry = eventEntries.get(i);
 
-            boolean keepEntry = true;
-
-            if (entry.hasRestrictions()) {
-
-                keepEntry = false;
-
-                for (EventRestriction cr : entry.getRestrictions()) {
-                    if (cr.getRole_id() != null && user.hasRole(cr.getRole_id())) {
-                        keepEntry = true;
-                        break;
-                    }
-                    if (cr.getUser_id() != null && user.getId() == cr.getUser_id()) {
-                        keepEntry = true;
-                        break;
-                    }
-                }
-
-            }
+            boolean keepEntry = checkIfUserMayReadEvent(user, entry);
 
             if (!keepEntry) {
                 eventEntries.remove(i);
@@ -174,6 +178,28 @@ public class CalendarServlet extends BaseServlet {
             }
 
         }
+    }
+
+    private boolean checkIfUserMayReadEvent(User user, Event entry) {
+        boolean keepEntry = true;
+
+        if (entry.hasRestrictions()) {
+
+            keepEntry = false;
+
+            for (EventRestriction cr : entry.getRestrictions()) {
+                if (cr.getRole_id() != null && user.hasRole(cr.getRole_id())) {
+                    keepEntry = true;
+                    break;
+                }
+                if (cr.getUser_id() != null && user.getId() == cr.getUser_id()) {
+                    keepEntry = true;
+                    break;
+                }
+            }
+
+        }
+        return keepEntry;
     }
 
 

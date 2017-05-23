@@ -3,6 +3,8 @@ package de.sp.modules.calendar.servlet;
 import de.sp.database.model.*;
 import de.sp.database.stores.StudentClassStore;
 import de.sp.database.stores.UserRolePermissionStore;
+import de.sp.database.stores.ValueListStore;
+import de.sp.database.valuelists.ValueListType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,15 +22,13 @@ public class GetEventDetailsResponse {
     public List<EventDetailsResponseRestrictionEntry> roleRestrictions = new ArrayList<>();
     
 
-
-
-    public GetEventDetailsResponse(Event event, Long school_term_id){
+    public GetEventDetailsResponse(Event event, Long school_id, Long school_term_id){
 
         this.event = event;
         
         buildRestrictionLists(event);
 
-        buildAbsentClassList(event, school_term_id);
+        buildAbsentClassList(event, school_id, school_term_id);
 
         // List for ressources
 
@@ -38,28 +38,36 @@ public class GetEventDetailsResponse {
 
     }
 
-    private void buildAbsentClassList(Event event, Long school_term_id) {
+    private void buildAbsentClassList(Event event, Long school_id, Long school_term_id) {
 
         List<DBClass> classList = StudentClassStore.getInstance().getClassesInSchoolTerm(school_term_id);
 
-        List<EventDetailsResponseTermEntry> termEntries = new ArrayList<>();
-        Map<Long, EventDetailsResponseTermEntry> termEntryMap = new HashMap<>();
+        List<EventDetailsResponseFormEntry> formEntries = new ArrayList<>();
+        Map<Long, EventDetailsResponseFormEntry> formEntryMap = new HashMap<>();
 
 
         for (DBClass dbClass : classList) {
 
-            EventDetailsResponseTermEntry termEntry = termEntryMap.get(dbClass.getSchool_term_id());
+            Long form_id = dbClass.getForm_id();
 
-            if(termEntry == null){
+            EventDetailsResponseFormEntry formEntry = formEntryMap.get(form_id);
+
+            if(formEntry == null){
+
+                Value form = ValueListStore.getInstance().getValue(school_id, ValueListType.form.getKey(), form_id);
+                formEntry = new EventDetailsResponseFormEntry(form_id, form.getName(), event.formIsAbsent(form_id));
+                formEntryMap.put(form_id, formEntry);
+
+                formEntries.add(formEntry);
 
             }
 
+            EventDetailsResponseClassEntry classEntry = new EventDetailsResponseClassEntry(dbClass.getId(),
+                    dbClass.getName(), event.classIsAbsent(dbClass.getId()) || formEntry.is_absent);
 
+            formEntry.classEntries.add(classEntry);
 
         }
-
-
-
 
     }
 

@@ -2,7 +2,6 @@ package de.sp.database.daos.basic;
 
 import de.sp.database.model.Event;
 import de.sp.database.statements.StatementStore;
-import de.sp.main.resources.modules.InsufficientPermissionException;
 import org.sql2o.Connection;
 
 import java.util.List;
@@ -23,8 +22,7 @@ public class EventDAO {
 
     }
 
-    public static void addDescription(Event event, Connection con)
-    throws InsufficientPermissionException {
+    public static void addDescription(Event event, Connection con){
 
         String sql = StatementStore.getStatement("event.getDescription");
 

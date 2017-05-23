@@ -26,7 +26,7 @@ public class EventStore {
     private static EventStore instance;
 
     // maps 100 * year + month (january == 1) to Event objects
-    private Map<Long, Map<Integer, List<Event>>> schoolIdToyearMonthToEventMap = new ConcurrentHashMap<>();
+    private Map<Long, Map<Integer, List<Event>>> schoolIdToYearMonthToEventMap = new ConcurrentHashMap<>();
 
     private Map<Long, Map<Integer,List<Absence>>> classIdToYearMonthToAbsenceList = new ConcurrentHashMap<>();
 
@@ -107,11 +107,11 @@ public class EventStore {
 
         for (Integer yearMonthIndex : yearMonthList) {
 
-            Map<Integer, List<Event>> yearMonthToEventMap = schoolIdToyearMonthToEventMap.get(event.getSchool_id());
+            Map<Integer, List<Event>> yearMonthToEventMap = schoolIdToYearMonthToEventMap.get(event.getSchool_id());
 
             if(yearMonthToEventMap == null){
                 yearMonthToEventMap = new ConcurrentHashMap<>();
-                schoolIdToyearMonthToEventMap.put(event.getSchool_id(), yearMonthToEventMap);
+                schoolIdToYearMonthToEventMap.put(event.getSchool_id(), yearMonthToEventMap);
             }
 
             List<Event> eventList = yearMonthToEventMap.get(yearMonthIndex);
@@ -178,7 +178,7 @@ public class EventStore {
 
         List<Event> events = new ArrayList<>();
 
-        Map<Integer, List<Event>> yearMonthToEventMap = schoolIdToyearMonthToEventMap.get(school_id);
+        Map<Integer, List<Event>> yearMonthToEventMap = schoolIdToYearMonthToEventMap.get(school_id);
 
         if (yearMonthToEventMap != null) {
             for (Integer ym : yearMonthIndexList) {
@@ -204,7 +204,7 @@ public class EventStore {
             List<EventRestriction> restrictions = EventRestrictionDAO.getAll(con);
             List<Absence> absences = AbsenceDAO.getAll(con);
 
-            // fill schoolIdToyearMonthToEventMap
+            // fill schoolIdToYearMonthToEventMap
             for (Event event : events) {
 
                 addEvent(event);
@@ -252,7 +252,9 @@ public class EventStore {
     }
 
 
+    public Event getEventById(Long event_id) {
 
+        return eventIdToEventMap.get(event_id);
 
-
+    }
 }
