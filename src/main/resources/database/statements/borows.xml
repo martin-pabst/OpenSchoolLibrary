@@ -33,4 +33,12 @@
 		where id = :borrows_id
   	</statement>
 
+	<statement name="borrows.setOverHolidays">
+		update borrows
+		set over_holidays = :over_holidays
+		where id = :borrows_id
+  	</statement>
+
+
+
 </statementlist>

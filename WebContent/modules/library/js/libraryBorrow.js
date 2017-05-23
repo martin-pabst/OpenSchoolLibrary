@@ -488,8 +488,29 @@
             },
             onUnselect: function (event) {
                 this.onSelect(event);
-            }
+            },
+            onChange: function (event) {
 
+                var change = {
+                    recid: event.recid
+                };
+
+                var id = w2ui[event.target].records[event.index].borrows_id;
+
+                change[this.columns[event.column].field] = event.value_new;
+
+                var updateRequest = {
+                    cmd: "update",
+                    school_id: global_school_id,
+                    id: id,
+                    field: this.columns[event.column].field,
+                    value_new: event.value_new,
+                    changes: [change]
+                };
+
+                commitW2GridChanges(this, updateRequest, "/library/borrowedBooks/updateHoliday");
+
+            }
         });
 
 

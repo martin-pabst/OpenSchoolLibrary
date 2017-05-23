@@ -1,12 +1,11 @@
 package de.sp.database.daos.basic;
 
-import java.util.Date;
-import java.util.List;
-
-import org.sql2o.Connection;
-
 import de.sp.database.model.Borrows;
 import de.sp.database.statements.StatementStore;
+import org.sql2o.Connection;
+
+import java.util.Date;
+import java.util.List;
 
 public class BorrowsDAO {
 	public static List<Borrows> getAll(Connection con) {
@@ -75,5 +74,20 @@ public class BorrowsDAO {
 				.executeUpdate();
 
 	}
+
+	public static void setOverHolidays(Long borrows_id, Boolean over_holidays,
+			Connection con) {
+
+		String sql = StatementStore.getStatement("borrows.setOverHolidays");
+
+		con.createQuery(sql)
+
+		.addParameter("borrows_id", borrows_id)
+				.addParameter("over_holidays", over_holidays)
+
+				.executeUpdate();
+
+	}
+
 
 }

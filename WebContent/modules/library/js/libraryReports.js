@@ -57,18 +57,23 @@
     };
 
     function collectSelectedData() {
-        var gridObj = w2ui['libraryReportsDataNavigator'];
         //$('#reportsList .active')[0] ist das <a>-Element mit Eigenschaft data-id (z.B. "0")
         //$('#reportsList .active')[1] ist das <label>-Element mit Eigenschaft data-contenttype (z.B. "pdf")
         // $($('#reportsList .active')[0]).data() = {id: 0}
         // $($('#reportsList .active')[1]).data() = {contenttype: "pdf"}
 
-        var selectedRows = gridObj.getSelection(false);
+        var gridObj = w2ui['libraryReportsDataNavigator'];
 
-        if (selectedRows.length === 0) {
-            selectedRows = gridObj.selectAll();
-            selectedRows = gridObj.getSelection(false);
+        var selectedRows = [];
+
+        if(gridObj !== undefined) {
+            gridObj.getSelection(false);
+            if (selectedRows.length === 0) {
+                gridObj.selectAll();
+                selectedRows = gridObj.getSelection(false);
+            }
         }
+
 
         var reportElement = $('#reportsList').find('a.active:first');
         var reportId = reportElement.data().id;
@@ -435,7 +440,7 @@
                     },
                     columns: [
                         {field: 'id', caption: 'ID', size: '30px', hidden: true, sortable: true},
-                        {field: 'name', caption: 'Name', size: '180px', sortable: true, resizable: true},
+                        {field: 'name', caption: 'Name', size: '180px', sortable: true, resizable: true}
                     ],
                     searches: [
                         {field: 'name', caption: 'Name', type: 'text'}

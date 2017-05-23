@@ -12,6 +12,7 @@ import de.sp.modules.library.servlets.borrow.borrowedbooks.addstudent.LibraryAdd
 import de.sp.modules.library.servlets.borrow.borrowedbooks.LibraryBorrowedBooksListServlet;
 import de.sp.modules.library.servlets.borrow.borrowedbooks.LibraryRegisterBorrowingServlet;
 import de.sp.modules.library.servlets.borrow.borrowerlist.LibraryBorrowerListServlet;
+import de.sp.modules.library.servlets.borrow.updateBorrowHoliday.UpdateBorrowHolidayServlet;
 import de.sp.modules.library.servlets.inventory.books.LibraryBookFormServlet;
 import de.sp.modules.library.servlets.inventory.books.LibraryInventoryBooksServlet;
 import de.sp.modules.library.servlets.inventory.copies.LibraryInventoryCopiesServlet;
@@ -98,6 +99,7 @@ public class LibraryModule extends Module {
 		context.addServlet(LibraryBookFormStoreServlet.class, "/library/bookFormStore");
 		context.addServlet(LibraryBorrowedBooksListServlet.class, "/library/borrowedBooks/*");
 		context.addServlet(LibraryRegisterBorrowingServlet.class, "/library/borrowedBooks/save");
+		context.addServlet(UpdateBorrowHolidayServlet.class, "/library/borrowedBooks/updateHoliday");
 		context.addServlet(LibraryBookCopyStatusServlet.class, "/library/bookCopyStatus/*");
 		context.addServlet(LibraryReturnBookServlet.class, "/library/returnBook");
 		context.addServlet(FeeServlet.class, "/library/fee/*");

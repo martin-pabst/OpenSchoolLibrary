@@ -25,63 +25,60 @@ import java.net.URLDecoder;
 
 public class LibraryReportServlet extends BaseServlet {
 
-	@Override
-	protected void doPostExtended(HttpServletRequest request,
-			HttpServletResponse response, Logger logger, HttpSession session,
-			User user, TS ts, String postData) throws ServletException,
-			IOException {
+    @Override
+    protected void doPostExtended(HttpServletRequest request,
+                                  HttpServletResponse response, Logger logger, HttpSession session,
+                                  User user, TS ts, String postData) throws ServletException,
+            IOException {
 
-		Gson gson = new GsonBuilder().setDateFormat("dd.MM.yyyy").create();
+        Gson gson = new GsonBuilder().setDateFormat("dd.MM.yyyy").create();
 
-		String postString = URLDecoder.decode(postData, "UTF-8");
-		postString = postString.substring(postString.indexOf('{'));
+        String postString = URLDecoder.decode(postData, "UTF-8");
+        postString = postString.substring(postString.indexOf('{'));
+        ExecuteReportRequest executeReportRequest = gson.fromJson(postString, ExecuteReportRequest.class);
 
-		ExecuteReportRequest executeReportRequest = gson.fromJson(postString, ExecuteReportRequest.class);
+        try (Connection con = ConnectionPool.beginTransaction()) {
 
-		try (Connection con = ConnectionPool.beginTransaction()) {
+            user.checkPermission(LibraryModule.PERMISSION_REPORTS,
+                    executeReportRequest.school_id);
 
-			user.checkPermission(LibraryModule.PERMISSION_REPORTS,
-					executeReportRequest.school_id);
+            BaseReport report = ReportManager.getInstance().getReport(executeReportRequest.getDataType(), executeReportRequest.getReportId());
 
-			BaseReport report = ReportManager.getInstance().getReport(executeReportRequest.getDataType(), executeReportRequest.getReportId());
+            response.setStatus(HttpServletResponse.SC_OK);
 
-			response.setStatus(HttpServletResponse.SC_OK);
+            ContentType contentType = executeReportRequest.getContentTypeEnum();
+            response.setContentType(contentType.getContentType());
 
-			ContentType contentType = executeReportRequest.getContentTypeEnum();
-			response.setContentType(contentType.getContentType());
+            if (!(contentType == ContentType.html)) {
+                response.setHeader("Content-Disposition", "filename=\"" + report.getFilename() + "." + contentType.getFileEnding() + "\"");
+            }
 
-			if(!(contentType == ContentType.html)) {
-				response.setHeader("Content-Disposition", "filename=\"" + report.getFilename() + "." + contentType.getFileEnding() + "\"");
-			}
+            executeReport(report, executeReportRequest, con, response);
 
-			executeReport(report, executeReportRequest, con, response);
+            con.rollback();
 
-			con.rollback();
+        } catch (Exception ex) {
+            logger.error(this.getClass().toString() + ": Error serving data",
+                    ex);
+            String responseString = gson.toJson(new GridResponseSave(
+                    GridResponseStatus.error, ex.toString(), null));
 
-		} catch (Exception ex) {
-			logger.error(this.getClass().toString() + ": Error serving data",
-					ex);
-			String responseString = gson.toJson(new GridResponseSave(
-					GridResponseStatus.error, ex.toString(), null));
+            response.setContentType("text/json");
+            response.setStatus(HttpServletResponse.SC_OK);
 
-			response.setContentType("text/json");
-			response.setStatus(HttpServletResponse.SC_OK);
-
-			response.getWriter().println(responseString);
-		}
-
+            response.getWriter().println(responseString);
+        }
 
 
-	}
+    }
 
-	private void executeReport(BaseReport report, ExecuteReportRequest executeReportRequest, Connection con, HttpServletResponse response) throws IOException, JRException {
+    private void executeReport(BaseReport report, ExecuteReportRequest executeReportRequest, Connection con, HttpServletResponse response) throws IOException, JRException {
 
-		report.execute(executeReportRequest.getContentTypeEnum(), executeReportRequest.selectedRows,
-				executeReportRequest.school_id,
-				executeReportRequest.school_term_id, executeReportRequest.getParameterValues(),  con, response);
+        report.execute(executeReportRequest.getContentTypeEnum(), executeReportRequest.selectedRows,
+                executeReportRequest.school_id,
+                executeReportRequest.school_term_id, executeReportRequest.getParameterValues(), con, response);
 
-	}
-
+    }
 
 
 }
