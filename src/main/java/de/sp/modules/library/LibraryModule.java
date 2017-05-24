@@ -16,8 +16,8 @@ import de.sp.modules.library.servlets.borrow.updateBorrowHoliday.UpdateBorrowHol
 import de.sp.modules.library.servlets.inventory.books.LibraryBookFormServlet;
 import de.sp.modules.library.servlets.inventory.books.LibraryInventoryBooksServlet;
 import de.sp.modules.library.servlets.inventory.copies.LibraryInventoryCopiesServlet;
-import de.sp.modules.library.servlets.reports.LibraryNavigatorDataServlet;
-import de.sp.modules.library.servlets.reports.LibraryReportServlet;
+import de.sp.modules.library.reports.LibraryNavigatorDataServlet;
+import de.sp.modules.library.reports.LibraryReportServlet;
 import de.sp.modules.library.servlets.returnbooks.returnerlist.ReturnerListServlet;
 import de.sp.modules.library.servlets.returnbooks.scanbarcodeservlet.FeeServlet;
 import de.sp.modules.library.servlets.returnbooks.scanbarcodeservlet.LibraryReturnBookServlet;

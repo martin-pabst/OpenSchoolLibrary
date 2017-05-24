@@ -14,8 +14,8 @@ import de.sp.database.stores.SchoolTermStore;
 import de.sp.main.config.Configuration;
 import de.sp.modules.library.daos.LibraryDAO;
 import de.sp.modules.library.servlets.borrow.borrowerlist.BorrowerRecord;
-import de.sp.modules.library.servlets.reports.reportsschueler.neededbooks.NeededBookRecord;
-import de.sp.modules.library.servlets.reports.reportsschueler.neededbooks.NeededBooksHelper;
+import de.sp.modules.library.reports.reportsschueler.neededbooks.NeededBookRecord;
+import de.sp.modules.library.reports.reportsschueler.neededbooks.NeededBooksHelper;
 import org.sql2o.Connection;
 
 import java.util.*;

@@ -9,7 +9,7 @@ import de.sp.modules.library.servlets.borrow.bookformstore.BookFormStoreRecord;
 import de.sp.modules.library.servlets.borrow.borrowedbooks.BarcodeInfoRecord;
 import de.sp.modules.library.servlets.borrow.borrowedbooks.BorrowedBookRecord;
 import de.sp.modules.library.servlets.borrow.borrowerlist.BorrowerRecord;
-import de.sp.modules.library.servlets.reports.ClassRecord;
+import de.sp.modules.library.reports.ClassRecord;
 import de.sp.modules.library.servlets.returnbooks.returnerlist.ReturnerRecord;
 import de.sp.modules.library.servlets.returnbooks.scanbarcodeservlet.ReturnBookResponse;
 import org.sql2o.Connection;

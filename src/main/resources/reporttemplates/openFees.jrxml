@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
+<!-- 2017-05-24T16:04:00 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="borrowedBooks" printOrder="Horizontal" pageWidth="595" pageHeight="842" columnWidth="555" columnSpacing="5" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f1c190c4-e104-4638-9c70-b2dea1d1003d">
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="class_name" class="java.lang.String"/>
+	<field name="firstname" class="java.lang.String"/>
+	<field name="surname" class="java.lang.String"/>
+	<field name="title" class="java.lang.String"/>
+	<field name="begindate" class="java.util.Date"/>
+	<field name="return_date" class="java.util.Date"/>
+	<field name="amount" class="java.lang.Double"/>
+	<field name="sum" class="java.lang.Double"/>
+	<group name="Klasse" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{class_name}]]></groupExpression>
+		<groupHeader>
+			<band height="44">
+				<textField>
+					<reportElement x="0" y="0" width="554" height="20" uuid="bcd9c0fd-47c7-4e1a-80d0-a6d81799f928"/>
+					<textElement>
+						<font size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{class_name} == null ? "Ohne Klassenzuordnung" : "Klasse " + $F{class_name}) + ": Ausstehende Zahlungen"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="Schueler" keepTogether="true">
+		<groupExpression><![CDATA[$F{surname} + $F{firstname}]]></groupExpression>
+		<groupHeader>
+			<band height="50">
+				<printWhenExpression><![CDATA[$F{title} != null]]></printWhenExpression>
+				<textField>
+					<reportElement x="0" y="6" width="544" height="21" uuid="6b1cdbf3-e5c6-48bb-9a3d-cec10873cfbe"/>
+					<textElement>
+						<font size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{firstname} + " " + $F{surname}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="45" width="550" height="1" uuid="1226471e-0694-4110-b904-b9d391d50007">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+				</line>
+				<staticText>
+					<reportElement x="0" y="31" width="220" height="14" uuid="39d3855a-c1af-4053-9854-e2ad12ee516f"/>
+					<textElement>
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Titel]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="220" y="31" width="82" height="14" uuid="ffb2ac81-4bc3-4117-b2d0-894b7a0542aa"/>
+					<textElement>
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Ausleihdatum]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="303" y="31" width="88" height="14" uuid="f58ecd97-a965-4c74-98e7-344823677a58"/>
+					<textElement>
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Rückgabedatum]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="391" y="31" width="76" height="14" uuid="c8db58af-e127-49fc-af5d-ea945b5658a6"/>
+					<textElement textAlignment="Right">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Gebühr]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="50">
+				<staticText>
+					<reportElement x="303" y="0" width="88" height="20" uuid="b0b6f413-d5f6-4612-a062-e24e3c945575"/>
+					<textElement textAlignment="Right">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Summe:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="391" y="1" width="76" height="19" uuid="5e86b579-c740-4521-a935-c6b17ba9e027"/>
+					<textElement textAlignment="Right">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.00").format($F{sum}) + " € "]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{title} != null]]></printWhenExpression>
+			<textField>
+				<reportElement x="0" y="0" width="220" height="13" uuid="947ac548-95aa-406f-9870-96b8309412d6"/>
+				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd.MM.yyyy" isBlankWhenNull="true">
+				<reportElement x="220" y="0" width="82" height="13" uuid="a04846ae-5ae1-4dda-a44b-a8ae9efc0f53"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{begindate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd.MM.yyyy" isBlankWhenNull="true">
+				<reportElement x="303" y="0" width="88" height="13" uuid="b051b74d-18f8-4e14-8aff-18373d674dd6"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{return_date}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="391" y="0" width="76" height="13" uuid="6d51bf73-79ce-49ec-b9b3-cfe682d8d13a"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#.00").format($F{amount}) + " € "]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="29">
+			<textField>
+				<reportElement x="454" y="10" width="100" height="14" uuid="3ae665d2-0ce2-4543-b2ee-0518a5e0896b"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Seite " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
