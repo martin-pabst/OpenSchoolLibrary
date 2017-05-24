@@ -1,4 +1,4 @@
-package de.sp.modules.library.reports.reportsother.openfees;
+package de.sp.modules.library.reports.reportsschueler.paidfees;
 
 import de.sp.database.statements.StatementStore;
 import de.sp.modules.library.reports.model.BaseReport;
@@ -24,7 +24,7 @@ import java.util.*;
 /**
  * Created by Martin on 17.04.2017.
  */
-public class ReportOpenFees extends BaseReport {
+public class ReportPaidFees extends BaseReport {
 
 
     @Override
@@ -34,12 +34,12 @@ public class ReportOpenFees extends BaseReport {
 
     @Override
     public String getName() {
-        return "Ausstehende Zahlungen";
+        return "Geleistete Zahlungen";
     }
 
     @Override
     public String getDescription() {
-        return "Liste der ausstehenden Zahlungen, gruppiert je Klasse und Schüler/in";
+        return "Liste der geleisteten Zahlungen, gruppiert je Klasse und Schüler/in";
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ReportOpenFees extends BaseReport {
 
     @Override
     public String getFilename() {
-        return "Ausstehende_Zahlungen";
+        return "Geleistete_Zahlungen";
     }
 
     @Override
@@ -63,39 +63,39 @@ public class ReportOpenFees extends BaseReport {
                         Long school_term_id, List<String> paramerterValues, Connection con,
                         HttpServletResponse response) throws IOException, JRException {
 
-        String sql = StatementStore.getStatement("libraryReports.openFees");
+        String sql = StatementStore.getStatement("libraryReports.paidFees");
 
         sql = sql.replace(":ids", getSQLList(ids));
 
-        List<OpenFeeRecord> openFees = con.createQuery(sql)
+        List<PaidFeeRecord> paidFees = con.createQuery(sql)
                 .addParameter("school_id", school_term_id)
                 .addParameter("school_term_id", school_term_id)
-                .executeAndFetch(OpenFeeRecord.class);
+                .executeAndFetch(PaidFeeRecord.class);
 
-        consolidateOpenFees(openFees);
+        consolidatePaidFees(paidFees);
 
         switch (contentType) {
             case pdf:
-                writePdf(response, openFees);
+                writePdf(response, paidFees);
                 break;
             case html:
-                writeHtml(response, openFees);
+                writeHtml(response, paidFees);
                 break;
         }
 
 
     }
 
-    private void consolidateOpenFees(List<OpenFeeRecord> openFees) {
+    private void consolidatePaidFees(List<PaidFeeRecord> openFees) {
 
         Collections.sort(openFees);
 
         Long student_id = null;
         double sum = 0;
 
-        ArrayList<OpenFeeRecord> openFeesForCurrentStudent = new ArrayList<>();
+        ArrayList<PaidFeeRecord> openFeesForCurrentStudent = new ArrayList<>();
 
-        for (OpenFeeRecord openFee : openFees) {
+        for (PaidFeeRecord openFee : openFees) {
 
             if (student_id == null) {
 
@@ -103,7 +103,7 @@ public class ReportOpenFees extends BaseReport {
 
             } else if (!student_id.equals(openFee.student_id)) {
 
-                for (OpenFeeRecord ofr : openFeesForCurrentStudent) {
+                for (PaidFeeRecord ofr : openFeesForCurrentStudent) {
                     ofr.sum = sum;
                 }
 
@@ -116,12 +116,12 @@ public class ReportOpenFees extends BaseReport {
             openFeesForCurrentStudent.add(openFee);
         }
 
-        for (OpenFeeRecord ofr : openFeesForCurrentStudent) {
+        for (PaidFeeRecord ofr : openFeesForCurrentStudent) {
             ofr.sum = sum;
         }
     }
 
-    private void writeHtml(HttpServletResponse response, List<OpenFeeRecord> openFeeRecords) throws IOException {
+    private void writeHtml(HttpServletResponse response, List<PaidFeeRecord> paidFeeRecords) throws IOException {
 
         DecimalFormat df = new DecimalFormat("#.00");
 
@@ -131,7 +131,7 @@ public class ReportOpenFees extends BaseReport {
 
         appendHtmlHeader();
 
-        html.append("<h1>Ausstehende Zahlungen</h1>\n");
+        html.append("<h1>Geleistete Zahlungen</h1>\n");
 
         Long last_class_id = Long.MAX_VALUE;
         Long last_student_id = null;
@@ -139,7 +139,7 @@ public class ReportOpenFees extends BaseReport {
         boolean firstRow = true;
         Double lastSum = null;
 
-        for (OpenFeeRecord of : openFeeRecords) {
+        for (PaidFeeRecord of : paidFeeRecords) {
 
             if (!secureEquals(of.class_id, last_class_id)) {
 
@@ -269,14 +269,14 @@ public class ReportOpenFees extends BaseReport {
         return id1.equals(id2);
     }
 
-    private void writePdf(HttpServletResponse response, List<OpenFeeRecord> borrowedBooks) throws IOException, JRException {
+    private void writePdf(HttpServletResponse response, List<PaidFeeRecord> borrowedBooks) throws IOException, JRException {
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(borrowedBooks);
 
         JasperReport jasperReport = null;
         JasperDesign jasperDesign = null;
         Map parameters = new HashMap();
 
-        jasperDesign = JRXmlLoader.load(FileTool.getInputStream("reporttemplates/openFees.jrxml"));
+        jasperDesign = JRXmlLoader.load(FileTool.getInputStream("reporttemplates/paidFees.jrxml"));
         jasperReport = JasperCompileManager.compileReport(jasperDesign);
         byte[] byteStream = JasperRunManager.runReportToPdf(jasperReport, parameters, ds);
 

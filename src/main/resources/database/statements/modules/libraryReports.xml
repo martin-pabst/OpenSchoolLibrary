@@ -25,7 +25,36 @@
                                              and school_term_id = :school_term_id
             left join class on student_school_term.class_id = class.id
         WHERE
-            student.school_id = :school_id
+            student.school_id = :school_id and
+            student.id in :ids
+    </statement>
+
+    <statement name="libraryReports.paidFees">
+        select
+            student.firstname,
+            student.surname,
+            student.id as student_id,
+            class.name as class_name,
+            class.id as class_id,
+            book.title,
+            borrows.begindate,
+            borrows.enddate,
+            borrows.return_date,
+            fee.amount,
+            fee.remarks
+        FROM
+            student
+            join borrows on student.id = borrows.student_id
+            join fee on borrows.id = fee.borrows_id
+                        and not fee.paid_date is NULL
+            join book_copy on borrows.book_copy_id = book_copy.id
+            join book on book_copy.book_id = book.id
+            left join student_school_term on student.id = student_school_term.student_id
+                                             and school_term_id = :school_term_id
+            left join class on student_school_term.class_id = class.id
+        WHERE
+            student.school_id = :school_id AND
+            student.id in :ids
     </statement>
 
     <statement name="libraryReports.schuelerBorrowedBooks">

@@ -1,20 +1,7 @@
 package de.sp.modules.library.servlets.returnbooks.scanbarcodeservlet;
 
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.slf4j.Logger;
-import org.sql2o.Connection;
-
 import com.google.gson.Gson;
-
+import com.google.gson.GsonBuilder;
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.BorrowsDAO;
 import de.sp.database.daos.basic.StudentDAO;
@@ -26,6 +13,17 @@ import de.sp.modules.library.daos.LibraryDAO;
 import de.sp.modules.library.servlets.borrow.borrowedbooks.BarcodeInfoStatus;
 import de.sp.modules.library.servlets.borrow.borrowedbooks.BorrowedBookRecord;
 import de.sp.tools.server.BaseServlet;
+import org.slf4j.Logger;
+import org.sql2o.Connection;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class LibraryReturnBookServlet extends BaseServlet {
 
@@ -35,7 +33,8 @@ public class LibraryReturnBookServlet extends BaseServlet {
 			User user, TS ts, String postData) throws ServletException,
 			IOException {
 
-		Gson gson = new Gson();
+//		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().setDateFormat("dd.MM.yyyy").create();
 
 		ReturnBookResponse returnBookResp;
 
@@ -83,7 +82,10 @@ public class LibraryReturnBookServlet extends BaseServlet {
 
 						returnBookResp.setStatus(BarcodeInfoStatus.success);
 
-					} 
+					} else {
+						returnBookResp = new ReturnBookResponse(BarcodeInfoStatus.error,
+								"Das Buch mit dem Barcode " + rbr.getBarcode() + " gibt es nicht.");
+					}
 
 				} 
 

@@ -31,7 +31,6 @@
     });
 
 
-    var bookFormStore = [];
     var bookCopyDetailsData;
     var bookCopyDetailsRecord;
     var bookCopyDetailsName;
@@ -86,7 +85,14 @@
             addOrUpdatePayment();
         });
 
-        $('#bookReturnDeletePaymentButton').click(function (event) {
+        $('#bookReturnAmount').keypress(function (event) {
+
+            if (event.which === 13) {
+                addOrUpdatePayment();
+            }
+        });
+
+                $('#bookReturnDeletePaymentButton').click(function (event) {
             deletePayment();
         });
 
@@ -140,10 +146,11 @@
                             bookCopyDetailsRecord = data; // Java-Type: BookReturnResponse
                             bookCopyDetailsRecord['id'] = data.book_copy_id;
                             bookCopyDetailsRecord.barcode = barcode;
-                            returnerGrid.records.forEach(function (returner) {
 
-                                if ((returner.isStudent && returner.student_id == data.student_id)
-                                    || (returner.isTeacher && returner.teacher_id == data.teacher_id)
+                            for(var i = 0; i < returnerGrid.records.length; i++){
+                                var returner = returnerGrid.records[i];
+                                if ((returner.isStudent && returner.student_id === data.student_id)
+                                    || (returner.isTeacher && returner.teacher_id === data.teacher_id)
                                 ) {
                                     bookCopyDetailsReturnerRecord = returner;
                                     returner.numberOfBorrowedBooks--;
@@ -154,15 +161,18 @@
                                     returnerGrid.scrollIntoView();
                                     returnerGrid.onSelect = onSelect;
                                     $('#bookReturnPaymentsHeader').html("Ausstehene Zahlungen von " + returner.name + ":");
+                                    break;
                                 }
+                            }
 
-                            });
-
+                            returnerGrid.refresh();
                             bookCopyDetailsData = data.statusList;
                             feeData = data.feeList;
 
                             booksGrid.clear();
-                            booksGrid.records = data.borrowedBooksList;
+
+                            booksGrid.add(data.borrowedBooksList);
+
                             booksGrid.refresh();
 
                             showBookCopyDetails();
@@ -309,16 +319,16 @@
                     caption: 'Ausleihdatum',
                     size: '100px',
                     sortable: true,
-                    resizable: true,
-                    render: 'date:dd.MM.yyyy'
+                    resizable: true
+//                    render: 'date:dd.MM.yyyy'
                 },
                 {
                     field: 'return_date',
                     caption: 'Rückgabe',
                     size: '80px',
                     sortable: true,
-                    resizable: true,
-                    render: 'date:dd.MM.yyyy'
+                    resizable: true
+//                    render: 'date:dd.MM.yyyy'
                 }
 
             ],

@@ -66,7 +66,7 @@
 
         var selectedRows = [];
 
-        if(gridObj !== undefined) {
+        if (gridObj !== undefined) {
             gridObj.getSelection(false);
             if (selectedRows.length === 0) {
                 gridObj.selectAll();
@@ -81,16 +81,16 @@
         var reports = reportData.reports[dataType];
         var parameterValues = [];
 
-        for(var i = 0; i < reports.length; i++) {
+        for (var i = 0; i < reports.length; i++) {
 
             var report = reports[i];
             if (report.id === reportId) {
 
-                for(var j = 0; j < report.parameters.length; j++){
+                for (var j = 0; j < report.parameters.length; j++) {
 
                     var parameter = report.parameters[j];
                     var inputElement = $("#" + parameter.inputID);
-                    if(parameter.type === "boolean"){
+                    if (parameter.type === "boolean") {
                         parameterValues.push(inputElement.is(":checked") ? "true" : "false");
                     } else {
                         parameterValues.push(inputElement.val());
@@ -345,19 +345,10 @@
 
         $('#libraryReportsTab').on('shown.bs.tab', function (e) {
 
-            // Show w2ui-tables for the first time only if they are yet visible.
-            // Otherwise they behave strange!
+            if (w2ui['libraryReportsDataNavigator'] !== undefined) {
+                w2ui['libraryReportsDataNavigator'].resize();
+            }
 
-            //var gridObj = w2ui['libraryBorrowerList'];
-
-            //if (typeof gridObj == "undefined") {
-
-            //    initializeBorrowTables();
-
-            //} else {
-            w2ui['libraryReportsDataNavigator'].resize();
-
-            //}
 
         });
 
@@ -369,7 +360,7 @@
         initDataTable();
 
         $('#reportsList').html('<div class="list-group">\n' + getReportsList() + '\n</div>');
-        $('#reportsList').find('.list-group-item').click(function(e){
+        $('#reportsList').find('.list-group-item').click(function (e) {
             $('#reportsList').find('.list-group-item').removeClass('active');
             $(this).addClass('active');
         });

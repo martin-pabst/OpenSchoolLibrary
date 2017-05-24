@@ -5,6 +5,7 @@ import de.sp.modules.library.reports.reportsother.openfees.ReportOpenFees;
 import de.sp.modules.library.reports.reportsschueler.BarcodeTestsheet.ReportBarcodeTestsheet;
 import de.sp.modules.library.reports.reportsschueler.borrowedbooks.ReportBorrowedBooks;
 import de.sp.modules.library.reports.reportsschueler.neededbooks.ReportNeededBooks;
+import de.sp.modules.library.reports.reportsschueler.paidfees.ReportPaidFees;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ public class ReportManager {
         addReport(new ReportBorrowedBooks());
         addReport(new ReportNeededBooks());
         addReport(new ReportBarcodeTestsheet());
+        addReport(new ReportPaidFees());
 
         //Other
         addReport(new ReportBorrowedOverHolidays());
