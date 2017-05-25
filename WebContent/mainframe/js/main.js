@@ -4,7 +4,7 @@
 
 // Stop Chrome from opening download-page when scanning barcodes
 document.addEventListener('keydown', function(event) {
-    if( event.keyCode === 17 || event.keyCode === 74 )
+    if( event.keyCode === 17 ) //|| event.keyCode === 74 ) -> Error: This prevents key "j"
         event.preventDefault();
 });
 

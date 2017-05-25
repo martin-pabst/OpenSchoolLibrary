@@ -334,7 +334,7 @@
             <div class="row">
 
                 <!-- Navigation Buttons -->
-                <div class="col-md-3">
+                <div class="col-md-3" style="padding-left: 2em">
                     <ul class="nav nav-pills nav-stacked" id="myTabs">
                         <li class="active"><a href="#ls_deleteOldBookings" data-toggle="pill">Alte Buchungen löschen</a>
                         </li>
@@ -344,6 +344,8 @@
                             zusammenführen</a>
                         </li>
                         <li><a href="#ls_sortOut" data-toggle="pill" id="sortOutTab">Bücherexemplare ausmustern</a>
+                        </li>
+                        <li><a href="#ls_changeBarcode" data-toggle="pill" id="changeBarcodeTab">Barcode eines Buchs ändern</a>
                         </li>
                     </ul>
                 </div>
@@ -478,6 +480,38 @@
                                 </div>
                             </div>
                             <div class="alert alert-success" role="alert" style="display: none; height: 15em; overflow: auto"></div>
+                        </div>
+                        <!-- 5. tab: change barcode of a book -->
+                        <div class="tab-pane settingsPane" id="ls_changeBarcode">
+                            <h2>Barcode eines Buches ändern</h2>
+                            <p>Bitte erfasssen Sie unten den alten und neuen Barcode des Buchexemplars und Klicken Sie auf "ändern".
+                            Das Buchexemplar wird dann auf den neuen Barcode registriert.</p>
+                            <div style="margin: 10px 0 10px 0">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon6">Alter Barcode:</span>
+                                    <input id="libraryChangeBarcodeOld" type="text" class="form-control"
+                                           placeholder="Barcode"
+                                           aria-describedby="basic-addon6"
+                                    style="width: 20em">
+                                    <span class="input-group-addon" id="basic-addon7">Neuer Barcode:</span>
+                                    <input id="libraryChangeBarcodeNew" type="text" class="form-control"
+                                           placeholder="Barcode"
+                                           aria-describedby="basic-addon7"
+                                    style="width: 20em">
+                                </div>
+                            </div>
+
+                            <div style="margin: 0 0 10px 0">
+                                <div style="vertical-align: middle;display: inline-block;height: 100%;">
+                                    <img src="/public/img/spiffygif_26x26.gif" style="display: none">
+                                </div>
+                                <button type="button" class="btn btn-default">
+                                    Start
+                                    <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                            <div class="alert alert-success" role="alert" style="display: none"></div>
+
                         </div>
 
                     </div>

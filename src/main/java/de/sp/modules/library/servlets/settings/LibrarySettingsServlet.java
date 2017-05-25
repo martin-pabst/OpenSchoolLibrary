@@ -117,6 +117,17 @@ public class LibrarySettingsServlet extends BaseServlet {
 
                         break;
 
+                    case "changeBarcode":
+
+                        ChangeBarcodeRequest cbr = gson.fromJson(postData, ChangeBarcodeRequest.class);
+
+                        user.checkPermission("library.settings",
+                                cbr.school_id);
+
+                        responseString = gson.toJson(changeBarcode(cbr, con));
+
+                        break;
+
                 }
 
                 con.commit(true);
@@ -133,6 +144,34 @@ public class LibrarySettingsServlet extends BaseServlet {
         response.setStatus(HttpServletResponse.SC_OK);
 
         response.getWriter().println(responseString);
+
+    }
+
+    private ChangeBarcodeResponse changeBarcode(ChangeBarcodeRequest cbr, Connection con) {
+
+        List<BookCopyInfoRecord> bookCopyInfoRecords = BookCopyDAO.getBookCopyInInfo(cbr.school_id, cbr.oldBarcode, con);
+
+        String info = "";
+        if(bookCopyInfoRecords.size() > 0) {
+            BookCopyInfoRecord bir = bookCopyInfoRecords.get(0);
+
+            info += "Der Barcode des Buchs " + bir.getTitle() + " wurde geändert.check_mark<br />";
+            info += "Alter Barcode " + cbr.oldBarcode + "<br />";
+            info += "Neuer Barcode " + cbr.newBarcode + "<br />";
+
+            if(bir.getSurname() != null){
+                info += "Das Buch ist gerade entliehen an " + bir.getFirstname() + " " + bir.getSurname() + ".<br />";
+            }
+
+        } else {
+            info += "Der Barcode des Buchs wurde geändert.check_mark<br />";
+            info += "Alter Barcode " + cbr.oldBarcode + "<br />";
+            info += "Neuer Barcode " + cbr.newBarcode + "<br />";
+        }
+
+        BookCopyDAO.changeBarcode(cbr.oldBarcode, cbr.newBarcode, cbr.school_id, con);
+
+        return new ChangeBarcodeResponse("success", info);
 
     }
 

@@ -34,18 +34,26 @@ public class BookCopyDAO {
 	}
 
 
+	public static void changeBarcode(String oldBarcode, String newBarcode, Long school_id, Connection con){
+
+		oldBarcode = completeBarcode(oldBarcode, true);
+		newBarcode = completeBarcode(newBarcode, true);
+
+		String sql = StatementStore.getStatement("book_copy.changeBarcode");
+
+		con.createQuery(sql)
+				.addParameter("oldBarcode", oldBarcode)
+				.addParameter("newBarcode", newBarcode)
+				.addParameter("school_id", school_id)
+				.executeUpdate();
+
+	}
 
 	public static BookCopy insert(Long book_id, String edition, String barcode,
 			Date purchase_date,
 			Connection con) throws Exception {
 
-		while(barcode.length() < 12){
-			barcode = "0" + barcode;
-		}
-
-		if(barcode.length() < 13) {
-			barcode = addCheckSum(barcode);
-		}
+		barcode = completeBarcode(barcode, false);
 
 		if(purchase_date == null){
 			purchase_date = Calendar.getInstance().getTime();
@@ -62,6 +70,17 @@ public class BookCopyDAO {
 
 		return new BookCopy(id, book_id, edition, barcode, purchase_date, null);
 
+	}
+
+	private static String completeBarcode(String barcode, boolean checksumAlreadyIncluded) {
+		while(barcode.length() < 12 + (checksumAlreadyIncluded ? 1 : 0)){
+			barcode = "0" + barcode;
+		}
+
+		if(barcode.length() < 13) {
+			barcode = addCheckSum(barcode);
+		}
+		return barcode;
 	}
 
 	public static void setSortedOutDate(Long book_copy_id, Date sorted_out_date, Connection con){
@@ -129,6 +148,8 @@ public class BookCopyDAO {
 
 	public static List<BookCopyInfoRecord> getBookCopyInInfo(Long school_id,
 			String barcode, Connection con) {
+
+		barcode = completeBarcode(barcode, true);
 
 		String sql = StatementStore
 				.getStatement("book_copy.findByBarcodeAndSchool");

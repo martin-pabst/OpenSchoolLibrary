@@ -129,6 +129,58 @@
             barcodeField.focus();
 
         });
+        
+        // Change Barcode
+        $('#changeBarcodeTab').on('shown.bs.tab', function (e) {
+
+            var changeBarcodeDiv = $('#ls_changeBarcode');
+
+            var button = changeBarcodeDiv.find('button');
+
+            button.click(function(){
+
+                var oldBarcodeInput = $('#libraryChangeBarcodeOld');
+                var newBarcodeInput = $('#libraryChangeBarcodeNew');
+
+                var animatedGif = changeBarcodeDiv.find('img');
+                var alertDiv = changeBarcodeDiv.find('.alert-success');
+
+                animatedGif.show();
+                button.prop('disabled', true);
+
+                $.post("/library/settings/changeBarcode", JSON.stringify(
+                    {
+                        school_id: global_school_id,
+                        oldBarcode: oldBarcodeInput.val(),
+                        newBarcode: newBarcodeInput.val()
+                    }),
+                    function (data) {
+
+                        animatedGif.hide();
+                        button.prop('disabled', false);
+
+                        if (data.status === "success") {
+
+                            showMessage(alertDiv, 'success', data.message);
+                            oldBarcodeInput.val('');
+                            newBarcodeInput.val('');
+
+                        } else {
+
+                            showMessage(alertDiv, 'danger', data.message);
+
+                        }
+
+                    }, "json"
+                );
+
+
+            });
+
+        });
+        
+        
+        
 
         var searchAll1 = $('#librarySettingsMergeStudentsNavigator').find('.w2ui-search-all');
 

@@ -8,6 +8,19 @@
 		book_copy
 	</statement>
 
+	<statement name="book_copy.changeBarcode">
+		update book_copy
+		set barcode = :newBarcode
+		where
+			id = (
+				select book_copy.id
+				from book_copy
+					JOIN book on book_copy.book_id = book.id
+					and school_id = :school_id
+				WHERE barcode = :oldBarcode
+			)
+	</statement>
+
 	<statement name="book_copy.findAvailableCopiesBySchool">
 		select bc.id, book_id, bc.edition, barcode
 			from book_copy bc join book on bc.book_id = book.id
