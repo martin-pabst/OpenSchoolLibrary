@@ -1,15 +1,16 @@
 package de.sp.database.daos.basic;
 
-import java.util.Date;
-import java.util.List;
-
-import org.sql2o.Connection;
-
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.model.BookCopyStatus;
 import de.sp.database.statements.StatementStore;
+import org.sql2o.Connection;
+
+import java.util.Date;
+import java.util.List;
 
 public class BookCopyStatusDAO {
+
+
 	public static List<BookCopyStatus> getAll() {
 
 		try (Connection con = ConnectionPool.open()) {
@@ -18,6 +19,19 @@ public class BookCopyStatusDAO {
 			List<BookCopyStatus> book_copy_statuslist = con.createQuery(sql)
 					.executeAndFetch(BookCopyStatus.class);
 			return book_copy_statuslist;
+
+		}
+
+	}
+
+	public static List<BookCopyStatus> findBySchoolId(Long school_id) {
+
+		try (Connection con = ConnectionPool.open()) {
+
+			String sql = StatementStore.getStatement("book_copy_status.findBySchoolId");
+			return con.createQuery(sql)
+                    .addParameter("school_id", school_id)
+					.executeAndFetch(BookCopyStatus.class);
 
 		}
 

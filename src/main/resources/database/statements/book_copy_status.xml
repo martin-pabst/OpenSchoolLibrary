@@ -3,6 +3,14 @@
 
 	<!-- Table book -->
 
+	<statement name="book_copy_status.findBySchoolId">
+		select book_copy_status.*
+			from book_copy_status
+				join book_copy on book_copy_status.book_copy_id = book_copy.id
+				join book on book_copy.book_id = book.id
+					and book.school_id = :school_id
+	</statement>
+
 	<statement name="book_copy_status.getAll">
 		select * from book_copy_status
 	</statement>

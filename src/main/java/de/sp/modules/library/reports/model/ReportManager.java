@@ -3,6 +3,7 @@ package de.sp.modules.library.reports.model;
 import de.sp.modules.library.reports.reportsother.borrowoverholidays.ReportBorrowedOverHolidays;
 import de.sp.modules.library.reports.reportsother.openfees.ReportOpenFees;
 import de.sp.modules.library.reports.reportsschueler.BarcodeTestsheet.ReportBarcodeTestsheet;
+import de.sp.modules.library.reports.reportsschueler.bookcopystatus.ReportBookCopyStatus;
 import de.sp.modules.library.reports.reportsschueler.borrowedbooks.ReportBorrowedBooks;
 import de.sp.modules.library.reports.reportsschueler.neededbooks.ReportNeededBooks;
 import de.sp.modules.library.reports.reportsschueler.paidfees.ReportPaidFees;
@@ -28,6 +29,7 @@ public class ReportManager {
         addReport(new ReportNeededBooks());
         addReport(new ReportBarcodeTestsheet());
         addReport(new ReportPaidFees());
+        addReport(new ReportBookCopyStatus());
 
         //Other
         addReport(new ReportBorrowedOverHolidays());

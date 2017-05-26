@@ -33,42 +33,52 @@ public class LibraryReportServlet extends BaseServlet {
 
         Gson gson = new GsonBuilder().setDateFormat("dd.MM.yyyy").create();
 
+
         String postString = URLDecoder.decode(postData, "UTF-8");
-        postString = postString.substring(postString.indexOf('{'));
-        ExecuteReportRequest executeReportRequest = gson.fromJson(postString, ExecuteReportRequest.class);
 
-        try (Connection con = ConnectionPool.beginTransaction()) {
+        if (postString.indexOf("{") < 0) {
+            response.getWriter().println("<h1>Fehler:<h1>Es wurde kein Bericht ausgewählt.");
 
-            user.checkPermission(LibraryModule.PERMISSION_REPORTS,
-                    executeReportRequest.school_id);
+        } else {
 
-            BaseReport report = ReportManager.getInstance().getReport(executeReportRequest.getDataType(), executeReportRequest.getReportId());
+            try (Connection con = ConnectionPool.beginTransaction()) {
 
-            response.setStatus(HttpServletResponse.SC_OK);
 
-            ContentType contentType = executeReportRequest.getContentTypeEnum();
-            response.setContentType(contentType.getContentType());
+                postString = postString.substring(postString.indexOf('{'));
+                ExecuteReportRequest executeReportRequest = gson.fromJson(postString, ExecuteReportRequest.class);
 
-            if (!(contentType == ContentType.html)) {
-                response.setHeader("Content-Disposition", "filename=\"" + report.getFilename() + "." + contentType.getFileEnding() + "\"");
+
+                user.checkPermission(LibraryModule.PERMISSION_REPORTS,
+                        executeReportRequest.school_id);
+
+                BaseReport report = ReportManager.getInstance().getReport(executeReportRequest.getDataType(), executeReportRequest.getReportId());
+
+                response.setStatus(HttpServletResponse.SC_OK);
+
+                ContentType contentType = executeReportRequest.getContentTypeEnum();
+                response.setContentType(contentType.getContentType());
+
+                if (!(contentType == ContentType.html)) {
+                    response.setHeader("Content-Disposition", "filename=\"" + report.getFilename() + "." + contentType.getFileEnding() + "\"");
+                }
+
+                executeReport(report, executeReportRequest, con, response);
+
+                con.rollback();
+
+            } catch (Exception ex) {
+                logger.error(this.getClass().toString() + ": Error serving data",
+                        ex);
+                String responseString = gson.toJson(new GridResponseSave(
+                        GridResponseStatus.error, ex.toString(), null));
+
+                response.setContentType("text/json");
+                response.setStatus(HttpServletResponse.SC_OK);
+
+                response.getWriter().println(responseString);
             }
 
-            executeReport(report, executeReportRequest, con, response);
-
-            con.rollback();
-
-        } catch (Exception ex) {
-            logger.error(this.getClass().toString() + ": Error serving data",
-                    ex);
-            String responseString = gson.toJson(new GridResponseSave(
-                    GridResponseStatus.error, ex.toString(), null));
-
-            response.setContentType("text/json");
-            response.setStatus(HttpServletResponse.SC_OK);
-
-            response.getWriter().println(responseString);
         }
-
 
     }
 

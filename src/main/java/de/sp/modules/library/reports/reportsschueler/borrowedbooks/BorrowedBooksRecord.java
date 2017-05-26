@@ -1,6 +1,11 @@
 package de.sp.modules.library.reports.reportsschueler.borrowedbooks;
 
+import de.sp.database.model.BookCopyStatus;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Martin on 17.04.2017.
@@ -17,9 +22,21 @@ public class BorrowedBooksRecord implements Comparable<BorrowedBooksRecord> {
     public Long book_id;
     public Date begindate;
     public String barcode;
+    public Long book_copy_id;
+
+    public List<BookCopyStatus> statusList = new ArrayList<>();
+
 
     public BorrowedBooksRecord(){
 
+    }
+
+    public JRBeanCollectionDataSource getStatusDataSource(){
+        return new JRBeanCollectionDataSource(statusList);
+    }
+
+    public List<BookCopyStatus> getStatusList() {
+        return statusList;
     }
 
     public String getClass_name() {

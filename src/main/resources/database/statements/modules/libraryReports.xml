@@ -68,7 +68,8 @@
             book.title,
             book.id as book_id,
             borrows.begindate,
-            book_copy.barcode
+            book_copy.barcode,
+            book_copy.id as book_copy_id
         FROM
             student
             LEFT JOIN student_school_term ON student_school_term.student_id = student.id
