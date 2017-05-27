@@ -419,8 +419,8 @@
 		</column>
 		<!-- if class_id ==  null && form_id == null then absence is for whole school and school_id is set -->
 
-		<column name="no_written_tests" type="bool"/>
-		<column name="no_tests" type="bool"/>
+		<column name="no_big_tests" type="bool"/>
+		<column name="no_small_tests" type="bool"/>
 
 		<column name="event_id" type="bigint">
 			<references table="event" column="id"  ondelete="cascade" />

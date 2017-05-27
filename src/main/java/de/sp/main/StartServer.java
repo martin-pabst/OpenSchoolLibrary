@@ -4,6 +4,7 @@ import de.sp.database.connection.ConnectionPool;
 import de.sp.database.model.StoreManager;
 import de.sp.database.statements.StatementStore;
 import de.sp.main.config.Configuration;
+import de.sp.main.config.DatabaseConfig;
 import de.sp.main.login.LoginServlet;
 import de.sp.main.mainframe.MainFrameServlet;
 import de.sp.main.mainframe.definitionsservlet.DefinitionsServlet;
@@ -68,6 +69,14 @@ public class StartServer {
 			System.exit(1);
 
 		}
+
+	}
+
+	private static void testDatabase(DatabaseConfig database) {
+
+
+
+
 
 	}
 

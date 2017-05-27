@@ -120,14 +120,15 @@
                                     <textarea class="form-control" rows="5" id="eventDescription"></textarea>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group" width="100%">
                                     <label for="eventRestriction">Lesender Zugriff nur für:</label>
-                                    <select class="form-control" id="eventRestriction">
-                                        <option value="1" style="color: green; font-weight: bold">Alle (öffentlich)
-                                        </option>
+                                    <select class="selectpicker" id="eventRestriction" data-width="fit" multiple>
+                                    #*
+                                        <option value="1" style="color: green; font-weight: bold">Alle (öffentlich)</option>
                                         <option value="2">Lehrkräfte</option>
                                         <option value="3">Schulleitung</option>
                                         <option value="4">Benutzer (privater Termin)</option>
+*#
                                     </select>
                                 </div>
 
@@ -136,30 +137,31 @@
 
                             <div id="eventAbsence" class="tab-pane fade" style="margin-top: 10px">
 
-                                <div>
-                                    <div class="checkbox">
-                                        <label><input type="checkbox" id="eventAbsencesWholeSchool">Ganze Schule</label>
+                                <div style="display: flex">
+
+                                    <div>
+                                        <div>
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" id="eventAbsencesWholeSchool">Ganze Schule</label>
+                                            </div>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" id="eventAbsencesNoBigTests">Keine
+                                                Große Leistungsnachweise möglich</label>
+                                        </div>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" id="eventAbsencesNoSmallTests">Keine kleinen
+                                                Kleine Leistungsnachweise möglich</label>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div id="eventAbsencesMatrix">
+                                    <div id="eventAbsencesMatrix"  style="margin-left: 3em">
 
-                                <!-- This div gets filled dynamically -->
+                                        <!-- This div gets filled dynamically -->
 
-                                </div>
-
-                                <div>
-                                    <div class="checkbox">
-                                        <label><input type="checkbox" id="eventAbsencesNoBigTests">Keine Schulaufgaben
-                                            möglich</label>
                                     </div>
-                                    <div class="checkbox">
-                                        <label><input type="checkbox" id="eventAbsencesNoSmallTests">Keine kleinen
-                                            Leistungsnachweise
-                                            möglich</label>
-                                    </div>
-                                </div>
 
+                                </div>
 
                             </div>
 

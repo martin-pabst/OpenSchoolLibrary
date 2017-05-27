@@ -1,21 +1,19 @@
+Überarbeiten:
+
+
+
 Kalender
 
- - Jeder Termin (event) besteht aus einem Namen und dem Start- und Endzeitpunkt
- - Mit einem Termin ist ggf. eine Information verknüpft, wer ihn lesen darf
-   (event_restriction): Nur bestimmte Rollen oder Benutzer
  - Mit einem Termin ist ggf. die Reservierung einer Ressource (Raum, ...) verknüpft.
    In diesem Fall ist mindestens die Blockierung der Ressource für ALLE sichtbar.
  - Mit einem Temrin ist ggf. eine Prüfung (Schulaufgabe, ...) verknüpft.
    Falls diese geheim ist (Extermin...), so ist sie nur für Lehrkräfte sichtbar,
    ansonsten für alle.
- - Mit einem Termin ist ggf. die Absenz einer Klasse/Jahrgangsstufe verknüft. In diesem
-   Fall ist der Termin immer für ALLE sichtbar.
  - Es gibt Termine, die nach außen hin (Homepage, ...) sichtbar sind. Das entsprechende
  Attribut darf nur ein entsprechend berechtigter Benutzer setzen.
 
 Aus Sicht des Benutzers:
 
- - Auswahl "Alles", "Nur öffentliche", "Nur Reservierungen", "Nur Prüfungen", "Nur Absenzen"
  - Die Termine haben Icons, anhand denen sichtbar ist, ob mit dem Termin
    - eine Reservierung
    - eine Absenz verbunden ist
@@ -23,12 +21,8 @@ Aus Sicht des Benutzers:
  - Prüfungen werden mit roter Hintergrundfarbe gesetzt
  - Für die Eingabe/Änderung eines Termins modales Fenster mit Tabs:
    - Termindetails (Text, Kurzform, von, bis, öffentlich (j/n), Ersteller)
-   - Berechtigungen (Auswahl von Rollen, die den Termin sehen dürfen)
-   - Absente Klassen/Jahrgangsstufen (Matrix)
    - Benötigte Ressourcen (Räume, ...)
    - Prüfungsdetails (welche Klasse/n, welche Art von Prüfung, geheim?, weitere erlaubt?)
-
-
 
  - Ferien und Feiertage als "Background events" von Fullcalendar
  - Schulaufgabenkalender

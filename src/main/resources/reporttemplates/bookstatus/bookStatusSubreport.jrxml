@@ -1,41 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2017-05-26T18:55:55 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="borrowedBooks" pageWidth="500" pageHeight="400" columnWidth="500" columnSpacing="5" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f1c190c4-e104-4638-9c70-b2dea1d1003d">
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-05-27T00:01:25 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="borrowedBooks" pageWidth="550" pageHeight="400" columnWidth="550" columnSpacing="5" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f1c190c4-e104-4638-9c70-b2dea1d1003d">
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
 	<field name="statusdate" class="java.util.Date"/>
 	<field name="evidence" class="java.lang.String"/>
 	<field name="mark" class="java.lang.String"/>
-	<columnHeader>
-		<band height="23">
-			<staticText>
-				<reportElement x="0" y="5" width="71" height="14" uuid="38ad902f-091e-4670-bfdc-1f96de7a2689"/>
-				<text><![CDATA[Zeitpunkt]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="80" y="5" width="303" height="14" uuid="37655baa-28bc-46dc-9335-e742a19e25b3"/>
-				<text><![CDATA[Beschreibung]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="398" y="5" width="71" height="14" uuid="9d3f5ef6-fdef-4ff3-b47b-78068eca02ff"/>
-				<text><![CDATA[Note]]></text>
-			</staticText>
-		</band>
-	</columnHeader>
 	<detail>
-		<band height="24" splitType="Stretch">
+		<band height="14" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<textField>
-				<reportElement x="0" y="0" width="71" height="18" uuid="4daeda48-36d6-4727-be56-7855c0763d2e"/>
+				<reportElement x="28" y="0" width="49" height="14" uuid="4daeda48-36d6-4727-be56-7855c0763d2e"/>
+				<textElement verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA[$F{statusdate}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="80" y="0" width="303" height="18" uuid="f11a61aa-ff16-4d5d-be81-053afd330462"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="77" y="0" width="306" height="14" uuid="f11a61aa-ff16-4d5d-be81-053afd330462"/>
+				<textElement verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA[$F{evidence}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="398" y="0" width="71" height="18" uuid="6f7ffa40-7924-44cb-9447-d5ccf8fec69f"/>
+				<reportElement x="398" y="0" width="152" height="14" uuid="6f7ffa40-7924-44cb-9447-d5ccf8fec69f">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Top"/>
 				<textFieldExpression><![CDATA[$F{mark}]]></textFieldExpression>
 			</textField>
 		</band>

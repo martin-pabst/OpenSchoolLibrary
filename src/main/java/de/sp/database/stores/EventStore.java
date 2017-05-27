@@ -70,9 +70,7 @@ public class EventStore {
         }
 
     }
-
-
-
+    
 
     private void addAbsence(Absence absence){
         Event event = eventIdToEventMap.get(absence.getEvent_id());
@@ -257,4 +255,74 @@ public class EventStore {
         return eventIdToEventMap.get(event_id);
 
     }
+    
+    public void storeAbsenceIntoDatabase(Absence absence, Event event, Connection con){
+        absence.setEvent_id(event.getId());
+        absence.setEvent(event);
+        AbsenceDAO.insert(absence, con);
+        
+        event.getAbsences().add(absence);
+        addAbsence(absence);
+    }
+
+
+    public void removeAbsence(Absence absence, List<Integer> oldYearMonthList, Event event, Long school_id, Connection con) {
+
+        AbsenceDAO.remove(absence, con);
+
+        event.getAbsences().remove(absence);
+
+        if(absence.getSchool_id() != null) {
+            removeAbsenceFromMap(schoolIdToYearMonthToAbsenceList, absence.getSchool_id(), oldYearMonthList, absence);
+        }
+
+        if(absence.getClass_id() != null) {
+            removeAbsenceFromMap(classIdToYearMonthToAbsenceList, absence.getClass_id(), oldYearMonthList, absence);
+        }
+
+        if(absence.getForm_id() != null) {
+            removeAbsenceFromMap(formIdToYearMonthToAbsenceList, absence.getForm_id(), oldYearMonthList, absence);
+        }
+
+    }
+
+    private void removeAbsenceFromMap(Map<Long, Map<Integer, List<Absence>>> IdToYearMonthToAbsenceList,
+                                      Long id, List<Integer> oldYearMonthList, Absence absence) {
+
+        Map<Integer, List<Absence>> yearMonthToAbsenceList = IdToYearMonthToAbsenceList.get(id);
+
+        for (Integer yearMonth : oldYearMonthList) {
+            List<Absence> absenceList = yearMonthToAbsenceList.get(yearMonth);
+            if(absenceList != null){
+                absenceList.remove(absence);
+            }
+        }
+        
+    
+    }
+
+    public void removeEvent(Event event, Connection con){
+
+        EventDAO.remove(event, con);
+
+        List<Integer> yearMonthList = event.getYearMonthList();
+
+        Map<Integer, List<Event>> yearMonthToEventMap = schoolIdToYearMonthToEventMap.get(event.getSchool_id());
+        for (Integer yearMonth : yearMonthList) {
+            List<Event> eventList = yearMonthToEventMap.get(yearMonth);
+            if(eventList != null){
+                eventList.remove(event);
+            }
+        }
+
+        eventIdToEventMap.remove(event.getId());
+
+        for (Absence absence : event.getAbsences()) {
+            removeAbsence(absence,yearMonthList, event, event.getSchool_id(), con);
+        }
+
+
+    }
+
+
 }

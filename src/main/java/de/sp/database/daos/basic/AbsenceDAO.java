@@ -35,4 +35,13 @@ public class AbsenceDAO {
     }
 
 
+    public static void remove(Absence absence, Connection con) {
+
+        String sql = StatementStore.getStatement("absence.remove");
+
+        con.createQuery(sql)
+                .addParameter("id", absence.getId())
+                .executeUpdate();
+
+    }
 }

@@ -11,18 +11,21 @@ public class Absence {
     private Long form_id; // Jahrgangsstufe
     private Long event_id;
 
-    private boolean no_written_tests;
-    private boolean no_tests;
+    // TODO: rename: no_big_tests
+    private boolean no_big_tests;
+
+    // TODO: rename: no_small_tests;
+    private boolean no_small_tests;
 
     transient private Event event;
 
     public Absence(Long school_id, Long class_id, Long form_id,
-                   boolean no_written_tests, boolean no_tests) {
+                   boolean no_big_tests, boolean no_small_tests) {
         this.school_id = school_id;
         this.class_id = class_id;
         this.form_id = form_id;
-        this.no_written_tests = no_written_tests;
-        this.no_tests = no_tests;
+        this.no_big_tests = no_big_tests;
+        this.no_small_tests = no_small_tests;
     }
 
     public Long getId() {
@@ -65,12 +68,12 @@ public class Absence {
         return school_id;
     }
 
-    public boolean getNo_written_tests() {
-        return no_written_tests;
+    public boolean getNo_big_tests() {
+        return no_big_tests;
     }
 
-    public boolean getNo_tests() {
-        return no_tests;
+    public boolean getNo_small_tests() {
+        return no_small_tests;
     }
 
     public void setEvent_id(Long event_id) {

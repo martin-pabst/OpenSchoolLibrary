@@ -1,14 +1,14 @@
 package de.sp.database.connection;
 
+import com.jolbox.bonecp.BoneCPConfig;
+import com.jolbox.bonecp.BoneCPDataSource;
+import de.sp.main.config.Configuration;
+import de.sp.main.config.DatabaseConfig;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.quirks.PostgresQuirks;
 
-import com.jolbox.bonecp.BoneCPConfig;
-import com.jolbox.bonecp.BoneCPDataSource;
-
-import de.sp.main.config.Configuration;
-import de.sp.main.config.DatabaseConfig;
+import java.util.concurrent.TimeUnit;
 
 public class ConnectionPool {
 	
@@ -36,7 +36,12 @@ public class ConnectionPool {
 
 		bcConfig.setPartitionCount(1);
 
+		bcConfig.setLazyInit(true);
+		bcConfig.setAcquireRetryAttempts(5);
+		bcConfig.setAcquireRetryDelay(10, TimeUnit.SECONDS);
+
 		boneCPDataSource = new BoneCPDataSource(bcConfig);
+
 
 	}
 	

@@ -4,10 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.EventDAO;
-import de.sp.database.model.Event;
-import de.sp.database.model.EventRestriction;
-import de.sp.database.model.User;
+import de.sp.database.daos.basic.EventRestrictionDAO;
+import de.sp.database.model.*;
 import de.sp.database.stores.EventStore;
+import de.sp.database.stores.StudentClassStore;
+import de.sp.database.stores.ValueListStore;
+import de.sp.database.valuelists.ValueListType;
 import de.sp.main.resources.modules.InsufficientPermissionException;
 import de.sp.main.resources.text.TS;
 import de.sp.modules.calendar.CalendarModule;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -75,6 +78,28 @@ public class CalendarServlet extends BaseServlet {
 
                         break;
 
+                    case "setEventDetails": // also inserts new Events if given id == null
+
+                        SetEventDetailsRequest sedr = gson.fromJson(postData, SetEventDetailsRequest.class);
+
+                        user.checkPermission(CalendarModule.CALENDAROPEN,
+                                sedr.school_id);
+
+                        responseString = gson.toJson(setEventDetails(sedr, user, con));
+
+                        break;
+
+                    case "removeEvent":
+
+                        RemoveEventRequest rer = gson.fromJson(postData, RemoveEventRequest.class);
+
+                        user.checkPermission(CalendarModule.CALENDAROPEN,
+                                rer.school_id);
+
+                        responseString = gson.toJson(removeEvent(rer, user, con));
+
+                        break;
+
                 }
 
                 con.commit(true);
@@ -91,6 +116,193 @@ public class CalendarServlet extends BaseServlet {
         response.setStatus(HttpServletResponse.SC_OK);
 
         response.getWriter().println(responseString);
+
+    }
+
+    private Object removeEvent(RemoveEventRequest rer, User user, Connection con) throws Exception {
+
+        Event event = EventStore.getInstance().getEventById(rer.event_id);
+
+        if(!event.getSchool_id().equals(rer.school_id)){
+            return new RemoveEventResponse("error", "Dieser Termin gehört zu einer anderen Schule und kann daher nicht gelöscht werden.");
+        }
+
+        EventStore.getInstance().removeEvent(event, con);
+
+        return new RemoveEventResponse("success", "");
+    }
+
+    private SetEventDetailsResponse setEventDetails(SetEventDetailsRequest sedr, User user, Connection con) {
+
+        Event event;
+
+        List<Integer> oldYearMonthList;
+
+        if(sedr.id == null){
+
+            event = new Event(sedr.school_id, sedr.title, sedr.description, sedr.short_title,
+                    sedr.location, sedr.allDay, sedr.preliminary, sedr.start, sedr.end,
+                    sedr.start_period, sedr.end_period, sedr.color, sedr.backgroundColor,
+                    sedr.borderColor, sedr.textColor);
+
+            EventStore.getInstance().storeEventIntoDatabase(event, con);
+
+            oldYearMonthList = new ArrayList<>();
+
+        } else {
+
+            event = EventStore.getInstance().getEventById(sedr.id);
+
+            oldYearMonthList = event.getYearMonthList();
+
+            event.updateAttributes(sedr.title, sedr.description, sedr.short_title,
+                    sedr.location, sedr.allDay, sedr.preliminary, sedr.start, sedr.end,
+                    sedr.start_period, sedr.end_period, sedr.color, sedr.backgroundColor,
+                    sedr.borderColor, sedr.textColor);
+
+            EventDAO.update(event, con);
+
+        }
+        
+        updateAbsentClassesAndForms(sedr, event, oldYearMonthList, con);
+
+        updateRestrictions(sedr, event, con);
+
+        return new SetEventDetailsResponse("success", "", event);
+
+    }
+
+    private void updateRestrictions(SetEventDetailsRequest sedr, Event event, Connection con) {
+
+        // Remove restrictions which are no more needed
+        int i = 0;
+        while (i < event.getRestrictions().size()) {
+
+            EventRestriction eventRestriction = event.getRestrictions().get(i);
+
+            Long role_id = eventRestriction.getRole_id();
+
+            if(role_id != null){
+                if(sedr.restrictionIndices.contains(role_id)){
+                    sedr.restrictionIndices.remove(role_id);
+                } else {
+                    event.getRestrictions().remove(eventRestriction);
+                    i--;
+                }
+            }
+
+            i++;
+
+        }
+
+        //create new restrictions
+        //if user clicks on "visible for whole school" then -1 is in list
+        if(!sedr.restrictionIndices.contains(new Long(-1))) {
+            for (Long role_id : sedr.restrictionIndices) {
+                EventRestriction eventRestriction = new EventRestriction(role_id, null, event);
+                EventRestrictionDAO.insert(eventRestriction, con);
+                event.getRestrictions().add(eventRestriction);
+            }
+        }
+
+    }
+
+    private void updateAbsentClassesAndForms(SetEventDetailsRequest sedr, Event event, List<Integer> oldYearMonthList, Connection con) {
+
+        if(sedr.absenceWholeSchool){
+            // this leads to all stored absences for classes/forms being removed later on:
+            sedr.absencesSelectedClasses.clear();
+
+            Absence absence = new Absence(sedr.school_id, null, null, sedr.absenceNoBigTests, sedr.absenceNoSmallTests);
+            EventStore.getInstance().storeAbsenceIntoDatabase(absence, event, con);
+
+        }
+
+        // if all classes of one form are absent, then remove them out of sedr.absentClassIds and add form_id in this List:
+        List<Long> absent_form_ids = getAbsentForms(sedr);
+
+        //Remove form-ids and class-ids which are already present in event
+        int i = 0;
+        while (i < event.getAbsences().size()) {
+            
+            Absence absence = event.getAbsences().get(i);
+            
+            if(absence.getForm_id() != null){
+                if(absent_form_ids.contains(absence.getForm_id())){
+                    absent_form_ids.remove(absence.getForm_id());
+                } else {
+                    EventStore.getInstance().removeAbsence(absence, oldYearMonthList, event,
+                            sedr.school_id, con);
+                    i--;
+                }
+                
+            }
+            
+            if(absence.getClass_id() != null){
+                if(sedr.absencesSelectedClasses.contains(absence.getClass_id())){
+                    sedr.absencesSelectedClasses.remove(absence.getClass_id());
+                } else {
+                    EventStore.getInstance().removeAbsence(absence, oldYearMonthList, event,
+                            sedr.school_id, con);
+                    i--;
+                }
+                
+            }
+
+            i++;
+
+        }
+
+        //Insert new absence-entries
+        for (Long absent_form_id : absent_form_ids) {
+
+            Absence absence = new Absence(null, null, absent_form_id, sedr.absenceNoBigTests, sedr.absenceNoSmallTests);
+            EventStore.getInstance().storeAbsenceIntoDatabase(absence, event, con);
+        }
+
+        for (Long class_id : sedr.absencesSelectedClasses) {
+
+            Absence absence = new Absence(null, class_id, null, sedr.absenceNoBigTests, sedr.absenceNoSmallTests);
+            EventStore.getInstance().storeAbsenceIntoDatabase(absence, event, con);
+
+        }
+
+    }
+
+    private List<Long> getAbsentForms(SetEventDetailsRequest sedr) {
+        
+        ArrayList<Long> absent_form_ids = new ArrayList<>();
+        
+        List<DBClass> classList = StudentClassStore.getInstance().
+                getClassesInSchoolTerm(sedr.school_term_id);
+
+        List<Value> forms = ValueListStore.getInstance().getValueList(sedr.school_id, ValueListType.form.getKey());
+
+        for (Value form : forms) {
+        
+            boolean allClassesInForm = true;
+            List<Long> classIds = new ArrayList<>();
+            
+            for (DBClass dbClass : classList) {
+                if(form.getId().equals(dbClass.getForm_id())){
+                    classIds.add(dbClass.getId());
+                    if(!sedr.absencesSelectedClasses.contains(dbClass.getId())){
+                        allClassesInForm = false;
+                        break;
+                    }
+                }
+            }
+            
+            if(allClassesInForm){
+                absent_form_ids.add(form.getId());
+                sedr.absencesSelectedClasses.removeAll(classIds);
+            }
+            
+            classIds.clear();
+            
+        }
+        
+        return absent_form_ids;
 
     }
 

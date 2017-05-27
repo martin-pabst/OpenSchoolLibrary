@@ -3,6 +3,7 @@ package de.sp.modules.library.reports.reportsschueler.borrowedbooks;
 import de.sp.database.model.BookCopyStatus;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,16 @@ public class BorrowedBooksRecord implements Comparable<BorrowedBooksRecord> {
 
     public BorrowedBooksRecord(){
 
+    }
+
+    public String getBeginDateFormatted(){
+        if(begindate == null){
+            return "";
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+
+        return sdf.format(begindate);
     }
 
     public JRBeanCollectionDataSource getStatusDataSource(){

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.0.final using JasperReports Library version 6.3.0  -->
-<!-- 2017-05-26T19:05:19 -->
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-05-27T00:05:25 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="borrowedBooks" pageWidth="595" pageHeight="842" columnWidth="555" columnSpacing="5" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f1c190c4-e104-4638-9c70-b2dea1d1003d">
 	<parameter name="subreportParameter" class="net.sf.jasperreports.engine.JasperReport"/>
 	<queryString>
@@ -17,12 +17,13 @@
 		<groupExpression><![CDATA[$F{class_name}]]></groupExpression>
 		<groupHeader>
 			<band height="52">
+				<printWhenExpression><![CDATA[$F{firstname} != null]]></printWhenExpression>
 				<textField>
 					<reportElement x="0" y="0" width="554" height="20" uuid="bcd9c0fd-47c7-4e1a-80d0-a6d81799f928"/>
 					<textElement>
 						<font size="14" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Klasse " + $F{class_name} + ": Entliehene Bücher"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Klasse " + $F{class_name} + ": Entliehene Bücher mit Zustand"]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -53,7 +54,8 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="49" splitType="Stretch">
+		<band height="13" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<printWhenExpression><![CDATA[$F{title} != null]]></printWhenExpression>
 			<textField>
 				<reportElement x="0" y="0" width="220" height="13" uuid="947ac548-95aa-406f-9870-96b8309412d6"/>
@@ -64,19 +66,12 @@
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{begindate}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="0" y="15" width="80" height="14" uuid="1c13a695-a598-41a5-a3f5-38aecb07c3a5">
-					<printWhenExpression><![CDATA[$F{statusDataSource}.getRecordCount() > 0]]></printWhenExpression>
-				</reportElement>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Buchzustand:]]></text>
-			</staticText>
+		</band>
+		<band height="23">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<printWhenExpression><![CDATA[$F{statusDataSource}.getRecordCount() > 0]]></printWhenExpression>
 			<subreport>
-				<reportElement x="0" y="30" width="554" height="19" uuid="05988e1c-30ea-481a-bdd3-e3429d7fa776">
-					<printWhenExpression><![CDATA[$F{statusDataSource}.getRecordCount() > 0]]></printWhenExpression>
-				</reportElement>
+				<reportElement x="0" y="0" width="554" height="19" uuid="05988e1c-30ea-481a-bdd3-e3429d7fa776"/>
 				<dataSourceExpression><![CDATA[$F{statusDataSource}]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{subreportParameter}]]></subreportExpression>
 			</subreport>

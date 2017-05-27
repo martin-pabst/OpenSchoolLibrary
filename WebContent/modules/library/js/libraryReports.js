@@ -67,7 +67,7 @@
         var selectedRows = [];
 
         if (gridObj !== undefined) {
-            gridObj.getSelection(false);
+            selectedRows = gridObj.getSelection(false);
             if (selectedRows.length === 0) {
                 gridObj.selectAll();
                 selectedRows = gridObj.getSelection(false);

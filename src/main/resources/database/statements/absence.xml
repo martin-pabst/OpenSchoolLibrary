@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <statementlist>
 
+    <statement name="absence.remove">
+        delete from absence where id = :id
+    </statement>
 
     <statement name="absence.getAll">
-      select id, school_id, class_id, form_id, no_written_tests, no_tests, event_id
+      select id, school_id, class_id, form_id, no_big_tests, no_small_tests, event_id
         from absence
     </statement>
 
     <statement name="absence.insert">
-        insert into absence (school_id, class_id, form_id, event_id, no_tests, no_written_tests)
-                values (:school_id, :class_id, :form_id, :event_id, :no_tests, :no_written_tests)
+        insert into absence (school_id, class_id, form_id, event_id, no_small_tests, no_big_tests)
+                values (:school_id, :class_id, :form_id, :event_id, :no_small_tests, :no_big_tests)
     </statement>
 
 

@@ -2,6 +2,10 @@
 <statementlist>
 
 
+    <statement name="event.getDescription">
+        select description from event where id = :event_id
+    </statement>
+
     <statement name="event.getAllWithoutDescription">
         select id, school_id, title, short_title, location, allDay, preliminary,
             start_timestamp, end_timestamp, start_period, end_period, color
@@ -19,5 +23,27 @@
              :color, :backgroundColor, :borderColor, :textColor)
     </statement>
 
+    <statement name="event.update" >
+        update event
+            set title = :title,
+                description = :description,
+                short_title = :short_title,
+                location = :location,
+                allDay = :allDay,
+                preliminary = :preliminary,
+                start_timestamp = :start,
+                end_timestamp = :end,
+                start_period = :start_period,
+                end_period = :end_period,
+                color = :color,
+                backgroundcolor = :backgroundColor,
+                bordercolor = :borderColor,
+                textcolor = :textColor
+        WHERE id = :id
+    </statement>
+
+    <statement name="event.remove">
+        delete from event where id = :id
+    </statement>
 
 </statementlist>

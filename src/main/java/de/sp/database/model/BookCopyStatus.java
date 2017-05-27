@@ -1,4 +1,5 @@
 package de.sp.database.model;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -27,6 +28,15 @@ public class BookCopyStatus{
    public BookCopyStatus(){
 }
 
+    public String getStatusDateFormatted(){
+        if(statusdate == null){
+            return "";
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+
+        return sdf.format(statusdate);
+    }
 
 
 

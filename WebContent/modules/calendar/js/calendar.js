@@ -27,6 +27,7 @@
     });
 
     var calendarEntriesType = "schedule";
+    var detailsDialogFullcalendarEvent = null;
 
     function initializeCalendar(calendarHeight) {
         $('#fullCalendar').fullCalendar({
@@ -88,10 +89,12 @@
 
     function openEventDetailsDialog(event){
 
+        detailsDialogFullcalendarEvent = event;
+
         $.post('/calendar/fetchEventDetails',
             JSON.stringify({school_id: global_school_id,
                             school_term_id: global_school_term_id,
-                            eventId: event.id}),
+                            event_id: event.id}),
             function (data) {
                 
                 loadDetailValues(data);
@@ -110,48 +113,50 @@
 
     function initializeEventDetailsDialog(){
 
+
+        $('#eventDateFrom').datetimepicker({
+            locale: 'de',
+            calendarWeeks: true,
+            format: 'DD.MM.YYYY'
+        });
+
+        $('#eventTimeFrom').timepicker({
+            minuteStep: 5,
+            showSeconds: false,
+            showMeridian: false,
+            defaultTime: false,
+            explicitMode: true
+        });
+
+        $('#eventDateTo').datetimepicker({
+            locale: 'de',
+            calendarWeeks: true,
+            format: 'DD.MM.YYYY'
+        });
+
+        $('#eventTimeTo').timepicker({
+            minuteStep: 5,
+            showSeconds: false,
+            showMeridian: false,
+            defaultTime: false,
+            explicitMode: true
+        });
+
+        $("#eventDateFrom").on("dp.change", function (e) {
+            $('#eventDateTo').data("DateTimePicker").minDate(e.date);
+        });
+
+        $("#eventDateTo").on("dp.change", function (e) {
+            $('#eventDateFrom').data("DateTimePicker").maxDate(e.date);
+        });
+
+
+
         $('#eventDetailsDialog').on('shown.bs.modal', function (e) {
 
             $('#eventName').focus();
 
             $('#eventDetailsForm').validator();
-
-
-            $('#eventDateFrom').datetimepicker({
-                locale: 'de',
-                calendarWeeks: true,
-                format: 'DD.MM.YYYY'
-            });
-
-            $('#eventTimeFrom').timepicker({
-                minuteStep: 5,
-                showSeconds: false,
-                showMeridian: false,
-                defaultTime: false,
-                explicitMode: true
-            });
-
-            $('#eventDateTo').datetimepicker({
-                locale: 'de',
-                calendarWeeks: true,
-                format: 'DD.MM.YYYY'
-            });
-
-            $('#eventTimeTo').timepicker({
-                minuteStep: 5,
-                showSeconds: false,
-                showMeridian: false,
-                defaultTime: false,
-                explicitMode: true
-            });
-
-            $("#eventDateFrom").on("dp.change", function (e) {
-                $('#eventDateTo').data("DateTimePicker").minDate(e.date);
-            });
-
-            $("#eventDateTo").on("dp.change", function (e) {
-                $('#eventDateFrom').data("DateTimePicker").maxDate(e.date);
-            });
 
         });
 
@@ -194,7 +199,7 @@
 
         $('#calendarDetailsForm').validator().on('submit', function (e) {
             if (!e.isDefaultPrevented()) {
-                saveEventDetailValues();
+                saveDetailValues();
             }
 
         });
@@ -206,25 +211,25 @@
 
         var html = '';
 
-        for(var jgst in absenceValues){
-            if(absenceValues.hasOwnProperty(jgst)){
-                html += '<div style="margin-top: 0.5em">\n';
-                html += '<button type="button" class="btn btn-primary btn-xs">' + jgst + '</button>\n';
-                html += '<div class="btn-group" data-toggle="buttons"\n>';
+        for(var i = 0; i < absenceValues.length; i++){
+            var form = absenceValues[i];
+            html += '<div style="margin-top: 0.5em">\n';
+            html += '<button type="button" class="btn btn-primary btn-xs">' + form.form_name + '</button>\n';
+            html += '<div class="btn-group" data-toggle="buttons"\n>';
 
-                for(var className in absenceValues[jgst]){
-                    if(absenceValues[jgst].hasOwnProperty(className)){
+                for(var j = 0; j < form.classEntries.length; j++){
 
-                        var active = absenceValues[jgst][className] ? ' active' : '';
-                        html += '<label class="btn btn-xs btn-default class-button' + active + '"><input type="checkbox">' + className + '</label>';
+                    var classEntry = form.classEntries[j];
 
-                    }
+                    var active = classEntry.is_absent ? ' active' : '';
+                    html += '<label class="btn btn-xs btn-default class-button' + active + '"><input type="checkbox">' + classEntry.class_name + '</label>';
+
                 }
 
 
                 html += '</div></div>';
-            }
         }
+
 
         $('#eventAbsencesMatrix').html(html);
 
@@ -234,11 +239,13 @@
 
         var event = eventData.event;
 
+        $('#eventAbsencesWholeSchool').prop('checked', eventData.absenceWholeSchool);
+
         $('#eventName').val(event.title);
         $('#eventNameShort').val(event.short_title);
 
-        var from = moment(event.start);
-        var to = moment(event.end);
+        var from = moment(event.start, "DD.MM.YYYY");
+        var to = moment(event.end, "DD.MM.YYYY");
 
         $('#eventDateFrom').data('DateTimePicker').date(from.format('DD.MM.Y'));
         $('#eventDateTo').data('DateTimePicker').date(to.format('DD.MM.Y'));
@@ -258,69 +265,113 @@
         $('#eventLocation').val(event.location);
         $('#eventDescription').val(event.description);
 
-        //todo: set options according to data.roleRestrictions == GetEventDetailsResponse.roleRestrictions
-        $('#eventRestriction').find('option[value="3"]').prop('selected', true);
+        var html = '<option value="-1" style="color: green; font-weight: bold">Alle (öffentlich)</option>';
+        var selectedValues = [];
 
-        $('#eventAbsencesWholeSchool').prop('checked', false);
-        $('#eventAbsencesNoBigTests').prop('checked', false);
-        $('#eventAbsencesNoSmallTests').prop('checked', true);
+        for(var i = 0; i < eventData.roleRestrictions.length; i++){
 
-        var absenceValues = {
+            var restriction = eventData.roleRestrictions[i];
 
-            '5': {
-                '5a': true,
-                '5b': false,
-                '5c': true
-            },
-            '6': {
-                '6a': false,
-                '6b': true,
-                '6c': false
+            html += '<option value="' + restriction.id + '">' + restriction.name + '</option>';
+
+            if(restriction.isRestricted){
+                selectedValues.push[restriction.id];
             }
 
-        };
+        }
 
-        buildAbsenceMatrix(absenceValues);
+        var eventRestrictionElement = $('#eventRestriction');
+        eventRestrictionElement.html(html);
+
+        eventRestrictionElement.selectpicker('val', selectedValues);
+        eventRestrictionElement.selectpicker('refresh');
+
+        buildAbsenceMatrix(eventData.formEntries);
 
     }
 
     function saveDetailValues(){
 
-        var eventData = {};
+        var eventData = {
+            id: null
+        }
 
-        eventData['eventName'] = $('#eventName').val();
-        eventData['shortName'] = $('#eventNameShort').val();
-        eventData['dateFrom'] = $('#eventDateFrom').find('input').val();
-        eventData['dateTo'] = $('#eventDateTo').find('input').val();
+        if(detailsDialogFullcalendarEvent !== null){
+            eventData.id = detailsDialogFullcalendarEvent.id;
+        }
+        
+        var fcEventStart;
+        var fcEventEnd;
 
-        eventData['timeFrom'] = $('#eventTimeFrom').val();
-        eventData['timeTo'] = $('#eventTimeTo').val();
+        eventData.title = $('#eventName').val();
+        eventData.short_title = $('#eventNameShort').val();
 
-        eventData['wholeDay'] = $('#eventWholeDay').prop('checked');
-        eventData['location'] = $('#eventLocation').val();
-        eventData['description'] = $('#eventDescription').val();
+        eventData.allDay = $('#eventWholeDay').prop('checked');
 
-        eventData['restriction'] = $('#eventRestriction').val();
+        eventData.start = $('#eventDateFrom').find('input').val();
+        fcEventStart = $.fullCalendar.moment.parse(eventData.start, "DD.MM.YYYY");
+        fcEventStart.stripTime();
+
+        eventData.end = $('#eventDateTo').find('input').val();
+        fcEventEnd = $.fullCalendar.moment.parse(eventData.end, "DD.MM.YYYY");
+        fcEventEnd.stripTime();
+
+        if(!eventData.allDay){
+            eventData.start += " " + $('#eventTimeFrom').val();
+            fcEventStart = $.fullCalendar.moment.parse(eventData.start, "DD.MM.YYYY hh:mm");
+            eventData.end += " " + $('#eventTimeTo').val();
+            fcEventEnd = $.fullCalendar.moment.parse(eventData.end, "DD.MM.YYYY hh:mm");
+        }
+
+
+        eventData.location = $('#eventLocation').val();
+        eventData.description = $('#eventDescription').val();
+
+        eventData['restrictionIndices'] = $('#eventRestriction').selectpicker('val');
 
         eventData['absenceWholeSchool'] = $('#eventAbsencesWholeSchool').prop('checked');
         eventData['absenceNoBigTests'] = $('#eventAbsencesNoBigTests').prop('checked');
         eventData['absenceNoSmallTests'] = $('#eventAbsencesNoSmallTests').prop('checked');
 
         var activeLabels = $('#eventAbsence').find('label.active.class-button');
-        var inactiveLabels = $('#eventAbsence').find('label.class-button').not('.active');
 
         eventData['absencesSelectedClasses'] = [];
-        eventData['absencesUnselectedClasses'] = [];
 
         for(var i = 0; i < activeLabels.length; i++){
             eventData['absencesSelectedClasses'].push($(activeLabels[i]).text());
         }
 
-        for(var i = 0; i < inactiveLabels.length; i++){
-            eventData['absencesUnselectedClasses'].push($(inactiveLabels[i]).text());
-        }
+        $.post('/calendar/setEventDetails',
+            JSON.stringify({school_id: global_school_id,
+                school_term_id: global_school_term_id,
+                event_data: eventData}),
+            function (data) {
 
-        console.log(eventData);
+                if(data.status === "success"){
+
+                    if(data.isCreateEvent) {
+
+                        // Todo
+
+                    } else {
+
+                        detailsDialogFullcalendarEvent.title = eventData.title;
+                        detailsDialogFullcalendarEvent.start = eventData.start;
+                        detailsDialogFullcalendarEvent.end = eventData.end;
+                        $('#fullCalendar').fullCalendar('updateEvent', detailsDialogFullcalendarEvent);
+
+                    }
+                } else {
+                    w2alert(data.message);
+                }
+
+                return true;
+
+            }, "json");
+
+
+        // console.log(eventData);
+
     }
 
 

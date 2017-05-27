@@ -6,24 +6,28 @@ package de.sp.tools.string;
 public class FormTool {
 
     public static Integer formToInteger(String form){
-        form = form.trim();
 
-        int i = 0;
-        while(i < form.length() && Character.isDigit(form.charAt(i))){
-            i++;
+        StringBuilder sb = new StringBuilder(form.length());
+
+        boolean initial0 = true;
+
+        for(int i = 0; i < form.length(); i++){
+            char c = form.charAt(i);
+            if(Character.isDigit(c)){
+                if(!initial0 || c != '0') {
+                    sb.append(c);
+                    initial0 = false;
+                }
+            }
         }
 
-        form = form.substring(0, i);
-
-        int n = 0;
 
         try{
-            n = Integer.parseInt(form);
+            return  Integer.parseInt(sb.toString());
         } catch (NumberFormatException ex){
-
+            return 0;
         }
 
-        return n;
     }
 
 

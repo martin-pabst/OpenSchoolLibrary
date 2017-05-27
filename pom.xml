@@ -6,7 +6,7 @@
 
     <groupId>de.pabstsoftware</groupId>
     <artifactId>OpenSchoolPlatform</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <name>Open School Platform</name>
     <url>http://www.pabst-software.de</url>
@@ -74,6 +74,25 @@
                                     <directory>${basedir}/configuration</directory>
                                     <includes>
                                         <include>configuration.xml</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-WebContent</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/deploy/WebContent</outputDirectory>
+                            <encoding>UTF-8</encoding>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/WebContent</directory>
+                                    <includes>
+                                        <include>**/*</include>
                                     </includes>
                                 </resource>
                             </resources>

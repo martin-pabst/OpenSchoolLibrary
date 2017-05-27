@@ -31,8 +31,8 @@ public class Event {
 
     private boolean editable = false;
 
-    private ArrayList<EventRestriction> restrictions = null;
-    private  ArrayList<Absence> absences = null;
+    private List<EventRestriction> restrictions = new ArrayList<>();
+    private List<Absence> absences = new ArrayList<>();
 
 
 
@@ -110,11 +110,11 @@ public class Event {
         return school_id;
     }
 
-    public ArrayList<EventRestriction> getRestrictions() {
+    public List<EventRestriction> getRestrictions() {
         return restrictions;
     }
 
-    public ArrayList<Absence> getAbsences() {
+    public List<Absence> getAbsences() {
         return absences;
     }
 
@@ -225,6 +225,10 @@ public class Event {
 
     public boolean classIsAbsent(Long classId) {
 
+        if(absences == null){
+            return false;
+        }
+
         for (Absence absence : absences) {
             if(absence.getClass_id() != null && absence.getClass_id().equals(classId)){
                 return true;
@@ -237,6 +241,10 @@ public class Event {
 
     public boolean formIsAbsent(Long form_id) {
 
+        if(absences == null){
+            return false;
+        }
+
         for (Absence absence : absences) {
             if(absence.getForm_id() != null && absence.getForm_id().equals(form_id)){
                 return true;
@@ -246,6 +254,40 @@ public class Event {
         return false;
 
         
+    }
+
+    public void updateAttributes(String title, String description, String short_title,
+                 String location, Boolean allDay,
+                 Boolean preliminary, Date start, Date end, Integer start_period,
+                 Integer end_period, String color, String backgroundColor, String borderColor, String textColor) {
+        this.title = title;
+        this.description = description;
+        this.short_title = short_title;
+        this.location = location;
+        this.allDay = allDay;
+        this.preliminary = preliminary;
+        this.start = start;
+        this.end = end;
+        this.start_period = start_period;
+        this.end_period = end_period;
+        this.color = color;
+        this.backgroundColor = backgroundColor;
+        this.borderColor = borderColor;
+        this.textColor = textColor;
+
+    }
+
+
+    public Boolean wholeSchoolIsAbsent() {
+
+        for (Absence absence : absences) {
+            if(absence.getSchool_id() != null){
+                return true;
+            }
+        }
+
+        return false;
+
     }
 }
 
