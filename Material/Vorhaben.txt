@@ -1,6 +1,10 @@
-Überarbeiten:
-
-
+Nächste Arbeiten:
+ - Test und Debugging von "Termindetails bearbeiten"
+ - Termin löschen
+ - Termin per Drag'n drop verschieben
+ - Neue Berechtigung zum Bearbeiten von Terminen
+ - Attribut "veröffentlichter Termin"
+ - Die Anzeige der absenten Klassen ist vom Schuljahr abhängig, in dem sich der Termin(vereinfachtend: -start) befindet!
 
 Kalender
 
