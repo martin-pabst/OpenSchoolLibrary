@@ -35,7 +35,7 @@ public class CalendarServlet extends BaseServlet {
                                   User user, TS ts, String postData) throws ServletException,
             IOException {
 
-        Gson gson = new GsonBuilder().setDateFormat("dd.MM.yyyy").create();
+        Gson gson = new GsonBuilder().setDateFormat("dd.MM.yyyy HH:mm").create();
 
         String responseString = "";
 
@@ -132,7 +132,7 @@ public class CalendarServlet extends BaseServlet {
         return new RemoveEventResponse("success", "");
     }
 
-    private SetEventDetailsResponse setEventDetails(SetEventDetailsRequest sedr, User user, Connection con) {
+    private SetEventDetailsResponse setEventDetails(SetEventDetailsRequest sedr, User user, Connection con) throws Exception {
 
         Event event;
 
@@ -152,6 +152,10 @@ public class CalendarServlet extends BaseServlet {
         } else {
 
             event = EventStore.getInstance().getEventById(sedr.id);
+
+            if(!event.getSchool_id().equals(sedr.school_id)){
+                throw new Exception("Der Termin gehört zu einer anderen Schule als der Benutzer, der ihn verändern möchte.");
+            }
 
             oldYearMonthList = event.getYearMonthList();
 
@@ -236,7 +240,7 @@ public class CalendarServlet extends BaseServlet {
                     i--;
                 }
                 
-            }
+            } else
             
             if(absence.getClass_id() != null){
                 if(sedr.absencesSelectedClasses.contains(absence.getClass_id())){
@@ -280,11 +284,14 @@ public class CalendarServlet extends BaseServlet {
 
         for (Value form : forms) {
         
-            boolean allClassesInForm = true;
+            boolean allClassesInForm = false;
             List<Long> classIds = new ArrayList<>();
-            
+
+            // if at leas one class of this school belongs to given form and ALL classes of given school are marked
+            // absent in GUI (so that the belong to sedr.absencesSelectedClasses) then allClassesInForm == true
             for (DBClass dbClass : classList) {
                 if(form.getId().equals(dbClass.getForm_id())){
+                    allClassesInForm = true;  // at least one class of this school belongs to given form
                     classIds.add(dbClass.getId());
                     if(!sedr.absencesSelectedClasses.contains(dbClass.getId())){
                         allClassesInForm = false;
@@ -355,7 +362,7 @@ public class CalendarServlet extends BaseServlet {
 
             switch (rt) {
                 case schedule:
-                    removeEntry = (entry.hasAbsences() || entry.isTest());
+                    removeEntry = (entry.isTest());
                     break;
                 case absences:
                     removeEntry = (!entry.hasAbsences());

@@ -123,6 +123,14 @@ public class Event {
     }
 
     /**
+     * Don't remove the parameterless constructor as without it absences and restrictions are
+     * not initialized when event is deserialized from database with SQL2o.
+     */
+    public Event(){
+
+    }
+
+    /**
      *
      * Returns list with values 100*year + month (jan == 0) for each
      * (year/month) in interval [start; end]
@@ -147,7 +155,7 @@ public class Event {
     public static List<Integer> getYearMonthList(Date from, Date to){
 
         Integer ymiFrom = getYearMonthIndex(from);
-        Integer ymiTo = getYearMonthIndex(to);
+        Integer ymiTo = to == null ? ymiFrom : getYearMonthIndex(to);
 
         int i = ymiFrom;
 
@@ -170,9 +178,6 @@ public class Event {
 
 
     public void addAbsence(Absence absence) {
-        if(absences == null){
-            absences = new ArrayList<>();
-        }
 
         if(!absences.contains(absence)){
             absences.add(absence);
@@ -192,13 +197,13 @@ public class Event {
 
     public boolean hasAbsences() {
 
-        return absences != null && absences.size() > 0;
+        return absences.size() > 0;
 
     }
 
     public boolean hasRestrictions() {
 
-        return restrictions != null && restrictions.size() > 0;
+        return restrictions.size() > 0;
 
     }
 

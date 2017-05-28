@@ -197,7 +197,7 @@
 
         });
 
-        $('#calendarDetailsForm').validator().on('submit', function (e) {
+        $('#eventDetailsForm').validator().on('submit', function (e) {
             if (!e.isDefaultPrevented()) {
                 saveDetailValues();
             }
@@ -222,7 +222,7 @@
                     var classEntry = form.classEntries[j];
 
                     var active = classEntry.is_absent ? ' active' : '';
-                    html += '<label class="btn btn-xs btn-default class-button' + active + '"><input type="checkbox">' + classEntry.class_name + '</label>';
+                    html += '<label class="btn btn-xs btn-default class-button' + active + '" data-class-id="' + classEntry.class_id + '"><input type="checkbox">' + classEntry.class_name + '</label>';
 
                 }
 
@@ -244,11 +244,11 @@
         $('#eventName').val(event.title);
         $('#eventNameShort').val(event.short_title);
 
-        var from = moment(event.start, "DD.MM.YYYY");
-        var to = moment(event.end, "DD.MM.YYYY");
+        var from = moment(event.start, "DD.MM.YYYY HH:mm");
+        var to = moment(event.end, "DD.MM.YYYY HH:mm");
 
-        $('#eventDateFrom').data('DateTimePicker').date(from.format('DD.MM.Y'));
-        $('#eventDateTo').data('DateTimePicker').date(to.format('DD.MM.Y'));
+        $('#eventDateFrom').data('DateTimePicker').date(from.format('DD.MM.YYYY'));
+        $('#eventDateTo').data('DateTimePicker').date(to.format('DD.MM.YYYY'));
 
         var fromTime = '';
         var toTime = '';
@@ -293,8 +293,10 @@
     function saveDetailValues(){
 
         var eventData = {
+            school_id: global_school_id,
+            school_term_id: global_school_term_id,
             id: null
-        }
+        };
 
         if(detailsDialogFullcalendarEvent !== null){
             eventData.id = detailsDialogFullcalendarEvent.id;
@@ -309,18 +311,18 @@
         eventData.allDay = $('#eventWholeDay').prop('checked');
 
         eventData.start = $('#eventDateFrom').find('input').val();
-        fcEventStart = $.fullCalendar.moment.parse(eventData.start, "DD.MM.YYYY");
+        fcEventStart = $.fullCalendar.moment(eventData.start, "DD.MM.YYYY");
         fcEventStart.stripTime();
 
         eventData.end = $('#eventDateTo').find('input').val();
-        fcEventEnd = $.fullCalendar.moment.parse(eventData.end, "DD.MM.YYYY");
+        fcEventEnd = $.fullCalendar.moment(eventData.end, "DD.MM.YYYY");
         fcEventEnd.stripTime();
 
         if(!eventData.allDay){
             eventData.start += " " + $('#eventTimeFrom').val();
-            fcEventStart = $.fullCalendar.moment.parse(eventData.start, "DD.MM.YYYY hh:mm");
+            fcEventStart = $.fullCalendar.moment(eventData.start, "DD.MM.YYYY hh:mm");
             eventData.end += " " + $('#eventTimeTo').val();
-            fcEventEnd = $.fullCalendar.moment.parse(eventData.end, "DD.MM.YYYY hh:mm");
+            fcEventEnd = $.fullCalendar.moment(eventData.end, "DD.MM.YYYY hh:mm");
         }
 
 
@@ -338,13 +340,11 @@
         eventData['absencesSelectedClasses'] = [];
 
         for(var i = 0; i < activeLabels.length; i++){
-            eventData['absencesSelectedClasses'].push($(activeLabels[i]).text());
+            eventData['absencesSelectedClasses'].push($(activeLabels[i]).data('class-id'));
         }
 
         $.post('/calendar/setEventDetails',
-            JSON.stringify({school_id: global_school_id,
-                school_term_id: global_school_term_id,
-                event_data: eventData}),
+            JSON.stringify(eventData),
             function (data) {
 
                 if(data.status === "success"){
