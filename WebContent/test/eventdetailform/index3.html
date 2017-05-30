@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="../../public/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../public/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css">
     <link rel="stylesheet" href="../../public/lib/bootstrap-combobox/css/bootstrap-combobox.css">
+    <link rel="stylesheet" href="eventdetails.css">
 
 
 </head>
@@ -92,9 +93,9 @@
                             <div class="form-inline" style="margin-top: 10px">
 
                                 <label>Beginn:</label>
-                                <div class="form-group has-feedback" style="margin-right: 10px; width: 12em">
+                                <div class="form-group has-feedback" style="margin-right: 10px; width: 10em">
                                     <div class='input-group date' id='eventDateFrom'>
-                                        <input type='text' class="form-control"
+                                        <input type='text' class="form-control correct-rightpadding"
                                                pattern="^(\d{2})\.(\d{2})\.(\d{2})(\d{2})? *$"
                                                required/>
                                         <span class="input-group-addon">
@@ -104,8 +105,8 @@
                                 </div>
 
                                 <div class="form-group has-feedback">
-                                    <div class="input-group" style="width: 9em">
-                                        <select id="eventTimeFrom" class="combobox form-control">
+                                    <div class="input-group" style="width: 8em">
+                                        <select id="eventTimeFrom" class="combobox form-control correct-rightpadding">
                                             <option></option>
                                             <option value="-"> - - : - -</option>
                                             <option value="10:00">10:00</option>
@@ -116,9 +117,9 @@
                                 </div>
 
                                 <label>Ende:</label>
-                                <div class="form-group has-feedback" style="margin-right: 10px; width: 12em">
+                                <div class="form-group has-feedback" style="margin-right: 10px; width: 10em">
                                     <div class='input-group date' id='eventDateTo'>
-                                        <input type='text' class="form-control"
+                                        <input type='text' class="form-control correct-rightpadding"
                                                pattern="^(\d{2})\.(\d{2})\.(\d{2})(\d{2})? *$"
                                                required/>
                                         <span class="input-group-addon">
@@ -128,7 +129,7 @@
                                 </div>
 
                                 <div class="input-group bootstrap-timepicker timepicker" style="width: 8em">
-                                    <input id="eventTimeTo" type="text" class="form-control">
+                                    <input id="eventTimeTo" type="text" class="form-control correct-rightpadding">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                                 </div>
 

@@ -417,12 +417,16 @@
       var that = this;
       this.focused = false;
       var val = this.$element.val();
+
+// Martin Pabst, may 2017: commented out to allow values that are not present in dropdown list
+/*
       if (!this.selected && val !== '' ) {
         this.$element.val('');
         this.$source.val('').trigger('change');
         this.$target.val('').trigger('change');
       }
-      if (!this.mousedover && this.shown) {setTimeout(function () { that.hide(); }, 200);}
+*/
+    if (!this.mousedover && this.shown) {setTimeout(function () { that.hide(); }, 200);}
     }
 
   , click: function (e) {

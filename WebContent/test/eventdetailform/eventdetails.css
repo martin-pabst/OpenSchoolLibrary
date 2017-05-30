@@ -9,3 +9,7 @@
 .modal-body .form-horizontal .col-sm-offset-2 {
     margin-left: 15px;
 }
+
+.correct-rightpadding {
+    padding-right: 0.5em !important;
+}
