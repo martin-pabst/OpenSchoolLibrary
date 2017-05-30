@@ -13,8 +13,6 @@ $(function () {
 
         $('#eventName').focus();
 
-        $('#myForm').validator();
-
 
         $('#eventDateFrom').datetimepicker({
             locale: 'de',
@@ -22,26 +20,15 @@ $(function () {
             format: 'DD.MM.YYYY'
         });
 
-        $('#eventTimeFrom').timepicker({
-            minuteStep: 5,
-            showSeconds: false,
-            showMeridian: false,
-            defaultTime: false,
-            explicitMode: true
+        $('#eventTimeFrom').combobox({
+            placeholder: '- - : - -',
+            pattern: "^ *(\d{1})?(\d{1}):(\d{2}) *$"
         });
 
         $('#eventDateTo').datetimepicker({
             locale: 'de',
             calendarWeeks: true,
             format: 'DD.MM.YYYY'
-        });
-
-        $('#eventTimeTo').timepicker({
-            minuteStep: 5,
-            showSeconds: false,
-            showMeridian: false,
-            defaultTime: false,
-            explicitMode: true
         });
 
         $("#eventDateFrom").on("dp.change", function (e) {
@@ -51,6 +38,9 @@ $(function () {
         $("#eventDateTo").on("dp.change", function (e) {
             $('#eventDateFrom').data("DateTimePicker").maxDate(e.date);
         });
+
+        $('#myForm').validator();
+
 
         loadDetailValues();
 
@@ -134,7 +124,7 @@ $(function () {
         $('#eventDateFrom').data('DateTimePicker').date('17.05.2017');
         $('#eventDateTo').data('DateTimePicker').date('18.05.2017');
 
-        $('#eventTimeFrom').timepicker('setTime', '10:00');
+        // $('eventTimeFrom').val('10:00');
         $('#eventTimeTo').timepicker('setTime', '12:00');
 
         $('#eventWholeDay').prop('checked', false);

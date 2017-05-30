@@ -10,13 +10,13 @@
     <script type="text/javascript"
             src="../../public/lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
     <script type="text/javascript"
-            src="../../public/lib/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+            src="../../public/lib/bootstrap-combobox/js/bootstrap-combobox.js"></script>
     <script type="text/javascript" src="eventdetails.js"></script>
 
     <link rel="stylesheet" href="../../public/lib/font-awesome/css/font-awesome.css">
     <link rel="stylesheet" href="../../public/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../public/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css">
-    <link rel="stylesheet" href="../../public/lib/bootstrap-timepicker/css/timepicker.css">
+    <link rel="stylesheet" href="../../public/lib/bootstrap-combobox/css/bootstrap-combobox.css">
 
 
 </head>
@@ -103,10 +103,16 @@
                                     </div>
                                 </div>
 
-                                <div class="input-group bootstrap-timepicker timepicker"
-                                     style="width: 8em; margin-right: 2em">
-                                    <input id="eventTimeFrom" type="text" class="form-control">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                <div class="form-group has-feedback">
+                                    <div class="input-group" style="width: 9em">
+                                        <select id="eventTimeFrom" class="combobox form-control">
+                                            <option></option>
+                                            <option value="-"> - - : - -</option>
+                                            <option value="10:00">10:00</option>
+                                            <option value="11:00">11:00</option>
+                                            <option value="12:00">12:00</option>
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <label>Ende:</label>
