@@ -244,7 +244,7 @@ public class LibrarySettingsServlet extends BaseServlet {
 
         TeacherDAO.deleteCascadingByTeacherList(teachers, con);
 
-        String message = "check_mark Folgende " + teachers.size() + " Schülerdatensätze wurden gelöscht: <br />";
+        String message = "check_mark Folgende " + teachers.size() + " Lehrkraftdatensätze wurden gelöscht: <br />";
 
         message += teachers.stream().map(teacher -> teacher.getFullName()).collect(Collectors.joining("; "));
 

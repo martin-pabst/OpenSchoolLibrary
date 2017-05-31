@@ -48,7 +48,7 @@ public class ConnectionPool {
 	public static Sql2o getSQL2o(){
 		
 		if(dbConfig.getType().equalsIgnoreCase("postgres")){
-			return new Sql2o(boneCPDataSource, new PostgresQuirks());			
+			return new Sql2o(boneCPDataSource, new PostgresQuirks());
 		} else {
 			return new Sql2o(boneCPDataSource);
 		}

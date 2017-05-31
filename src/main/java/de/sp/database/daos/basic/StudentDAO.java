@@ -50,7 +50,7 @@ public class StudentDAO {
 				.addParameter("sex_key", sex_key)
 				.addParameter("external_id", external_id)
 				.addParameter("exit_date", exit_date)
-				.addParameter("synchronized", is_synchronized)
+				.addParameter("synchronized", is_synchronized ? 1 : 0)
 				.addParameter("religion_id", religion_id)
 				.executeUpdate()
 				.getKey(Long.class);
@@ -113,7 +113,7 @@ public class StudentDAO {
 				.addParameter("sex_key", student.getSex_key())
 				.addParameter("external_id", student.getExternal_id())
 				.addParameter("exit_date", student.getExit_date())
-				.addParameter("synchronized", student.isSynchronized())
+				.addParameter("synchronized", student.isSynchronized() ? 1 : 0)
 				.addParameter("religion_id", student.getReligion_id())
 				.executeUpdate();
 
@@ -166,7 +166,7 @@ public class StudentDAO {
 
 		con.createQuery(sql)
 				.addParameter("school_id", school_id)
-				.addParameter("synchronized", is_synchronized)
+				.addParameter("synchronized", is_synchronized ? 1 : 0)
 				.executeUpdate();
 	}
 

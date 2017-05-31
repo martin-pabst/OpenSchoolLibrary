@@ -77,6 +77,7 @@
 
         $('#bookDetailButton').click(function (event) {
             addBookDetail();
+            $('#libraryBorrowBarcodeField').focus();
         });
 
 
@@ -623,7 +624,7 @@
 
         var selectedBorrowerList = borrowerGrid.getSelection(false); // id of borrower
 
-        if (selectedBorrowerList.length == 1) {
+        if (selectedBorrowerList.length === 1) {
             var selectedBorrowerId = selectedBorrowerList[0];
             var selectedBorrower = borrowerGrid.get(selectedBorrowerId);
 

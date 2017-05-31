@@ -3,12 +3,12 @@
 
 	<database>
 		<type>postgres</type>
-		<!--<connection>jdbc:postgresql://localhost/bibliothek</connection>-->
-		<connection>jdbc:postgresql://S189-10/bibliothek</connection>
+		<connection>jdbc:postgresql://localhost/bibliothek</connection>
+		<!--<connection>jdbc:postgresql://S189-10/bibliothek</connection>-->
 		<!--<connection>jdbc:postgresql://192.168.56.101/bibliothek</connection>-->
 		<username>bibliothek</username>
-		<!--<password>bibliothek</password>-->
-		<password>axs137?</password>
+		<password>bibliothek</password>
+		<!--<password>axs137?</password>-->
 	</database>
 
 	<directories>

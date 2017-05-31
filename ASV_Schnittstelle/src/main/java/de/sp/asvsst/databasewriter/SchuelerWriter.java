@@ -47,11 +47,6 @@ public class SchuelerWriter {
     public void start() throws Exception {
 
 
-        // Reset synchronized-attribute. For all students found in ASV this attribute
-        // is set again later in this process
-        StudentDAO.setSynchronizedForAll(schoolTerm.getSchool().getId(),
-                false, con);
-
 
         // Gibt es eine Schülerin mit gegebenem ASV-Merkmal bzw. Namen und
         // Geburtsdatum in diesem Schuljahr?

@@ -156,6 +156,11 @@ public class ASVToDatabaseWriter {
 		// anhand des ASV-Imports neu zu.
 		ASVSStDAO.deleteStudentClassReferendes(schoolTerm.getId(), con);
 
+		// Reset synchronized-attribute. For all students found in ASV this attribute
+		// is set again later in this process
+		StudentDAO.setSynchronizedForAll(schoolTerm.getSchool().getId(),
+				false, con);
+
 		List<DBClass> classes = DBClassDAO.getAll(con);
 		HashMap<String, DBClass> classMap = new HashMap<>();
 		classes.forEach(dbClass -> classMap.put(dbClass.getName(), dbClass));

@@ -35,7 +35,7 @@
 
     <statementlist name="teacher.deleteCascading">
         <statement>
-            DELETE FROM user
+            DELETE FROM users
             WHERE id IN (
                 SELECT user_id
                 FROM teacher
