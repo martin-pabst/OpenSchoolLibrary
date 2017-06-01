@@ -117,6 +117,7 @@ public class StudentDAO {
 				.addParameter("religion_id", student.getReligion_id())
 				.executeUpdate();
 
+
 	}
 
 	public static Long getSchoolId(Long student_id, Connection con) {

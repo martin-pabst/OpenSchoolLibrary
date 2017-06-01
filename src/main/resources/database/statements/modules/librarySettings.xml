@@ -43,8 +43,10 @@
         SELECT student.*
         FROM student
         WHERE school_id = :school_id AND
-              NOT exit_date IS NULL AND
-              exit_date <= :date_from AND (
+              (NOT exit_date IS NULL AND
+              exit_date <= :date_from
+                  or not synchronized)
+              AND (
                                               SELECT count(*)
                                               FROM borrows
                                               WHERE student_id = student.id AND

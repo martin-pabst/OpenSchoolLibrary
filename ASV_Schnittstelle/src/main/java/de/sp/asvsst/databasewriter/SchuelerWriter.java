@@ -110,6 +110,7 @@ public class SchuelerWriter {
 
             // TODO: eigentlich könnte man hier vorher überprüfen, ob wirklich
             // ein update nötig ist...
+            // 01.06.17: Nein: Mindestens das synchronized-Attribut muss neu gesetzt werden!
             student.setDateofbirth(schuelerin.geburtsdatum);
             student.setSurname(schuelerin.familienname);
             student.setFirstname(schuelerin.rufname);

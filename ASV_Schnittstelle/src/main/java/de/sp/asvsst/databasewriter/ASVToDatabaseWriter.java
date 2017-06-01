@@ -27,215 +27,216 @@ import java.util.List;
 
 public class ASVToDatabaseWriter {
 
-	private StringBuilder protocol;
-	private String progressCode;
-	private Logger logger;
+    private StringBuilder protocol;
+    private String progressCode;
+    private Logger logger;
 
-	private int schuelerZaehler;
-	private int schuelerAnzahl;
+    private int schuelerZaehler;
+    private int schuelerAnzahl;
 
-	private HashMap<String, Value> externalJahrgangsstufeKeyToValueMap;
+    private HashMap<String, Value> externalJahrgangsstufeKeyToValueMap;
 
-	public ASVToDatabaseWriter(String progressCode) {
-		super();
-		this.progressCode = progressCode;
-		logger = LoggerFactory.getLogger(StartServer.class);
-	}
+    public ASVToDatabaseWriter(String progressCode) {
+        super();
+        this.progressCode = progressCode;
+        logger = LoggerFactory.getLogger(StartServer.class);
+    }
 
-	public void writeToDatabase(ASVExport asvExport) {
-
-
-		protocol = new StringBuilder();
-
-		publishProgress(0, 120, 20,
-				"Schreibe die ASV-Daten in die Datenbank...", false, "",
-				progressCode);
-
-		List<School> dbSchools = SchoolTermStore.getInstance().getSchools();
-
-		String result = "";
-
-		try (Connection con = ConnectionPool.beginTransaction()) {
-
-			try {
-
-				for (ASVSchule asvSchule : asvExport.schulen) {
-
-					for (School school : dbSchools) {
-
-						if (asvSchule.schulnummer.equals(school.getNumber())) {
-
-							protocolAdd("Importiere die ASV-Daten von Schule "
-									+ asvSchule.dienststellenname + "("
-									+ asvSchule.schulnummer + ")\n\n", true,
-									"#0000ff", 0);
-
-							ASVBesuchterReligionsunterricht.init(con, school.getId());
-
-							initMaps(school.getId());
-
-							importSchool(asvSchule, school, asvExport, con);
-
-						}
-
-					}
-				}
-
-				con.commit();
-
-				result = "<h1>Import beendet</h1><h2>Protokoll:</h2>";
-
-			} catch (Exception e) {
-
-				con.rollback();
-
-				result = "<h1 style=\"color: red\">Import mit Fehler beendet</h1>";
-
-				logger.error("Fataler Fehler beim Import der ASV-Daten: ", e);
-				protocolAdd(
-						"Fataler Fehler beim Import der ASV-Daten:"
-								+ e.toString() + "\n\n", true, "#ff0000", 0);
-			}
-
-		}
-
-		ASVWlStore.releaseMemory();
-
-		publishProgress(0, 120, 20, "Fertig!", true, result
-				+ protocol.toString(), progressCode);
-
-	}
-
-	private void initMaps(Long school_id) {
-
-		// Initialize externalJahrgangsstufeKeyToValueMap
-
-		externalJahrgangsstufeKeyToValueMap = new HashMap<>();
-
-		for (Value value : ValueListStore.getInstance().getValueList(school_id, ValueListType.form.getKey())) {
-			externalJahrgangsstufeKeyToValueMap.put(value.getExternal_key(), value);
-		}
+    public void writeToDatabase(ASVExport asvExport) {
 
 
-	}
+        protocol = new StringBuilder();
 
-	private void publishProgress(int min, int max, int now,
-								 String text, boolean completed, Object result, String progressCode){
+        publishProgress(0, 120, 20,
+                "Schreibe die ASV-Daten in die Datenbank...", false, "",
+                progressCode);
 
+        List<School> dbSchools = SchoolTermStore.getInstance().getSchools();
 
-		if (progressCode != null) {
-			ProgressServlet.publishProgress(min, max, now, text, completed, result, progressCode);
-		} else {
+        String result = "";
 
-			int percent = (int)((double)now/(double)max * 100);
-		    System.out.println("" + percent + "%: " + text);
+        try (Connection con = ConnectionPool.beginTransaction()) {
+
+            try {
+
+                for (ASVSchule asvSchule : asvExport.schulen) {
+
+                    for (School school : dbSchools) {
+
+                        if (asvSchule.schulnummer.equals(school.getNumber())) {
+
+                            protocolAdd("Importiere die ASV-Daten von Schule "
+                                            + asvSchule.dienststellenname + "("
+                                            + asvSchule.schulnummer + ")\n\n", true,
+                                    "#0000ff", 0);
+
+                            ASVBesuchterReligionsunterricht.init(con, school.getId());
+
+                            initMaps(school.getId());
+
+                            // Reset synchronized-attribute. For all students found in ASV this attribute
+                            // is set again later in this process
+                            StudentDAO.setSynchronizedForAll(school.getId(),
+                                    false, con);
+
+                            importSchool(asvSchule, school, asvExport, con);
+
+                        }
+
+                    }
+                }
+
+                con.commit();
+
+                result = "<h1>Import beendet</h1><h2>Protokoll:</h2>";
+
+            } catch (Exception e) {
+
+                con.rollback();
+
+                result = "<h1 style=\"color: red\">Import mit Fehler beendet</h1>";
+
+                logger.error("Fataler Fehler beim Import der ASV-Daten: ", e);
+                protocolAdd(
+                        "Fataler Fehler beim Import der ASV-Daten:"
+                                + e.toString() + "\n\n", true, "#ff0000", 0);
+            }
+
         }
 
-	}
+        ASVWlStore.releaseMemory();
 
-	private void importSchool(ASVSchule asvSchule, School school,
-			ASVExport asvExport, Connection con) throws Exception {
+        publishProgress(0, 120, 20, "Fertig!", true, result
+                + protocol.toString(), progressCode);
 
-		publishProgress(0, 120, 20,
-				"Schreibe die ASV-Daten von Schule "
-						+ asvSchule.dienststellenname + " in die Datenbank...",
-				false, "", progressCode);
+    }
 
-		schuelerAnzahl = asvSchule.getSchuelerAnzahl();
+    private void initMaps(Long school_id) {
 
-		// Division durch 0 später vermeiden
-		if (schuelerAnzahl == 0) {
-			schuelerAnzahl = 1;
-		}
+        // Initialize externalJahrgangsstufeKeyToValueMap
 
-		schuelerZaehler = 0;
+        externalJahrgangsstufeKeyToValueMap = new HashMap<>();
 
-		SchoolTerm schoolTerm = getOrCreateSchoolTerm(asvSchule, school, con);
+        for (Value value : ValueListStore.getInstance().getValueList(school_id, ValueListType.form.getKey())) {
+            externalJahrgangsstufeKeyToValueMap.put(value.getExternal_key(), value);
+        }
 
-		// Wir nehmen alle Schüler/innen aus den Klassen und ordnen sie dann
-		// anhand des ASV-Imports neu zu.
-		ASVSStDAO.deleteStudentClassReferendes(schoolTerm.getId(), con);
 
-		// Reset synchronized-attribute. For all students found in ASV this attribute
-		// is set again later in this process
-		StudentDAO.setSynchronizedForAll(schoolTerm.getSchool().getId(),
-				false, con);
+    }
 
-		List<DBClass> classes = DBClassDAO.getAll(con);
-		HashMap<String, DBClass> classMap = new HashMap<>();
-		classes.forEach(dbClass -> classMap.put(dbClass.getName(), dbClass));
+    private void publishProgress(int min, int max, int now,
+                                 String text, boolean completed, Object result, String progressCode) {
 
-		for (ASVKlasse klasse : asvSchule.klassen) {
-			importKlasse(klasse, asvSchule, school, classMap, schoolTerm, con);
-		}
 
-		LehrkraefteWriter lw = new LehrkraefteWriter(this, asvSchule, school, schoolTerm, asvExport, con, progressCode);
-		lw.start();
-		
-	}
+        if (progressCode != null) {
+            ProgressServlet.publishProgress(min, max, now, text, completed, result, progressCode);
+        } else {
 
-	private SchoolTerm getOrCreateSchoolTerm(ASVSchule asvSchule,
-			School school, Connection con) throws ParseException, Exception {
+            int percent = (int) ((double) now / (double) max * 100);
+            System.out.println("" + percent + "%: " + text);
+        }
 
-		SchoolTerm schoolTerm = SchoolTermStore.getInstance().getTerm(school.getId(), asvSchule.schuljahr);
+    }
 
-		if (schoolTerm == null) {
+    private void importSchool(ASVSchule asvSchule, School school,
+                              ASVExport asvExport, Connection con) throws Exception {
 
-			String jahr1String = asvSchule.schuljahr.substring(0, 4);
-			int jahr1 = Integer.parseInt(jahr1String);
-			int jahr2 = jahr1 + 1;
+        publishProgress(0, 120, 20,
+                "Schreibe die ASV-Daten von Schule "
+                        + asvSchule.dienststellenname + " in die Datenbank...",
+                false, "", progressCode);
 
-			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-			Date begin;
+        schuelerAnzahl = asvSchule.getSchuelerAnzahl();
 
-			begin = sdf.parse("01.08." + jahr1);
-			Date end = sdf.parse("31.07." + jahr2);
-			protocolAdd("Lege Schuljahr " + asvSchule.schuljahr
-					+ " in der Datenbank an.\n", false, "#0000ff", 1);
-			schoolTerm = SchoolTermDAO.insert(school, asvSchule.schuljahr, begin, end, con);
+        // Division durch 0 später vermeiden
+        if (schuelerAnzahl == 0) {
+            schuelerAnzahl = 1;
+        }
 
-			SchoolTermStore.getInstance().addSchoolTerm(schoolTerm);
+        schuelerZaehler = 0;
 
-		}
+        SchoolTerm schoolTerm = getOrCreateSchoolTerm(asvSchule, school, con);
 
-		return schoolTerm;
-	}
+        // Wir nehmen alle Schüler/innen aus den Klassen und ordnen sie dann
+        // anhand des ASV-Imports neu zu.
+        ASVSStDAO.deleteStudentClassReferendes(schoolTerm.getId(), con);
 
-	private void importKlasse(ASVKlasse klasse, ASVSchule asvSchule,
-			School school, HashMap<String, DBClass> classMap,
-			SchoolTerm schoolTerm, Connection con) throws Exception {
 
-		DBClass dbClass = classMap.get(klasse.klassenname);
+        List<DBClass> classes = DBClassDAO.getAll(con);
+        HashMap<String, DBClass> classMap = new HashMap<>();
+        classes.forEach(dbClass -> classMap.put(dbClass.getName(), dbClass));
 
-		if (dbClass == null) {
+        for (ASVKlasse klasse : asvSchule.klassen) {
+            importKlasse(klasse, asvSchule, school, classMap, schoolTerm, con);
+        }
 
-			protocolAdd("Lege Klasse " + klasse.klassenname + " im Schuljahr "
-					+ schoolTerm.getName() + " an.", true, "#000000",
-					2);
+        LehrkraefteWriter lw = new LehrkraefteWriter(this, asvSchule, school, schoolTerm, asvExport, con, progressCode);
+        lw.start();
 
-			String jahrgangsstufeSchluessel = "051";
+    }
 
-			if (klasse.klassengruppen.size() > 0) {
-				ASVKlassengruppe kg = klasse.klassengruppen.get(0);
-				jahrgangsstufeSchluessel = kg.jahrgangsstufeSchluessel;
-			}
+    private SchoolTerm getOrCreateSchoolTerm(ASVSchule asvSchule,
+                                             School school, Connection con) throws ParseException, Exception {
 
-			// Wertelisteneintrag für die Jahrgangsstufe holen
+        SchoolTerm schoolTerm = SchoolTermStore.getInstance().getTerm(school.getId(), asvSchule.schuljahr);
+
+        if (schoolTerm == null) {
+
+            String jahr1String = asvSchule.schuljahr.substring(0, 4);
+            int jahr1 = Integer.parseInt(jahr1String);
+            int jahr2 = jahr1 + 1;
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+            Date begin;
+
+            begin = sdf.parse("01.08." + jahr1);
+            Date end = sdf.parse("31.07." + jahr2);
+            protocolAdd("Lege Schuljahr " + asvSchule.schuljahr
+                    + " in der Datenbank an.\n", false, "#0000ff", 1);
+            schoolTerm = SchoolTermDAO.insert(school, asvSchule.schuljahr, begin, end, con);
+
+            SchoolTermStore.getInstance().addSchoolTerm(schoolTerm);
+
+        }
+
+        return schoolTerm;
+    }
+
+    private void importKlasse(ASVKlasse klasse, ASVSchule asvSchule,
+                              School school, HashMap<String, DBClass> classMap,
+                              SchoolTerm schoolTerm, Connection con) throws Exception {
+
+        DBClass dbClass = classMap.get(klasse.klassenname);
+
+        if (dbClass == null) {
+
+            protocolAdd("Lege Klasse " + klasse.klassenname + " im Schuljahr "
+                            + schoolTerm.getName() + " an.", true, "#000000",
+                    2);
+
+            String jahrgangsstufeSchluessel = "051";
+
+            if (klasse.klassengruppen.size() > 0) {
+                ASVKlassengruppe kg = klasse.klassengruppen.get(0);
+                jahrgangsstufeSchluessel = kg.jahrgangsstufeSchluessel;
+            }
+
+            // Wertelisteneintrag für die Jahrgangsstufe holen
 /*
-			Value jahrgangsstufeValue = ValueDAO
+            Value jahrgangsstufeValue = ValueDAO
 					.findBySchoolAndValueStoreAndExternalKey(school.getId(),
 							ValueListType.form.getKey(), jahrgangsstufeSchluessel,
 							con);
 */
 
-			Value jahrgangsstufeValue = externalJahrgangsstufeKeyToValueMap.get(jahrgangsstufeSchluessel);
+            Value jahrgangsstufeValue = externalJahrgangsstufeKeyToValueMap.get(jahrgangsstufeSchluessel);
 
-			if (jahrgangsstufeValue == null) {
+            if (jahrgangsstufeValue == null) {
 
-				ASVJahrgangsstufe asvjgst = ASVJahrgangsstufe
-						.findBySchluessel(jahrgangsstufeSchluessel);
+                ASVJahrgangsstufe asvjgst = ASVJahrgangsstufe
+                        .findBySchluessel(jahrgangsstufeSchluessel);
 
-				if (asvjgst != null) {
+                if (asvjgst != null) {
 
 /*
 					jahrgangsstufeValue = ValueDAO.insert(
@@ -244,86 +245,87 @@ public class ASVToDatabaseWriter {
 							asvjgst.getSchluessel(), 100, con);
 */
 
-					jahrgangsstufeValue = ValueListStore.getInstance().addValue(school.getId(), ValueListType.form, asvjgst.getAnzeigeform(), asvjgst.getKurzform(),
-							asvjgst.getSchluessel(), con);
+                    jahrgangsstufeValue = ValueListStore.getInstance().addValue(school.getId(), ValueListType.form, asvjgst.getAnzeigeform(), asvjgst.getKurzform(),
+                            asvjgst.getSchluessel(), con);
 
-				}
-			}
+                }
+            }
 
-			dbClass = DBClassDAO.insert(schoolTerm.getId(), klasse.klassenname,
-					getYearOfSchool(klasse.klassenname),
-					jahrgangsstufeValue != null ? jahrgangsstufeValue.getId()
-							: null, con);
-		}
+            dbClass = DBClassDAO.insert(schoolTerm.getId(), klasse.klassenname,
+                    getYearOfSchool(klasse.klassenname),
+                    jahrgangsstufeValue != null ? jahrgangsstufeValue.getId()
+                            : null, con);
+        }
 
-		List<Student> studentList = StudentDAO.findBySchoolId(school.getId(),
-				con);
+        List<Student> studentList = StudentDAO.findBySchoolId(school.getId(),
+                con);
 
-		for (ASVKlassengruppe klassengruppe : klasse.klassengruppen) {
-			for (ASVSchuelerin schuelerin : klassengruppe.schueler) {
-				
-				schuelerZaehler++;
-				if (schuelerZaehler % 5 == 0) {
-					publishProgress(
-									0,
-									220,
-									20 + (int) ((double) schuelerZaehler * 180 / (double) schuelerAnzahl),
-									"Importiere Schüler/in " + schuelerin.rufname + " "
-											+ schuelerin.familienname + ", Klasse "
-											+ klasse.klassenname
-											+ " in die Datenbank...", false, "",
-									progressCode);
-				}
+        for (ASVKlassengruppe klassengruppe : klasse.klassengruppen) {
+            for (ASVSchuelerin schuelerin : klassengruppe.schueler) {
 
+                if (schuelerin.austrittsdatum == null) {
 
-				SchuelerWriter sw = new SchuelerWriter(this,schuelerin, klasse, klassengruppe, asvSchule,
-						dbClass, schoolTerm, studentList, con);
-				
-				sw.start();
-			}
-		}
-
-	}
+                    schuelerZaehler++;
+                    if (schuelerZaehler % 5 == 0) {
+                        publishProgress(
+                                0,
+                                220,
+                                20 + (int) ((double) schuelerZaehler * 180 / (double) schuelerAnzahl),
+                                "Importiere Schüler/in " + schuelerin.rufname + " "
+                                        + schuelerin.familienname + ", Klasse "
+                                        + klasse.klassenname
+                                        + " in die Datenbank...", false, "",
+                                progressCode);
+                    }
 
 
+                    SchuelerWriter sw = new SchuelerWriter(this, schuelerin, klasse, klassengruppe, asvSchule,
+                            dbClass, schoolTerm, studentList, con);
 
-	private int getYearOfSchool(String klassenname) {
+                    sw.start();
+                }
+            }
+        }
 
-		String jgstString = "";
+    }
 
-		for (int i = 0; i < klassenname.length(); i++) {
-			if (Character.isDigit(klassenname.charAt(i))) {
-				jgstString += klassenname.charAt(i);
-			} else {
-				break;
-			}
-		}
 
-		if (jgstString.length() > 0) {
-			return Integer.parseInt(jgstString);
-		}
+    private int getYearOfSchool(String klassenname) {
 
-		return 4;
-	}
+        String jgstString = "";
 
-	public void protocolAdd(String text, boolean bold, String color,
-			int indentation) {
-		String boldString = bold ? "; font-weight: bold" : "";
+        for (int i = 0; i < klassenname.length(); i++) {
+            if (Character.isDigit(klassenname.charAt(i))) {
+                jgstString += klassenname.charAt(i);
+            } else {
+                break;
+            }
+        }
 
-		if (color != null && !color.startsWith("#")) {
-			color = "#" + color;
-		}
+        if (jgstString.length() > 0) {
+            return Integer.parseInt(jgstString);
+        }
 
-		String colorString = color == null ? "" : "; color: " + color;
+        return 4;
+    }
 
-		protocol.append("<div style=\"margin-left: " + indentation + "em "
-				+ boldString + colorString + "\">");
+    public void protocolAdd(String text, boolean bold, String color,
+                            int indentation) {
+        String boldString = bold ? "; font-weight: bold" : "";
 
-		protocol.append(text);
+        if (color != null && !color.startsWith("#")) {
+            color = "#" + color;
+        }
 
-		protocol.append("</div>\n");
-	}
+        String colorString = color == null ? "" : "; color: " + color;
 
+        protocol.append("<div style=\"margin-left: " + indentation + "em "
+                + boldString + colorString + "\">");
+
+        protocol.append(text);
+
+        protocol.append("</div>\n");
+    }
 
 
 }
