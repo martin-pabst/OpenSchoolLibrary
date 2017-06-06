@@ -2,6 +2,7 @@ package de.sp.modules.library.reports.model;
 
 import de.sp.modules.library.reports.reportsother.borrowoverholidays.ReportBorrowedOverHolidays;
 import de.sp.modules.library.reports.reportsother.openfees.ReportOpenFees;
+import de.sp.modules.library.reports.reportsother.studentsoutsideasv.borrowoverholidays.ReportStudentsOutsideASV;
 import de.sp.modules.library.reports.reportsschueler.BarcodeTestsheet.ReportBarcodeTestsheet;
 import de.sp.modules.library.reports.reportsschueler.bookcopystatus.ReportBookCopyStatus;
 import de.sp.modules.library.reports.reportsschueler.borrowedbooks.ReportBorrowedBooks;
@@ -34,6 +35,7 @@ public class ReportManager {
         //Other
         addReport(new ReportBorrowedOverHolidays());
         addReport(new ReportOpenFees());
+        addReport(new ReportStudentsOutsideASV());
 
     }
 

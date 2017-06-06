@@ -17,8 +17,8 @@
             var used = $("body").height() + 50;
             $("#libraryBorrowerList").height($(window).height() - used - 20);
 
-            $("#libraryBorrowedBooksList").height($(window).height() - used - 385);
-            $("#libraryNeededBooksList").height($(window).height() - used - 385);
+            $("#libraryBorrowedBooksList").height($(window).height() - used - 410);
+            $("#libraryNeededBooksList").height($(window).height() - used - 410);
 
 
             initializeBorrowTables();
@@ -36,8 +36,25 @@
             w2ui['libraryBorrowedBooksList'].destroy();
             w2ui['libraryNeededBooksList'].destroy();
             bookCopyDetailsData = undefined;
+
+            $('html').unbind('click',backgroundClickHandler);
         }
     });
+
+    function backgroundClickHandler(e){
+        // alert(e.target);
+        // alert(e.target.tagName);
+
+        var classes = $(e.target).attr('class');
+        var isMargin = false;
+        if (!(typeof classes === "undefined")) {
+            isMargin = classes.indexOf("col-md-") >= 0 || classes.indexOf("form-inline") >= 0 || classes.indexOf("nav-tabs") >= 0 || classes.indexOf("navbar-collapse") >= 0;
+        }
+        if (e.target.tagName === 'HTML' || isMargin) {
+            $('#libraryBorrowBarcodeField').focus();
+        }
+
+    }
 
 
     var bookFormStore = [];
@@ -71,6 +88,13 @@
 
     function initializeDOM() {
 
+        $('#libraryBorrowHoliday').change(function () {
+            $('#libraryBorrowBarcodeField').focus();
+        });
+
+        $('#libraryBorrowNextSchoolyear').change(function () {
+            $('#libraryBorrowBarcodeField').focus();
+        });
 
         $('#bookDetailDate').w2field('date', {format: 'dd.mm.yyyy'});
 
@@ -92,37 +116,44 @@
 
         $('#libraryBorrowTab').on('shown.bs.tab', function (e) {
 
-            // Show w2ui-tables for the first time only if they are yet visible.
-            // Otherwise they behave strange!
+            if (w2ui['libraryBorrowerList'].records.length === 0) {
 
-            //var gridObj = w2ui['libraryBorrowerList'];
+                fetchData();
+                $("#libraryBorrowErrorList").hide();
 
-            //if (typeof gridObj == "undefined") {
+                w2ui['libraryBorrowerList'].resize();
+                w2ui['libraryBorrowedBooksList'].resize();
+                w2ui['libraryNeededBooksList'].resize();
 
-            //    initializeBorrowTables();
+                libraryBorrowsOnSelectUnselect();
 
-            //} else {
+                //bookCopyDetailsData = undefined;
+                showBookCopyDetails();
 
-            fetchData();
-            $("#libraryBorrowErrorList").hide();
+            }
 
-            w2ui['libraryBorrowerList'].resize();
-            w2ui['libraryBorrowedBooksList'].resize();
-            w2ui['libraryNeededBooksList'].resize();
+            $('html').bind('click',backgroundClickHandler);
+            $('#libraryBorrowBarcodeField').focus();
 
-            libraryBorrowsOnSelectUnselect();
-
-            //bookCopyDetailsData = undefined;
-            showBookCopyDetails();
-            //}
 
         });
+
+        $('#libraryBorrowTab').on('hide.bs.tab', function (e) {
+
+            $('html').unbind('click',backgroundClickHandler);
+
+        });
+
 
 
         var searchAll = $('#libraryBorrowerList').find('.w2ui-search-all');
 
         searchAll.keyup(function (event) {
+
+            searchAll.blur();
             this.onchange();
+            searchAll.focus();
+
         });
 
 
@@ -312,12 +343,12 @@
             //url		: 'library/inventoryBooks',
             buffered: 2000,
             recid: 'id',
+            multiSelect: false,
             postData: {school_id: global_school_id, school_term_id: global_school_term_id},
             show: {
                 header: false,
                 toolbar: true,
                 selectColumn: false,
-                multiSelect: false,
                 toolbarAdd: true,
                 toolbarEdit: true,
                 toolbarDelete: false,
@@ -385,8 +416,8 @@
             postData: {school_id: global_school_id},
             show: {
                 header: true,
-                toolbar: true,
-                selectColumn: true,
+                toolbar: false,
+                selectColumn: false,
                 toolbarAdd: false,
                 toolbarDelete: false,
                 toolbarSave: false,
@@ -394,7 +425,7 @@
                 toolbarColumns: false,
                 footer: false
             },
-            multiSelect: true,
+            multiSelect: false,
             toolbar: {
                 items: [
                     {type: 'break'},
@@ -407,7 +438,7 @@
                     }
                 ],
                 onClick: function (target, data) {
-                    if (target == "returnBooksButton") {
+                    if (target === "returnBooksButton") {
 
                         var selectedItems = w2ui['libraryBorrowedBooksList'].getSelection();
                         if (selectedItems.length > 0) {
@@ -444,9 +475,10 @@
                 {field: 'author', caption: 'Autor', size: '50px', hidden: true, sortable: true, resizable: true},
                 {field: 'subject', caption: 'F', size: '30px', sortable: true, resizable: true},
                 {field: 'barcode', caption: 'Barcode', size: '120px', sortable: true, resizable: true},
-                {field: 'over_holidays', caption: 'FA', size: '20px', sortable: true, resizable: true,
+                {
+                    field: 'over_holidays', caption: 'FA', size: '20px', sortable: true, resizable: true,
                     editable: {type: 'check'}
-                    }
+                }
 
             ],
             searches: [
@@ -486,6 +518,9 @@
                         showBookCopyDetails();
                     }
                 }
+
+                $('#libraryBorrowBarcodeField').focus();
+
             },
             onUnselect: function (event) {
                 this.onSelect(event);
@@ -511,6 +546,8 @@
 
                 commitW2GridChanges(this, updateRequest, "/library/borrowedBooks/updateHoliday");
 
+                $('#libraryBorrowBarcodeField').focus();
+
             }
         });
 
@@ -521,6 +558,7 @@
             //url		: 'library/inventoryBooks',
             buffered: 2000,
             recid: 'id',
+            multiSelect: false,
             show: {
                 header: true,
                 toolbar: false,
@@ -538,7 +576,7 @@
                 {
                     field: 'status', caption: 'Status', size: '60px', sortable: true, resizable: true,
                     render: function (record) {
-                        if(record.status === 'OK'){
+                        if (record.status === 'OK') {
                             return '<img src="/public/img/green_check_mark.png" style="height: 1em"/>';
                         } else {
                             return '<div style="color:#ff2020; font-weight:bold">Fehlt</div>';
@@ -554,7 +592,7 @@
 
             onClick: function (event) {
 
-                var record = this.get(event.recid);
+                $('#libraryBorrowBarcodeField').focus();
 
             }
 
@@ -619,10 +657,12 @@
     function libraryBorrowUpdateTables() {
 
         var borrowerGrid = w2ui['libraryBorrowerList'];
-        var borrowedGrid = w2ui['libraryBorrowedBooksList'];
+        var borrowedBooksGrid = w2ui['libraryBorrowedBooksList'];
         var neededGrid = w2ui['libraryNeededBooksList'];
 
         var selectedBorrowerList = borrowerGrid.getSelection(false); // id of borrower
+
+        var benoetigtUndGeliehen = 0;
 
         if (selectedBorrowerList.length === 1) {
             var selectedBorrowerId = selectedBorrowerList[0];
@@ -636,9 +676,10 @@
 
                         var status = "fehlt";
 
-                        borrowedGrid.records.forEach(function (borrowedBook) {
+                        borrowedBooksGrid.records.forEach(function (borrowedBook) {
                             if (borrowedBook.book_id == bfsr.book_id) {
                                 status = "OK";
+                                benoetigtUndGeliehen++;
                             }
                         });
 
@@ -659,11 +700,24 @@
 
         }
 
+        var geliehen = borrowedBooksGrid.records.length;
+        var benoetigt = neededGrid.records.length;
+        
+        borrowedBooksGrid.header = '' + geliehen + ' geliehene Bücher, davon <span style="color:green; font-weight:bold">' +
+            benoetigtUndGeliehen + '</span> benötgt, <span style="color:#ff2020; font-weight:bold">' +
+            (geliehen - benoetigtUndGeliehen) + '</span> zusätzlich';
+
+        var color = (benoetigt - benoetigtUndGeliehen) === 0 ? "green" : "#ff2020";
+        
+        neededGrid.header = '' + benoetigt + ' benötigt, davon <span style="color:' + color + '; font-weight:bold">' +
+            (benoetigt - benoetigtUndGeliehen) + '</span> noch nicht entliehen.';
+        
         /**
          * Borrowed books which are not needed are rendered in red color. This is only
          * possible if neededGrid is rendered beforehand.
          */
-        borrowedGrid.refresh();
+        borrowedBooksGrid.refresh();
+        neededGrid.refresh();
 
     }
 

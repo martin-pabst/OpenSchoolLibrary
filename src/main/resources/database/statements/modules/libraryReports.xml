@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <statementlist>
 
+    <statement name="libraryReports.studentsOutsideASV">
+        select firstname, surname, class.name as class_name,
+                                   class.id as class_id, student.id as student_id,
+            (select count(*) from borrows where borrows.student_id = student.id and return_date IS NULL )
+            as book_count
+        from student
+            LEFT JOIN student_school_term on student.id = student_school_term.student_id
+            left JOIN class on student_school_term.class_id = class.id
+        where
+            student_school_term.school_term_id = :school_term_id AND
+            student.school_id = :school_id and
+            not student.synchronized
+    </statement>
+
     <statement name="libraryReports.openFees">
         select
             student.firstname,

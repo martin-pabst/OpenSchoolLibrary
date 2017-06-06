@@ -27,8 +27,24 @@
             w2ui['libraryReturnerList'].destroy();
             w2ui['libraryReturnBooksList'].destroy();
             bookCopyDetailsData = undefined;
+            $('html').unbind('click',backgroundClickHandler);
         }
     });
+
+    function backgroundClickHandler(e){
+        // alert(e.target);
+        // alert(e.target.tagName);
+
+        var classes = $(e.target).attr('class');
+        var isMargin = false;
+        if (!(typeof classes === "undefined")) {
+            isMargin = classes.indexOf("col-md-") >= 0 || classes.indexOf("form-inline") >= 0 || classes.indexOf("nav-tabs") >= 0 || classes.indexOf("navbar-collapse") >= 0;
+        }
+        if (e.target.tagName === 'HTML' || isMargin) {
+            $('#libraryReturnBarcodeField').focus();
+        }
+
+    }
 
 
     var bookCopyDetailsData;
@@ -45,7 +61,7 @@
 
         gridObj.load('/library/returnerList/get', function () {
 
-            if (typeof gridObj.records == "object" && gridObj.records.length > 0) {
+            if (typeof gridObj.records === "object" && gridObj.records.length > 0) {
                 gridObj.select(gridObj.records[0]);
             }
 
@@ -62,42 +78,59 @@
          */
         $('#libraryReturnTab').on('shown.bs.tab', function (e) {
 
-            w2ui['libraryReturnerList'].resize();
+            var returner = w2ui['libraryReturnerList'];
+            returner.resize();
             w2ui['libraryReturnBooksList'].resize();
 
-            fetchData();
+            if (returner.records.length === 0) {
+                fetchData();
 
-            onSelectUnselectBorrower();
-            showBookCopyDetails();
-            showFeeDetails();
+                onSelectUnselectReturner();
+                showBookCopyDetails();
+                showFeeDetails();
+            }
+
+            $('#libraryReturnBarcodeField').focus();
+
+            $('html').bind('click',backgroundClickHandler);
+
 
         });
 
+        $('#libraryReturnTab').on('hide.bs.tab', function (e) {
+            $('html').unbind('click',backgroundClickHandler);
+        });
 
-        $('#bookReturnDetailDate').w2field('date', {format: 'dd.mm.yyyy'});
+            $('#bookReturnDetailDate').w2field('date', {format: 'dd.mm.yyyy'});
 
 
         $('#bookReturnDetailButton').click(function (event) {
             addBookDetail();
+            $('#libraryReturnBarcodeField').focus();
         });
 
         $('#bookReturnUpdatePaymentButton').click(function (event) {
             addOrUpdatePayment();
+            $('#libraryReturnBarcodeField').focus();
         });
 
         $('#bookReturnAmount').keypress(function (event) {
 
             if (event.which === 13) {
                 addOrUpdatePayment();
+                $('#libraryReturnBarcodeField').focus();
             }
+
         });
 
-                $('#bookReturnDeletePaymentButton').click(function (event) {
+        $('#bookReturnDeletePaymentButton').click(function (event) {
             deletePayment();
+            $('#libraryReturnBarcodeField').focus();
         });
 
         $('#bookReturnPaymentDoneButton').click(function (event) {
             paymentDone();
+            $('#libraryReturnBarcodeField').focus();
         });
 
 
@@ -110,7 +143,9 @@
         var searchAll = $('#libraryReturnerList').find('.w2ui-search-all');
 
         searchAll.keyup(function (event) {
+            searchAll.blur();
             this.onchange();
+            searchAll.focus();
         });
 
 
@@ -120,7 +155,7 @@
 
                 var barcode = $('#libraryReturnBarcodeField').val();
 
-                while(barcode.length < 13){
+                while (barcode.length < 13) {
                     barcode = '0' + barcode;
                 }
 
@@ -147,7 +182,7 @@
                             bookCopyDetailsRecord['id'] = data.book_copy_id;
                             bookCopyDetailsRecord.barcode = barcode;
 
-                            for(var i = 0; i < returnerGrid.records.length; i++){
+                            for (var i = 0; i < returnerGrid.records.length; i++) {
                                 var returner = returnerGrid.records[i];
                                 if ((returner.isStudent && returner.student_id === data.student_id)
                                     || (returner.isTeacher && returner.teacher_id === data.teacher_id)
@@ -219,11 +254,11 @@
             buffered: 2000,
             recid: 'id',
             postData: {school_id: global_school_id, school_term_id: global_school_term_id},
+            multiselect: false,
             show: {
                 header: false,
                 toolbar: true,
                 selectColumn: false,
-                multiSelect: false,
                 toolbarAdd: false,
                 toolbarDelete: false,
                 toolbarSave: false,
@@ -250,13 +285,14 @@
 
             onSelect: function (event) {
 
-                event.onComplete = onSelectUnselectBorrower;
+                event.onComplete = onSelectUnselectReturner;
 
+                $('#libraryReturnBarcodeField').focus();
             },
 
             onUnselect: function (event) {
 
-                event.onComplete = onSelectUnselectBorrower;
+                event.onComplete = onSelectUnselectReturner;
 
             }
 
@@ -362,6 +398,9 @@
                         showBookCopyDetails();
                         showFeeDetails();
                     }
+
+                    $('#libraryReturnBarcodeField').focus();
+
                 }
             },
             onUnselect: function (event) {
@@ -373,7 +412,7 @@
 
     }
 
-    function onSelectUnselectBorrower() {
+    function onSelectUnselectReturner() {
 
         var returnerGrid = w2ui['libraryReturnerList'];
         var booksGrid = w2ui['libraryReturnBooksList'];
@@ -445,11 +484,11 @@
                 selected: borrows_ids,
                 school_id: global_school_id
             }
-            , "/library/borrowedBooks/delete", function(){
+            , "/library/borrowedBooks/delete", function () {
 
                 var returner = getSelectedReturner();
 
-                if(returner){
+                if (returner) {
                     returner.numberOfBorrowedBooks--;
                     w2ui['libraryReturnerList'].refresh();
                 }
@@ -458,7 +497,7 @@
 
     }
 
-    function getSelectedReturner(){
+    function getSelectedReturner() {
         var returnerGrid = w2ui['libraryReturnerList'];
 
         var selectedReturnerList = returnerGrid.getSelection(false); // id of returner
@@ -496,14 +535,14 @@
         currentFeeId = undefined;
         $('#bookReturnAmount').val('');
 
-        if (feeData ) { // 16.04.17: && bookCopyDetailsData entfernt
+        if (feeData) { // 16.04.17: && bookCopyDetailsData entfernt
 
             var i = 1;
 
             feeData.forEach(function (record) {
                 out += '<li class="list-group-item"><a href = "#" id="feeDetail' + i++ + '"><span style="color: blue">' + record.title + ' (Barcode: ' + record.barcode + ')</span> ';
 
-                var amount = parseFloat( ("" + record.amount).replace(",", "."));
+                var amount = parseFloat(("" + record.amount).replace(",", "."));
                 amount = amount.toFixed(2).replace(".", ",");
 
                 out += '<span style="font-weight: bold; color: black">' + amount + " €</span></a>";
@@ -532,7 +571,7 @@
 
             feeData.forEach(function (record) {
 
-                $('#feeDetail' + i++).click(function(){
+                $('#feeDetail' + i++).click(function () {
                     getAndShowBookDetailsFromBarcode(record.barcode, record.borrows_id);
                 });
 
@@ -544,7 +583,7 @@
             $('#bookReturnPaymentDoneButton').prop("disabled", false);
             $('#bookReturnAmount').prop("disabled", false);
 
-            $('#bookReturnSumAmount').val(sum.toFixed(2).replace(".", ",")+ " €");
+            $('#bookReturnSumAmount').val(sum.toFixed(2).replace(".", ",") + " €");
 
         } else {
             $('#bookReturnUpdatePaymentButton').prop("disabled", true);
@@ -567,11 +606,11 @@
     }
 
 
-    function getAndShowBookDetails(record){
+    function getAndShowBookDetails(record) {
         getAndShowBookDetailsFromBarcode(record.barcode, null);
     }
 
-    getAndShowBookDetailsFromBarcode = function(barcode, borrows_id) {
+    getAndShowBookDetailsFromBarcode = function (barcode, borrows_id) {
 
         $.post('/library/bookCopyStatus/get', JSON.stringify({
             barcode: barcode,
@@ -582,7 +621,7 @@
             bookCopyDetailsRecord = data.returnBookResponse; // vor 16.04.17: = record;
             bookCopyDetailsRecord.barcode = barcode;
             bookCopyDetailsRecord.id = bookCopyDetailsRecord.book_copy_id;
-            if(borrows_id != null){
+            if (borrows_id != null) {
                 bookCopyDetailsRecord.borrows_id = borrows_id;
             }
 

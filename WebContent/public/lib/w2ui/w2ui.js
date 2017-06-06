@@ -8978,6 +8978,8 @@ var w2confirm = function (msg, title, callBack) {
         // -- Internal Event Handlers
 
         click: function (id, event) {
+            console.log(id); // Martin
+            console.log(event); // Martin
             var tab = this.get(id);
             if (tab === null || tab.disabled) return false;
             // event before

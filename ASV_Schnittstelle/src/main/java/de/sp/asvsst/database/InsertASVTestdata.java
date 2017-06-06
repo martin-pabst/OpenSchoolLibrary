@@ -17,7 +17,7 @@ import java.nio.file.Paths;
 /**
  * Created by martin on 24.04.2017.
  */
-public class InsertTestdata {
+public class InsertASVTestdata {
 
     public static void main(String[] args) throws Exception {
 
@@ -48,7 +48,7 @@ public class InsertTestdata {
         importFromASV("ASV_Schnittstelle/Testdaten/ASV-Export 2017,18 (8.5.17).zip", "?+QGcQRS");
 
         } catch (Exception ex) {
-            Logger logger = LoggerFactory.getLogger(InsertTestdata.class);
+            Logger logger = LoggerFactory.getLogger(InsertASVTestdata.class);
             logger.error("Fehler beim Schreiben der ASV-Testdaten:", ex);
         }
 
