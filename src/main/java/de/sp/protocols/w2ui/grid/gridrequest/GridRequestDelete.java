@@ -1,5 +1,7 @@
 package de.sp.protocols.w2ui.grid.gridrequest;
 
+import de.sp.tools.validation.Validation;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +16,14 @@ public class GridRequestDelete {
 	 */
 
 
-	private String cmd;
+	protected String cmd;
 
-	private String name;
+	protected String name;
 
-	private List<Long> selected = new ArrayList<>();
+	protected List<Long> selected = new ArrayList<>();
 
-	private Long school_id;
+	@Validation(notNull = true)
+	protected Long school_id;
 
 	public GridRequestDelete(){
 		

@@ -48,6 +48,8 @@ public class AdminRoleAdministrationServlet extends BaseServlet {
 
                         RoleAdministrationListRequest ralr = gson.fromJson(postData, RoleAdministrationListRequest.class);
 
+                        ralr.validate(ts);
+
                         user.checkPermission(AdminModule.PERMISSIONADMINUSERADMINISTRATION, ralr.school_id);
 
                         RoleAdministrationListsResponse ralresp = new RoleAdministrationListsResponse(con, ts, ralr.school_id);
@@ -60,6 +62,8 @@ public class AdminRoleAdministrationServlet extends BaseServlet {
 
                         AddRemovePermissionRequest arp = gson.fromJson(postData, AddRemovePermissionRequest.class);
 
+                        arp.validate(ts);
+
                         user.checkPermission(AdminModule.PERMISSIONADMINUSERADMINISTRATION,
                                 arp.school_id);
 
@@ -71,6 +75,8 @@ public class AdminRoleAdministrationServlet extends BaseServlet {
                     case "saveRole":
 
                         SaveRoleRequest srr = gson.fromJson(postData, SaveRoleRequest.class);
+
+                        srr.validate(ts);
 
                         user.checkPermission(AdminModule.PERMISSIONADMINUSERADMINISTRATION,
                                 srr.school_id);
@@ -87,6 +93,8 @@ public class AdminRoleAdministrationServlet extends BaseServlet {
                     case "removeRoles":
 
                         RemoveRoleRequest rrr = gson.fromJson(postData, RemoveRoleRequest.class);
+
+                        rrr.validate(ts);
 
                         user.checkPermission(AdminModule.PERMISSIONADMINUSERADMINISTRATION,
                                 rrr.school_id);

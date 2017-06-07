@@ -181,6 +181,10 @@ public class LibrarySettingsServlet extends BaseServlet {
 
         if(bookCopyInfoRecords.size() > 0){
 
+            if(bookCopyInfoRecords.get(0).getSorted_out_date() != null){
+                return new SortOutResponse("success", "warning_sign Das Buch mit dem Barcode " + sor.barcode + " ist bereits ausgemustert.");
+            }
+
             if(sor.sort_out_date == null){
                 sor.sort_out_date = Calendar.getInstance().getTime();
             }

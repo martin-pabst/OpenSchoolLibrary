@@ -4,6 +4,7 @@ import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.ValueDAO;
 import de.sp.database.model.Value;
 import de.sp.database.valuelists.ValueListType;
+import de.sp.tools.validation.ValidationException;
 import org.sql2o.Connection;
 
 import java.util.ArrayList;
@@ -168,4 +169,24 @@ public class ValueListStore {
         return null;
 
     }
+
+    public void validateID(ValueListType valueListType, Long school_id, Long id, boolean nullPermitted) throws ValidationException {
+
+        if(id != null) {
+            List<Value> valueList = getValueList(school_id, valueListType.getKey());
+
+            for (Value value : valueList) {
+                if (value.getId().equals(id)) {
+                    return;
+                }
+            }
+            throw new ValidationException("Der Wert " + id + " wurde in der Werteliste " + valueListType.toString() + " nicht gefunden.");
+        }
+
+        if(!nullPermitted) {
+            throw new ValidationException("Der Wert null wurde in der Werteliste " + valueListType.toString() + " nicht gefunden.");
+        }
+    }
+
+
 }

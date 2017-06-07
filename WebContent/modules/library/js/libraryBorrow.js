@@ -163,10 +163,6 @@
 
                 var barcode = $('#libraryBorrowBarcodeField').val();
 
-                while (barcode.length < 13) {
-                    barcode = "0" + barcode;
-                }
-
                 var borrowerGrid = w2ui['libraryBorrowerList'];
                 var borrowedGrid = w2ui['libraryBorrowedBooksList'];
 

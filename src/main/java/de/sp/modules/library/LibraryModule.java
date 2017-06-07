@@ -6,22 +6,23 @@ import de.sp.main.mainframe.menu.MenuItemSide;
 import de.sp.main.resources.modules.Module;
 import de.sp.main.resources.templates.VelocityEngineFactory;
 import de.sp.main.resources.text.TS;
+import de.sp.modules.library.reports.LibraryNavigatorDataServlet;
+import de.sp.modules.library.reports.LibraryReportServlet;
 import de.sp.modules.library.servlets.borrow.bookcopystatus.LibraryBookCopyStatusServlet;
 import de.sp.modules.library.servlets.borrow.bookformstore.LibraryBookFormStoreServlet;
-import de.sp.modules.library.servlets.borrow.borrowedbooks.addstudent.LibraryAddStudentServlet;
 import de.sp.modules.library.servlets.borrow.borrowedbooks.LibraryBorrowedBooksListServlet;
 import de.sp.modules.library.servlets.borrow.borrowedbooks.LibraryRegisterBorrowingServlet;
+import de.sp.modules.library.servlets.borrow.borrowedbooks.addstudent.LibraryAddStudentServlet;
 import de.sp.modules.library.servlets.borrow.borrowerlist.LibraryBorrowerListServlet;
 import de.sp.modules.library.servlets.borrow.updateBorrowHoliday.UpdateBorrowHolidayServlet;
 import de.sp.modules.library.servlets.inventory.books.LibraryBookFormServlet;
 import de.sp.modules.library.servlets.inventory.books.LibraryInventoryBooksServlet;
 import de.sp.modules.library.servlets.inventory.copies.LibraryInventoryCopiesServlet;
-import de.sp.modules.library.reports.LibraryNavigatorDataServlet;
-import de.sp.modules.library.reports.LibraryReportServlet;
 import de.sp.modules.library.servlets.returnbooks.returnerlist.ReturnerListServlet;
 import de.sp.modules.library.servlets.returnbooks.scanbarcodeservlet.FeeServlet;
 import de.sp.modules.library.servlets.returnbooks.scanbarcodeservlet.LibraryReturnBookServlet;
 import de.sp.modules.library.servlets.settings.LibrarySettingsServlet;
+import de.sp.modules.library.servlets.tools.LibraryToolsServlet;
 import org.apache.velocity.Template;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
@@ -108,6 +109,7 @@ public class LibraryModule extends Module {
 		context.addServlet(LibraryReportServlet.class, "/library/reports/start");
 		context.addServlet(LibraryAddStudentServlet.class, "/library/students/save");
 		context.addServlet(LibrarySettingsServlet.class, "/library/settings/*");
+		context.addServlet(LibraryToolsServlet.class, "/library/tools/*");
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import de.sp.database.model.BookCopy;
 import de.sp.database.statements.StatementStore;
 import de.sp.modules.library.servlets.inventory.copies.BookCopyInfoRecord;
 import de.sp.modules.library.servlets.inventory.copies.LibraryInventoryCopiesRecord;
+import de.sp.modules.library.servlets.tools.FindBookIdByBarcodeResponse;
 import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
 import org.krysalis.barcode4j.impl.upcean.UPCEANLogicImpl;
 import org.sql2o.Connection;
@@ -36,8 +37,8 @@ public class BookCopyDAO {
 
 	public static void changeBarcode(String oldBarcode, String newBarcode, Long school_id, Connection con){
 
-		oldBarcode = completeBarcode(oldBarcode, true);
-		newBarcode = completeBarcode(newBarcode, true);
+		oldBarcode = convertBarcodeToDatabaseFormat(oldBarcode);
+		newBarcode = convertBarcodeToDatabaseFormat(newBarcode);
 
 		String sql = StatementStore.getStatement("book_copy.changeBarcode");
 
@@ -53,7 +54,7 @@ public class BookCopyDAO {
 			Date purchase_date,
 			Connection con) throws Exception {
 
-		barcode = completeBarcode(barcode, false);
+		barcode = convertBarcodeToDatabaseFormat(barcode);
 
 		if(purchase_date == null){
 			purchase_date = Calendar.getInstance().getTime();
@@ -78,10 +79,28 @@ public class BookCopyDAO {
 		}
 
 		if(barcode.length() < 13) {
-			barcode = addCheckSum(barcode);
+			barcode = addCheckSumEAN13(barcode);
 		}
 		return barcode;
 	}
+
+	private static String convertBarcodeToDatabaseFormat(String barcode){
+
+		while(barcode.startsWith("0")){
+			barcode = barcode.substring(1);
+		}
+
+		return barcode;
+	}
+
+	public static String addLeadingZerosToGetEAN13(String barcode){
+		while (barcode.length() < 13){
+			barcode = "0" + barcode;
+		}
+
+		return barcode;
+	}
+
 
 	public static void setSortedOutDate(Long book_copy_id, Date sorted_out_date, Connection con){
 
@@ -149,7 +168,7 @@ public class BookCopyDAO {
 	public static List<BookCopyInfoRecord> getBookCopyInInfo(Long school_id,
 			String barcode, Connection con) {
 
-		barcode = completeBarcode(barcode, true);
+		barcode = convertBarcodeToDatabaseFormat(barcode);
 
 		String sql = StatementStore
 				.getStatement("book_copy.findByBarcodeAndSchool");
@@ -174,10 +193,31 @@ public class BookCopyDAO {
 
 
 
-    public static String addCheckSum (String codigo) {
+    public static String addCheckSumEAN13(String codigo) {
+
+		String codigo12 = codigo;
+		while(codigo12.length() < 12){
+			codigo12 = "0" + codigo12;
+		}
+
         EAN13Bean generator = new EAN13Bean();
         UPCEANLogicImpl impl = generator.createLogicImpl();
-        codigo += impl.calcChecksum(codigo);
+        codigo += impl.calcChecksum(codigo12);
         return codigo;
     }
+
+    public static FindBookIdByBarcodeResponse findBookIdByBarcode(String barcode, Long school_id, Connection con) {
+
+		barcode = convertBarcodeToDatabaseFormat(barcode);
+
+		String sql = StatementStore.getStatement("book_copy.findIdByBarcode");
+
+		FindBookIdByBarcodeResponse response =
+				con.createQuery(sql)
+				.addParameter("school_id", school_id)
+				.addParameter("barcode", barcode)
+				.executeAndFetchFirst(FindBookIdByBarcodeResponse.class);
+
+		return response;
+	}
 }

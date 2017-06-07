@@ -4,6 +4,8 @@ import java.util.List;
 
 /**
  * Created by martin on 03.05.2017.
+ *
+ * This class is only used in response-objects, so no validation needed.
  */
 public class UserData {
 

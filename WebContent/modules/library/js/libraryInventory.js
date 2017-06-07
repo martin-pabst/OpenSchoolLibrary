@@ -70,6 +70,9 @@
                 var purchase_date = dateinput.val();
 
                 var barcode = $('#libraryInventoryAddCopy').val();
+
+                barcode = barcode.replace(/^0+/, ''); // remove leading "0"s
+
                 var book_id = w2ui['libraryInventoryCopies'].postData['reference_id'];
                 var edition = $('#libraryInventoryEdition').val();
 
@@ -78,10 +81,6 @@
                     w2alert("Bitte wählen Sie zuerst in der linken Tabelle ein Buch aus.");
                     $('#libraryInventoryAddCopy').blur();
                 } else if (barcode !== "") {
-
-                    while(barcode.length < 13){
-                        barcode = '0' + barcode;
-                    }
 
                     showUpdateMessage(w2ui['libraryInventoryCopies']);
 
@@ -140,7 +139,7 @@
         });
 
         /**
-         * Barcode input field to delete books
+         * Barcode input field to find book_copies
          */
 
         $('#libraryInventorySelect').keypress(function (event) {
@@ -149,28 +148,31 @@
 
                 var barcode = $('#libraryInventorySelect').val();
 
-                while(barcode.length < 13){
-                    barcode = '0' + barcode;
-                }
+                barcode = barcode.replace(/^0+/, ''); // remove leading "0"s
 
-                var recordToSelect = null;
+                $.post("/library/tools/findBookIdByBarcode", JSON.stringify({
+                        school_id: global_school_id,
+                        barcode: barcode
+                    }),
+                    function (data) {
 
-                w2ui['libraryInventoryCopies'].records.forEach(function (record) {
-                    if (record.barcode == barcode) {
-                        recordToSelect = record;
-                    }
-                });
+                        if (data.status === "success") {
 
-                if (recordToSelect == null) {
-                    w2alert("Das Buch mit dem Barcode " + barcode + " ist nicht in der Tabelle enthalten.", "Hinweis");
-                } else {
+                            w2ui['libraryInventoryCopies'].barcodeToSelect = barcode;
 
-                    w2ui['libraryInventoryCopies'].select(recordToSelect.id);
+                            var bookGrid = w2ui['libraryInventoryBooks'];
+                            bookGrid.select(data.book_id);
+                            bookGrid.scrollIntoView(bookGrid.get(data.book_id, true));
 
-                }
+                            $('#libraryInventorySelect').val('');
 
-                $('#libraryInventorySelect').val('');
 
+                        } else if (data.status === "error") {
+                        }
+                    },
+                    "json"
+                );
+                
                 event.stopPropagation();
 
                 return false;
@@ -205,13 +207,13 @@
             header: 'Buchtitel',
             //url		: 'library/inventoryBooks',
             buffered: 1000,
+            multiSelect: false,
             recid: 'id',
             postData: {school_id: global_school_id},
             show: {
                 header: true,
                 toolbar: true,
                 selectColumn: true,
-                multiSelect: true,
                 toolbarAdd: true,
                 toolbarDelete: true,
                 toolbarSave: false,
@@ -313,7 +315,7 @@
 
             },
 
-            onClick: function (event) {
+            onSelect: function (event) {
 
                 w2ui['libraryInventoryBookForm'].clear();
                 var record = this.get(event.recid);
@@ -377,13 +379,34 @@
                     var text = 'Entliehen: <span style="color:red; font-weight: bold">' + entliehen + '</span>, im Lager: <span style="color:green; font-weight: bold">' + imLager;
                     $('#grid_'+ 'libraryInventoryCopies' +'_footer').find('.w2ui-footer-center').html(text);
 
+                    if(w2ui['libraryInventoryCopies'].barcodeToSelect !== null) {
+
+                        var recordToSelect = null;
+
+                        var barcode = w2ui['libraryInventoryCopies'].barcodeToSelect;
+                        w2ui['libraryInventoryCopies'].barcodeToSelect = null;
+
+                        w2ui['libraryInventoryCopies'].records.forEach(function (record) {
+                            if (record.barcode === barcode) {
+                                recordToSelect = record;
+                            }
+                        });
+
+                        if (recordToSelect === null) {
+                            w2alert("Das Buch mit dem Barcode " + barcode + " ist nicht in der Tabelle enthalten.", "Hinweis");
+                        } else {
+
+                            w2ui['libraryInventoryCopies'].selectNone();
+                            w2ui['libraryInventoryCopies'].select(recordToSelect.id);
+
+                        }
+
+                    } else {
+                        w2ui['libraryInventoryCopies'].selectNone();
+                    }
+
                 });
 
-            },
-            onSelect: function (event) {
-                if (this.getSelection(false).length > 1) {
-                    w2ui['libraryInventoryBookForm'].clear();
-                }
             },
             onAdd: function (event) {
                 openAddBookDialog();
@@ -531,6 +554,7 @@
 
         $('#libraryInventoryCopies').w2grid({
             name: 'libraryInventoryCopies',
+            barcodeToSelect: null,
             header: 'Exemplare',
             //url		: 'library/inventoryBooks',
             buffered: 1000,

@@ -1,5 +1,6 @@
 package de.sp.modules.library.reports.reportsschueler.BarcodeTestsheet;
 
+import de.sp.database.daos.basic.BookCopyDAO;
 import de.sp.database.statements.StatementStore;
 import de.sp.modules.library.daos.LibraryDAO;
 import de.sp.modules.library.servlets.borrow.borrowedbooks.BorrowedBookRecord;
@@ -77,11 +78,14 @@ public class ReportBarcodeTestsheet extends BaseReport {
         for (BorrowedBooksRecord bb : borrowedBooks) {
 
             if (bb.book_id != null) {
+
+                String barcode = BookCopyDAO.addLeadingZerosToGetEAN13(bb.barcode);
+
                 barcodeRecordList.add(new BarcodeTestsheetRecord(bb.class_name, bb.class_id,
                         bb.getFirstname() + " " + bb.getSurname(), bb.student_id,
                         languagesCurriculumHelper.getLanguageReligionCurriculum(bb.student_id),
                         bb.getTitle(), bb.book_id,
-                        bb.barcode, false));
+                        barcode, false));
             }
 
         }
@@ -92,6 +96,8 @@ public class ReportBarcodeTestsheet extends BaseReport {
 
             if (nb.getBook_id() != null) {
                 String barcode = availableBookFinder.popBarcode(nb.getBook_id());
+
+                barcode = BookCopyDAO.addLeadingZerosToGetEAN13(barcode);
 
                 barcodeRecordList.add(new BarcodeTestsheetRecord(nb.getClass_name(), nb.getClass_id(),
                         nb.getBorrower().getFirstname() + " " + nb.getBorrower().getSurname(),

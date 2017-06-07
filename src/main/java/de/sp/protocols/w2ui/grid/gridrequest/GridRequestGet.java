@@ -1,9 +1,10 @@
 package de.sp.protocols.w2ui.grid.gridrequest;
 
+import com.google.gson.annotations.SerializedName;
+import de.sp.tools.validation.Validation;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.gson.annotations.SerializedName;
 
 public class GridRequestGet {
 	/*
@@ -15,30 +16,31 @@ public class GridRequestGet {
 	 * "direction": "DESC" } } </code>
 	 */
 
-	private String cmd;
+	protected String cmd;
 
-	private String name;
+	protected String name;
 
-	private int limit;
+	protected int limit;
 
-	private int offset;
+	protected int offset;
 
-	private List<String> selected = new ArrayList<>();
+	protected List<String> selected = new ArrayList<>();
 
-	private Long reference_id;
+	protected Long reference_id;
 
-	private String reference_type;
+	protected String reference_type;
 
 	@SerializedName("search-logic")
-	private String searchLogic;
+	protected String searchLogic;
 
-	private ArrayList<GridRequestSearchfield> search = new ArrayList<>();
+	protected ArrayList<GridRequestSearchfield> search = new ArrayList<>();
 
-	private ArrayList<GridRequestSortfield> sort = new ArrayList<>();
+	protected ArrayList<GridRequestSortfield> sort = new ArrayList<>();
 
-	private Long school_id;
+	@Validation(notNull = true)
+	protected Long school_id;
 
-	private Long school_term_id;
+	protected Long school_term_id;
 
 	public GridRequestGet() {
 

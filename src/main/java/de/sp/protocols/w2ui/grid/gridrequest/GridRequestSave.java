@@ -1,8 +1,10 @@
 package de.sp.protocols.w2ui.grid.gridrequest;
 
+import de.sp.tools.validation.*;
+
 import java.util.Map;
 
-public class GridRequestSave {
+public class GridRequestSave implements SelfValidating{
 	/*
 	 * <code> "cmd": "get-records", "name": "myGrid", "limit": 50, "offset": 0,
 	 * "selected": [1, 2], "search-logic": "AND", "search": [ { "field":
@@ -13,15 +15,16 @@ public class GridRequestSave {
 	 */
 
 
-	private String cmd;
+	protected String cmd;
 
-	private String name;
+	protected String name;
 
-	private Map<String, Object> record;
-	
-	private Long school_id;
+	protected Map<String, Object> record;
 
-	private Long school_term_id;
+	@Validation(notNull = true)
+	protected Long school_id;
+
+	protected Long school_term_id;
 
 	
 	public GridRequestSave(){
@@ -55,6 +58,20 @@ public class GridRequestSave {
 	}
 
 
-	
-	
+	@Override
+	public void validate() throws ValidationException {
+		if(record == null) return;
+
+		record.forEach((key, value) -> {
+			if(value instanceof  String){
+				String stringValue = (String) value;
+				String newValue = Validator.sanitize(stringValue, SanitizingStrategy.jsoupWhitelist);
+				if(!value.equals(newValue)){
+					record.put(key, newValue);
+				}
+			}
+
+		});
+
+	}
 }

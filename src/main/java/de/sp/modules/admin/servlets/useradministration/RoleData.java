@@ -1,6 +1,7 @@
 package de.sp.modules.admin.servlets.useradministration;
 
 import de.sp.main.resources.text.TS;
+import de.sp.tools.validation.Validation;
 
 import java.util.regex.Pattern;
 
@@ -9,14 +10,19 @@ import java.util.regex.Pattern;
  */
 public class RoleData {
 
+    @Validation(notNull = true)
     public Long id;
 
+    @Validation(notEmpty = true, maxLength = 40)
     public String name;
 
+    @Validation(maxLength = 40)
     public String translated_name;
 
+    @Validation(maxLength = 500)
     public String remark;
 
+    @Validation(notNull = true)
     public String permissions = "";
 
     public String[] permissionIdentifierList = new String[]{};

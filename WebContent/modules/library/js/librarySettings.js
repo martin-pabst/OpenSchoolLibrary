@@ -129,7 +129,7 @@
             barcodeField.focus();
 
         });
-        
+
         // Change Barcode
         $('#changeBarcodeTab').on('shown.bs.tab', function (e) {
 
@@ -137,12 +137,12 @@
 
             var button = changeBarcodeDiv.find('button');
 
-            button.click(function(){
+            button.click(function () {
 
                 var oldBarcodeInput = $('#libraryChangeBarcodeOld');
                 var newBarcodeInput = $('#libraryChangeBarcodeNew');
 
-                var animatedGif = changeBarcodeDiv.find('img');
+                var animatedGif = changeBarcodeDiv.find('.animated_gif');
                 var alertDiv = changeBarcodeDiv.find('.alert-success');
 
                 animatedGif.show();
@@ -178,9 +178,7 @@
             });
 
         });
-        
-        
-        
+
 
         var searchAll1 = $('#librarySettingsMergeStudentsNavigator').find('.w2ui-search-all');
 
@@ -203,11 +201,7 @@
 
             if (barcode !== "") {
 
-                while (barcode.length < 13) {
-                    barcode = '0' + barcode;
-                }
-
-                var image = sortOutDiv.find('img');
+                var image = sortOutDiv.find('.animated_gif');
                 image.show();
 
                 $('#librarySortOutBarcodeField').val('');
@@ -228,7 +222,7 @@
                             var alert = sortOutDiv.find('.alert');
                             alert.show();
                             var html = alert.html();
-                            html = data.message + html;
+                            html = insertSigns(data.message) + "<br/>" + html;
                             alert.html(html);
 
                         } else {
@@ -361,7 +355,7 @@
         var mergeStudentsDiv = $('#ls_mergeStudentRecords');
         var alertDiv = mergeStudentsDiv.find('.alert');
         var button = mergeStudentsDiv.find('button');
-        var animatedGif = mergeStudentsDiv.find('img');
+        var animatedGif = mergeStudentsDiv.find('.animated_gif');
 
 
         if (selectedStudents.length === 2) {
@@ -428,10 +422,7 @@
 
         alertDiv.attr('class', 'alert alert-' + type);
 
-        if (type === 'success') {
-            message = message.replace(/check_mark/g,
-                '<img src="/public/img/green_check_mark.png" style="height: 1em; vertical-align: middle; margin-left: 0.2em">');
-        }
+        message = insertSigns(message);
 
         alertDiv.html(message);
 
@@ -439,11 +430,22 @@
 
     }
 
+    function insertSigns(message){
+
+        message = message.replace(/check_mark/g,
+            '<img src="/public/img/green_check_mark.png" style="height: 1em; vertical-align: middle; margin-left: 0.2em">');
+
+        message = message.replace(/warning_sign/g,
+            '<img src="/public/img/warning_sign.png" style="height: 1em; vertical-align: middle; margin-left: 0.2em">');
+
+        return message;
+    }
+
     function deleteOldBookings() {
 
         var deleteOldBookingsDiv = $('#ls_deleteOldBookings');
 
-        var animatedGif = deleteOldBookingsDiv.find('img');
+        var animatedGif = deleteOldBookingsDiv.find('.animated_gif');
         animatedGif.show();
 
         var button = deleteOldBookingsDiv.find('button');
@@ -488,7 +490,7 @@
 
         var deleteResignedStudentsDiv = div;
 
-        var animatedGif = deleteResignedStudentsDiv.find('img');
+        var animatedGif = deleteResignedStudentsDiv.find('.animated_gif');
         animatedGif.show();
 
         var button = deleteResignedStudentsDiv.find('button');

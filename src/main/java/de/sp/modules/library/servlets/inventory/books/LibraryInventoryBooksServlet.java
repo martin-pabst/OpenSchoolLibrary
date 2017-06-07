@@ -1,9 +1,12 @@
 package de.sp.modules.library.servlets.inventory.books;
 
 import de.sp.database.daos.basic.BookDAO;
+import de.sp.database.daos.basic.SubjectDAO;
 import de.sp.database.model.Book;
+import de.sp.database.model.Subject;
 import de.sp.modules.library.LibraryModule;
 import de.sp.protocols.w2ui.grid.gridrequest.*;
+import de.sp.tools.validation.ValidationException;
 import org.sql2o.Connection;
 
 import java.util.List;
@@ -58,6 +61,11 @@ public class LibraryInventoryBooksServlet extends
             price = Double.parseDouble(priceO.toString());
         }
 
+        Long school_id = saveData.getSchool_id();
+
+        checkSubject(con, school_id, subjectID);
+
+
         Book book = BookDAO.insert(saveData.getSchool_id(),
                 saveCastToString(record.get("title")),
                 saveCastToString(record.get("author")),
@@ -71,6 +79,25 @@ public class LibraryInventoryBooksServlet extends
         return new GridResponseSave(GridResponseStatus.success, "",
                 book.getId());
 
+    }
+
+    private void checkSubject(Connection con, Long school_id, Long subjectID) throws ValidationException {
+        if(subjectID != null) {
+            List<Subject> list = SubjectDAO.getAllForSchool(con, school_id);
+
+            boolean subjectOK = false;
+
+            for (Subject subject : list) {
+                if(subject.getId().equals(subjectID)){
+                    subjectOK = true;
+                    break;
+                }
+            }
+
+            if(!subjectOK){
+                throw new ValidationException("" + subjectID + " is no valid subject-id.");
+            }
+        }
     }
 
     @Override
@@ -145,6 +172,9 @@ public class LibraryInventoryBooksServlet extends
                 Long subjectID = (long) ((double) ((Map) value).get("id"));
 
                 if (subjectID != null) {
+
+                    checkSubject(con, school_id, subjectID);
+
                     String statement2 = "update book set subject_id = :subject_id "
                             + "where id = :id";
                     con.createQuery(statement2)

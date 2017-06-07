@@ -58,7 +58,8 @@
 
 	<statement name="book_copy.findByBarcodeAndSchool">
 	select book_copy.id as book_copy_id, book.id as book_id, book.title, book.author,
-		book_copy.purchase_date, student.firstname, student.surname, borrows.id as borrows_id
+		book_copy.purchase_date, student.firstname, student.surname, borrows.id as borrows_id,
+		book_copy.sorted_out_date
 		from book_copy 
 			join book on book_copy.book_id = book.id
 			join school on book.school_id = school.id
@@ -102,6 +103,14 @@
 			book_copy JOIN borrows on borrows.book_copy_id = book_copy.id
 			          JOIN fee on fee.borrows_id = borrows.id
 		where book_copy.id = :book_copy_id
+	</statement>
+
+	<statement name="book_copy.findIdByBarcode">
+		select book_id, sorted_out_date FROM
+			book_copy JOIN book on book_copy.book_id = book.id
+						AND book.school_id = :school_id
+		WHERE
+			barcode = :barcode
 	</statement>
 
 </statementlist>

@@ -29,21 +29,7 @@ public class LibraryInventoryCopiesServlet extends
 						+ deleteData.getSchool_id());
 			}
 
-
-/*
-			 Wenn noch eine Gebühr für das Buch offen ist, kann noch nicht endgültig gelöscht werden
-			 TODO: Bereinigungsfunktion einbauen, die alle Bücher findet, die wegen einer offenen Gebühr noch nicht
-			 gelöscht wurden aber jetzt gelöscht werden können.
-*/
-
-			List<Long> feeIds = BookCopyDAO.getFeeIds(id, con);
-
-			if(feeIds.size() > 0){
-				BookCopyDAO.setSortedOutDate(id, Calendar.getInstance().getTime(), con);
-			} else {
-				BookCopyDAO.delete(id, con);
-			}
-
+			BookCopyDAO.setSortedOutDate(id, Calendar.getInstance().getTime(), con);
 
 		}
 
@@ -76,7 +62,7 @@ public class LibraryInventoryCopiesServlet extends
 			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 			purchase_date = sdf.parse(dateString);
 		} catch(Exception ex){
-
+			purchase_date = Calendar.getInstance().getTime();
 		}
 
 		List<BookCopyInfoRecord> bookCopyInfoList = BookCopyDAO

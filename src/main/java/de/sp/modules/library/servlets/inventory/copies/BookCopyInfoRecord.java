@@ -15,6 +15,12 @@ public class BookCopyInfoRecord {
 	private String surname;
 	private Long borrows_id;
 
+	private Date sorted_out_date;
+
+	public Date getSorted_out_date() {
+		return sorted_out_date;
+	}
+
 	public Long getBook_id() {
 		return book_id;
 	}

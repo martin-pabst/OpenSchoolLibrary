@@ -46,6 +46,8 @@ public class AdminUserAdministrationServlet extends BaseServlet {
 
                         UserAdministrationListsRequest ualr = gson.fromJson(postData, UserAdministrationListsRequest.class);
 
+                        ualr.validate(ts);
+
                         user.checkPermission(AdminModule.PERMISSIONADMINUSERADMINISTRATION,
                                 ualr.school_id);
 
@@ -59,6 +61,8 @@ public class AdminUserAdministrationServlet extends BaseServlet {
 
                         AddRemoveRoleRequest arr = gson.fromJson(postData, AddRemoveRoleRequest.class);
 
+                        arr.validate(ts);
+
                         user.checkPermission(AdminModule.PERMISSIONADMINUSERADMINISTRATION,
                                 arr.school_id);
 
@@ -70,6 +74,8 @@ public class AdminUserAdministrationServlet extends BaseServlet {
                     case "saveUser":
 
                         SaveUserRequest sur = gson.fromJson(postData, SaveUserRequest.class);
+
+                        sur.validate(ts);
 
                         user.checkPermission(AdminModule.PERMISSIONADMINUSERADMINISTRATION,
                                 sur.school_id);
@@ -86,6 +92,8 @@ public class AdminUserAdministrationServlet extends BaseServlet {
                     case "removeUsers":
 
                         RemoveUserRequest rur = gson.fromJson(postData, RemoveUserRequest.class);
+
+                        rur.validate(ts);
 
                         user.checkPermission(AdminModule.PERMISSIONADMINUSERADMINISTRATION,
                                 rur.school_id);

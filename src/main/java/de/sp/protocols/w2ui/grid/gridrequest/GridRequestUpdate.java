@@ -1,9 +1,11 @@
 package de.sp.protocols.w2ui.grid.gridrequest;
 
+import de.sp.tools.validation.*;
+
 import java.util.List;
 import java.util.Map;
 
-public class GridRequestUpdate {
+public class GridRequestUpdate implements SelfValidating{
 	/*
 	 * <code> "cmd": "get-records", "name": "myGrid", "limit": 50, "offset": 0,
 	 * "selected": [1, 2], "search-logic": "AND", "search": [ { "field":
@@ -14,16 +16,17 @@ public class GridRequestUpdate {
 	 */
 
 
-	private String cmd;
+	protected String cmd;
 
-	private String name;
+	protected String name;
 
 	
-	private List<Map<String, Object>> changes;
-	
-	private Long school_id;
+	protected List<Map<String, Object>> changes;
 
-	private Long school_term_id;
+	@Validation(notNull = true)
+	protected Long school_id;
+
+	protected Long school_term_id;
 
 
 	public GridRequestUpdate(){
@@ -56,6 +59,26 @@ public class GridRequestUpdate {
 		return school_term_id;
 	}
 
-	
-	
+
+	@Override
+	public void validate() throws ValidationException {
+
+		if(changes == null) return;
+
+		for (Map<String, Object> changeMap : changes) {
+
+			changeMap.forEach( (key, value) -> {
+				if(value instanceof  String){
+					String stringValue = (String) value;
+					String newValue = Validator.sanitize(stringValue, SanitizingStrategy.jsoupWhitelist);
+					if(!value.equals(newValue)){
+						changeMap.put(key, newValue);
+					}
+				}
+			});
+
+		}
+
+
+	}
 }

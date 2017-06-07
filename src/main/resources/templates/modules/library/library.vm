@@ -157,12 +157,12 @@
                         </span>
                     </div>
                     <div class="input-group" style="margin-top: 10px">
-                        <span class="input-group-addon" id="basic-addon1">Neu erfassen:</span>
+                        <span class="input-group-addon" id="basic-addon1">Exemplar neu erfassen:</span>
                         <input id="libraryInventoryAddCopy" type="text" class="form-control" placeholder="Barcode"
                                aria-describedby="basic-addon1">
                     </div>
                     <div class="input-group" style="margin-top: 10px">
-                        <span class="input-group-addon" id="basic-addon2">Markieren:</span>
+                        <span class="input-group-addon" id="basic-addon2">Exemplar Suchen:</span>
                         <input id="libraryInventorySelect" type="text" class="form-control" placeholder="Barcode"
                                aria-describedby="basic-addon2">
                     </div>
@@ -375,7 +375,7 @@
                             </p>
                             <div style="margin: 0 0 10px 0">
                                 <div style="vertical-align: middle;display: inline-block;height: 100%;">
-                                    <img src="/public/img/spiffygif_26x26.gif" style="display: none">
+                                    <img src="/public/img/spiffygif_26x26.gif" style="display: none" class="animated_gif">
                                 </div>
                                 <button type="button" class="btn btn-default">
                                     Start
@@ -395,7 +395,7 @@
                                 </p>
                                 <div style="margin: 0 0 10px 0">
                                     <div style="vertical-align: middle;display: inline-block;height: 100%;">
-                                        <img src="/public/img/spiffygif_26x26.gif" style="display: none">
+                                        <img src="/public/img/spiffygif_26x26.gif" style="display: none" class="animated_gif">
                                     </div>
                                     <button type="button" class="btn btn-default">
                                         Start
@@ -411,7 +411,7 @@
                                 </p>
                                 <div style="margin: 0 0 10px 0">
                                     <div style="vertical-align: middle;display: inline-block;height: 100%;">
-                                        <img src="/public/img/spiffygif_26x26.gif" style="display: none">
+                                        <img src="/public/img/spiffygif_26x26.gif" style="display: none" class="animated_gif">
                                     </div>
                                     <button type="button" class="btn btn-default">
                                         Start
@@ -450,7 +450,7 @@
                             </div>
                             <div style="margin: 0 0 10px 0">
                                 <div style="vertical-align: middle;display: inline-block;height: 100%;">
-                                    <img src="/public/img/spiffygif_26x26.gif" style="display: none">
+                                    <img src="/public/img/spiffygif_26x26.gif" style="display: none" class="animated_gif">
                                 </div>
                                 <button type="button" class="btn btn-default">
                                     Start
@@ -466,13 +466,10 @@
                             <p>Die Bücherexemplare mit dem angegebenen Barcode werden aussortiert. Sollten noch
                                 Ausleihvorgänge darauf
                                 gebucht sein, so wird automatisch eine Rückgabe gebucht.</p>
-                            <p>Bitte platzieren sie den Cursor in das Feld für den Barcode. <span
-                                    style="color: red; font-weight: bold">
+                            <p>Bitte platzieren sie den Cursor in das Feld für den Barcode.</p>
+                                <p><span style="color: red; font-weight: bold">
                                 Vorsicht: </span>Nach dem Einscannen
                                 (oder der Eingabe von Enter) wird das Ausmustern sofort vollzogen.</p>
-                        ##                            <div>Aussortiert am:
-                        ##                                <input class="dateinput" type="text" maxlength="100" style="width: 90px">
-                        ##                            </div>
                             <div style="margin: 10px 0 10px 0">
                                 <div class="input-group">
                                     <span class="input-group-addon" id="basic-addon6">Ausgemustert am:</span>
@@ -490,7 +487,7 @@
                                            style="width: 20em">
                                 </div>
                                 <div style="vertical-align: middle;display: inline-block;height: 100%;">
-                                    <img src="/public/img/spiffygif_26x26.gif" style="display: none">
+                                    <img src="/public/img/spiffygif_26x26.gif" style="display: none" class="animated_gif">
                                 </div>
                             </div>
                             <div class="alert alert-success" role="alert"
@@ -519,7 +516,7 @@
 
                             <div style="margin: 0 0 10px 0">
                                 <div style="vertical-align: middle;display: inline-block;height: 100%;">
-                                    <img src="/public/img/spiffygif_26x26.gif" style="display: none">
+                                    <img src="/public/img/spiffygif_26x26.gif" style="display: none" class="animated_gif">
                                 </div>
                                 <button type="button" class="btn btn-default">
                                     Start

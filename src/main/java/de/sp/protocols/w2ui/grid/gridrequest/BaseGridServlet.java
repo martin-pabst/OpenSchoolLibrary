@@ -6,6 +6,7 @@ import de.sp.database.connection.ConnectionPool;
 import de.sp.database.model.User;
 import de.sp.main.resources.text.TS;
 import de.sp.tools.server.BaseServlet;
+import de.sp.tools.validation.Validator;
 import org.slf4j.Logger;
 import org.sql2o.Connection;
 
@@ -40,6 +41,8 @@ public abstract class BaseGridServlet<E> extends BaseServlet {
 					GridRequestGet getData = gson.fromJson(postData,
 							GridRequestGet.class);
 
+					Validator.validate(getData, ts);
+
 					user.checkPermission(getRequiredPermission("get"),
 							getData.getSchool_id());
 
@@ -52,6 +55,8 @@ public abstract class BaseGridServlet<E> extends BaseServlet {
 
 					GridRequestUpdate updateData = gson.fromJson(postData,
 							GridRequestUpdate.class);
+
+					Validator.validate(updateData, ts);
 
 					user.checkPermission(getRequiredPermission("update"),
 							updateData.getSchool_id());
@@ -66,7 +71,9 @@ public abstract class BaseGridServlet<E> extends BaseServlet {
 
 					GridRequestDelete deleteData = gson.fromJson(postData,
 							GridRequestDelete.class);
-					
+
+					Validator.validate(deleteData, ts);
+
 					user.checkPermission(getRequiredPermission("delete"),
 							deleteData.getSchool_id());
 					
@@ -80,7 +87,9 @@ public abstract class BaseGridServlet<E> extends BaseServlet {
 
 					GridRequestSave saveData = gson.fromJson(postData,
 							GridRequestSave.class);
-					
+
+					Validator.validate(saveData, ts);
+
 					user.checkPermission(getRequiredPermission("save"),
 							saveData.getSchool_id());
 					
