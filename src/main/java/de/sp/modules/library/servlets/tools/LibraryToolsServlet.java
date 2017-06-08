@@ -43,6 +43,8 @@ public class LibraryToolsServlet extends BaseServlet {
 
                         FindBookIdByBarcodeRequest fbr = gson.fromJson(postData, FindBookIdByBarcodeRequest.class);
 
+                        fbr.validate(ts);
+
                         user.checkPermission(LibraryModule.PERMISSION_BORROW,
                                 fbr.school_id);
 

@@ -1,19 +1,6 @@
 package de.sp.modules.library.servlets.borrow.borrowedbooks;
 
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.slf4j.Logger;
-import org.sql2o.Connection;
-
 import com.google.gson.Gson;
-
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.BorrowsDAO;
 import de.sp.database.daos.basic.StudentDAO;
@@ -24,6 +11,16 @@ import de.sp.main.resources.text.TS;
 import de.sp.modules.library.LibraryModule;
 import de.sp.modules.library.daos.LibraryDAO;
 import de.sp.tools.server.BaseServlet;
+import org.slf4j.Logger;
+import org.sql2o.Connection;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 
 public class LibraryRegisterBorrowingServlet extends BaseServlet {
 
@@ -41,7 +38,9 @@ public class LibraryRegisterBorrowingServlet extends BaseServlet {
 				RegisterBorrowingRequest.class);
 
 		try (Connection con = ConnectionPool.beginTransaction()) {
-			
+
+			rbr.validate(ts);
+
 			user.checkPermission(LibraryModule.PERMISSION_BORROW, rbr.getSchool_id());
 
 			if ((rbr.getStudent_id() != null || rbr.getTeacher_id() != null)

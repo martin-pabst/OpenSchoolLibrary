@@ -1,11 +1,16 @@
 package de.sp.modules.library.servlets.returnbooks.scanbarcodeservlet;
 
-public class ReturnBookRequest {
-	
+import de.sp.tools.validation.BaseRequestData;
+import de.sp.tools.validation.Validation;
+
+public class ReturnBookRequest extends BaseRequestData{
+
+	@Validation(notEmpty = true)
 	private String barcode;
 	
 	private boolean performReturn;
-		
+
+	@Validation(notNull = true)
 	private Long school_id;
 
 	public String getBarcode() {

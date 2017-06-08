@@ -1,35 +1,56 @@
 package de.sp.modules.library.servlets.borrow.borrowedbooks.addstudent;
 
-import de.sp.protocols.w2ui.forms.SimpleValueListRespoonse;
+import de.sp.protocols.w2ui.forms.SimpleValueListResponse;
+import de.sp.tools.validation.BaseRequestData;
+import de.sp.tools.validation.Validation;
 
 import java.util.Date;
 
 /**
  * Created by Martin on 22.04.2017.
  */
-public class LibraryAddStudentRequestRecord {
+public class LibraryAddStudentRequestRecord extends BaseRequestData{
 
+    @Validation(notNull = true)
     public Date date_of_birth;
-    public SimpleValueListRespoonse sex;
+
+    @Validation(notNull = true)
+    public SimpleValueListResponse sex;
+
+    @Validation(notEmpty = true, maxLength = 100)
     public String firstname;
+
+    @Validation(notNull = true, maxLength = 300)
     public String surname;
+
+    @Validation(maxLength = 100)
     public String before_surname;
+
+    @Validation(maxLength = 100)
     public String after_surname;
-    public SimpleValueListRespoonse classname;
-    public SimpleValueListRespoonse curriculum;
 
-    public SimpleValueListRespoonse religion;
+    @Validation
+    public SimpleValueListResponse classname;
 
-    public SimpleValueListRespoonse language_1;
+    @Validation
+    public SimpleValueListResponse curriculum;
+
+    @Validation
+    public SimpleValueListResponse religion;
+
+    @Validation
+    public SimpleValueListResponse language_1;
     public Integer from_form_1;
 
-    public SimpleValueListRespoonse language_2;
+    @Validation
+    public SimpleValueListResponse language_2;
     public Integer from_form_2;
 
-    public SimpleValueListRespoonse language_3;
+    @Validation
+    public SimpleValueListResponse language_3;
     public Integer from_form_3;
     
-    public SimpleValueListRespoonse getLanguage(int i){
+    public SimpleValueListResponse getLanguage(int i){
         switch (i){
             case 1: return language_1;
             case 2: return language_2;

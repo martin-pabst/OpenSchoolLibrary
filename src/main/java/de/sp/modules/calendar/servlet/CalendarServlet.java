@@ -56,6 +56,8 @@ public class CalendarServlet extends BaseServlet {
                         GetEventRequest gcr = new GetEventRequest(parameters.get("school_id"), parameters.get("type"),
                                 parameters.get("start"), parameters.get("end"));
 
+                        gcr.validate(ts);
+
                         user.checkPermission(CalendarModule.CALENDAROPEN,
                                 gcr.school_id);
 
@@ -71,6 +73,8 @@ public class CalendarServlet extends BaseServlet {
 
                         GetEventDetailsRequest gedr = gson.fromJson(postData, GetEventDetailsRequest.class);
 
+                        gedr.validate(ts);
+
                         user.checkPermission(CalendarModule.CALENDAROPEN,
                                 gedr.school_id);
 
@@ -82,6 +86,7 @@ public class CalendarServlet extends BaseServlet {
 
                         SetEventDetailsRequest sedr = gson.fromJson(postData, SetEventDetailsRequest.class);
 
+                        sedr.validate(ts);
                         user.checkPermission(CalendarModule.CALENDAROPEN,
                                 sedr.school_id);
 
@@ -92,6 +97,8 @@ public class CalendarServlet extends BaseServlet {
                     case "removeEvent":
 
                         RemoveEventRequest rer = gson.fromJson(postData, RemoveEventRequest.class);
+
+                        rer.validate(ts);
 
                         user.checkPermission(CalendarModule.CALENDAROPEN,
                                 rer.school_id);

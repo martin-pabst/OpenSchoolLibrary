@@ -1,11 +1,16 @@
 package de.sp.modules.library.servlets.returnbooks.scanbarcodeservlet;
 
+import de.sp.tools.validation.BaseRequestData;
+import de.sp.tools.validation.Validation;
+
 import java.util.Date;
 
-public class FeeUpdateSaveRequest {
+public class FeeUpdateSaveRequest extends BaseRequestData{
 
+	@Validation(notNull = true)
 	private Long school_id;
 
+	@Validation(notNull = true)
 	private Long borrows_id;
 
 	private double amount;

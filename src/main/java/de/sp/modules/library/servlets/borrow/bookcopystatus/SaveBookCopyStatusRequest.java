@@ -1,15 +1,24 @@
 package de.sp.modules.library.servlets.borrow.bookcopystatus;
 
+import de.sp.tools.validation.BaseRequestData;
+import de.sp.tools.validation.Validation;
+
 import java.util.Date;
 
-public class SaveBookCopyStatusRequest {
-	
+public class SaveBookCopyStatusRequest extends BaseRequestData {
+
 	private String evidence;
 	private String event;
 	private String mark;
 	private String borrowername;
+
+	@Validation(notEmpty = true)
 	private String username;
+
+	@Validation(notNull = true)
 	private Long book_copy_id;
+
+	@Validation(notNull = true)
 	private Date statusdate;
 	
 	private Long school_id;

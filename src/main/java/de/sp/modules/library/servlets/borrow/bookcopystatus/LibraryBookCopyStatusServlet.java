@@ -15,6 +15,7 @@ import de.sp.modules.library.servlets.returnbooks.scanbarcodeservlet.ReturnBookR
 import de.sp.protocols.w2ui.grid.gridrequest.GridResponseSave;
 import de.sp.protocols.w2ui.grid.gridrequest.GridResponseStatus;
 import de.sp.tools.server.BaseServlet;
+import de.sp.tools.validation.ValidationException;
 import org.slf4j.Logger;
 import org.sql2o.Connection;
 
@@ -43,10 +44,10 @@ public class LibraryBookCopyStatusServlet extends BaseServlet {
 
 			switch (command) {
 			case "get":
-				responseString = doGet(user, con, postData, gson);
+				responseString = doGet(user, con, postData, gson, ts);
 				break;
 			case "save":
-				responseString = doSave(user, con, postData, gson);
+				responseString = doSave(user, con, postData, gson, ts);
 				break;
 			}
 
@@ -66,11 +67,13 @@ public class LibraryBookCopyStatusServlet extends BaseServlet {
 
 	}
 
-	private String doSave(User user, Connection con, String postData, Gson gson)
+	private String doSave(User user, Connection con, String postData, Gson gson, TS ts)
 			throws Exception {
 
 		SaveBookCopyStatusRequest request = gson.fromJson(postData,
 				SaveBookCopyStatusRequest.class);
+
+		request.validate(ts);
 
 		user.checkPermission(LibraryModule.PERMISSION_EXAMINE,
 				request.getSchool_id());
@@ -94,11 +97,13 @@ public class LibraryBookCopyStatusServlet extends BaseServlet {
 				null));
 	}
 
-	private String doGet(User user, Connection con, String postData, Gson gson)
-			throws InsufficientPermissionException {
+	private String doGet(User user, Connection con, String postData, Gson gson, TS ts)
+			throws InsufficientPermissionException, ValidationException {
 
 		GetBookCopyStatusRequest request = gson.fromJson(postData,
 				GetBookCopyStatusRequest.class);
+
+		request.validate(ts);
 
 		user.checkPermission(LibraryModule.PERMISSION_LIBRARY,
 				request.getSchool_id());

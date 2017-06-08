@@ -41,6 +41,8 @@ public class UpdateBorrowHolidayServlet extends BaseServlet {
 
                         UpdateBorrowHolidayRequest ubhr = gson.fromJson(postData, UpdateBorrowHolidayRequest.class);
 
+                        ubhr.validate(ts);
+
                         user.checkPermission(LibraryModule.PERMISSION_BORROW,
                                 ubhr.school_id);
 

@@ -1,7 +1,11 @@
 package de.sp.modules.library.servlets.returnbooks.scanbarcodeservlet;
 
-public class PaymentsDoneRequest {
-	
+import de.sp.tools.validation.BaseRequestData;
+import de.sp.tools.validation.Validation;
+
+public class PaymentsDoneRequest extends BaseRequestData{
+
+	@Validation(notNull = true)
 	private Long school_id;
 	
 	private Long student_id;

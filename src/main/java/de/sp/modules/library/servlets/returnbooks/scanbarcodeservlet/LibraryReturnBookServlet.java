@@ -45,6 +45,8 @@ public class LibraryReturnBookServlet extends BaseServlet {
 
             try {
 
+                rbr.validate(ts);
+
                 returnBookResp = LibraryDAO.getReturnBookResponse(rbr.getBarcode(),
                         rbr.getSchool_id(), con);
 
@@ -127,7 +129,6 @@ public class LibraryReturnBookServlet extends BaseServlet {
                 throw new Exception("Student with id " + student_id
                         + " does not belong to school with id " + school_id);
             }
-            ;
         }
 
     }

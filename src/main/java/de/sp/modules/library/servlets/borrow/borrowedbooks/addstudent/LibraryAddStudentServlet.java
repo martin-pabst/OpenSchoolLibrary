@@ -42,6 +42,8 @@ public class LibraryAddStudentServlet extends BaseServlet {
 			LibraryAddStundentRequest lasr = gson.fromJson(postData,
 					LibraryAddStundentRequest.class);
 
+			lasr.validate(ts);
+
 			LibraryAddStudentRequestRecord record = lasr.record;
 
 			user.checkPermission(LibraryModule.PERMISSION_EDIT_STUDENTS, lasr.school_id);

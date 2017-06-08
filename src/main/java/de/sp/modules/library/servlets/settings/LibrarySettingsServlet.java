@@ -56,6 +56,8 @@ public class LibrarySettingsServlet extends BaseServlet {
 
                         DeleteOldRecordsRequest dobr = gson.fromJson(postData, DeleteOldRecordsRequest.class);
 
+                        dobr.validate(ts);
+
                         user.checkPermission("library.settings",
                                 dobr.school_id);
 
@@ -67,6 +69,8 @@ public class LibrarySettingsServlet extends BaseServlet {
 
                         DeleteOldRecordsRequest dobr1 = gson.fromJson(postData, DeleteOldRecordsRequest.class);
 
+                        dobr1.validate(ts);
+
                         user.checkPermission("library.settings",
                                 dobr1.school_id);
 
@@ -77,6 +81,8 @@ public class LibrarySettingsServlet extends BaseServlet {
                     case "deleteResignedTeachers":
 
                         DeleteOldRecordsRequest dobr2 = gson.fromJson(postData, DeleteOldRecordsRequest.class);
+
+                        dobr2.validate(ts);
 
                         user.checkPermission("library.settings",
                                 dobr2.school_id);
@@ -100,6 +106,8 @@ public class LibrarySettingsServlet extends BaseServlet {
                         MergeStudentsRequest msr = gson.fromJson(postData,
                                 MergeStudentsRequest.class);
 
+                        msr.validate(ts);
+
                         user.checkPermission("library.settings",
                                 msr.school_id);
 
@@ -109,6 +117,8 @@ public class LibrarySettingsServlet extends BaseServlet {
 
                     case "sortOut":
                         SortOutRequest sor = gson.fromJson(postData, SortOutRequest.class);
+
+                        sor.validate(ts);
 
                         user.checkPermission("library.settings",
                                 sor.school_id);
@@ -120,6 +130,8 @@ public class LibrarySettingsServlet extends BaseServlet {
                     case "changeBarcode":
 
                         ChangeBarcodeRequest cbr = gson.fromJson(postData, ChangeBarcodeRequest.class);
+
+                        cbr.validate(ts);
 
                         user.checkPermission("library.settings",
                                 cbr.school_id);

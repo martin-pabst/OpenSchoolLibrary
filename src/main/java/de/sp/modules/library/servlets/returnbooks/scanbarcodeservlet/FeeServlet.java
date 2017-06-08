@@ -45,19 +45,19 @@ public class FeeServlet extends BaseServlet {
 
 				switch (command) {
 				case "get":
-					responseString = doGet(user, postData, con, gson);
+					responseString = doGet(user, postData, con, gson, ts);
 					break;
 				case "delete":
-					responseString = doDelete(user, postData, con, gson);
+					responseString = doDelete(user, postData, con, gson, ts);
 					break;
 				case "save":
-					responseString = doSave(user, postData, con, gson);
+					responseString = doSave(user, postData, con, gson, ts);
 					break;
 				case "update":
-					responseString = doUpdate(user, postData, con, gson);
+					responseString = doUpdate(user, postData, con, gson, ts);
 					break;
 				case "paymentsDone":
-					responseString = doPaymentsDone(user, postData, con, gson);
+					responseString = doPaymentsDone(user, postData, con, gson, ts);
 					break;
 
 				}
@@ -77,11 +77,13 @@ public class FeeServlet extends BaseServlet {
 
 	}
 
-	private String doGet(User user, String postData, Connection con, Gson gson)
+	private String doGet(User user, String postData, Connection con, Gson gson, TS ts)
 			throws Exception {
 		List<FeeRecord> feeList = new ArrayList<>();
 
 		FeeGetRequest r = gson.fromJson(postData, FeeGetRequest.class);
+
+		r.validate(ts);
 
 		user.checkPermission(LibraryModule.PERMISSION_LIBRARY, r.getSchool_id());
 
@@ -101,9 +103,11 @@ public class FeeServlet extends BaseServlet {
 	}
 
 	private String doDelete(User user, String postData, Connection con,
-			Gson gson) throws Exception {
+							Gson gson, TS ts) throws Exception {
 
 		FeeDeleteRequest r = gson.fromJson(postData, FeeDeleteRequest.class);
+
+		r.validate(ts);
 
 		user.checkPermission(LibraryModule.PERMISSION_RETURN, r.getSchool_id());
 
@@ -120,11 +124,13 @@ public class FeeServlet extends BaseServlet {
 
 	}
 
-	private String doSave(User user, String postData, Connection con, Gson gson)
+	private String doSave(User user, String postData, Connection con, Gson gson, TS ts)
 			throws Exception {
 
 		FeeUpdateSaveRequest r = gson.fromJson(postData,
 				FeeUpdateSaveRequest.class);
+
+		r.validate(ts);
 
 		user.checkPermission(LibraryModule.PERMISSION_RETURN, r.getSchool_id());
 
@@ -143,10 +149,12 @@ public class FeeServlet extends BaseServlet {
 	}
 
 	private String doUpdate(User user, String postData, Connection con,
-			Gson gson) throws Exception {
+							Gson gson, TS ts) throws Exception {
 
 		FeeUpdateSaveRequest r = gson.fromJson(postData,
 				FeeUpdateSaveRequest.class);
+
+		r.validate(ts);
 
 		user.checkPermission(LibraryModule.PERMISSION_RETURN, r.getSchool_id());
 
@@ -173,10 +181,12 @@ public class FeeServlet extends BaseServlet {
 	}
 
 	private String doPaymentsDone(User user, String postData, Connection con,
-			Gson gson) throws Exception {
+								  Gson gson, TS ts) throws Exception {
 
 		PaymentsDoneRequest r = gson.fromJson(postData,
 				PaymentsDoneRequest.class);
+
+		r.validate(ts);
 
 		user.checkPermission(LibraryModule.PERMISSION_LIBRARY, r.getSchool_id());
 

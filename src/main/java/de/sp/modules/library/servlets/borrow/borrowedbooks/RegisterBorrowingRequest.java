@@ -1,15 +1,20 @@
 package de.sp.modules.library.servlets.borrow.borrowedbooks;
 
-public class RegisterBorrowingRequest {
-	
+import de.sp.tools.validation.BaseRequestData;
+import de.sp.tools.validation.Validation;
+
+public class RegisterBorrowingRequest extends BaseRequestData{
+
+	@Validation(notNull = true)
 	private String barcode;
 	
 	private boolean unbookFromPreviousBorrower;
-	
+
 	private Long student_id;
 	
 	private Long teacher_id;
-	
+
+	@Validation(notNull = true)
 	private Long school_id;
 
 	private Boolean over_holidays;
