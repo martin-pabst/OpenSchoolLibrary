@@ -75,13 +75,17 @@
         var searchAll = $('#adminUsersUserList').find('.w2ui-search-all');
 
         searchAll.keyup(function (event) {
+            searchAll.blur();
             this.onchange();
+            searchAll.focus();
         });
 
         searchAll = $('#adminUsersRoleList').find('.w2ui-search-all');
 
         searchAll.keyup(function (event) {
+            searchAll.blur();
             this.onchange();
+            searchAll.focus();
         });
     }
 
@@ -99,11 +103,11 @@
             buffered: 2000,
             recid: 'id',
             postData: {},
+            multiSelect: false,
             show: {
                 header: true,
                 toolbar: true,
                 selectColumn: false,
-                multiSelect: false,
                 toolbarAdd: true,
                 toolbarEdit: true,
                 toolbarDelete: true,
@@ -220,11 +224,11 @@
             buffered: 2000,
             recid: 'id',
             postData: {},
+            multiSelect: true,
             show: {
                 header: true,
                 toolbar: false,
                 selectColumn: false,
-                multiSelect: true,
                 toolbarAdd: false,
                 toolbarEdit: false,
                 toolbarDelete: false,
