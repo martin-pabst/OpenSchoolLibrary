@@ -35,6 +35,13 @@ public class EventRestrictionDAO {
     }
 
 
+    public static void remove(EventRestriction eventRestriction, Connection con) {
 
+        String sql = StatementStore.getStatement("event_restriction.remove");
 
+        con.createQuery(sql)
+                .addParameter("id", eventRestriction.getId())
+                .executeUpdate();
+
+    }
 }

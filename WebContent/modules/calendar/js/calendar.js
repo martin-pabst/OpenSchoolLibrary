@@ -18,7 +18,7 @@
 
             initializeEventDetailsDialog();
 
-
+            fetchEmptyEvent();
 
         },
         close: function () {
@@ -26,17 +26,49 @@
         }
     });
 
+    function fetchEmptyEvent() {
+        $.post('/calendar/fetchEventDetails',
+            JSON.stringify({
+                school_id: global_school_id,
+                school_term_id: global_school_term_id,
+                event_id: null
+            }),
+            function (data) {
+
+                emptyEvent = data;
+
+                return true;
+
+            }, "json");
+
+    }
+
+
     var calendarEntriesType = "schedule";
     var detailsDialogFullcalendarEvent = null;
+
+    var emptyEvent = null;
 
     function initializeCalendar(calendarHeight) {
         $('#fullCalendar').fullCalendar({
             height: calendarHeight,
             nowIndicator: true,
+            weekNumbers: true,
+            weekNumbersWithinDays: true,
+            minTime: "05:00:00",
+            maxTime: "22:00:00",
+            weekFormat: "KW w",
+            eventLimit: true,
+            views: {
+                month: {
+                    timeFormat: 'H:mm',
+                    eventLimit: 6
+                }
+            },
             customButtons: {
                 schedule: {
                     text: 'Termine',
-                    click: function(){
+                    click: function () {
                         console.log(this);
                         calendarEntriesType = "schedule";
                         toggle(this);
@@ -44,74 +76,263 @@
                 },
                 tests: {
                     text: 'Prüfungen',
-                    click: function(){
+                    click: function () {
                         calendarEntriesType = "tests";
                         toggle(this);
                     }
                 },
                 absences: {
                     text: 'Abwesende Klassen',
-                    click: function(){
+                    click: function () {
                         calendarEntriesType = "absences";
                         toggle(this);
                     }
                 }
             },
-            header:{
-                right: 'schedule,tests,absences today month,agendaDay,agendaWeek prev,next listWeek,listMonth,listYear'
+            header: {
+                right: 'schedule,tests,absences today month,agendaWeek,agendaDay prev,next listWeek,listMonth,listYear'
             },
             events: {
                 url: '/calendar/fetchEntries',
                 type: 'POST',
-                data: function(){
+                data: function () {
                     return {
                         school_id: global_school_id,
                         type: calendarEntriesType
                     }
                 },
-                error: function() {
+                error: function () {
                     alert('there was an error while fetching events!');
                 },
-                color: 'yellow',   // a non-ajax option
-                textColor: 'black' // a non-ajax option
+                success: function (data, textStatus) {
+                    if (typeof data === 'object') {
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].backgroundRendering) {
+                                data[i].rendering = 'background'
+                            }
+                        }
+                    }
+                }
             },
-            eventClick: function(event){
-                openEventDetailsDialog(event);
+            eventClick: function (event) {
+                openEventDetailsDialog(event, null);
+            },
+            dayClick: function (date, jsEvent, view) {
+
+                openEventDetailsDialog(null, date);
+
+                /*
+                 alert('Clicked on: ' + date.format());
+
+                 alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+
+                 alert('Current view: ' + view.name);
+
+                 // change the day's background color just for fun
+                 $(this).css('background-color', 'red');
+                 */
+            },
+            eventDrop: function (event, delta, revertFunc) {
+
+                moveEvent(event, revertFunc);
+
+            },
+            eventResize: function (event, delta, revertFunc) {
+
+                moveEvent(event, revertFunc);
+
+            },
+            eventRender: function (event, element, view) {
+                // console.log(element.html());
+
+                if (event.rendering == 'background') {
+
+                    var html = element[0].outerHTML;
+
+                    var backgroundColor = event.backgroundColor;
+
+                    if(typeof backgroundColor === 'string'){
+
+                        var brighterBackgroundColor = makeWhiter(event.backgroundColor, 0.2);
+                        html = html.replace(backgroundColor, brighterBackgroundColor);
+                    }
+
+                    html = html.replace('fc-bgevent', '');
+
+
+                    var html1 = $('<div style="color: #a9a9a9; position: absolute; bottom: 0; font-size: 130%; cursor: pointer; padding: 3px">'
+                        + event.title + '</div>');
+
+                    html1.on('click', function(){
+                        openEventDetailsDialog(event, null);
+                    });
+
+                    return $(html).append(html1);
+                }
+
+                var iconHtml = '<i class="fa fa-globe fullcalendar-icon" style="color: #0000a0"></i>';
+
+                if (typeof event.restrictions === 'object' && event.restrictions.length > 0) {
+                    iconHtml = '';
+                }
+
+                if (typeof event.absences === 'object' && event.absences.length > 0) {
+                    var iconAbsence = '<i class="fa fa-external-link fullcalendar-icon" ></i>';
+
+                    for (var i = 0; i < event.absences.length; i++) {
+                        if (typeof event.absences[i].school_id !== 'undefined') {
+                            iconAbsence = '<i class="fa fa-suitcase fullcalendar-icon" ></i>';
+                            break;
+                        }
+                    }
+
+                    iconHtml += iconAbsence;
+
+                }
+
+                if (iconHtml.length > 0) {
+                    element.find('.fc-content').css('background-color', 'inherit');
+
+                    $('<span class="fullcalendar-iconspan">' + iconHtml + '</span>').insertAfter(element.find('.fc-title'));
+                }
+
+                return element;
             }
         });
     }
 
-    function toggle(button){
-        $(button).parent().find('button').removeClass('fc-state-active');
-        $(button).addClass('fc-state-active');
-        $('#fullCalendar').fullCalendar('refetchEvents');
+    function makeWhiter(hex, percent) {
+        // strip the leading # if it's there
+        hex = hex.replace(/^\s*#|\s*$/g, '');
+
+        // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
+        if (hex.length == 3) {
+            hex = hex.replace(/(.)/g, '$1$1');
+        }
+
+        var r = parseInt(hex.substr(0, 2), 16),
+            g = parseInt(hex.substr(2, 2), 16),
+            b = parseInt(hex.substr(4, 2), 16);
+
+        r = increasePercent(r, percent);
+        g = increasePercent(g, percent);
+        b = increasePercent(b, percent);
+
+        return '#' + r + g + b;
     }
 
-    function openEventDetailsDialog(event){
+    function increasePercent(c, percent) {
+        c = Math.round(c * percent + 255*(1-percent));
+        if (c > 255) {
+            c = 255
+        }
+        c = c.toString(16);
+        if(c.length < 2){
+            c = '0' + c;
+        }
+        return c;
+    }
 
-        detailsDialogFullcalendarEvent = event;
 
-        $.post('/calendar/fetchEventDetails',
-            JSON.stringify({school_id: global_school_id,
-                            school_term_id: global_school_term_id,
-                            event_id: event.id}),
+    function moveEvent(event, revertFunc) {
+
+        $.post('/calendar/moveEvent',
+            JSON.stringify({
+                start: event.start.format('DD.MM.YYYY HH:mm'),
+                end: event.end.format('DD.MM.YYYY HH:mm'),
+                id: event.id,
+                school_id: global_school_id
+            }),
             function (data) {
-                
-                loadDetailValues(data);
 
-                $('#eventDetailsDialog').modal();
+                if (data.status !== "success") {
+
+                    revertFunc();
+                    w2alert(data.message);
+
+                }
 
                 return true;
 
             }, "json");
 
+    }
 
+
+    function toggle(button) {
+        $(button).parent().find('button').removeClass('fc-state-active');
+        $(button).addClass('fc-state-active');
+        $('#fullCalendar').fullCalendar('refetchEvents');
+    }
+
+    /**
+     * Open dialog to edit event details
+     *  - click on existing event => event != null && date == null
+     *  - click on empty timeslot => event == null && date != null
+     * @param event
+     * @param date
+     */
+    function openEventDetailsDialog(event, from) {
+
+        detailsDialogFullcalendarEvent = event;
+
+        if (event !== null) {
+
+            $.post('/calendar/fetchEventDetails',
+                JSON.stringify({
+                    school_id: global_school_id,
+                    school_term_id: global_school_term_id,
+                    event_id: event.id
+                }),
+                function (data) {
+
+                    loadDetailValues(data);
+
+                    $('#eventDetailsDialog').modal();
+
+                    return true;
+
+                }, "json");
+
+        } else {
+
+            clearEventDetailDialogValues();
+            detailsDialogFullcalendarEvent = null;
+
+            if (from !== null) {
+
+                $('#eventDateFrom').data('DateTimePicker').date(from.format('DD.MM.YYYY'));
+                $('#eventDateTo').data('DateTimePicker').date(from.format('DD.MM.YYYY'));
+
+                var fromTime = '';
+                var toTime = '';
+
+                if (from.hasTime()) {
+                    fromTime = from.format('HH:mm');
+
+                    var to = $.fullCalendar.moment(from);
+                    to.add(30, 'minutes');
+
+                    toTime = to.format('HH:mm');
+
+                    $('#eventTimeFrom').timepicker('setTime', fromTime);
+                    $('#eventTimeTo').timepicker('setTime', toTime);
+
+                }
+
+                $('#eventWholeDay').prop('checked', !from.hasTime());
+                $('#eventWholeDay').trigger('change');
+
+            }
+
+            $('#eventDetailsDialog').modal();
+
+        }
 
     }
 
 
-
-    function initializeEventDetailsDialog(){
+    function initializeEventDetailsDialog() {
 
 
         $('#eventDateFrom').datetimepicker({
@@ -150,6 +371,7 @@
             $('#eventDateFrom').data("DateTimePicker").maxDate(e.date);
         });
 
+        $('#eventcolor').simplecolorpicker({theme: 'fontawesome'});
 
 
         $('#eventDetailsDialog').on('shown.bs.modal', function (e) {
@@ -157,6 +379,36 @@
             $('#eventName').focus();
 
             $('#eventDetailsForm').validator();
+
+            $('#eventRestriction').on('changed.bs.select', function (event, clickedIndex, newValue, oldValue) {
+
+                var el = $('#eventRestriction');
+
+                var values = el.selectpicker('val');
+
+                if (clickedIndex === 0 && newValue === true) {
+                    if (values.length > 1) {
+                        el.selectpicker('val', [-1]);
+                    }
+
+                    return;
+
+                }
+
+                if (values.length === 0) {
+                    el.selectpicker('val', [-1]);
+                    return;
+                }
+
+                if (clickedIndex > 0 && newValue === true) {
+                    if (values[0] === "-1") {
+                        values.splice(0, 1);
+                        el.selectpicker('val', values);
+                    }
+
+                }
+            });
+
 
         });
 
@@ -200,9 +452,23 @@
         $('#eventDetailsForm').validator().on('submit', function (e) {
             if (!e.isDefaultPrevented()) {
                 saveDetailValues();
+                $('#eventDetailsDialog').modal('hide');
             }
 
         });
+
+        $('#eventWholeDay').change(function () {
+
+            if ($('#eventWholeDay').prop('checked')) {
+                $('#eventTimeFrom').parent().hide();
+                $('#eventTimeTo').parent().hide();
+            } else {
+                $('#eventTimeFrom').parent().show();
+                $('#eventTimeTo').parent().show();
+            }
+
+        });
+
 
     }
 
@@ -211,23 +477,23 @@
 
         var html = '';
 
-        for(var i = 0; i < absenceValues.length; i++){
+        for (var i = 0; i < absenceValues.length; i++) {
             var form = absenceValues[i];
             html += '<div style="margin-top: 0.5em">\n';
             html += '<button type="button" class="btn btn-primary btn-xs">' + form.form_name + '</button>\n';
             html += '<div class="btn-group" data-toggle="buttons"\n>';
 
-                for(var j = 0; j < form.classEntries.length; j++){
+            for (var j = 0; j < form.classEntries.length; j++) {
 
-                    var classEntry = form.classEntries[j];
+                var classEntry = form.classEntries[j];
 
-                    var active = classEntry.is_absent ? ' active' : '';
-                    html += '<label class="btn btn-xs btn-default class-button' + active + '" data-class-id="' + classEntry.class_id + '"><input type="checkbox">' + classEntry.class_name + '</label>';
+                var active = classEntry.is_absent ? ' active' : '';
+                html += '<label class="btn btn-xs btn-default class-button' + active + '" data-class-id="' + classEntry.class_id + '"><input type="checkbox">' + classEntry.class_name + '</label>';
 
-                }
+            }
 
 
-                html += '</div></div>';
+            html += '</div></div>';
         }
 
 
@@ -247,37 +513,48 @@
         var from = moment(event.start, "DD.MM.YYYY HH:mm");
         var to = moment(event.end, "DD.MM.YYYY HH:mm");
 
-        $('#eventDateFrom').data('DateTimePicker').date(from.format('DD.MM.YYYY'));
-        $('#eventDateTo').data('DateTimePicker').date(to.format('DD.MM.YYYY'));
-
         var fromTime = '';
         var toTime = '';
 
-        if(!event.allDay){
+        if (!event.allDay) {
             fromTime = from.format('HH:mm');
             toTime = to.format('HH.mm');
+        } else {
+            to.subtract(1, 'days');
         }
+
+        $('#eventDateFrom').data('DateTimePicker').date(from.format('DD.MM.YYYY'));
+        $('#eventDateTo').data('DateTimePicker').date(to.format('DD.MM.YYYY'));
+
 
         $('#eventTimeFrom').timepicker('setTime', fromTime);
         $('#eventTimeTo').timepicker('setTime', toTime);
 
         $('#eventWholeDay').prop('checked', event.allDay);
+        $('#eventWholeDay').trigger('change');
+
         $('#eventLocation').val(event.location);
         $('#eventDescription').val(event.description);
 
-        var html = '<option value="-1" style="color: green; font-weight: bold">Alle (öffentlich)</option>';
+        var html = '<option value="-1" data-content = "<span style=\'color: green; font-weight: bold\'>Alle (öffentlich)<i class=\'fa fa-globe fullcalendar-icon\' style=\'color: #0000a0\'></i></span>">Alle (öffentlich)</option>';
+        html += '<option data-divider="true"></option>';
+
         var selectedValues = [];
 
-        for(var i = 0; i < eventData.roleRestrictions.length; i++){
+        for (var i = 0; i < eventData.roleRestrictions.length; i++) {
 
             var restriction = eventData.roleRestrictions[i];
 
             html += '<option value="' + restriction.id + '">' + restriction.name + '</option>';
 
-            if(restriction.isRestricted){
-                selectedValues.push[restriction.id];
+            if (restriction.isRestricted) {
+                selectedValues.push(restriction.id);
             }
 
+        }
+
+        if (selectedValues.length === 0) {
+            selectedValues.push(-1);
         }
 
         var eventRestrictionElement = $('#eventRestriction');
@@ -288,9 +565,59 @@
 
         buildAbsenceMatrix(eventData.formEntries);
 
+        var color = eventData.event.backgroundColor;
+        if (typeof color === "undefined") {
+            color = "#4986e7";
+        }
+
+        $('#eventcolor').simplecolorpicker('selectColor', color);
+        $('#eventBackgroundRendering').prop('checked', eventData.event.backgroundRendering);
+
     }
 
-    function saveDetailValues(){
+    function clearEventDetailDialogValues() {
+
+        $('#eventAbsencesWholeSchool').prop('checked', false);
+
+        $('#eventName').val('');
+        $('#eventNameShort').val('');
+
+        $('#eventDateFrom').data('DateTimePicker').date('');
+        $('#eventDateTo').data('DateTimePicker').date('');
+
+        $('#eventTimeFrom').timepicker('setTime', '');
+        $('#eventTimeTo').timepicker('setTime', '');
+
+        $('#eventWholeDay').prop('checked', false);
+        $('#eventLocation').val('');
+        $('#eventDescription').val('');
+
+        var html = '<option value="-1" data-content = "<span style=\'color: green; font-weight: bold\'>Alle (öffentlich)<i class=\'fa fa-globe\' style=\'color: #0000a0; margin: 0 3px\'></i></span>">Alle (öffentlich)</option>';
+        html += '<option data-divider="true"></option>';
+
+        var selectedValues = [-1];
+
+        for (var i = 0; i < emptyEvent.roleRestrictions.length; i++) {
+
+            var restriction = emptyEvent.roleRestrictions[i];
+
+            html += '<option value="' + restriction.id + '">' + restriction.name + '</option>';
+
+        }
+
+        var eventRestrictionElement = $('#eventRestriction');
+        eventRestrictionElement.html(html);
+
+        eventRestrictionElement.selectpicker('val', selectedValues);
+        eventRestrictionElement.selectpicker('refresh');
+
+        buildAbsenceMatrix(emptyEvent.formEntries);
+
+        $('#eventBackgroundRendering').prop('checked', false);
+
+    }
+
+    function saveDetailValues() {
 
         var eventData = {
             school_id: global_school_id,
@@ -298,10 +625,10 @@
             id: null
         };
 
-        if(detailsDialogFullcalendarEvent !== null){
+        if (detailsDialogFullcalendarEvent !== null) {
             eventData.id = detailsDialogFullcalendarEvent.id;
         }
-        
+
         var fcEventStart;
         var fcEventEnd;
 
@@ -315,16 +642,30 @@
         fcEventStart.stripTime();
 
         eventData.end = $('#eventDateTo').find('input').val();
+
+        if (typeof eventData.end !== 'string' || eventData.end === '') {
+            eventData.end = eventData.start;
+        }
+
         fcEventEnd = $.fullCalendar.moment(eventData.end, "DD.MM.YYYY");
         fcEventEnd.stripTime();
 
-        if(!eventData.allDay){
+        if (!eventData.allDay) {
             eventData.start += " " + $('#eventTimeFrom').val();
-            fcEventStart = $.fullCalendar.moment(eventData.start, "DD.MM.YYYY hh:mm");
-            eventData.end += " " + $('#eventTimeTo').val();
-            fcEventEnd = $.fullCalendar.moment(eventData.end, "DD.MM.YYYY hh:mm");
-        }
+            fcEventStart = $.fullCalendar.moment(eventData.start, "DD.MM.YYYY HH:mm");
 
+            var timeTo = $('#eventTimeTo').val();
+            if (typeof timeTo !== 'string' || timeTo === '') {
+                timeTo = $('#eventTimeFrom').val();
+            }
+
+            eventData.end += " " + timeTo;
+            fcEventEnd = $.fullCalendar.moment(eventData.end, "DD.MM.YYYY HH:mm");
+        } else {
+            eventData.start += " 00:00";
+            fcEventEnd.add(1, 'days');
+            eventData.end = fcEventEnd.format('DD.MM.YYYY HH:mm');
+        }
 
         eventData.location = $('#eventLocation').val();
         eventData.description = $('#eventDescription').val();
@@ -339,25 +680,38 @@
 
         eventData['absencesSelectedClasses'] = [];
 
-        for(var i = 0; i < activeLabels.length; i++){
+        for (var i = 0; i < activeLabels.length; i++) {
             eventData['absencesSelectedClasses'].push($(activeLabels[i]).data('class-id'));
         }
+
+        eventData['backgroundColor'] = $('#eventcolor').val();
+        eventData['borderColor'] = $('#eventcolor').data('bordercolor');
+        eventData['textColor'] = $('#eventcolor').data('textcolor');
+
+        eventData['backgroundRendering'] = $('#eventBackgroundRendering').prop('checked');
 
         $.post('/calendar/setEventDetails',
             JSON.stringify(eventData),
             function (data) {
 
-                if(data.status === "success"){
+                if (data.status === "success") {
 
-                    if(data.isCreateEvent) {
+                    // new Event?
+                    if (detailsDialogFullcalendarEvent === null) {
 
-                        // Todo
+                        $('#fullCalendar').fullCalendar('renderEvent', data.event);
 
                     } else {
 
                         detailsDialogFullcalendarEvent.title = eventData.title;
-                        detailsDialogFullcalendarEvent.start = eventData.start;
-                        detailsDialogFullcalendarEvent.end = eventData.end;
+                        detailsDialogFullcalendarEvent.start = fcEventStart;
+                        detailsDialogFullcalendarEvent.end = fcEventEnd;
+                        detailsDialogFullcalendarEvent.backgroundColor = eventData['backgroundColor'];
+                        detailsDialogFullcalendarEvent.borderColor = eventData['borderColor'];
+                        detailsDialogFullcalendarEvent.textColor = eventData['textColor'];
+                        detailsDialogFullcalendarEvent.absences = data.event.absences;
+                        detailsDialogFullcalendarEvent.restrictions = data.event.restrictions;
+                        detailsDialogFullcalendarEvent.rendering = data.event.backgroundRendering ? 'background' : undefined;
                         $('#fullCalendar').fullCalendar('updateEvent', detailsDialogFullcalendarEvent);
 
                     }
@@ -373,8 +727,6 @@
         // console.log(eventData);
 
     }
-
-
 
 
 }(App));

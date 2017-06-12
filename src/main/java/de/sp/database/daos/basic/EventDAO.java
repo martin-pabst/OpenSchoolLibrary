@@ -64,10 +64,10 @@ public class EventDAO {
                 .addParameter("end", event.getEnd())
                 .addParameter("start_period", event.getStart_period())
                 .addParameter("end_period", event.getEnd_period())
-                .addParameter("color", event.getColor())
                 .addParameter("backgroundColor", event.getBackgroundColor())
                 .addParameter("borderColor", event.getBorderColor())
                 .addParameter("textColor", event.getTextColor())
+                .addParameter("backgroundRendering", event.isBackgroundRendering())
                 .executeUpdate();
     
     }

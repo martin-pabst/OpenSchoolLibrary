@@ -74,4 +74,29 @@ input:invalid:focus {
     border-radius:6px 0 6px 6px;
 }
 
+/*
+  Small improvements for fullcalendar
+ */
+.fc-week-number::before {
+    content: "KW ";
+}
+/* In day and week view framework writes "KW" itself. */
+.fc-axis.fc-week-number::before {
+    content: "";
+}
 
+.fullcalendar-iconspan {
+    background-color: inherit;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    float: right;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 1px;
+}
+
+.fullcalendar-icon {
+    color: #000000;
+    padding: 0 1px;
+}

@@ -15,7 +15,6 @@ public class GetEventDetailsResponse {
 
     public Event event;
 
-    public List<EventDetailsResponseRestrictionEntry> userRestrictions = new ArrayList<>();
     public List<EventDetailsResponseRestrictionEntry> roleRestrictions = new ArrayList<>();
     public List<EventDetailsResponseFormEntry> formEntries = new ArrayList<>();
 
@@ -26,11 +25,11 @@ public class GetEventDetailsResponse {
 
         this.event = event;
         
-        buildRestrictionLists(event);
+        buildRestrictionLists(event, school_id);
 
         buildAbsentClassList(event, school_id, school_term_id);
 
-        absenceWholeSchool = event.wholeSchoolIsAbsent();
+        absenceWholeSchool = event == null ? false : event.wholeSchoolIsAbsent();
 
         // List of ressources
 
@@ -53,20 +52,25 @@ public class GetEventDetailsResponse {
             Long form_id = dbClass.getForm_id();
 
             if(form_id != null) {
+
                 EventDetailsResponseFormEntry formEntry = formEntryMap.get(form_id);
 
                 if (formEntry == null) {
 
+                    boolean formIsAbsent = event == null ? false : event.formIsAbsent(form_id);
+
                     Value form = ValueListStore.getInstance().getValue(school_id, ValueListType.form.getKey(), form_id);
-                    formEntry = new EventDetailsResponseFormEntry(form_id, form.getName(), event.formIsAbsent(form_id));
+                    formEntry = new EventDetailsResponseFormEntry(form_id, form.getName(), formIsAbsent);
                     formEntryMap.put(form_id, formEntry);
 
                     formEntries.add(formEntry);
 
                 }
 
+                boolean classIsAbsent = event == null ? false : event.classIsAbsent(dbClass.getId()) || formEntry.is_absent;
+
                 EventDetailsResponseClassEntry classEntry = new EventDetailsResponseClassEntry(dbClass.getId(),
-                        dbClass.getName(), event.classIsAbsent(dbClass.getId()) || formEntry.is_absent);
+                        dbClass.getName(), classIsAbsent);
 
                 formEntry.classEntries.add(classEntry);
 
@@ -80,37 +84,19 @@ public class GetEventDetailsResponse {
 
     }
 
-    private void buildRestrictionLists(Event event) {
+    private void buildRestrictionLists(Event event, Long school_id) {
         
         UserRolePermissionStore ups = UserRolePermissionStore.getInstance();
         
-        List<User> users = ups.getUserListBySchoolId(event.getSchool_id());
-        List<Role> roles = ups.getRoleListBySchoolId(event.getSchool_id());
-
-        for (User user : users) {
-            EventDetailsResponseRestrictionEntry edre = new EventDetailsResponseRestrictionEntry(user.getId(), user.getUsername() + " (" + user.getName() + ")", false);
-            userRestrictions.add(edre);
-        }
+        List<Role> roles = ups.getRoleListBySchoolId(school_id);
 
         for (Role role : roles) {
             EventDetailsResponseRestrictionEntry edre = new EventDetailsResponseRestrictionEntry(role.getId(), role.getName(), false);
             roleRestrictions.add(edre);
         }
 
-        if(event.getRestrictions() != null) {
+        if(event != null && event.getRestrictions() != null) {
             for (EventRestriction eventRestriction : event.getRestrictions()) {
-
-                if (eventRestriction.getUser_id() != null) {
-
-                    Long user_id = eventRestriction.getUser_id();
-                    for (EventDetailsResponseRestrictionEntry userRestriction : userRestrictions) {
-                        if (userRestriction.id.equals(user_id)) {
-                            userRestriction.isRestricted = true;
-                            break;
-                        }
-                    }
-
-                }
 
                 if (eventRestriction.getRole_id() != null) {
 

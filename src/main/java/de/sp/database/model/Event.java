@@ -1,6 +1,7 @@
 package de.sp.database.model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -24,10 +25,11 @@ public class Event {
     private Integer start_period; // Unterrichtsstunde!
     private Integer end_period;
 
-    private String color;
     private String backgroundColor;
     private String borderColor;
     private String textColor;
+
+    private boolean backgroundRendering = false;
 
     private boolean editable = false;
 
@@ -39,7 +41,7 @@ public class Event {
     public Event(Long school_id, String title, String description, String short_title,
                  String location, Boolean allDay,
                  Boolean preliminary, Date start, Date end, Integer start_period,
-                 Integer end_period, String color, String backgroundColor, String borderColor, String textColor) {
+                 Integer end_period, String backgroundColor, String borderColor, String textColor, boolean backgroundRendering) {
         this.school_id = school_id;
         this.title = title;
         this.description = description;
@@ -51,11 +53,10 @@ public class Event {
         this.end = end;
         this.start_period = start_period;
         this.end_period = end_period;
-        this.color = color;
         this.backgroundColor = backgroundColor;
         this.borderColor = borderColor;
         this.textColor = textColor;
-
+        this.backgroundRendering = backgroundRendering;
     }
 
     public Long getId() {
@@ -102,10 +103,6 @@ public class Event {
         return end_period;
     }
 
-    public String getColor() {
-        return color;
-    }
-
     public Long getSchool_id() {
         return school_id;
     }
@@ -120,6 +117,10 @@ public class Event {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isBackgroundRendering() {
+        return backgroundRendering;
     }
 
     /**
@@ -148,7 +149,24 @@ public class Event {
         java.util.Calendar cal = java.util.Calendar.getInstance();
 
         cal.setTime(date);
-        return cal.get(java.util.Calendar.YEAR) * 100 + cal.get(java.util.Calendar.MONTH);
+
+        int month = cal.get(java.util.Calendar.MONTH);
+        int year = cal.get(java.util.Calendar.YEAR);
+
+
+        /*
+          If event.allDay = true and event has duration 1 day then end of event is at 00:00 on the following day.
+          To avoid registerin such an event with yearMonthIndex of the following month, test:
+         */
+        if(cal.get(Calendar.DAY_OF_MONTH) == 1 && cal.get(Calendar.HOUR_OF_DAY) == 0 && cal.get(Calendar.MINUTE) == 0){
+            month--;
+            if(month < 0){
+                month += 12;
+                year--;
+            }
+        }
+
+        return year * 100 + month;
 
     }
 
@@ -264,7 +282,7 @@ public class Event {
     public void updateAttributes(String title, String description, String short_title,
                  String location, Boolean allDay,
                  Boolean preliminary, Date start, Date end, Integer start_period,
-                 Integer end_period, String color, String backgroundColor, String borderColor, String textColor) {
+                 Integer end_period, String backgroundColor, String borderColor, String textColor, boolean backgroundRendering) {
         this.title = title;
         this.description = description;
         this.short_title = short_title;
@@ -275,11 +293,10 @@ public class Event {
         this.end = end;
         this.start_period = start_period;
         this.end_period = end_period;
-        this.color = color;
         this.backgroundColor = backgroundColor;
         this.borderColor = borderColor;
         this.textColor = textColor;
-
+        this.backgroundRendering = backgroundRendering;
     }
 
 
@@ -294,6 +311,16 @@ public class Event {
         return false;
 
     }
+
+    public void setStart(Date start) {
+        this.start = start;
+    }
+
+    public void setEnd(Date end) {
+        this.end = end;
+    }
+
+
 }
 
 

@@ -47,13 +47,15 @@ public class SetEventDetailsRequest extends BaseRequestData {
     public String borderColor;
     public String textColor;
 
+    public boolean backgroundRendering;
+
     public Boolean absenceWholeSchool;
     public Boolean absenceNoBigTests;
+
+
     public Boolean absenceNoSmallTests;
-
-
     public ArrayList<Long> restrictionIndices = new ArrayList<>();
+
+
     public ArrayList<Long> absencesSelectedClasses = new ArrayList<>();
-
-
 }

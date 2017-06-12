@@ -3,14 +3,18 @@
 
 
     <statement name="event_restriction.getAll">
-      select id, event_id, role_id, user_id
+      select id, event_id, role_id
         from event_restriction
     </statement>
 
     <statement name="event_restriction.insert">
-        insert into event_restriction (event_id, role_id, user_id)
-        values (:event_id, :role_id, :user_id)
+        insert into event_restriction (event_id, role_id)
+        values (:event_id, :role_id)
     </statement>
 
+    <statement name="event_restriction.remove">
+        delete from event_restriction
+        where id = :id
+    </statement>
 
 </statementlist>

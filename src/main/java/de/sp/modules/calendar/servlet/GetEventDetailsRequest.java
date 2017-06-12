@@ -14,7 +14,7 @@ public class GetEventDetailsRequest extends BaseRequestData {
     @Validation(notNull = true)
     public Long school_term_id;
 
-    @Validation(notNull = true)
+    // event_id maybe null -> then serve list values for restriction combobox and absent classes matrix
     public Long event_id;
 
 }

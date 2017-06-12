@@ -8,7 +8,7 @@
 
     <statement name="event.getAllWithoutDescription">
         select id, school_id, title, short_title, location, allDay, preliminary,
-            start_timestamp, end_timestamp, start_period, end_period, color
+            start_timestamp, end_timestamp, start_period, end_period, backgroundcolor, bordercolor, textcolor, backgroundrendering
         from event
     </statement>
 
@@ -16,11 +16,11 @@
         insert into event
         (school_id, title, description, short_title, location, allDay, preliminary, 
         start_timestamp, end_timestamp, start_period, end_period, 
-        color, backgroundColor, borderColor, textColor)
+        backgroundColor, borderColor, textColor, backgroundrendering)
         values
             (:school_id, :title, :description, :short_title, :location, :allDay, :preliminary,
                         :start, :end, :start_period, :end_period,
-             :color, :backgroundColor, :borderColor, :textColor)
+             :backgroundColor, :borderColor, :textColor, :backgroundRendering)
     </statement>
 
     <statement name="event.update" >
@@ -35,10 +35,10 @@
                 end_timestamp = :end,
                 start_period = :start_period,
                 end_period = :end_period,
-                color = :color,
                 backgroundcolor = :backgroundColor,
                 bordercolor = :borderColor,
-                textcolor = :textColor
+                textcolor = :textColor,
+                backgroundrendering = :backgroundRendering
         WHERE id = :id
     </statement>
 

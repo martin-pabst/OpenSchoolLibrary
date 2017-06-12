@@ -8,13 +8,11 @@ public class EventRestriction {
     private Long id;
     private Long event_id;
     private Long role_id;
-    private Long user_id;
 
     private transient Event event;
 
-    public EventRestriction(Long role_id, Long user_id, Event event) {
+    public EventRestriction(Long role_id, Event event) {
         this.role_id = role_id;
-        this.user_id = user_id;
         this.event = event;
         this.event_id = event.getId();
     }
@@ -29,10 +27,6 @@ public class EventRestriction {
 
     public Long getRole_id() {
         return role_id;
-    }
-
-    public Long getUser_id() {
-        return user_id;
     }
 
     public Event getEvent() {

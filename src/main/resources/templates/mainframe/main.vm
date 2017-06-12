@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/public/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css">
     <link rel="stylesheet" href="/public/lib/bootstrap-timepicker/css/timepicker.css">
     <link rel="stylesheet" href="/public/lib/bootstrap-select/css/bootstrap-select.css">
+    <link rel="stylesheet" href="/public/lib/simplecolorpicker/jquery.simplecolorpicker.css">
     <link rel="stylesheet" href="/mainframe/css/main.css">
     $cssImportStatements
 
@@ -27,6 +28,7 @@
     <script type="text/javascript" src="/public/lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
     <script type="text/javascript" src="/public/lib/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
     <script type="text/javascript" src="/public/lib/bootstrap-select/js/bootstrap-select.js"></script>
+    <script type="text/javascript" src="/public/lib/simplecolorpicker/jquery.simplecolorpicker.js"></script>
 
     <script type="text/javascript" src="/mainframe/js/tools.js"></script>
     <script type="text/javascript" src="/mainframe/js/main.js"></script>

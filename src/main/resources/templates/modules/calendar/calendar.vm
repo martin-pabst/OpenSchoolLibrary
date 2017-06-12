@@ -34,7 +34,7 @@
 
                             <li role="presentation"><a data-toggle="tab" href="#eventAbsence"
                                                        id="eventAbsenceTab">
-                                <i class="fa fa-share-square-o fa-fw" aria-hidden="true"></i>
+                                <i class="fa fa-external-link fa-fw" aria-hidden="true"></i>
                                 <span class="menuitemtext">Abwesende Klassen</span></a></li>
 
                             <li role="presentation"><a data-toggle="tab" href="#eventRessources"
@@ -96,7 +96,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="input-group bootstrap-timepicker timepicker" style="width: 8em">
+                                    <div class="input-group bootstrap-timepicker timepicker" style="margin-right: 10px; width: 8em">
                                         <input id="eventTimeTo" type="text" class="form-control">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                                     </div>
@@ -132,6 +132,42 @@
                                     </select>
                                 </div>
 
+                                <div class="form-inline" width="100%">
+                                    <label for="eventcolor">Farbe:</label>
+##                                    <select class="selectpicker" id="eventcolor" data-width="fit" multiple>
+##                                    </select>
+                                    <select id="eventcolor">
+                                        <option value="#ac725e">#ac725e</option>
+                                        <option value="#d06b64">#d06b64</option>
+                                        <option value="#f83a22">#f83a22</option>
+                                        <option value="#fa573c">#fa573c</option>
+                                        <option value="#ff7537">#ff7537</option>
+                                        <option value="#ffad46">#ffad46</option>
+                                        <option value="#42d692">#42d692</option>
+                                        <option value="#16a765">#16a765</option>
+                                        <option value="#7bd148">#7bd148</option>
+                                        <option value="#b3dc6c">#b3dc6c</option>
+                                        <option value="#fbe983">#fbe983</option>
+                                        <option value="#fad165">#fad165</option>
+                                        <option value="#92e1c0">#92e1c0</option>
+                                        <option value="#9fe1e7">#9fe1e7</option>
+                                        <option value="#9fc6e7">#9fc6e7</option>
+                                        <option value="#4986e7">#4986e7</option>
+                                        <option value="#9a9cff">#9a9cff</option>
+                                        <option value="#b99aff">#b99aff</option>
+                                        <option value="#c2c2c2">#c2c2c2</option>
+                                        <option value="#cabdbf">#cabdbf</option>
+                                        <option value="#cca6ac">#cca6ac</option>
+                                        <option value="#f691b2">#f691b2</option>
+                                        <option value="#cd74e6">#cd74e6</option>
+                                        <option value="#a47ae2">#a47ae2</option>
+                                    </select>
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" id="eventBackgroundRendering">Im Hintergrund: </label>
+                                    </div>
+
+                                </div>
+
                             </div>
 
 
@@ -143,6 +179,7 @@
                                         <div>
                                             <div class="checkbox">
                                                 <label><input type="checkbox" id="eventAbsencesWholeSchool">Ganze Schule</label>
+                                                <i class="fa fa-suitcase" ></i>
                                             </div>
                                         </div>
                                         <div class="checkbox">

@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.EventDAO;
-import de.sp.database.daos.basic.EventRestrictionDAO;
 import de.sp.database.model.*;
 import de.sp.database.stores.EventStore;
 import de.sp.database.stores.StudentClassStore;
@@ -63,7 +62,7 @@ public class CalendarServlet extends BaseServlet {
 
                         List<Event> gcResponse = fetchCalendarEntries(con, gcr, user);
 
-                        Gson gson1 = new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss").create();
+                        Gson gson1 = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 
                         responseString = gson1.toJson(gcResponse);
 
@@ -90,6 +89,7 @@ public class CalendarServlet extends BaseServlet {
                         user.checkPermission(CalendarModule.CALENDAROPEN,
                                 sedr.school_id);
 
+                        gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
                         responseString = gson.toJson(setEventDetails(sedr, user, con));
 
                         break;
@@ -106,6 +106,19 @@ public class CalendarServlet extends BaseServlet {
                         responseString = gson.toJson(removeEvent(rer, user, con));
 
                         break;
+
+                    case "moveEvent":
+                        MoveEventRequest mer = gson.fromJson(postData, MoveEventRequest.class);
+
+                        mer.validate(ts);
+
+                        user.checkPermission(CalendarModule.CALENDAROPEN,
+                                mer.school_id);
+
+                        responseString = gson.toJson(moveEvent(mer, user, con));
+
+                        break;
+
 
                 }
 
@@ -134,7 +147,7 @@ public class CalendarServlet extends BaseServlet {
             return new RemoveEventResponse("error", "Dieser Termin gehört zu einer anderen Schule und kann daher nicht gelöscht werden.");
         }
 
-        EventStore.getInstance().removeEvent(event, con);
+        EventStore.getInstance().removeEventWithAbsencesAndRestrictionsFromStoreAndDatabase(event, con);
 
         return new RemoveEventResponse("success", "");
     }
@@ -143,138 +156,86 @@ public class CalendarServlet extends BaseServlet {
 
         Event event;
 
-        List<Integer> oldYearMonthList;
+        EventStore eventStore = EventStore.getInstance();
 
         if(sedr.id == null){
 
             event = new Event(sedr.school_id, sedr.title, sedr.description, sedr.short_title,
                     sedr.location, sedr.allDay, sedr.preliminary, sedr.start, sedr.end,
-                    sedr.start_period, sedr.end_period, sedr.color, sedr.backgroundColor,
-                    sedr.borderColor, sedr.textColor);
-
-            EventStore.getInstance().storeEventIntoDatabase(event, con);
-
-            oldYearMonthList = new ArrayList<>();
+                    sedr.start_period, sedr.end_period, sedr.backgroundColor,
+                    sedr.borderColor, sedr.textColor, sedr.backgroundRendering);
 
         } else {
 
-            event = EventStore.getInstance().getEventById(sedr.id);
+            event = eventStore.getEventById(sedr.id);
 
             if(!event.getSchool_id().equals(sedr.school_id)){
                 throw new Exception("Der Termin gehört zu einer anderen Schule als der Benutzer, der ihn verändern möchte.");
             }
 
-            oldYearMonthList = event.getYearMonthList();
+            eventStore.removeAbsencesAndRestrictionsFromStoreAndDatabase(event, con);
+            eventStore.removeEventWithoutAbsencesFromStore(event);
 
             event.updateAttributes(sedr.title, sedr.description, sedr.short_title,
                     sedr.location, sedr.allDay, sedr.preliminary, sedr.start, sedr.end,
-                    sedr.start_period, sedr.end_period, sedr.color, sedr.backgroundColor,
-                    sedr.borderColor, sedr.textColor);
+                    sedr.start_period, sedr.end_period,sedr.backgroundColor,
+                    sedr.borderColor, sedr.textColor, sedr.backgroundRendering);
 
             EventDAO.update(event, con);
 
         }
         
-        updateAbsentClassesAndForms(sedr, event, oldYearMonthList, con);
+        addAbsentClassesToEvent(sedr, event);
 
-        updateRestrictions(sedr, event, con);
+        addRestrictionsToEvent(sedr, event);
+
+        eventStore.storeEventWithAbsencesAndRestrictionsIntoDatabaseAndStore(event, con, sedr.id != null);
+
+        event.setEditable(true);
 
         return new SetEventDetailsResponse("success", "", event);
 
     }
 
-    private void updateRestrictions(SetEventDetailsRequest sedr, Event event, Connection con) {
-
-        // Remove restrictions which are no more needed
-        int i = 0;
-        while (i < event.getRestrictions().size()) {
-
-            EventRestriction eventRestriction = event.getRestrictions().get(i);
-
-            Long role_id = eventRestriction.getRole_id();
-
-            if(role_id != null){
-                if(sedr.restrictionIndices.contains(role_id)){
-                    sedr.restrictionIndices.remove(role_id);
-                } else {
-                    event.getRestrictions().remove(eventRestriction);
-                    i--;
-                }
-            }
-
-            i++;
-
-        }
+    private void addRestrictionsToEvent(SetEventDetailsRequest sedr, Event event) {
 
         //create new restrictions
         //if user clicks on "visible for whole school" then -1 is in list
         if(!sedr.restrictionIndices.contains(new Long(-1))) {
             for (Long role_id : sedr.restrictionIndices) {
-                EventRestriction eventRestriction = new EventRestriction(role_id, null, event);
-                EventRestrictionDAO.insert(eventRestriction, con);
+                EventRestriction eventRestriction = new EventRestriction(role_id, event);
                 event.getRestrictions().add(eventRestriction);
             }
         }
 
     }
 
-    private void updateAbsentClassesAndForms(SetEventDetailsRequest sedr, Event event, List<Integer> oldYearMonthList, Connection con) {
+    private void addAbsentClassesToEvent(SetEventDetailsRequest sedr, Event event) {
 
         if(sedr.absenceWholeSchool){
             // this leads to all stored absences for classes/forms being removed later on:
             sedr.absencesSelectedClasses.clear();
 
             Absence absence = new Absence(sedr.school_id, null, null, sedr.absenceNoBigTests, sedr.absenceNoSmallTests);
-            EventStore.getInstance().storeAbsenceIntoDatabase(absence, event, con);
+            event.addAbsence(absence);
 
         }
 
         // if all classes of one form are absent, then remove them out of sedr.absentClassIds and add form_id in this List:
         List<Long> absent_form_ids = getAbsentForms(sedr);
 
-        //Remove form-ids and class-ids which are already present in event
-        int i = 0;
-        while (i < event.getAbsences().size()) {
-            
-            Absence absence = event.getAbsences().get(i);
-            
-            if(absence.getForm_id() != null){
-                if(absent_form_ids.contains(absence.getForm_id())){
-                    absent_form_ids.remove(absence.getForm_id());
-                } else {
-                    EventStore.getInstance().removeAbsence(absence, oldYearMonthList, event,
-                            sedr.school_id, con);
-                    i--;
-                }
-                
-            } else
-            
-            if(absence.getClass_id() != null){
-                if(sedr.absencesSelectedClasses.contains(absence.getClass_id())){
-                    sedr.absencesSelectedClasses.remove(absence.getClass_id());
-                } else {
-                    EventStore.getInstance().removeAbsence(absence, oldYearMonthList, event,
-                            sedr.school_id, con);
-                    i--;
-                }
-                
-            }
-
-            i++;
-
-        }
-
         //Insert new absence-entries
         for (Long absent_form_id : absent_form_ids) {
 
             Absence absence = new Absence(null, null, absent_form_id, sedr.absenceNoBigTests, sedr.absenceNoSmallTests);
-            EventStore.getInstance().storeAbsenceIntoDatabase(absence, event, con);
+            event.addAbsence(absence);
+
         }
 
         for (Long class_id : sedr.absencesSelectedClasses) {
 
             Absence absence = new Absence(null, class_id, null, sedr.absenceNoBigTests, sedr.absenceNoSmallTests);
-            EventStore.getInstance().storeAbsenceIntoDatabase(absence, event, con);
+            event.addAbsence(absence);
 
         }
 
@@ -322,12 +283,15 @@ public class CalendarServlet extends BaseServlet {
 
     private GetEventDetailsResponse getEventDetailsResponse(GetEventDetailsRequest gedr, User user, Connection con) throws InsufficientPermissionException {
 
-        Event event = EventStore.getInstance().getEventById(gedr.event_id);
+        Event event = null;
 
-        EventDAO.addDescription(event, con);
+        if(gedr.event_id != null) {
+            event = EventStore.getInstance().getEventById(gedr.event_id);
+            EventDAO.addDescription(event, con);
 
-        if(!checkIfUserMayReadEvent(user, event)){
-            throw new InsufficientPermissionException("User must not read this event.");
+            if(!checkIfUserMayReadEvent(user, event)){
+                throw new InsufficientPermissionException("User must not read this event.");
+            }
         }
 
         GetEventDetailsResponse response = new GetEventDetailsResponse(event, gedr.school_id, gedr.school_term_id);
@@ -418,14 +382,25 @@ public class CalendarServlet extends BaseServlet {
                     keepEntry = true;
                     break;
                 }
-                if (cr.getUser_id() != null && user.getId() == cr.getUser_id()) {
-                    keepEntry = true;
-                    break;
-                }
             }
 
         }
         return keepEntry;
+    }
+
+    private Object moveEvent(MoveEventRequest mer, User user, Connection con) throws Exception {
+
+        Event event = EventStore.getInstance().getEventById(mer.id);
+
+        if(event == null || !event.getSchool_id().equals(mer.school_id)){
+            return new RemoveEventResponse("error", "Dieser Termin gehört zu einer anderen Schule und kann daher nicht gelöscht werden.");
+        }
+
+        EventStore.getInstance().moveEventInStore(event, mer.start, mer.end);
+
+        EventDAO.update(event, con);
+
+        return new MoveEventResponse("success", "");
     }
 
 
