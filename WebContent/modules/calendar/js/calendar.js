@@ -775,6 +775,10 @@
                     // new Event?
                     if (detailsDialogFullcalendarEvent === null) {
 
+                        if(data.event.backgroundRendering){
+                            data.event.rendering = 'background'
+                        }
+
                         $('#fullCalendar').fullCalendar('renderEvent', data.event);
 
                     } else {
