@@ -20,11 +20,60 @@
 
             fetchEmptyEvent();
 
+            initializePlusButton();
+
+            initializeDeleteButton();
         },
         close: function () {
             // w2ui['librarySettingsMergeStudents'].destroy();
         }
     });
+
+    function initializePlusButton(){
+        $('#calendarPlusButton').click(
+            function(){
+                openEventDetailsDialog(null, null);
+            }
+        )
+    }
+
+    function initializeDeleteButton(){
+
+        $('#eventDeleteButton').confirmation({
+            rootSelector: '#eventDeleteButton',
+            title: 'Sind Sie sicher?',
+            content: 'Sie sind dabei, einen Termin unwiederruflich zu <span style="font-weight: bold">löschen</span>.',
+            html: true,
+            singleton: true,
+            popout: true,
+            btnOkLabel: 'Ja',
+            btnOkClass: 'btn-success',
+            btnCancelLabel: 'Abbrechen',
+            btnCancelClass: 'btn-danger',
+            onConfirm: function(){
+                $('#eventDetailsDialog').modal('hide');
+
+                $.post('/calendar/removeEvent',
+                    JSON.stringify({
+                        school_id: global_school_id,
+                        event_id: detailsDialogFullcalendarEvent.id
+                    }),
+                    function (data) {
+                        if(data.status === 'success'){
+                            $('#fullCalendar').fullCalendar('removeEvents',detailsDialogFullcalendarEvent.id);
+                        } else {
+                            w2alert('Der Termin konnte nicht gelöscht werden:\n' + data.message);
+                        }
+
+                        return true;
+
+                    }, "json");
+            }
+
+        });
+
+    }
+
 
     function fetchEmptyEvent() {
         $.post('/calendar/fetchEventDetails',
@@ -69,7 +118,6 @@
                 schedule: {
                     text: 'Termine',
                     click: function () {
-                        console.log(this);
                         calendarEntriesType = "schedule";
                         toggle(this);
                     }
@@ -80,16 +128,12 @@
                         calendarEntriesType = "tests";
                         toggle(this);
                     }
-                },
-                absences: {
-                    text: 'Abwesende Klassen',
-                    click: function () {
-                        calendarEntriesType = "absences";
-                        toggle(this);
-                    }
                 }
+
             },
             header: {
+                center: 'title',
+                left: 'prevYear,nextYear',
                 right: 'schedule,tests,absences today month,agendaWeek,agendaDay prev,next listWeek,listMonth,listYear'
             },
             events: {
@@ -236,10 +280,24 @@
 
     function moveEvent(event, revertFunc) {
 
+        var end = null;
+
+        if(event.end !== null){
+            end = event.end.format('DD.MM.YYYY HH:mm');
+        } else {
+            if(!event.allDay){
+                var endMoment = $.fullCalendar.moment(event.start);
+                endMoment.add(2, 'hours');
+                event.end = endMoment;
+                end = event.end.format('DD.MM.YYYY HH:mm');
+            }
+        }
+
         $.post('/calendar/moveEvent',
             JSON.stringify({
                 start: event.start.format('DD.MM.YYYY HH:mm'),
-                end: event.end.format('DD.MM.YYYY HH:mm'),
+                end: end,
+                allDay: event.allDay,
                 id: event.id,
                 school_id: global_school_id
             }),
@@ -278,6 +336,9 @@
 
         if (event !== null) {
 
+            $('#eventDetailsDialogLabel').html('Termin ändern');
+            $('#eventDeleteButton').show();
+
             $.post('/calendar/fetchEventDetails',
                 JSON.stringify({
                     school_id: global_school_id,
@@ -296,10 +357,20 @@
 
         } else {
 
+            $('#eventDetailsDialogLabel').html('Neuer Termin');
+            $('#eventDeleteButton').hide();
+
             clearEventDetailDialogValues();
             detailsDialogFullcalendarEvent = null;
 
             if (from !== null) {
+
+                /*
+                  In code above we set to >= from and from <= to. As both have unknown values we have
+                  to empty them before setting new values
+                  */
+                $('#eventDateFrom').data('DateTimePicker').clear();
+                $('#eventDateTo').data('DateTimePicker').clear();
 
                 $('#eventDateFrom').data('DateTimePicker').date(from.format('DD.MM.YYYY'));
                 $('#eventDateTo').data('DateTimePicker').date(from.format('DD.MM.YYYY'));
@@ -582,8 +653,8 @@
         $('#eventName').val('');
         $('#eventNameShort').val('');
 
-        $('#eventDateFrom').data('DateTimePicker').date('');
-        $('#eventDateTo').data('DateTimePicker').date('');
+        $('#eventDateFrom').data('DateTimePicker').clear();
+        $('#eventDateTo').data('DateTimePicker').clear();
 
         $('#eventTimeFrom').timepicker('setTime', '');
         $('#eventTimeTo').timepicker('setTime', '');
@@ -667,6 +738,11 @@
             eventData.end = fcEventEnd.format('DD.MM.YYYY HH:mm');
         }
 
+        eventData.start.trim();
+        if(typeof eventData.end === 'string'){
+            eventData.end.trim();
+        }
+
         eventData.location = $('#eventLocation').val();
         eventData.description = $('#eventDescription').val();
 
@@ -706,6 +782,7 @@
                         detailsDialogFullcalendarEvent.title = eventData.title;
                         detailsDialogFullcalendarEvent.start = fcEventStart;
                         detailsDialogFullcalendarEvent.end = fcEventEnd;
+                        detailsDialogFullcalendarEvent.allDay = data.event.allDay;
                         detailsDialogFullcalendarEvent.backgroundColor = eventData['backgroundColor'];
                         detailsDialogFullcalendarEvent.borderColor = eventData['borderColor'];
                         detailsDialogFullcalendarEvent.textColor = eventData['textColor'];

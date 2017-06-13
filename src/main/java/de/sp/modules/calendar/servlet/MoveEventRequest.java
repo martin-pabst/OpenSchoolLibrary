@@ -16,6 +16,7 @@ public class MoveEventRequest extends BaseRequestData {
     @Validation(notNull = true)
     public Long school_id;
 
+    @Validation(notNull = true)
     public Boolean allDay;
 
     @Validation(notNull = true)

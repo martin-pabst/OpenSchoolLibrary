@@ -398,6 +398,8 @@ public class CalendarServlet extends BaseServlet {
 
         EventStore.getInstance().moveEventInStore(event, mer.start, mer.end);
 
+        event.setAllDay(mer.allDay);
+
         EventDAO.update(event, con);
 
         return new MoveEventResponse("success", "");

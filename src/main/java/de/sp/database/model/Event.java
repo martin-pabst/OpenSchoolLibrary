@@ -321,6 +321,11 @@ public class Event {
     }
 
 
+    public void setAllDay(Boolean allDay) {
+        if(allDay != null) {
+            this.allDay = allDay;
+        }
+    }
 }
 
 

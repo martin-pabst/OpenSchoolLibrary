@@ -706,7 +706,7 @@
         var color = (benoetigt - benoetigtUndGeliehen) === 0 ? "green" : "#ff2020";
         
         neededGrid.header = '' + benoetigt + ' benötigt, davon <span style="color:' + color + '; font-weight:bold">' +
-            (benoetigt - benoetigtUndGeliehen) + '</span> noch nicht entliehen.';
+            (benoetigt - benoetigtUndGeliehen) + '</span> noch offen.';
         
         /**
          * Borrowed books which are not needed are rendered in red color. This is only

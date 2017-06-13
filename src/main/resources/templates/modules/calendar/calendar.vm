@@ -1,6 +1,11 @@
 <div id="calendarmodule" style="margin: 10px">
 
-    <div id="fullCalendar"></div>
+    <div id="fullCalendar">
+        <div id="calendarPlusButton" style="">
+            <img src="/public/img/plus_button.png" style="width: 100%">
+        </div>
+    </div>
+
 
     <!-- Modal -->
     <div id="eventDetailsDialog" class="modal fade" tabindex="-1" role="dialog"
@@ -46,7 +51,7 @@
 
                         <div class="tab-content">
 
-                            <!-- Borrow -->
+                            <!-- Event base data -->
 
                             <div id="eventBasedata" class="tab-pane fade active in" style="margin-top: 10px">
 
@@ -102,8 +107,7 @@
                                     </div>
 
                                     <div class="checkbox">
-                                        <input type="checkbox" id="eventWholeDay"/> ganztags
-                                        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                                        <label><input type="checkbox" id="eventWholeDay"/> ganztags</label>
                                     </div>
 
                                 </div>
@@ -163,13 +167,14 @@
                                         <option value="#a47ae2">#a47ae2</option>
                                     </select>
                                     <div class="checkbox">
-                                        <label><input type="checkbox" id="eventBackgroundRendering">Im Hintergrund: </label>
+                                        <label><input type="checkbox" id="eventBackgroundRendering">im Hintergrund</label>
                                     </div>
 
                                 </div>
 
                             </div>
 
+                            <!-- Absence data -->
 
                             <div id="eventAbsence" class="tab-pane fade" style="margin-top: 10px">
 
@@ -202,6 +207,8 @@
 
                             </div>
 
+                            <!-- Ressource data -->
+
                             <div id="eventRessources" class="tab-pane fade" style="margin-top: 10px">
                             </div>
 
@@ -212,12 +219,15 @@
 
                     <!-- Modal Footer -->
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" id="eventDeleteButton" style="float: left">
+                            Termin Löschen
+                        </button>
                         <button type="button" class="btn btn-default"
                                 data-dismiss="modal">
-                            Close
+                            Schließen
                         </button>
                         <button type="submit" class="btn btn-primary">
-                            Save changes
+                            Speichern
                         </button>
                     </div>
 
