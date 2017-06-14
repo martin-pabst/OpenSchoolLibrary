@@ -8,18 +8,18 @@
 
     <statement name="event.getAllWithoutDescription">
         select id, school_id, title, short_title, location, allDay, preliminary,
-            start_timestamp, end_timestamp, start_period, end_period, backgroundcolor, bordercolor, textcolor, backgroundrendering
+            start_timestamp, end_timestamp, backgroundcolor, bordercolor, textcolor, backgroundrendering
         from event
     </statement>
 
     <statement name="event.insert" >
         insert into event
         (school_id, title, description, short_title, location, allDay, preliminary, 
-        start_timestamp, end_timestamp, start_period, end_period, 
+        start_timestamp, end_timestamp,
         backgroundColor, borderColor, textColor, backgroundrendering)
         values
             (:school_id, :title, :description, :short_title, :location, :allDay, :preliminary,
-                        :start, :end, :start_period, :end_period,
+                        :start, :end,
              :backgroundColor, :borderColor, :textColor, :backgroundRendering)
     </statement>
 
@@ -33,8 +33,6 @@
                 preliminary = :preliminary,
                 start_timestamp = :start,
                 end_timestamp = :end,
-                start_period = :start_period,
-                end_period = :end_period,
                 backgroundcolor = :backgroundColor,
                 bordercolor = :borderColor,
                 textcolor = :textColor,

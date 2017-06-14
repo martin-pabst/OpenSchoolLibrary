@@ -39,9 +39,6 @@ public class SetEventDetailsRequest extends BaseRequestData {
     public Date start;
     public Date end;
 
-    public Integer start_period; // Unterrichtsstunde!
-    public Integer end_period;
-
     public String color;
     public String backgroundColor;
     public String borderColor;

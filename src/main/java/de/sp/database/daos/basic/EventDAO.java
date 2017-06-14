@@ -62,8 +62,6 @@ public class EventDAO {
                 .addParameter("preliminary", event.getPreliminary())
                 .addParameter("start", event.getStart())
                 .addParameter("end", event.getEnd())
-                .addParameter("start_period", event.getStart_period())
-                .addParameter("end_period", event.getEnd_period())
                 .addParameter("backgroundColor", event.getBackgroundColor())
                 .addParameter("borderColor", event.getBorderColor())
                 .addParameter("textColor", event.getTextColor())

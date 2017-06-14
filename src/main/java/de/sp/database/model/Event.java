@@ -22,9 +22,6 @@ public class Event {
     private Date start;
     private Date end;
 
-    private Integer start_period; // Unterrichtsstunde!
-    private Integer end_period;
-
     private String backgroundColor;
     private String borderColor;
     private String textColor;
@@ -40,8 +37,8 @@ public class Event {
 
     public Event(Long school_id, String title, String description, String short_title,
                  String location, Boolean allDay,
-                 Boolean preliminary, Date start, Date end, Integer start_period,
-                 Integer end_period, String backgroundColor, String borderColor, String textColor, boolean backgroundRendering) {
+                 Boolean preliminary, Date start, Date end, String backgroundColor, String borderColor, String textColor,
+                 boolean backgroundRendering) {
         this.school_id = school_id;
         this.title = title;
         this.description = description;
@@ -51,8 +48,6 @@ public class Event {
         this.preliminary = preliminary;
         this.start = start;
         this.end = end;
-        this.start_period = start_period;
-        this.end_period = end_period;
         this.backgroundColor = backgroundColor;
         this.borderColor = borderColor;
         this.textColor = textColor;
@@ -93,14 +88,6 @@ public class Event {
 
     public Date getEnd() {
         return end;
-    }
-
-    public Integer getStart_period() {
-        return start_period;
-    }
-
-    public Integer getEnd_period() {
-        return end_period;
     }
 
     public Long getSchool_id() {
@@ -281,8 +268,8 @@ public class Event {
 
     public void updateAttributes(String title, String description, String short_title,
                  String location, Boolean allDay,
-                 Boolean preliminary, Date start, Date end, Integer start_period,
-                 Integer end_period, String backgroundColor, String borderColor, String textColor, boolean backgroundRendering) {
+                 Boolean preliminary, Date start, Date end, String backgroundColor, String borderColor, String textColor,
+                                 boolean backgroundRendering) {
         this.title = title;
         this.description = description;
         this.short_title = short_title;
@@ -291,8 +278,6 @@ public class Event {
         this.preliminary = preliminary;
         this.start = start;
         this.end = end;
-        this.start_period = start_period;
-        this.end_period = end_period;
         this.backgroundColor = backgroundColor;
         this.borderColor = borderColor;
         this.textColor = textColor;

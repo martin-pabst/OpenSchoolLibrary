@@ -1320,9 +1320,11 @@
                 }
 
                 if (handler) {
-                    handler.call(picker, widget);
-                    e.stopPropagation();
-                    e.preventDefault();
+                    // Martin Pabst, 14.06.2017 "if()" inserted; before there was handler.call(picker, widget)
+                    if(handler.call(picker, widget) !== true) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                    }
                 }
             },
 
@@ -2574,7 +2576,7 @@
             },
             left: function (widget) {
                 if (!widget) {
-                    return;
+                    return true; // Martin Pabst, 14.06.2017 "true" inserted
                 }
                 var d = this.date() || this.getMoment();
                 if (widget.find('.datepicker').is(':visible')) {
@@ -2583,7 +2585,7 @@
             },
             right: function (widget) {
                 if (!widget) {
-                    return;
+                    return true; // Martin Pabst, 14.06.2017 "true" inserted
                 }
                 var d = this.date() || this.getMoment();
                 if (widget.find('.datepicker').is(':visible')) {

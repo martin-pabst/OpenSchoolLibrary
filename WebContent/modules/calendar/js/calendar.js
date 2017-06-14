@@ -42,7 +42,7 @@
         $('#eventDeleteButton').confirmation({
             rootSelector: '#eventDeleteButton',
             title: 'Sind Sie sicher?',
-            content: 'Sie sind dabei, einen Termin unwiederruflich zu <span style="font-weight: bold">löschen</span>.',
+            content: 'Sie sind dabei, einen Termin unwiderruflich zu <span style="font-weight: bold">löschen</span>.',
             html: true,
             singleton: true,
             popout: true,
@@ -189,31 +189,6 @@
             eventRender: function (event, element, view) {
                 // console.log(element.html());
 
-                if (event.rendering == 'background') {
-
-                    var html = element[0].outerHTML;
-
-                    var backgroundColor = event.backgroundColor;
-
-                    if(typeof backgroundColor === 'string'){
-
-                        var brighterBackgroundColor = makeWhiter(event.backgroundColor, 0.2);
-                        html = html.replace(backgroundColor, brighterBackgroundColor);
-                    }
-
-                    html = html.replace('fc-bgevent', '');
-
-
-                    var html1 = $('<div style="color: #a9a9a9; position: absolute; bottom: 0; font-size: 130%; cursor: pointer; padding: 3px">'
-                        + event.title + '</div>');
-
-                    html1.on('click', function(){
-                        openEventDetailsDialog(event, null);
-                    });
-
-                    return $(html).append(html1);
-                }
-
                 var iconHtml = '<i class="fa fa-globe fullcalendar-icon" style="color: #0000a0"></i>';
 
                 if (typeof event.restrictions === 'object' && event.restrictions.length > 0) {
@@ -233,6 +208,36 @@
                     iconHtml += iconAbsence;
 
                 }
+
+                if(event.preliminary){
+                    iconHtml += '<i class="fa fa-warning fullcalendar-icon" ></i>'
+                }
+
+                if (event.rendering == 'background') {
+
+                    var html = element[0].outerHTML;
+
+                    var backgroundColor = event.backgroundColor;
+
+                    if(typeof backgroundColor === 'string'){
+
+                        var brighterBackgroundColor = makeWhiter(event.backgroundColor, 0.2);
+                        html = html.replace(backgroundColor, brighterBackgroundColor);
+                    }
+
+                    html = html.replace('fc-bgevent', '');
+
+
+                    var html1 = $('<div style="color: #a9a9a9; position: absolute; bottom: 0; font-size: 130%; cursor: pointer; padding: 3px">'
+                        + event.title + '<span style="margin-left: 1em; opacity: .3">' + iconHtml + '</span></div>');
+
+                    html1.on('click', function(){
+                        openEventDetailsDialog(event, null);
+                    });
+
+                    return $(html).append(html1);
+                }
+
 
                 if (iconHtml.length > 0) {
                     element.find('.fc-content').css('background-color', 'inherit');
@@ -396,6 +401,11 @@
 
             }
 
+            // Force validation
+            $('#eventName').trigger('input');
+            $('#eventDateFrom').trigger('input');
+            $('#eventDateTo').trigger('input');
+
             $('#eventDetailsDialog').modal();
 
         }
@@ -435,11 +445,22 @@
         });
 
         $("#eventDateFrom").on("dp.change", function (e) {
-            $('#eventDateTo').data("DateTimePicker").minDate(e.date);
+            // $('#eventDateTo').data("DateTimePicker").minDate(e.date);
+            var dateTo = $('#eventDateTo').data("DateTimePicker").date();
+
+            if(e.date > dateTo){
+                $('#eventDateTo').data("DateTimePicker").date(e.date);
+            }
+
         });
 
         $("#eventDateTo").on("dp.change", function (e) {
-            $('#eventDateFrom').data("DateTimePicker").maxDate(e.date);
+            // $('#eventDateFrom').data("DateTimePicker").maxDate(e.date);
+            var dateFrom = $('#eventDateFrom').data("DateTimePicker").date();
+
+            if(e.date < dateFrom){
+                $('#eventDateFrom').data("DateTimePicker").date(e.date);
+            }
         });
 
         $('#eventcolor').simplecolorpicker({theme: 'fontawesome'});
@@ -536,8 +557,14 @@
             } else {
                 $('#eventTimeFrom').parent().show();
                 $('#eventTimeTo').parent().show();
+                $('#eventBackgroundRendering').prop('checked', false);
             }
 
+        });
+
+        $('#eventBackgroundRendering').change(function(){
+           $('#eventWholeDay').prop('checked', true);
+           $('#eventWholeDay').trigger('change');
         });
 
 
@@ -578,7 +605,7 @@
 
         $('#eventAbsencesWholeSchool').prop('checked', eventData.absenceWholeSchool);
 
-        $('#eventName').val(event.title);
+        $('#eventName').val(event.title).trigger('input');
         $('#eventNameShort').val(event.short_title);
 
         var from = moment(event.start, "DD.MM.YYYY HH:mm");
@@ -600,6 +627,9 @@
 
         $('#eventTimeFrom').timepicker('setTime', fromTime);
         $('#eventTimeTo').timepicker('setTime', toTime);
+
+        $('#eventDateFrom').trigger('input');
+        $('#eventDateTo').trigger('input');
 
         $('#eventWholeDay').prop('checked', event.allDay);
         $('#eventWholeDay').trigger('change');
@@ -643,6 +673,7 @@
 
         $('#eventcolor').simplecolorpicker('selectColor', color);
         $('#eventBackgroundRendering').prop('checked', eventData.event.backgroundRendering);
+        $('#eventPreliminary').prop('checked', eventData.event.preliminary);
 
     }
 
@@ -685,6 +716,7 @@
         buildAbsenceMatrix(emptyEvent.formEntries);
 
         $('#eventBackgroundRendering').prop('checked', false);
+        $('#eventPreliminary').prop('checked', false);
 
     }
 
@@ -765,6 +797,7 @@
         eventData['textColor'] = $('#eventcolor').data('textcolor');
 
         eventData['backgroundRendering'] = $('#eventBackgroundRendering').prop('checked');
+        eventData['preliminary'] = $('#eventPreliminary').prop('checked');
 
         $.post('/calendar/setEventDetails',
             JSON.stringify(eventData),
@@ -793,6 +826,7 @@
                         detailsDialogFullcalendarEvent.absences = data.event.absences;
                         detailsDialogFullcalendarEvent.restrictions = data.event.restrictions;
                         detailsDialogFullcalendarEvent.rendering = data.event.backgroundRendering ? 'background' : undefined;
+                        detailsDialogFullcalendarEvent.preliminary = data.event.preliminary;
                         $('#fullCalendar').fullCalendar('updateEvent', detailsDialogFullcalendarEvent);
 
                     }

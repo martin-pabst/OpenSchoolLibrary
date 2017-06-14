@@ -35,24 +35,24 @@ public class EventTestdata {
 
 			// Simple entry, visible by all users
 			Event eventPublic1 = new Event(school_id, "Christmas feast", "Marry Christmas!", "Christmas", "Bethlehem", true,
-					false, sdf.parse("24.12.2017"), sdf.parse("24.12.2017"), null, null, "#a00000", "#a00000","#000", false);
+					false, sdf.parse("24.12.2017"), sdf.parse("24.12.2017"),  "#a00000", "#a00000","#000", false);
 			cs.storeEventWithAbsencesAndRestrictionsIntoDatabaseAndStore(eventPublic1, con, false);
 
 			Event eventPublic2 = new Event(school_id, "Januar Weeks", "Two weeks in january", "Jan-Weeks", "Warm room at home", true,
-					false, sdf.parse("03.01.2018"), sdf.parse("17.01.2018"), null, null, "#0a0", "#0a0", "#fff", false);
+					false, sdf.parse("03.01.2018"), sdf.parse("17.01.2018"), "#0a0", "#0a0", "#fff", false);
 			cs.storeEventWithAbsencesAndRestrictionsIntoDatabaseAndStore(eventPublic2, con, false);
 
 			Event eventPublic3 = new Event(school_id, "School", "One School day in february", "Feb-School", "CSG Ingolstadt", false,
-					false, sdfTime.parse("04.02.2018 08:00:00"), sdfTime.parse("04.02.2018 13:00:00"), null, null, "#00a","#00a", "#000", false);
+					false, sdfTime.parse("04.02.2018 08:00:00"), sdfTime.parse("04.02.2018 13:00:00"), "#00a","#00a", "#000", false);
 			cs.storeEventWithAbsencesAndRestrictionsIntoDatabaseAndStore(eventPublic3, con, false);
 
 			Event teacherCal = new Event(school_id, "Only teachers", "This is only for teachers", "April - Teachers", "Teachers' room", true,
-					false, sdf.parse("14.04.2018"), sdf.parse("15.04.2018"), null, null, "#0a0", "#0a0", "#ffffff", false);
+					false, sdf.parse("14.04.2018"), sdf.parse("15.04.2018"), "#0a0", "#0a0", "#ffffff", false);
 			teacherCal.addRestriction(new EventRestriction(UserTestdata.teacherRole.getId(), teacherCal));
 			cs.storeEventWithAbsencesAndRestrictionsIntoDatabaseAndStore(teacherCal, con, false);
 
 			Event absenceEvent = new Event(school_id, "Absence 8A", "class 8A is absent", "8a theatre", "Communal theatre", false,
-					false, sdf.parse("16.04.2018 09:00"), sdf.parse("16.04.2018 11:30"), null, null, "#44c", "#44c", "#000", false);
+					false, sdf.parse("16.04.2018 09:00"), sdf.parse("16.04.2018 11:30"), "#44c", "#44c", "#000", false);
 
 			Absence absence8A = new Absence(school_id, StudentTestdata.achtA.getId(), null, true, true);
 

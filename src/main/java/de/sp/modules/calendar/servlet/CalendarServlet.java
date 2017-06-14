@@ -156,13 +156,17 @@ public class CalendarServlet extends BaseServlet {
 
         Event event;
 
+        if(sedr.backgroundRendering){
+            sedr.allDay = true;
+        }
+
         EventStore eventStore = EventStore.getInstance();
 
         if(sedr.id == null){
 
             event = new Event(sedr.school_id, sedr.title, sedr.description, sedr.short_title,
                     sedr.location, sedr.allDay, sedr.preliminary, sedr.start, sedr.end,
-                    sedr.start_period, sedr.end_period, sedr.backgroundColor,
+                    sedr.backgroundColor,
                     sedr.borderColor, sedr.textColor, sedr.backgroundRendering);
 
         } else {
@@ -178,7 +182,7 @@ public class CalendarServlet extends BaseServlet {
 
             event.updateAttributes(sedr.title, sedr.description, sedr.short_title,
                     sedr.location, sedr.allDay, sedr.preliminary, sedr.start, sedr.end,
-                    sedr.start_period, sedr.end_period,sedr.backgroundColor,
+                    sedr.backgroundColor,
                     sedr.borderColor, sedr.textColor, sedr.backgroundRendering);
 
             EventDAO.update(event, con);
