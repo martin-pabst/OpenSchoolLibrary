@@ -29,15 +29,15 @@
         }
     });
 
-    function initializePlusButton(){
+    function initializePlusButton() {
         $('#calendarPlusButton').click(
-            function(){
+            function () {
                 openEventDetailsDialog(null, null);
             }
         )
     }
 
-    function initializeDeleteButton(){
+    function initializeDeleteButton() {
 
         $('#eventDeleteButton').confirmation({
             rootSelector: '#eventDeleteButton',
@@ -50,7 +50,7 @@
             btnOkClass: 'btn-success',
             btnCancelLabel: 'Abbrechen',
             btnCancelClass: 'btn-danger',
-            onConfirm: function(){
+            onConfirm: function () {
                 $('#eventDetailsDialog').modal('hide');
 
                 $.post('/calendar/removeEvent',
@@ -59,8 +59,8 @@
                         event_id: detailsDialogFullcalendarEvent.id
                     }),
                     function (data) {
-                        if(data.status === 'success'){
-                            $('#fullCalendar').fullCalendar('removeEvents',detailsDialogFullcalendarEvent.id);
+                        if (data.status === 'success') {
+                            $('#fullCalendar').fullCalendar('removeEvents', detailsDialogFullcalendarEvent.id);
                         } else {
                             w2alert('Der Termin konnte nicht gelöscht werden:\n' + data.message);
                         }
@@ -147,16 +147,15 @@
                 },
                 error: function () {
                     alert('there was an error while fetching events!');
-                },
-                success: function (data, textStatus) {
-                    if (typeof data === 'object') {
-                        for (var i = 0; i < data.length; i++) {
-                            if (data[i].backgroundRendering) {
-                                data[i].rendering = 'background'
-                            }
-                        }
-                    }
                 }
+            },
+            eventDataTransform: function (eventData) {
+                // Event object in Database is slightly different from fullcalendars event object format
+                // so we have to transform ist after fetching from the server:
+                if (eventData.backgroundRendering) {
+                    eventData.rendering = 'background';
+                }
+                return eventData;
             },
             eventClick: function (event) {
                 openEventDetailsDialog(event, null);
@@ -209,7 +208,7 @@
 
                 }
 
-                if(event.preliminary){
+                if (event.preliminary) {
                     iconHtml += '<i class="fa fa-warning fullcalendar-icon" ></i>'
                 }
 
@@ -219,7 +218,7 @@
 
                     var backgroundColor = event.backgroundColor;
 
-                    if(typeof backgroundColor === 'string'){
+                    if (typeof backgroundColor === 'string') {
 
                         var brighterBackgroundColor = makeWhiter(event.backgroundColor, 0.2);
                         html = html.replace(backgroundColor, brighterBackgroundColor);
@@ -231,7 +230,7 @@
                     var html1 = $('<div style="color: #a9a9a9; position: absolute; bottom: 0; font-size: 130%; cursor: pointer; padding: 3px">'
                         + event.title + '<span style="margin-left: 1em; opacity: .3">' + iconHtml + '</span></div>');
 
-                    html1.on('click', function(){
+                    html1.on('click', function () {
                         openEventDetailsDialog(event, null);
                     });
 
@@ -271,12 +270,12 @@
     }
 
     function increasePercent(c, percent) {
-        c = Math.round(c * percent + 255*(1-percent));
+        c = Math.round(c * percent + 255 * (1 - percent));
         if (c > 255) {
             c = 255
         }
         c = c.toString(16);
-        if(c.length < 2){
+        if (c.length < 2) {
             c = '0' + c;
         }
         return c;
@@ -287,10 +286,10 @@
 
         var end = null;
 
-        if(event.end !== null){
+        if (event.end !== null) {
             end = event.end.format('DD.MM.YYYY HH:mm');
         } else {
-            if(!event.allDay){
+            if (!event.allDay) {
                 var endMoment = $.fullCalendar.moment(event.start);
                 endMoment.add(2, 'hours');
                 event.end = endMoment;
@@ -371,9 +370,9 @@
             if (from !== null) {
 
                 /*
-                  In code above we set to >= from and from <= to. As both have unknown values we have
-                  to empty them before setting new values
-                  */
+                 In code above we set to >= from and from <= to. As both have unknown values we have
+                 to empty them before setting new values
+                 */
                 $('#eventDateFrom').data('DateTimePicker').clear();
                 $('#eventDateTo').data('DateTimePicker').clear();
 
@@ -448,7 +447,7 @@
             // $('#eventDateTo').data("DateTimePicker").minDate(e.date);
             var dateTo = $('#eventDateTo').data("DateTimePicker").date();
 
-            if(e.date > dateTo){
+            if (e.date > dateTo) {
                 $('#eventDateTo').data("DateTimePicker").date(e.date);
             }
 
@@ -458,7 +457,7 @@
             // $('#eventDateFrom').data("DateTimePicker").maxDate(e.date);
             var dateFrom = $('#eventDateFrom').data("DateTimePicker").date();
 
-            if(e.date < dateFrom){
+            if (e.date < dateFrom) {
                 $('#eventDateFrom').data("DateTimePicker").date(e.date);
             }
         });
@@ -545,6 +544,7 @@
             if (!e.isDefaultPrevented()) {
                 saveDetailValues();
                 $('#eventDetailsDialog').modal('hide');
+                e.preventDefault();
             }
 
         });
@@ -562,9 +562,9 @@
 
         });
 
-        $('#eventBackgroundRendering').change(function(){
-           $('#eventWholeDay').prop('checked', true);
-           $('#eventWholeDay').trigger('change');
+        $('#eventBackgroundRendering').change(function () {
+            $('#eventWholeDay').prop('checked', true);
+            $('#eventWholeDay').trigger('change');
         });
 
 
@@ -771,7 +771,7 @@
         }
 
         eventData.start.trim();
-        if(typeof eventData.end === 'string'){
+        if (typeof eventData.end === 'string') {
             eventData.end.trim();
         }
 
@@ -808,7 +808,7 @@
                     // new Event?
                     if (detailsDialogFullcalendarEvent === null) {
 
-                        if(data.event.backgroundRendering){
+                        if (data.event.backgroundRendering) {
                             data.event.rendering = 'background'
                         }
 

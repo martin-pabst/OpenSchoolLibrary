@@ -11,10 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sql2o.Connection;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -180,20 +177,62 @@ public class EventStore {
 
         List<Integer> yearMonthIndexList = Event.getYearMonthList(from, to);
 
-        List<Event> events = new ArrayList<>();
+        Set<Event> events = new HashSet<>();
 
         Map<Integer, List<Event>> yearMonthToEventMap = schoolIdToYearMonthToEventMap.get(school_id);
 
         if (yearMonthToEventMap != null) {
-            for (Integer ym : yearMonthIndexList) {
+
+            int i = 0;
+            while (i < yearMonthIndexList.size()){
+                Integer ym = yearMonthIndexList.get(i);
+
                 List<Event> cl = yearMonthToEventMap.get(ym);
                 if(cl != null){
+
+                    /*
+                     This implementation is stupid simple but does not take into account
+                     that from and to don't necessarily lie on begin/end of a month.
+
+                     If fullcalendar don't cache events or checks for doubles this maybe no problem.
+                     If not, the implementation commented out below is exact but much slower:
+                     */
                     events.addAll(cl);
+
+/*
+                    if(i > 0 && i < yearMonthIndexList.size() - 1){
+                        events.addAll(cl);
+                    } else {
+
+                        for (Event event : cl) {
+                            if(event.getStart().compareTo(to) > 0){
+                                continue;
+                            }
+                            if(event.getEnd() != null){
+                                if(event.getEnd().compareTo(from) < 0) {
+                                    continue;
+                                }
+                            } else {
+                                if(event.getStart().compareTo(from) < 0) {
+                                    continue;
+                                }
+                            }
+
+                            events.add(event);
+
+                        }
+
+                    }
+*/
+
                 }
+
+                i++;
             }
+
         }
 
-        return events;
+        return new ArrayList<>(events);
 
     }
 

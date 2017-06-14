@@ -131,7 +131,7 @@ public class Event {
 
     }
 
-    public static Integer getYearMonthIndex(Date date){
+    public static Integer getYearMonthIndex(Date date, boolean isStartDate){
 
         java.util.Calendar cal = java.util.Calendar.getInstance();
 
@@ -143,9 +143,10 @@ public class Event {
 
         /*
           If event.allDay = true and event has duration 1 day then end of event is at 00:00 on the following day.
-          To avoid registerin such an event with yearMonthIndex of the following month, test:
+          To avoid registering such an event with yearMonthIndex of the following month, test:
          */
-        if(cal.get(Calendar.DAY_OF_MONTH) == 1 && cal.get(Calendar.HOUR_OF_DAY) == 0 && cal.get(Calendar.MINUTE) == 0){
+        if(!isStartDate && cal.get(Calendar.DAY_OF_MONTH) == 1
+                && cal.get(Calendar.HOUR_OF_DAY) == 0 && cal.get(Calendar.MINUTE) == 0){
             month--;
             if(month < 0){
                 month += 12;
@@ -159,8 +160,8 @@ public class Event {
 
     public static List<Integer> getYearMonthList(Date from, Date to){
 
-        Integer ymiFrom = getYearMonthIndex(from);
-        Integer ymiTo = to == null ? ymiFrom : getYearMonthIndex(to);
+        Integer ymiFrom = getYearMonthIndex(from, true);
+        Integer ymiTo = to == null ? ymiFrom : getYearMonthIndex(to, false);
 
         int i = ymiFrom;
 
