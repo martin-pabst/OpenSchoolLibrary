@@ -14,6 +14,7 @@ public class CalendarModule extends Module {
 
 	public static final String CALENDAR = "calendar";
 	public static final String CALENDAROPEN = "calendar.open";
+	public static final String CALENDARWRITE = "calendar.write";
 
 	private Template template;
 
@@ -28,7 +29,7 @@ public class CalendarModule extends Module {
 
 	@Override
 	public String[] getPermissionNames() {
-		return new String[] {CALENDAROPEN};
+		return new String[] {CALENDAROPEN, CALENDARWRITE};
 	}
 
 	@Override

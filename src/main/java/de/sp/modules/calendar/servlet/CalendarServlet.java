@@ -86,7 +86,7 @@ public class CalendarServlet extends BaseServlet {
                         SetEventDetailsRequest sedr = gson.fromJson(postData, SetEventDetailsRequest.class);
 
                         sedr.validate(ts);
-                        user.checkPermission(CalendarModule.CALENDAROPEN,
+                        user.checkPermission(CalendarModule.CALENDARWRITE,
                                 sedr.school_id);
 
                         gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
@@ -100,7 +100,7 @@ public class CalendarServlet extends BaseServlet {
 
                         rer.validate(ts);
 
-                        user.checkPermission(CalendarModule.CALENDAROPEN,
+                        user.checkPermission(CalendarModule.CALENDARWRITE,
                                 rer.school_id);
 
                         responseString = gson.toJson(removeEvent(rer, user, con));
@@ -112,7 +112,7 @@ public class CalendarServlet extends BaseServlet {
 
                         mer.validate(ts);
 
-                        user.checkPermission(CalendarModule.CALENDAROPEN,
+                        user.checkPermission(CalendarModule.CALENDARWRITE,
                                 mer.school_id);
 
                         responseString = gson.toJson(moveEvent(mer, user, con));

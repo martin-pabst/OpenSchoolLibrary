@@ -47,7 +47,7 @@ public class UserTestdata {
 			teacherRole = RoleDAO.insert("teacher", "Teacher",
 					testSchool.getId(), teacherPermissions, con);
 
-			String adminPermissions = "library|mail|calendar.open|admin|asvsst.open";
+			String adminPermissions = "library|mail|calendar.open|calendar.write|admin|asvsst.open";
 
 			Role adminRole = RoleDAO.insert("admin", "Administrator",
 					testSchool.getId(), adminPermissions, con);

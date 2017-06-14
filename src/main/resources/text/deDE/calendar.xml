@@ -6,4 +6,8 @@
 	<textresources path="calendar.menu" language="de-DE">
 		<text path="main"> </text>
 	</textresources>
+	<textresources path="permissions.calendar" language="de-DE">
+		<text path="open">Kalender öffnen und Termine lesen</text>
+		<text path="write">Termine anlegen und bearbeiten</text>
+	</textresources>
 </textresourcefile>

@@ -162,6 +162,12 @@
             },
             dayClick: function (date, jsEvent, view) {
 
+                if (jsEvent.target.className === "fc-day-number") {
+                    $('#fullCalendar').fullCalendar("gotoDate", date);
+                    $('#fullCalendar').fullCalendar("changeView", "agendaDay");
+                    return;
+                }
+
                 openEventDetailsDialog(null, date);
 
                 /*
@@ -227,8 +233,8 @@
                     html = html.replace('fc-bgevent', '');
 
 
-                    var html1 = $('<div style="color: #a9a9a9; position: absolute; bottom: 0; font-size: 130%; cursor: pointer; padding: 3px">'
-                        + event.title + '<span style="margin-left: 1em; opacity: .3">' + iconHtml + '</span></div>');
+                    var html1 = $('<div class="eventBackgroundTitle">'
+                        + event.title + '<span style="margin-left: 1em">' + iconHtml + '</span></div>');
 
                     html1.on('click', function () {
                         openEventDetailsDialog(event, null);

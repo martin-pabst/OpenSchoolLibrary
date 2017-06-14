@@ -111,12 +111,42 @@ input:invalid:focus {
     right: 2em;
     width: 4em;
     z-index: 10000;
-    cursor: pointer
+    cursor: pointer;
+    opacity: 0.4;
+    transition: 0.25s;
 }
 
 #calendarPlusButton:hover {
+    /*
     top: -6.25em;
     right: 1.75em;
     width: 4.5em;
+    */
+    opacity: 1.0;
     transition: 0.25s;
+}
+
+.eventBackgroundTitle {
+    color: #000;
+    position: absolute;
+    bottom: 0;
+    font-size: 130%;
+    cursor: pointer;
+    padding: 3px;
+    opacity: 0.4;
+    transition: 0.25s;
+}
+
+.eventBackgroundTitle:hover {
+    opacity: 1.0;
+    transition: 0.25s;
+}
+
+.fc-day-number {
+    cursor: pointer;
+}
+
+.fc-day-number:hover {
+    cursor: pointer;
+    font-weight: bold;
 }
