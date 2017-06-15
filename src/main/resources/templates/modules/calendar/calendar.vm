@@ -167,11 +167,11 @@
                                         <option value="#a47ae2">#a47ae2</option>
                                     </select>
                                     <div class="checkbox" style="margin-left: 1em">
-                                        <label><input type="checkbox" id="eventBackgroundRendering">im
+                                        <label><input type="checkbox" id="eventBackgroundRendering"> im
                                             Hintergrund</label>
                                     </div>
                                     <div class="checkbox" style="margin-left: 2em">
-                                        <label><input type="checkbox" id="eventPreliminary">vorläufig</label>
+                                        <label><input type="checkbox" id="eventPreliminary"> vorläufig</label>
                                         <i class="fa fa-warning"></i>
                                     </div>
 
@@ -231,7 +231,7 @@
                                 data-dismiss="modal">
                             Schließen
                         </button>
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary" id="eventSaveButton">
                             Speichern
                         </button>
                     </div>

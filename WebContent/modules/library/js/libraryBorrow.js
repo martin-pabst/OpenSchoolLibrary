@@ -26,7 +26,7 @@
 
             initializeDOM();
 
-            // fetchData();
+            fetchData();
             $('#libraryBorrowTab').trigger('shown.bs.tab');
 
 
@@ -116,14 +116,14 @@
 
         $('#libraryBorrowTab').on('shown.bs.tab', function (e) {
 
+            w2ui['libraryBorrowerList'].resize();
+            w2ui['libraryBorrowedBooksList'].resize();
+            w2ui['libraryNeededBooksList'].resize();
+
             if (w2ui['libraryBorrowerList'].records.length === 0) {
 
                 fetchData();
                 $("#libraryBorrowErrorList").hide();
-
-                w2ui['libraryBorrowerList'].resize();
-                w2ui['libraryBorrowedBooksList'].resize();
-                w2ui['libraryNeededBooksList'].resize();
 
                 libraryBorrowsOnSelectUnselect();
 
@@ -345,8 +345,8 @@
                 header: false,
                 toolbar: true,
                 selectColumn: false,
-                toolbarAdd: true,
-                toolbarEdit: true,
+                toolbarAdd: App.userHasPermission('library.editStudents'),
+                toolbarEdit: App.userHasPermission('library.editStudents'),
                 toolbarDelete: false,
                 toolbarSave: false,
                 footer: true

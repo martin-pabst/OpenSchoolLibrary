@@ -195,7 +195,7 @@ public class LibraryInventoryBooksServlet extends
     protected String getRequiredPermission(String command) {
         switch (command) {
             case "get":
-                return LibraryModule.PERMISSION_LIBRARY;
+                return LibraryModule.PERMISSION_OPEN;
             case "update":
                 return LibraryModule.PERMISSION_INVENTORY;
             case "save":
@@ -204,7 +204,7 @@ public class LibraryInventoryBooksServlet extends
                 return LibraryModule.PERMISSION_INVENTORY;
 
             default:
-                return LibraryModule.PERMISSION_LIBRARY;
+                return LibraryModule.PERMISSION_OPEN;
         }
     }
 }

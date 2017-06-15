@@ -280,4 +280,9 @@ public class User {
         return false;
 
     }
+
+
+    public Set<String> getPermissions() {
+        return permissions;
+    }
 }

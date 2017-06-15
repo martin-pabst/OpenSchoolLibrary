@@ -56,11 +56,11 @@ public class LibraryBorrowedBooksListServlet extends
 
 		switch (command) {
 		case "get":
-			return LibraryModule.PERMISSION_LIBRARY;
+			return LibraryModule.PERMISSION_OPEN;
 		case "delete":
 			return LibraryModule.PERMISSION_RETURN;
 		default:
-			return LibraryModule.PERMISSION_LIBRARY;
+			return LibraryModule.PERMISSION_OPEN;
 		}
 
 	}

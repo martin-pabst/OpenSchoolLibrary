@@ -60,11 +60,11 @@ public class CalendarModule extends Module {
 
 	@Override
 	public void getHtmlFragment(String fragmentId, TS ts, User user,
-			StringBuilder sb) {
+                                Long school_id, StringBuilder sb) {
 
 		switch (fragmentId) {
 		case "startCalendar":
-			renderTemplate(template, ts, user, sb);
+			renderTemplate(template, ts, user, school_id, sb);
 			break;
 
 		default:

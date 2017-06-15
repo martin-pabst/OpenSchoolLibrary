@@ -63,15 +63,15 @@ public class UserModule extends Module {
 
 	@Override
 	public void getHtmlFragment(String fragmentId, TS ts, User user,
-			StringBuilder sb) {
+                                Long school_id, StringBuilder sb) {
 
 		switch (fragmentId) {
 		case "logout":
-			renderTemplate(logoutTemplate, ts, user, sb);
+			renderTemplate(logoutTemplate, ts, user, school_id, sb);
 			break;
 
 		case "userSettings":
-			renderTemplate(settingsTemplate, ts, user, sb);
+			renderTemplate(settingsTemplate, ts, user, school_id, sb);
 			break;
 
 		default:

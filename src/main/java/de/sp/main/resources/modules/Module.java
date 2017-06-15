@@ -166,13 +166,14 @@ public abstract class Module {
 	}
 
 	protected void renderTemplate(Template template, TS ts, User user,
-			StringBuilder sb) {
+								  Long school_id, StringBuilder sb) {
 
 
 
 		VelocityContext context = new VelocityContext();
 		context.put("ts", ts); // language
 		context.put("user", user);
+		context.put("school_id", school_id);
 
 		/* now render the template into a StringWriter */
 		StringWriter writer = new StringWriter();
@@ -186,7 +187,7 @@ public abstract class Module {
 	};
 
 	abstract public void getHtmlFragment(String fragmentId, TS ts, User user,
-			StringBuilder sb);
+                                         Long school_id, StringBuilder sb);
 
 	abstract public String[] addFragmentIds();
 

@@ -61,11 +61,11 @@ public class ASVSchnittstellePlugin extends Plugin {
 
 	@Override
 	public void getHtmlFragment(String fragmentId, TS ts, User user,
-			StringBuilder sb) {
+                                Long school_id, StringBuilder sb) {
 
 		switch (fragmentId) {
 		case "startAdminASVImport":
-			renderTemplate(template, ts, user, sb);
+			renderTemplate(template, ts, user, school_id, sb);
 			break;
 
 		default:

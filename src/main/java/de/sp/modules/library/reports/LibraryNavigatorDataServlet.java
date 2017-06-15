@@ -39,7 +39,7 @@ public class LibraryNavigatorDataServlet extends BaseServlet {
 
 		try (Connection con = ConnectionPool.beginTransaction()) {
 
-			user.checkPermission(LibraryModule.PERMISSION_REPORTS,
+			user.checkPermission(LibraryModule.PERMISSION_OPEN,
 					navigatorDataRequest.school_id);
 
 			responseString =

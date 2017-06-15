@@ -24,7 +24,13 @@ w2utilsPhrases = {
     'All Fields': 'Suchbegriff ...',
     'Add New': 'Hinzufügen',
     'Search': 'Suchen',
-    'Yes': 'Ja'
+    'Yes': 'Ja',
+    'Add new record': 'Neuen Datensatz hinzufügen',
+    'Edit selected record': 'Markierte Datensatz bearbeiten',
+    'Delete selected records': 'Markierte Datensätze löschen',
+    'Open Search Fields': 'Suchdialog öffnen (mit Suchfeldern je Tabellenspalte)',
+    'Show/hide columns': 'Spalten ein-/ausblenden',
+    'Reload data in the list': 'Daten der Tabelle neu vom Server holen'
 };
 
 $(function () {

@@ -195,7 +195,9 @@ public class CalendarServlet extends BaseServlet {
 
         eventStore.storeEventWithAbsencesAndRestrictionsIntoDatabaseAndStore(event, con, sedr.id != null);
 
-        event.setEditable(true);
+        if(user.hasPermission(CalendarModule.CALENDARWRITE, sedr.school_id)){
+            event.setEditable(true);
+        }
 
         return new SetEventDetailsResponse("success", "", event);
 

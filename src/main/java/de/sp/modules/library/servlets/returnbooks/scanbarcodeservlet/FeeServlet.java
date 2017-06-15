@@ -85,7 +85,7 @@ public class FeeServlet extends BaseServlet {
 
 		r.validate(ts);
 
-		user.checkPermission(LibraryModule.PERMISSION_LIBRARY, r.getSchool_id());
+		user.checkPermission(LibraryModule.PERMISSION_OPEN, r.getSchool_id());
 
 		checkTeacherStudentBelongToSchool(r.getStudent_id(), r.getTeacher_id(),
 				r.getSchool_id(), con);
@@ -109,7 +109,7 @@ public class FeeServlet extends BaseServlet {
 
 		r.validate(ts);
 
-		user.checkPermission(LibraryModule.PERMISSION_RETURN, r.getSchool_id());
+		user.checkPermission(LibraryModule.PERMISSION_ACCEPT_PAYMENTS, r.getSchool_id());
 
 		if (!r.getSchool_id()
 				.equals(FeeDAO.getSchoolForFee(r.getFee_id(), con))) {
@@ -132,7 +132,7 @@ public class FeeServlet extends BaseServlet {
 
 		r.validate(ts);
 
-		user.checkPermission(LibraryModule.PERMISSION_RETURN, r.getSchool_id());
+		user.checkPermission(LibraryModule.PERMISSION_ORDER_PAYMENTS, r.getSchool_id());
 
 		if (!r.getSchool_id().equals(
 				BorrowsDAO.findSchoolId(r.getBorrows_id(), con))) {
@@ -156,7 +156,7 @@ public class FeeServlet extends BaseServlet {
 
 		r.validate(ts);
 
-		user.checkPermission(LibraryModule.PERMISSION_RETURN, r.getSchool_id());
+		user.checkPermission(LibraryModule.PERMISSION_ORDER_PAYMENTS, r.getSchool_id());
 
 		if (!r.getSchool_id()
 				.equals(FeeDAO.getSchoolForFee(r.getFee_id(), con))) {
@@ -188,7 +188,7 @@ public class FeeServlet extends BaseServlet {
 
 		r.validate(ts);
 
-		user.checkPermission(LibraryModule.PERMISSION_LIBRARY, r.getSchool_id());
+		user.checkPermission(LibraryModule.PERMISSION_ACCEPT_PAYMENTS, r.getSchool_id());
 
 		checkTeacherStudentBelongToSchool(r.getStudent_id(), r.getTeacher_id(),
 				r.getSchool_id(), con);

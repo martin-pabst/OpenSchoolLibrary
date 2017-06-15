@@ -30,6 +30,11 @@
     });
 
     function initializePlusButton() {
+
+        if (!App.userHasPermission('calendar.write')) {
+            $('#calendarPlusButton').hide();
+        }
+
         $('#calendarPlusButton').click(
             function () {
                 openEventDetailsDialog(null, null);
@@ -168,7 +173,9 @@
                     return;
                 }
 
-                openEventDetailsDialog(null, date);
+                if (App.userHasPermission('calendar.write')) {
+                    openEventDetailsDialog(null, date);
+                }
 
                 /*
                  alert('Clicked on: ' + date.format());
@@ -342,12 +349,24 @@
      */
     function openEventDetailsDialog(event, from) {
 
+        var hasPermissionWrite = App.userHasPermission('calendar.write');
+
         detailsDialogFullcalendarEvent = event;
 
         if (event !== null) {
 
             $('#eventDetailsDialogLabel').html('Termin ändern');
-            $('#eventDeleteButton').show();
+
+            if (hasPermissionWrite) {
+                $('#eventDeleteButton').show();
+            } else {
+                $('#eventDeleteButton').hide();
+                $('#eventSaveButton').hide();
+                var tabContentElement = $("#eventDetailsForm").find('.tab-content');
+                tabContentElement.find('input, textarea, button, select').attr("disabled", true);
+                tabContentElement.find('.color').attr('data-disabled', "");
+
+            }
 
             $.post('/calendar/fetchEventDetails',
                 JSON.stringify({
@@ -579,12 +598,18 @@
 
     function buildAbsenceMatrix(absenceValues) {
 
+        var hasPermissionWrite = App.userHasPermission('calendar.write');
+        var disabled = hasPermissionWrite ? '' : ' disabled';
+        var attrDisabled = hasPermissionWrite ? '' : 'disabled="true"';
+
         var html = '';
+
 
         for (var i = 0; i < absenceValues.length; i++) {
             var form = absenceValues[i];
             html += '<div style="margin-top: 0.5em">\n';
-            html += '<button type="button" class="btn btn-primary btn-xs">' + form.form_name + '</button>\n';
+            html += '<button type="button" class="btn btn-primary btn-xs' + disabled + '"'
+                + attrDisabled + '>' + form.form_name + '</button>\n';
             html += '<div class="btn-group" data-toggle="buttons"\n>';
 
             for (var j = 0; j < form.classEntries.length; j++) {
@@ -592,7 +617,8 @@
                 var classEntry = form.classEntries[j];
 
                 var active = classEntry.is_absent ? ' active' : '';
-                html += '<label class="btn btn-xs btn-default class-button' + active + '" data-class-id="' + classEntry.class_id + '"><input type="checkbox">' + classEntry.class_name + '</label>';
+                html += '<label class="btn btn-xs btn-default class-button' + active + disabled + '"'
+                    + attrDisabled + ' data-class-id="' + classEntry.class_id + '"><input type="checkbox">' + classEntry.class_name + '</label>';
 
             }
 

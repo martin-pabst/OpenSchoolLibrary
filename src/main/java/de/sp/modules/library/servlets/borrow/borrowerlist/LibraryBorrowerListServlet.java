@@ -28,9 +28,9 @@ public class LibraryBorrowerListServlet extends BaseGridServlet<BorrowerRecord> 
 	protected String getRequiredPermission(String command) {
 		switch (command) {
 		case "get":
-			return LibraryModule.PERMISSION_LIBRARY;
+			return LibraryModule.PERMISSION_OPEN;
 		default:
-			return LibraryModule.PERMISSION_LIBRARY;
+			return LibraryModule.PERMISSION_OPEN;
 		}
 	}
 

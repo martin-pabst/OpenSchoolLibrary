@@ -200,7 +200,7 @@ public class LibraryBookFormServlet extends BaseGridServlet<Object> {
     protected String getRequiredPermission(String command) {
         switch (command) {
             case "get":
-                return LibraryModule.PERMISSION_LIBRARY;
+                return LibraryModule.PERMISSION_OPEN;
             case "update":
                 return LibraryModule.PERMISSION_INVENTORY;
             case "save":
@@ -209,7 +209,7 @@ public class LibraryBookFormServlet extends BaseGridServlet<Object> {
                 return LibraryModule.PERMISSION_INVENTORY;
 
             default:
-                return LibraryModule.PERMISSION_LIBRARY;
+                return LibraryModule.PERMISSION_OPEN;
         }
     }
 

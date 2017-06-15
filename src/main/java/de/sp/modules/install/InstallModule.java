@@ -1,12 +1,10 @@
 package de.sp.modules.install;
 
-import org.apache.velocity.Template;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
 import de.sp.database.model.User;
 import de.sp.main.mainframe.menu.MenuItem;
 import de.sp.main.resources.modules.Module;
-import de.sp.main.resources.templates.VelocityEngineFactory;
 import de.sp.main.resources.text.TS;
 import de.sp.modules.install.servlets.InitDBServlet;
 
@@ -49,7 +47,7 @@ public class InstallModule extends Module {
 
 	@Override
 	public void getHtmlFragment(String fragmentId, TS ts, User user,
-			StringBuilder sb) {
+                                Long school_id, StringBuilder sb) {
 
 	}
 

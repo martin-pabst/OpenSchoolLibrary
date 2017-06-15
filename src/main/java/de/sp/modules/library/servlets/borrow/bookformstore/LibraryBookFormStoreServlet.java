@@ -36,7 +36,7 @@ public class LibraryBookFormStoreServlet extends BaseServlet {
 
 			requestData.validate(ts);
 
-			user.checkPermission(LibraryModule.PERMISSION_LIBRARY,
+			user.checkPermission(LibraryModule.PERMISSION_OPEN,
 					requestData.getSchool_id());
 
 			List<BookFormStoreRecord> records = LibraryDAO.getBookFormStore(

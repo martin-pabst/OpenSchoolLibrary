@@ -25,5 +25,7 @@
 		<text path="admonition">Mahnwesen der Lernmittelbibliothek bearbeiten</text>
 		<text path="settings">Einstellungen der Lernmittelbibliothek bearbeiten</text>
 		<text path="editStudents">Schülerliste der Lernmittelbibliothek bearbeiten</text>
+		<text path="orderPayments">Zahlungen anordnen, bearbeiten</text>
+		<text path="acceptPayments">Zahlungen entgegennehmen/löschen</text>
 	</textresources>
 </textresourcefile>

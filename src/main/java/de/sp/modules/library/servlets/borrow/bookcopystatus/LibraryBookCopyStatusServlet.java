@@ -105,7 +105,7 @@ public class LibraryBookCopyStatusServlet extends BaseServlet {
 
 		request.validate(ts);
 
-		user.checkPermission(LibraryModule.PERMISSION_LIBRARY,
+		user.checkPermission(LibraryModule.PERMISSION_OPEN,
 				request.getSchool_id());
 
 		List<BookCopyStatus> statusList = BookCopyStatusDAO

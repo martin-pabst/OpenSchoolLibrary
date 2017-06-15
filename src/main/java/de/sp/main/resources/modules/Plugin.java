@@ -36,7 +36,7 @@ public abstract class Plugin extends Module {
 	}
 	
 	@Override
-	abstract public void getHtmlFragment(String fragmentId, TS ts, User user, StringBuilder sb);
+	abstract public void getHtmlFragment(String fragmentId, TS ts, User user, Long school_id, StringBuilder sb);
 	
 	@Override
 	abstract public String[] addFragmentIds();

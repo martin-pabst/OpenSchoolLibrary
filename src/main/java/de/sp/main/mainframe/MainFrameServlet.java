@@ -1,20 +1,5 @@
 package de.sp.main.mainframe;
 
-import java.io.IOException;
-import java.io.StringWriter;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.sql2o.Connection;
-
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.UserDAO;
 import de.sp.database.model.School;
@@ -26,6 +11,19 @@ import de.sp.main.resources.modules.ModuleManager;
 import de.sp.main.resources.templates.VelocityEngineFactory;
 import de.sp.main.resources.text.TS;
 import de.sp.tools.server.BaseServlet;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sql2o.Connection;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.StringWriter;
 
 public class MainFrameServlet extends BaseServlet {
 
@@ -128,6 +126,7 @@ public class MainFrameServlet extends BaseServlet {
 		VelocityContext context = new VelocityContext();
 		context.put("ts", ts); // language
 		context.put("user", user);
+		context.put("school", school);
 		context.put("menuLeft", sbLeft.toString());
 		context.put("menuRight", sbRight.toString());
 

@@ -39,6 +39,7 @@ var App = (function () {
         subjectList: [],
         schoolList: [],
         username: "dummy",
+        permissions: {},
         currentSchool: undefined,
         currentSchoolTerm: undefined
     };
@@ -51,6 +52,17 @@ var App = (function () {
         }), function (data) {
 
             globalDefinitions = data;
+
+            /**
+             * Gson serializes a java Map into a list. So we have to manually transform
+             * globalDefinitions.permissions it into a map:
+             */
+            var permissions = globalDefinitions.permissions;
+            globalDefinitions.permissions = {};
+
+            for(var i = 0; i < permissions.length; i++){
+                globalDefinitions.permissions[permissions[i]] = true;
+            }
 
             initMainMenu();
 
@@ -65,6 +77,10 @@ var App = (function () {
 
 
     });
+
+    function hasPermission(permission){
+        return typeof globalDefinitions.permissions[permission] !== 'undefined';
+    }
 
     function getContent(fragmentId, callback) {
 
@@ -272,7 +288,10 @@ var App = (function () {
         chooseSchool: chooseSchool,
         chooseSchoolTerm: chooseSchoolTerm,
 
-        getContent: getContent
+        getContent: getContent,
+        userHasPermission: function(permission){
+            return hasPermission(permission);
+        }
 
     };
 

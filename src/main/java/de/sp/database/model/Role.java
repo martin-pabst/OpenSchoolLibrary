@@ -60,7 +60,7 @@ public class Role {
 
 	public void removePermission(Permission permission) {
 		permissionList.remove(permission);
-		permissionNameMap.remove(permission);
+		permissionNameMap.remove(permission.getName());
 		permissions = StringUtils.join(permissionList, "|");
 	}
 

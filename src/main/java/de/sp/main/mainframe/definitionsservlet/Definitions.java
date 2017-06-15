@@ -13,6 +13,7 @@ import org.sql2o.Connection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("unused")
 public class Definitions {
@@ -34,6 +35,8 @@ public class Definitions {
 	private List<SimpleValueListEntry> sexList;
 
 	private String username;
+
+	private Set<String> permissions;
 	
 	public Definitions(User user, School school, SchoolTerm schoolTerm) {
 
@@ -58,6 +61,8 @@ public class Definitions {
 			classList = DBClassDAO.getSimpleValueList(schoolTerm.getId(), con);
 
 			username = user.getName();
+
+			permissions = user.getPermissions();
 						
 		}
 	}

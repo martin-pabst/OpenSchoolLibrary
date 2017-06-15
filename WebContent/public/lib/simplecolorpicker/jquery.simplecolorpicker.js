@@ -308,35 +308,7 @@
         picker: false,
 
         // Animation delay in milliseconds
-        pickerDelay: 0,
-
-        colorList: [
-            {backgroundColor: "#ac725e", fontColor: "#ffffff", name: "Dunkelbraun"},
-            {backgroundColor: "#d06b64", fontColor: "#ffffff", name: "Braun"},
-            {backgroundColor: "#f83a22", fontColor: "#ffffff", name: "Rot 1"},
-            {backgroundColor: "#fa573c", fontColor: "#ffffff", name: "Rot 2"},
-            {backgroundColor: "#ff7537", fontColor: "#000000", name: "Rot 3"},
-            {backgroundColor: "#ffad46", fontColor: "#000000", name: "Orange"},
-            {backgroundColor: "#42d692", fontColor: "#000000", name: "Mint"},
-            {backgroundColor: "#16a765", fontColor: "#ffffff", name: "Dunkelgrün"},
-            {backgroundColor: "#7bd148", fontColor: "#000000", name: "Grün"},
-            {backgroundColor: "#b3dc6c", fontColor: "#000000", name: "Hellgrün"},
-            {backgroundColor: "#fbe983", fontColor: "#000000", name: "Helles Ocker"},
-            {backgroundColor: "#fad165", fontColor: "#000000", name: "Ocker"},
-            {backgroundColor: "#92e1c0", fontColor: "#000000", name: "Helles Mintgrün"},
-            {backgroundColor: "#9fe1e7", fontColor: "#000000", name: "Hellblau"},
-            {backgroundColor: "#9fc6e7", fontColor: "#000000", name: "Aqua"},
-            {backgroundColor: "#4986e7", fontColor: "#ffffff", name: "Blau 1"},
-            {backgroundColor: "#9a9cff", fontColor: "#000000", name: "Blau 2"},
-            {backgroundColor: "#b99aff", fontColor: "#000000", name: "Violett 1"},
-            {backgroundColor: "#c2c2c2", fontColor: "#000000", name: "Grau 1"},
-            {backgroundColor: "#cabdbf", fontColor: "#000000", name: "Grau 2"},
-            {backgroundColor: "#cca6ac", fontColor: "#000000", name: "Rotgrau"},
-            {backgroundColor: "#f691b2", fontColor: "#000000", name: "Rosa"},
-            {backgroundColor: "#cd74e6", fontColor: "#000000", name: "Lila 1"},
-            {backgroundColor: "#a47ae2", fontColor: "#000000", name: "Lila 2"}
-        ]
-
+        pickerDelay: 0
 
     };
 

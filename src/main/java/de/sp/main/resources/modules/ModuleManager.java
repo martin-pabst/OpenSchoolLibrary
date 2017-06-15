@@ -283,7 +283,7 @@ public class ModuleManager {
 
 			user.checkPermission(m.getIdentifier() + ".open", school_id);
 
-			m.getHtmlFragment(fragmentId, ts, user, sb);
+			m.getHtmlFragment(fragmentId, ts, user, school_id, sb);
 
 		}
 
