@@ -71,4 +71,25 @@ public class SchoolDAO {
 
 	}
 
+    public static void remove(Long school_id, Connection con) {
+
+		String sql = StatementStore.getStatement("school.remove");
+
+		con.createQuery(sql)
+				.addParameter("id", school_id)
+				.executeUpdate();
+
+	}
+
+	public static void update(School school, Connection con) {
+
+		String sql = StatementStore.getStatement("school.update");
+
+		con.createQuery(sql)
+				.addParameter("number", school.getNumber())
+				.addParameter("name", school.getName())
+				.addParameter("abbreviation", school.getAbbreviation())
+				.executeUpdate();
+
+	}
 }

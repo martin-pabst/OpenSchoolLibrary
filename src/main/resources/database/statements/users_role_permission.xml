@@ -8,8 +8,8 @@
 	</statement>
 
 	<statement name="users.insert">
-		insert into users (username, name, hash, salt, languageCode, last_selected_school_term_id, is_admin, school_id)
-		values (:username, :name, :hash, :salt, :languageCode, :last_selected_school_term_id, :is_admin, :school_id)
+		insert into users (username, name, hash, salt, languageCode, last_selected_school_term_id, is_root, school_id)
+		values (:username, :name, :hash, :salt, :languageCode, :last_selected_school_term_id, :is_root, :school_id)
 	</statement>
 
 	<statement name="users.update">
@@ -18,7 +18,7 @@
 		name = :name,
 		languageCode = :languageCode,
 		last_selected_school_term_id = :last_selected_school_term_id,
-		is_admin = :is_admin,
+		is_root = :is_root,
 		school_id = :school_id
 		where 
 		id = :id

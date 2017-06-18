@@ -174,7 +174,8 @@ public class AdminUserAdministrationServlet extends BaseServlet {
             user.setUsername(record.username);
         }
 
-        user.setIs_admin(record.is_admin == 1);
+        // admin must not be able to create an root user:
+        user.setIs_root(false);
 
         if(record.password != null && !record.password.isEmpty()){
             user.setPassword(record.password);
@@ -196,8 +197,9 @@ public class AdminUserAdministrationServlet extends BaseServlet {
             return new SaveUserResponse("error", "User with given name already exists.", null);
         }
 
+        // Admin must not be able to create a root user, so set is_root to false:
         User user = UserDAO.insert(record.username, record.name,
-                    record.password, "de-DE", null, record.is_admin == 1, sur.school_id, con);
+                    record.password, "de-DE", null, false, sur.school_id, con);
 
         UserRolePermissionStore.getInstance().addUser(user);
 

@@ -4,6 +4,7 @@ import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.RoleDAO;
 import de.sp.database.daos.basic.UserDAO;
 import de.sp.database.daos.basic.UserRoleDAO;
+import de.sp.database.model.DatabaseStore;
 import de.sp.database.model.Role;
 import de.sp.database.model.School;
 import de.sp.database.model.User;
@@ -24,12 +25,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  */
 
-public class UserRolePermissionStore {
+public class UserRolePermissionStore implements DatabaseStore {
 
 	private static UserRolePermissionStore instance;
 
 	private Map<Long, User> userKeys = new ConcurrentHashMap<>(); // maps User.id to User
 	private Map<Long, Map<String, User>> schoolIdToUserNameMap = new ConcurrentHashMap<>();
+
+	// roots have no school_id, so extra map for them:
+	private Map<String, User> rootNameMap = new ConcurrentHashMap<>();
 
 	private Map<Long, List<Role>> schoolIdToRoleListMap = new ConcurrentHashMap<>();
 	private Map<Long, Role> roleKeys = new ConcurrentHashMap<>(); // maps Role.id to role
@@ -64,6 +68,24 @@ public class UserRolePermissionStore {
 
 	}
 
+	@Override
+	public void removeSchool(Long school_id) {
+		Map<String, User> userNameMap = schoolIdToUserNameMap.get(school_id);
+
+		userNameMap.forEach((username, user) -> {
+			userKeys.remove(user.getId());
+		});
+
+		schoolIdToUserNameMap.remove(school_id);
+
+		for (Role role : schoolIdToRoleListMap.get(school_id)) {
+			roleKeys.remove(role.getId());
+		}
+
+		schoolIdToRoleListMap.remove(school_id);
+
+	}
+
 	public void addRole(Role role) {
 
 		List<Role> roleList = schoolIdToRoleListMap.get(role.getSchool_id());
@@ -86,14 +108,18 @@ public class UserRolePermissionStore {
 
 		userKeys.put(user.getId(), user);
 
-		Map<String, User> userNameMap = schoolIdToUserNameMap.get(user.getSchool_id());
+		if(user.getSchool_id() == null){
+			rootNameMap.put(user.getUsername(), user);
+		} else {
+			Map<String, User> userNameMap = schoolIdToUserNameMap.get(user.getSchool_id());
 
-		if(userNameMap == null){
-			userNameMap = new ConcurrentHashMap<>();
-			schoolIdToUserNameMap.put(user.getSchool_id(), userNameMap);
+			if(userNameMap == null){
+				userNameMap = new ConcurrentHashMap<>();
+				schoolIdToUserNameMap.put(user.getSchool_id(), userNameMap);
+			}
+
+			userNameMap.put(user.getUsername(), user);
 		}
-
-		userNameMap.put(user.getUsername(), user);
 
 	}
 
@@ -110,6 +136,10 @@ public class UserRolePermissionStore {
 	}
 
 	public User getUserBySchoolIdAndName(Long school_id, String username) {
+
+		if(school_id == null){
+			return rootNameMap.get(username);
+		}
 
 		Map<String, User> userNameMap = schoolIdToUserNameMap.get(school_id);
 
@@ -162,10 +192,15 @@ public class UserRolePermissionStore {
 
 
 		for (User user : usersToRemove) {
-			Map<String, User> userNameMap = schoolIdToUserNameMap.get(user.getSchool_id());
 
-			if(userNameMap != null){
-				userNameMap.remove(user.getUsername());
+			if(user.getSchool_id() == null){
+				rootNameMap.remove(user.getUsername());
+			} else {
+				Map<String, User> userNameMap = schoolIdToUserNameMap.get(user.getSchool_id());
+
+				if(userNameMap != null){
+					userNameMap.remove(user.getUsername());
+				}
 			}
 
 			userKeys.remove(user.getId());
@@ -260,7 +295,16 @@ public class UserRolePermissionStore {
 
 	public List<User> getUserListBySchoolId(Long school_id) {
 
-		Map<String, User> userNameMap = schoolIdToUserNameMap.get(school_id);
+		Map<String, User> userNameMap;
+
+		if(school_id == null){
+
+			userNameMap = rootNameMap;
+
+		} else {
+
+			userNameMap = schoolIdToUserNameMap.get(school_id);
+		}
 
 		List<User> userList = new ArrayList<>();
 

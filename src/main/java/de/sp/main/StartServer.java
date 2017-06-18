@@ -50,8 +50,7 @@ public class StartServer {
 			StatementStore.readStatements(config.getDatabase().getType());
 
 			try {
-				StoreManager.getInstance().loadStoresFromDatabase(
-						ModuleManager.getAllPermissions());
+				StoreManager.getInstance().loadStoresFromDatabase();
 			} catch (Exception ex) {
 				Logger logger = LoggerFactory.getLogger(StartServer.class);
 				logger.error("Error in populating stores: ", ex);

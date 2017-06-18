@@ -76,7 +76,7 @@ public class MainFrameServlet extends BaseServlet {
 				}
 			}
 
-			if (!user.hasAnyPermissionForSchool(school)) {
+			if (school != null && !user.hasAnyPermissionForSchool(school)) {
 				throw new Exception(
 						"User has no permissions for corresponding school!");
 			}
@@ -92,7 +92,7 @@ public class MainFrameServlet extends BaseServlet {
 		} catch (Exception ex) {
 			logger.error("User with id " + user.getId()
 					+ " requested school_term with id "
-					+ schoolTermURLPart.substring(2) + ". " + ex.toString());
+					+ schoolTermURLPart.substring(2) + ". ", ex);
 
 			resp.setContentType("text/html");
 			resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);

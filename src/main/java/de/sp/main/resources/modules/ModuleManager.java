@@ -8,6 +8,7 @@ import de.sp.modules.calendar.CalendarModule;
 import de.sp.modules.install.InstallModule;
 import de.sp.modules.library.LibraryModule;
 import de.sp.modules.mail.MailModule;
+import de.sp.modules.root.RootModule;
 import de.sp.modules.user.UserModule;
 import de.sp.tools.file.FileTool;
 import de.sp.tools.file.JarFileIncluder;
@@ -63,6 +64,7 @@ public class ModuleManager {
 		addModule(new CalendarModule());
 		addModule(new LibraryModule());
 		addModule(new AdminModule());
+		addModule(new RootModule());
 		addModule(new InstallModule());
 	}
 

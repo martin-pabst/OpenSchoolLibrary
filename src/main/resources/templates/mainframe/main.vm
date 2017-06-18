@@ -75,7 +75,7 @@
 
                 <!-- choose school and term -->
 
-                <li  class = "dropdown">
+                <li  class = "dropdown" id="schoolTermMenu">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         <span class="menuitemtext" id="schooltermMenuCaption">-------</span><span class="caret"></span></a>
                     <ul class="dropdown-menu">

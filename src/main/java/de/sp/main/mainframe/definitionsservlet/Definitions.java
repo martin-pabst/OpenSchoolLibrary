@@ -40,31 +40,34 @@ public class Definitions {
 	
 	public Definitions(User user, School school, SchoolTerm schoolTerm) {
 
-		Long school_id = school.getId();
+		// user root has no school
+		if (school != null) {
 
-		try (Connection con = ConnectionPool.open()) {
+			Long school_id = school.getId();
 
+			try (Connection con = ConnectionPool.open()) {
 
+                formList = getValueList(school_id, ValueListType.form, con);
 
-			formList = getValueList(school_id, ValueListType.form, con);
+                curriculumList = getValueList(school_id, ValueListType.curriculum, con);
 
-			curriculumList = getValueList(school_id, ValueListType.curriculum, con);
+                sexList = VLSex.getAsValueList();
 
-			sexList = VLSex.getAsValueList();
+                curriculumList.add(new SimpleValueListEntry(null, "Alle"));
 
-			curriculumList.add(new SimpleValueListEntry(null, "Alle"));
+                getSubjectList(school_id, con);
 
-			getSubjectList(school_id, con);
-			
-			schoolList = Arrays.asList(SchoolTermStore.getInstance().getSchoolById(user.getSchool_id()));
+                schoolList = Arrays.asList(SchoolTermStore.getInstance().getSchoolById(user.getSchool_id()));
 
-			classList = DBClassDAO.getSimpleValueList(schoolTerm.getId(), con);
+                classList = DBClassDAO.getSimpleValueList(schoolTerm.getId(), con);
 
-			username = user.getName();
+                permissions = user.getPermissions();
 
-			permissions = user.getPermissions();
-						
+            }
 		}
+
+		username = user.getName();
+
 	}
 
 	private List<SimpleValueListEntry> getValueList(Long school_id,

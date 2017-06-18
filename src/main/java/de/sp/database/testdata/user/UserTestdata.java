@@ -31,26 +31,30 @@ public class UserTestdata {
 					"de-DE", null, false, testSchool.getId(),
 					con);
 			User admin = UserDAO.insert("admin", "Administrator", "123",
-					"de-DE", null, true, testSchool.getId(),
+					"de-DE", null, false, testSchool.getId(),
+					con);
+			User root = UserDAO.insert("root", "Root", "123",
+					"de-DE", null, true, null,
 					con);
 
 
 			String[] libraryPermissionList = new LibraryModule()
 					.getPermissionNames();
 
-			Role librarianRole = RoleDAO.insert("librarian", "Librarian",
+			Role librarianRole = RoleDAO.insert("Bibliothekar/in", "Verwalter/in der Lernmittelfreien Bibliothek",
 					testSchool.getId(),
 					StringUtils.join(libraryPermissionList, "|"), con);
 
 			String teacherPermissions = "library|mail|calendar|testmodule";
 
-			teacherRole = RoleDAO.insert("teacher", "Teacher",
+			teacherRole = RoleDAO.insert("Lehrkraft", "Lehrkraft der Schule",
 					testSchool.getId(), teacherPermissions, con);
 
-			String adminPermissions = "library|mail|calendar.open|calendar.write|admin|asvsst.open";
+			String adminPermissions = "library|mail|calendar.open|calendar.write|admin.open|admin.userAdministration|asvsst.open";
 
 			Role adminRole = RoleDAO.insert("admin", "Administrator",
 					testSchool.getId(), adminPermissions, con);
+
 
 			UserRoleDAO.insert(martin.getId(), teacherRole.getId(), con);
 			UserRoleDAO.insert(admin.getId(), adminRole.getId(), con);

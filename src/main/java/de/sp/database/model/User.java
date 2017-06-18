@@ -3,11 +3,13 @@ package de.sp.database.model;
 import de.sp.database.stores.SchoolTermStore;
 import de.sp.main.resources.modules.InsufficientPermissionException;
 import de.sp.main.resources.modules.Permission;
-import de.sp.modules.admin.AdminModule;
 import de.sp.tools.string.PasswordSecurity;
 import de.sp.tools.string.SaltAndHash;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class User {
 
@@ -19,7 +21,7 @@ public class User {
     private String languageCode;
     private Long last_selected_school_term_id = null;
     private Long school_id;
-    private Boolean is_admin = false;
+    private Boolean is_root = false;
 
     private List<Role> roles = new ArrayList<>();
 
@@ -35,7 +37,7 @@ public class User {
     }
 
     public User(long id, String username, String name, String hash,
-                String salt, String languageCode, boolean isAdmin, long school_id) {
+                String salt, String languageCode, boolean isAdmin, Long school_id) {
         super();
         this.id = id;
         this.username = username;
@@ -43,7 +45,7 @@ public class User {
         this.hash = hash;
         this.salt = salt;
         this.languageCode = languageCode;
-        this.is_admin = isAdmin;
+        this.is_root = isAdmin;
         this.school_id = school_id;
     }
 
@@ -75,8 +77,8 @@ public class User {
         return school_id;
     }
 
-    public Boolean is_admin() {
-        return is_admin;
+    public Boolean is_root() {
+        return is_root;
     }
 
     public List<Role> getRoles() {
@@ -128,7 +130,7 @@ public class User {
 
     public boolean hasPermission(String permission, Long school_id) {
 
-        if (is_admin && permission.startsWith(AdminModule.PERMISSIONADMIN)) {
+        if (is_root && permission.startsWith("root.")) {
             return true;
         }
 
@@ -187,9 +189,14 @@ public class User {
 
             School school = SchoolTermStore.getInstance().getSchoolById(school_id);
 
-            SchoolTerm st = school.getCurrentSchoolTerm();
-            if (st != null) {
-                last_selected_school_term_id = st.getId();
+            if (school != null) {
+
+                SchoolTerm st = school.getCurrentSchoolTerm();
+
+                if (st != null) {
+                    last_selected_school_term_id = st.getId();
+                }
+
             }
 
         }
@@ -214,6 +221,12 @@ public class User {
 
         }
 
+    }
+
+    public void checkRoot() throws InsufficientPermissionException {
+        if(!    is_root) {
+            throw new InsufficientPermissionException(this, "root", null);
+        }
     }
 
     public void checkPermission(String permission, School school)
@@ -265,8 +278,8 @@ public class User {
         this.school_id = school_id;
     }
 
-    public void setIs_admin(Boolean is_admin) {
-        this.is_admin = is_admin;
+    public void setIs_root(Boolean is_root) {
+        this.is_root = is_root;
     }
 
     public boolean hasRole(Long role_id) {

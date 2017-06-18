@@ -39,7 +39,7 @@
 		<column name="school_id" type="bigint">
 			<references table="school" column="id" ondelete="cascade"/>
 		</column>
-		<column name="is_admin" type="bool"/>
+		<column name="is_root" type="bool"/>
 	</table>
 
 	<table name="user_role">

@@ -1,9 +1,9 @@
 package de.sp.main.mainframe.menu;
 
-import java.util.ArrayList;
-
 import de.sp.database.model.User;
 import de.sp.main.resources.text.TS;
+
+import java.util.ArrayList;
 
 public class MenuItem implements Comparable<MenuItem> {
 

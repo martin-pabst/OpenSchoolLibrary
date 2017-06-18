@@ -1,0 +1,23 @@
+<div id="root.schools">
+
+    <div style="width: 50%; padding: 5px; float: left">
+        <div id="rootSchoolsSchoollist"></div>
+    </div>
+
+    <div style="width: 50%; padding: 5px; float: right">
+
+        <div class="panel panel-default" style="margin: 0 0 10px 0">
+            <div class="panel-heading">Details der selektierten Schule:
+            </div>
+            <div class="panel-body" style="padding: 5px">
+                <div id="rootSchoolsSchoolDetails" style="height: 250px; width: 100%;
+                                 margin-bottom: 4px; overflow: auto"></div>
+            </div>
+        </div>
+
+        <div id="rootSchoolsAdminList"></div>
+
+
+    </div>
+</div>
+

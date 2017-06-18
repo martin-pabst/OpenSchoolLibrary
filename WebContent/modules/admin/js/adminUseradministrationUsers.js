@@ -425,12 +425,14 @@
                 '           <input name="name" type="text" maxlength="200" style="width: 250px"/>' +
                 '        </div>' +
                 '    </div>' +
+/*
                 '    <div class="w2ui-field  w2ui-span8">' +
                 '        <label>Ist Admin:</label>' +
                 '        <div>' +
                 '           <input name="is_admin" type="checkbox"/>' +
                 '        </div>' +
                 '    </div>' +
+*/
                 '    <div class="w2ui-field w2ui-span8">' +
                 '        <label>Passwort:</label>' +
                 '        <div>' +
@@ -445,7 +447,7 @@
                 fields: [
                     {field: 'username', type: 'text', required: true},
                     {field: 'name', type: 'text', required: true},
-                    {field: 'is_admin', type: 'checkbox', required: true},
+                    // {field: 'is_admin', type: 'checkbox', required: true},
                     {field: 'password', type: 'password', required: false}
                 ],
                 actions: {
@@ -507,7 +509,7 @@
 
                         rec.username = record.username;
                         rec.name = record.name;
-                        rec.is_admin = record.is_admin;
+                        // rec.is_admin = record.is_admin;
                         rec.password = "";
                         rec.id = record.id;
 

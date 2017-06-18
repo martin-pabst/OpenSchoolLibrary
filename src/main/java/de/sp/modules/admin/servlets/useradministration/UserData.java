@@ -13,7 +13,7 @@ public class UserData {
     public String username;
     public String name;
     public String languageCode;
-    public Boolean is_admin = false;
+    public Boolean is_root = false;
 
     public Long role_id; // Dummy for flat SQL-Statement
 

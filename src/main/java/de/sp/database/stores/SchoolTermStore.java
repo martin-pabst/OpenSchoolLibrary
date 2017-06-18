@@ -3,6 +3,7 @@ package de.sp.database.stores;
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.SchoolDAO;
 import de.sp.database.daos.basic.SchoolTermDAO;
+import de.sp.database.model.DatabaseStore;
 import de.sp.database.model.School;
 import de.sp.database.model.SchoolTerm;
 import org.slf4j.Logger;
@@ -13,7 +14,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class SchoolTermStore {
+public class SchoolTermStore implements DatabaseStore {
 
     private List<School> schools = new CopyOnWriteArrayList<>();
     private Map<Long, School> schoolKeys = new ConcurrentHashMap<>();
@@ -76,6 +77,23 @@ public class SchoolTermStore {
             Logger logger = LoggerFactory.getLogger(this.getClass());
             logger.error(ex.toString(), ex);
         }
+
+    }
+
+    @Override
+    public void removeSchool(Long school_id) {
+
+        School school = schoolKeys.get(school_id);
+
+        List<SchoolTerm> schoolTermList = schoolIdToSchoolTermListMap.get(school_id);
+
+        for (SchoolTerm schoolTerm : schoolTermList) {
+            schoolTermIds.remove(schoolTerm.id);
+        }
+
+        schools.remove(school);
+        schoolKeys.remove(school_id);
+        schoolIdToSchoolTermListMap.remove(school_id);
 
     }
 
@@ -142,6 +160,17 @@ public class SchoolTermStore {
         }
 
         return null;
+
+    }
+
+    public List<SchoolTerm> getSchoolTerms(Long school_id){
+        return schoolIdToSchoolTermListMap.get(school_id);
+    }
+
+    public void addSchool(School school) {
+
+        schools.add(school);
+        schoolKeys.put(school.getId(), school);
 
     }
 }

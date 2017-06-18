@@ -13,8 +13,13 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 
 public class AdminModule extends Module {
 
-	public static final String PERMISSIONADMIN = "admin";
+
+	public static final String MODULEIDENTIFIER = "admin";
+	public static final String PERMISSIONADMINOPEN = "admin.open";
 	public static final String PERMISSIONADMINUSERADMINISTRATION = "admin.userAdministration";
+	public static final String PERMISSIONADMINROLEADMINISTRATION = "admin.roleAdministration";
+
+
 
 	private Template userAdministrationTemplate;
 
@@ -31,13 +36,13 @@ public class AdminModule extends Module {
 	@Override
 	public String[] getPermissionNames() {
 
-		return new String[] { PERMISSIONADMIN, PERMISSIONADMINUSERADMINISTRATION };
+		return new String[] {PERMISSIONADMINOPEN, PERMISSIONADMINUSERADMINISTRATION, PERMISSIONADMINROLEADMINISTRATION};
 
 	}
 
 	@Override
 	public String getIdentifier() {
-		return PERMISSIONADMIN;
+		return MODULEIDENTIFIER;
 	}
 
 	@Override
@@ -49,17 +54,12 @@ public class AdminModule extends Module {
 	public MenuItem[] getMenuItems() {
 
 		MenuItem m = new MenuItem("admin.menu.main", "", "fa-wrench", null,
-				new String[] { PERMISSIONADMIN }, PERMISSIONADMIN,
+				new String[] {PERMISSIONADMINOPEN}, PERMISSIONADMINOPEN,
 				MenuItemSide.right, 100);
 
 		m.addItem(new MenuItem("admin.menu.useradministration", "startUserAdministration", "fa-users",
-				null, new String[] { PERMISSIONADMIN }, PERMISSIONADMIN,
+				null, new String[] {PERMISSIONADMINUSERADMINISTRATION}, PERMISSIONADMINUSERADMINISTRATION,
 				10));
-
-		m.addItem(new MenuItem("admin.menu.schools", "", "fa-institution", null,
-				new String[] { PERMISSIONADMIN }, PERMISSIONADMIN,
-				20));
-
 
 		return new MenuItem[] { m };
 
@@ -67,7 +67,7 @@ public class AdminModule extends Module {
 
 	@Override
 	public String getMinimumPermission() {
-		return PERMISSIONADMIN;
+		return PERMISSIONADMINOPEN;
 	}
 
 	@Override

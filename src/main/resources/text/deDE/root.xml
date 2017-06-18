@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<textresourcefile>
+	<textresources path="root" language="de-DE">
+		<text path="moduleName">Root-Modul</text>
+	</textresources>
+	<textresources path="root.menu" language="de-DE">
+		<text path="schools">Schulen verwalten</text>
+	</textresources>
+</textresourcefile>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<statementlist>
+
+<!--
+	public Long id;
+
+	public String number;
+
+	public String name;
+
+	public String abbreviation;
+
+	public LAdminDatacord> admins = new ArrayList<>();
+
+
+	/*
+	When fetching data from database we join school and users. Afterwards we consolidate
+	admin-data below into List admins above.
+	*/
+	transient private String admin_username;
+
+	transient private String admin_name;
+
+	transient private Long admin_id; // null if new user
+-->
+
+
+	<statement name="schoolAdministration.getSchoolList">
+		SELECT school.id, school.number, school.name, school.abbreviation,
+		users.username as admin_username, users.name as admin_name, users.id as admin_id
+		FROM school
+		LEFT JOIN users ON school.id = users.school_id
+		LEFT JOIN user_role ON users.id = user_role.user_id
+		LEFT JOIN role ON user_role.role_id = role.id and role.name = 'admin'
+	</statement>
+
+</statementlist>

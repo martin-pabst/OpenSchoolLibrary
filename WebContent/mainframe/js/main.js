@@ -60,8 +60,15 @@ var App = (function () {
             var permissions = globalDefinitions.permissions;
             globalDefinitions.permissions = {};
 
-            for(var i = 0; i < permissions.length; i++){
-                globalDefinitions.permissions[permissions[i]] = true;
+            if(typeof permissions === 'object') {
+                for (var i = 0; i < permissions.length; i++) {
+                    globalDefinitions.permissions[permissions[i]] = true;
+                }
+            }
+
+            // root gets no schoolList
+            if(typeof globalDefinitions.schoolList !== 'object'){
+                globalDefinitions.schoolList = [];
             }
 
             initMainMenu();
@@ -120,6 +127,13 @@ var App = (function () {
 
         //alert("url: " + url + ", actionName: " + actionName + ", parameters: " + parameters);
 
+        if(actionName === 'logout'){
+
+            window.location.href = '/login?logout="yes"';
+
+            return;
+        }
+
         if (actionName.length > 0) {
             var action = actions[actionName];
 
@@ -176,36 +190,39 @@ var App = (function () {
 
         var school = globalDefinitions.currentSchool;
 
-        $('#schooltermMenuSchoolSubmenu').html(schoolSubmenu);
+        if(typeof school !== 'undefined') {
+            $('#schooltermMenuSchoolSubmenu').html(schoolSubmenu);
 
-        // find currently selected schoolterm
-        school.schoolTerms.forEach(function (st) {
+            // find currently selected schoolterm
+            school.schoolTerms.forEach(function (st) {
 
-            var icon = "";
+                var icon = "";
 
-            if (st.id == global_school_term_id) {
-                globalDefinitions.currentSchoolTerm = st;
-                icon = '<i class="fa fa-check fa-fw"></i>';
+                if (st.id == global_school_term_id) {
+                    globalDefinitions.currentSchoolTerm = st;
+                    icon = '<i class="fa fa-check fa-fw"></i>';
+                }
+
+                termSubmenu += indent + '<li>\n' +
+                    indent + '   <a href = "#" onclick="App.chooseSchoolTerm(' + st.id + '); return true;">\n' +
+                    indent + '   ' + icon + '<span class="menuitemtext">' + st.name + '</span></a>\n' +
+                    indent + '</li>\n';
+
+
+            });
+
+            var termname = globalDefinitions.currentSchoolTerm.name;
+            if (termname.indexOf("20") == 0 && termname.length > 5) {
+                termname = termname.substr(2);
             }
 
-            termSubmenu += indent + '<li>\n' +
-                indent + '   <a href = "#" onclick="App.chooseSchoolTerm(' + st.id + '); return true;">\n' +
-                indent + '   ' + icon + '<span class="menuitemtext">' + st.name + '</span></a>\n' +
-                indent + '</li>\n';
+            var menuCaption = school.abbreviation + ' ' + termname;
 
-
-        });
-
-        var termname = globalDefinitions.currentSchoolTerm.name;
-        if (termname.indexOf("20") == 0 && termname.length > 5) {
-            termname = termname.substr(2);
+            $('#schooltermMenuCaption').text(menuCaption);
+            $('#schooltermMenuTermSubmenu').html(termSubmenu);
+        } else {
+            $('#schoolTermMenu').hide(); // for root
         }
-
-        var menuCaption = school.abbreviation + ' ' + termname;
-
-        $('#schooltermMenuCaption').text(menuCaption);
-        $('#schooltermMenuTermSubmenu').html(termSubmenu);
-
     }
 
     function chooseSchool(school_id) {

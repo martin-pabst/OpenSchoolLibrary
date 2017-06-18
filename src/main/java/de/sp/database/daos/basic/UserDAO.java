@@ -7,7 +7,6 @@ import de.sp.tools.string.SaltAndHash;
 import org.sql2o.Connection;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UserDAO {
 
@@ -27,7 +26,7 @@ public class UserDAO {
 	}
 
 	public static User insert(String username, String name, String password,
-			String languageCode, Long last_selected_school_term_id, Boolean is_admin,
+			String languageCode, Long last_selected_school_term_id, Boolean is_root,
 			Long school_id,	Connection con) throws Exception {
 
 		String sql = StatementStore.getStatement("users.insert");
@@ -44,12 +43,12 @@ public class UserDAO {
 				.addParameter("last_selected_school_term_id",
 						last_selected_school_term_id)
 				.addParameter("school_id", school_id)
-				.addParameter("is_admin", is_admin)
+				.addParameter("is_root", is_root)
 				.executeUpdate()
 				.getKey(Long.class);
 
 		return new User(id, username, name, saltAndHash.getHash(),
-				saltAndHash.getSalt(), languageCode, is_admin, school_id);
+				saltAndHash.getSalt(), languageCode, is_root, school_id);
 
 	}
 
@@ -82,7 +81,7 @@ public class UserDAO {
 				.addParameter("languageCode", user.getLanguageCode())
 				.addParameter("last_selected_school_term_id",
 						user.getLast_selected_school_term_id())
-				.addParameter("is_admin", user.is_admin())
+				.addParameter("is_root", user.is_root())
 				.addParameter("school_id", user.getSchool_id())
 				.executeUpdate();
 

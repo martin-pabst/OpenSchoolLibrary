@@ -2,6 +2,7 @@ package de.sp.database.stores;
 
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.ValueDAO;
+import de.sp.database.model.DatabaseStore;
 import de.sp.database.model.Value;
 import de.sp.database.valuelists.ValueListType;
 import de.sp.tools.validation.ValidationException;
@@ -15,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by martin on 11.05.2017.
  */
-public class ValueListStore {
+public class ValueListStore implements DatabaseStore {
 
     private static ValueListStore instance = null;
 
@@ -89,6 +90,11 @@ public class ValueListStore {
 
         }
 
+    }
+
+    @Override
+    public void removeSchool(Long school_id) {
+        schoolIdToValueStoreKeyToKeyToValueMap.remove(school_id);
     }
 
     private void addValue(Value value) {

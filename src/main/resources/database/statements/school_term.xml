@@ -3,6 +3,14 @@
 
 <!-- Table school -->
 
+	<statement name="school.update">
+		UPDATE school
+		set number = :number,
+			name = :name,
+			abbreviation = :abbreviation
+		WHERE id = :id
+	</statement>
+
 	<statement name="school.findByNumber" >
 		select * from school where number = :number
 	</statement>

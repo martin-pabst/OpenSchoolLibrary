@@ -34,7 +34,7 @@ public class BaseServlet extends HttpServlet {
 
 		Logger logger = LoggerFactory.getLogger(MainFrameServlet.class);
 
-		HttpSession session = req.getSession();
+		HttpSession session = req.getSession(false);
 
 		User user = (User) session.getAttribute(LoginServlet.USER);
 		TS ts = (TS) session.getAttribute(LoginServlet.TRANSLATION_SERVICE);

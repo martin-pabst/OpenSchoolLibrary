@@ -4,9 +4,8 @@ import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.AbsenceDAO;
 import de.sp.database.daos.basic.EventDAO;
 import de.sp.database.daos.basic.EventRestrictionDAO;
-import de.sp.database.model.Absence;
-import de.sp.database.model.Event;
-import de.sp.database.model.EventRestriction;
+import de.sp.database.model.*;
+import de.sp.database.valuelists.ValueListType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sql2o.Connection;
@@ -18,7 +17,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Created by Martin on 09.05.2017.
  */
-public class EventStore {
+public class EventStore implements DatabaseStore {
 
     private static EventStore instance;
 
@@ -273,7 +272,25 @@ public class EventStore {
 
         }
     }
-    
+
+    @Override
+    public void removeSchool(Long school_id) {
+
+        for (Value form : ValueListStore.getInstance().getValueList(school_id, ValueListType.form.getKey())) {
+            formIdToYearMonthToAbsenceList.remove(form.getId());
+        }
+
+        for (SchoolTerm schoolTerm : SchoolTermStore.getInstance().getSchoolTerms(school_id)) {
+            for (DBClass dbClass : StudentClassStore.getInstance().getClassesInSchoolTerm(schoolTerm.getId())) {
+                classIdToYearMonthToAbsenceList.remove(dbClass.getId());
+            }
+        }
+
+        schoolIdToYearMonthToAbsenceList.remove(school_id);
+        schoolIdToYearMonthToEventMap.remove(school_id);
+
+    }
+
     private void storeAbsence(Map<Long, Map<Integer,List<Absence>>> idToYearMonthToAbsenceList, Long id, Absence absence){
        
         Map<Integer,List<Absence>> yearMonthToAbsenceList = idToYearMonthToAbsenceList.get(id);

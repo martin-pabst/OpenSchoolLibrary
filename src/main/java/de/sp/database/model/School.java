@@ -91,4 +91,15 @@ public class School {
 		return null;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setAbbreviation(String abbreviation) {
+		this.abbreviation = abbreviation;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
 }

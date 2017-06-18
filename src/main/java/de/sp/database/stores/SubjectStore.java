@@ -2,6 +2,7 @@ package de.sp.database.stores;
 
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.SubjectDAO;
+import de.sp.database.model.DatabaseStore;
 import de.sp.database.model.Subject;
 import org.sql2o.Connection;
 
@@ -13,11 +14,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Created by martin on 11.05.2017.
  */
-public class SubjectStore {
+public class SubjectStore implements DatabaseStore {
 
     private static SubjectStore instance = null;
 
-    private Map<Long, Subject> subjectMap = new ConcurrentHashMap<>();
+    private Map<Long, Subject> subjectIdToSubjectMap = new ConcurrentHashMap<>();
     private Map<Long, List<Subject>> schoolIdToSubjectListMap = new ConcurrentHashMap<>();
 
     public static SubjectStore getInstance(){
@@ -45,12 +46,23 @@ public class SubjectStore {
                 }
 
                 subjectList1.add(subject);
-                subjectMap.put(subject.getId(), subject);
+                subjectIdToSubjectMap.put(subject.getId(), subject);
 
             }
 
 
         }
+
+    }
+
+    @Override
+    public void removeSchool(Long school_id) {
+
+        for (Subject subject : schoolIdToSubjectListMap.get(school_id)) {
+            subjectIdToSubjectMap.remove(subject.getId());
+        }
+
+        schoolIdToSubjectListMap.remove(school_id);
 
     }
 
@@ -68,7 +80,7 @@ public class SubjectStore {
     }
 
     public Subject getSubjectById(Long subject_id){
-        return subjectMap.get(subject_id);
+        return subjectIdToSubjectMap.get(subject_id);
     }
 
     public void removeSubject(Subject subject){
@@ -76,7 +88,7 @@ public class SubjectStore {
         if(subjectList != null){
             subjectList.remove(subject);
         }
-        subjectMap.remove(subject.getId());
+        subjectIdToSubjectMap.remove(subject.getId());
     }
 
 }

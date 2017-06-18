@@ -5,14 +5,14 @@
     public String username;
     public String name;
     public String languageCode;
-    public Boolean is_admin = false;
+    public Boolis_rootdmin = false;
 
     public Long role_id; // Dummy for flat SQL-Statement
 
     public List<Long> role_ids;-->
 
     <statement name="admin.userAdministration.getUserList">
-        SELECT users.id, users.name, users.username, users.is_admin,
+        SELECT users.id, users.name, users.username, users.is_root,
                users.languagecode, role.id as role_id
         FROM users
             LEFT JOIN user_role ON users.id = user_role.user_id

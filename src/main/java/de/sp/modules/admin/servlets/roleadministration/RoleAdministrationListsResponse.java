@@ -7,6 +7,7 @@ import de.sp.modules.admin.servlets.useradministration.PermissionData;
 import de.sp.modules.admin.servlets.useradministration.RoleData;
 import de.sp.modules.admin.servlets.useradministration.UserAdministrationDAO;
 import de.sp.modules.admin.servlets.useradministration.UserData;
+import de.sp.modules.root.RootModule;
 import org.sql2o.Connection;
 
 import java.util.ArrayList;
@@ -47,8 +48,10 @@ public class RoleAdministrationListsResponse {
         permissions = new ArrayList<>();
 
         for (Permission rawPermission : rawPermissions) {
-            PermissionData pd = new PermissionData(ts, rawPermission);
-            permissions.add(pd);
+            if(!rawPermission.getName().startsWith(RootModule.MODULEIDENTIFIER)) {
+                PermissionData pd = new PermissionData(ts, rawPermission);
+                permissions.add(pd);
+            }
         }
 
     }

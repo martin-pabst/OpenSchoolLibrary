@@ -12,10 +12,11 @@ public class InsufficientPermissionException extends Exception {
 	public InsufficientPermissionException(User user, String permission,
 			School school) {
 
-		super("Isufficient permission: User " + user.getName()
-				+ "(Id " + user.getId() + ") lacks permmission " + permission
-				+ " for school " + school.getAbbreviation() + " (Id "
-				+ school.getId() + ")");
+		super(school == null ? "Insufficient permission: User " + user.getName() + " is not root." :
+				"Isufficient permission: User " + user.getName()
+						+ "(Id " + user.getId() + ") lacks permmission " + permission
+						+ " for school " + school.getAbbreviation() + " (Id "
+						+ school.getId() + ")");
 
 	}
 

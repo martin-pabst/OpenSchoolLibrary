@@ -7,7 +7,6 @@ import de.sp.database.connection.ConnectionPool;
 import de.sp.database.model.StoreManager;
 import de.sp.database.statements.StatementStore;
 import de.sp.main.config.Configuration;
-import de.sp.main.resources.modules.ModuleManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,8 +32,7 @@ public class InsertASVTestdata {
                 (String) "./ASV_Schnittstelle/src/main/resources/database/statements");
 
         try {
-            StoreManager.getInstance().loadStoresFromDatabase(
-                    ModuleManager.getAllPermissions());
+            StoreManager.getInstance().loadStoresFromDatabase();
 
         // Schuljahr 2016/17
 
