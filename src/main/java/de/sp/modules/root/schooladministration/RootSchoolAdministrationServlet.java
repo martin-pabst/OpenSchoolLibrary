@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.SchoolDAO;
 import de.sp.database.daos.basic.UserDAO;
+import de.sp.database.model.Role;
 import de.sp.database.model.School;
 import de.sp.database.model.StoreManager;
 import de.sp.database.model.User;
@@ -147,7 +148,9 @@ public class RootSchoolAdministrationServlet extends BaseServlet {
 
         admin.setName(record.name);
         admin.setUsername(record.username);
-        admin.setPassword(record.password);
+        if(record.password != null && !record.password.isEmpty()) {
+            admin.setPassword(record.password);
+        }
         
         UserDAO.update(admin, con);
 
@@ -162,9 +165,26 @@ public class RootSchoolAdministrationServlet extends BaseServlet {
         AdminData record = sar.record;
         User admin = UserDAO.insert(record.username, record.name, record.password, "de-DE", 
                 null, false, sar.school_id, con);
-        
+
+        UserRolePermissionStore.getInstance().addUser(admin);
+
+        record.id = admin.getId();
         record.password = ""; // don't send password back to client
-        
+
+        // truly make her/him admin:
+        Role adminRole = null;
+
+        for (Role role : UserRolePermissionStore.getInstance().getRoleListBySchoolId(sar.school_id)) {
+            if("admin".equals(role.getName())){
+                adminRole = role;
+                break;
+            }
+        }
+
+        if(adminRole != null){
+            UserRolePermissionStore.getInstance().addRoleToUser(adminRole, admin, con);
+        }
+
         return new SaveAdminResponse("success", "", record);//record);
 
     }
@@ -221,6 +241,8 @@ public class RootSchoolAdministrationServlet extends BaseServlet {
         School school = SchoolDAO.insert(record.name, record.number, record.abbreviation, con);
 
         SchoolTermStore.getInstance().addSchool(school);
+
+        SchoolDAO.initSchool(school, con);
 
         return new SaveSchoolResponse("success", "", school);//record);
 

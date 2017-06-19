@@ -1,7 +1,9 @@
 package de.sp.database.daos.basic;
 
+import de.sp.database.model.Role;
 import de.sp.database.model.School;
 import de.sp.database.statements.StatementStore;
+import de.sp.database.stores.UserRolePermissionStore;
 import org.sql2o.Connection;
 
 import java.util.HashMap;
@@ -89,7 +91,19 @@ public class SchoolDAO {
 				.addParameter("number", school.getNumber())
 				.addParameter("name", school.getName())
 				.addParameter("abbreviation", school.getAbbreviation())
+				.addParameter("id", school.getId())
 				.executeUpdate();
+
+	}
+
+	public static void initSchool(School school, Connection con) throws Exception {
+
+		String adminPermissions = "admin.open|admin.userAdministration|asvsst.open";
+
+		Role adminRole = RoleDAO.insert("admin", "Administrator",
+				school.getId(), adminPermissions, con);
+
+		UserRolePermissionStore.getInstance().addRole(adminRole);
 
 	}
 }

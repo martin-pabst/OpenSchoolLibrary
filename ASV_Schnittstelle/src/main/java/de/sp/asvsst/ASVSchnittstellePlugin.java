@@ -1,5 +1,6 @@
 package de.sp.asvsst;
 
+import de.sp.modules.admin.AdminModule;
 import org.apache.velocity.Template;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
@@ -48,7 +49,7 @@ public class ASVSchnittstellePlugin extends Plugin {
 				"fa-download", null, new String[] {PERMISSIONASVSSTOPEN},
 				PERMISSIONASVSSTOPEN, 2000);
 
-		m.setInsertBelowThisId("admin");
+		m.setInsertBelowThisId(AdminModule.PERMISSIONADMINOPEN);
 
 		return new MenuItem[] { m };
 

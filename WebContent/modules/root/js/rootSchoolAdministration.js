@@ -41,9 +41,9 @@
     function initializeDOM() {
         
             var used = $("body").height() + 55;
-            $("#rootSchoolsSchoollist").height($(window).height() - used - 20);
-            $("#rootSchoolsAdminList").height($(window).height()
-                - used - 35 - $("#rootSchoolsSchoolDetails").parent().height());
+            $("#rootSchoolsAdminList").height($(window).height() - used - 20);
+            $("#rootSchoolsSchoollist").height($(window).height()
+                - used - 75 - $("#rootSchoolsSchoolDetails").parent().height());
 
             fetchData();
 
@@ -94,7 +94,7 @@
             },
             columns: [
                 {field: 'id', caption: 'ID', size: '10px', hidden: true, sortable: true},
-                {field: 'number', caption: 'Nummer', size: '4em', sortable: true, resizable: true},
+                {field: 'number', caption: 'Nr.', size: '11em', sortable: true, resizable: true},
                 {field: 'name', caption: 'Name', size: '70%', sortable: true, resizable: true},
                 {field: 'abbreviation', caption: 'Abkürzung', size: '30%', sortable: true, resizable: true}
             ],
@@ -241,6 +241,8 @@
 
                 var message = "Wollen Sie die Administratoren wirklich löschen?";
 
+                var school = getSelectedSchool();
+
                 w2confirm({
                     title: "Vorsicht:",
                     msg: message,
@@ -250,18 +252,25 @@
 
 
                             var selectedIds = adminGrid.getSelection(false);
+                            var selectedId = selectedIds[0];
 
                             showUpdateMessage(adminGrid);
 
-                            $.post('/root/schoolAdministration/removeAdmins',
+                            $.post('/root/schoolAdministration/removeAdmin',
                                 JSON.stringify({
-                                    school_ids: selectedIds
+                                    admin_id: selectedId
                                 }),
                                 function (data) {
 
                                     if (data.status === 'success') {
 
-                                        adminGrid.remove(selectedIds);
+                                        adminGrid.remove(selectedId);
+
+                                        for(var i = 0; i < school.admins.length; i++){
+                                            if(school.admins[i].id === selectedId) {
+                                                school.admins.splice(i, 1);
+                                            }
+                                        }
 
                                     } else {
 
@@ -359,7 +368,7 @@
             role_id = record.id;
         }
 
-        if (!w2ui.addRoleDialog) {
+        if (!w2ui.addSchoolDialog) {
 
             $().w2form({
                 name: 'addSchoolDialog',
@@ -406,16 +415,20 @@
 
                             if (response.status === "success") {
 
-                                var newRecord = response.record;
+                                var newRecord = response.school;
 
                                 if (old_record !== null) {
                                     w2ui['rootSchoolsSchoollist'].remove(old_record.id);
+                                    newRecord.admins = old_record.admins;
                                     // TODO
                                     // newRecord.permissions = old_record.permissions;
                                     // newRecord.permissionList = old_record.permissionList;
                                     old_record = null; // for garbage collection
-                                } 
+                                } else {
+                                    newRecord.admins = [];
+                                }
                                 w2ui['rootSchoolsSchoollist'].add(newRecord);
+                                w2ui['rootSchoolsSchoollist'].select(newRecord.id);
 
                             } else {
                                 w2alert("Fehler beim Speichern", response.message);
@@ -429,7 +442,7 @@
             });
         }
 
-        w2ui.addRoleDialog.postData = {
+        w2ui.addSchoolDialog.postData = {
             school_id: global_school_id
         };
 
@@ -547,13 +560,16 @@
                                 var newRecord = response.record;
 
                                 if (old_record !== null) {
-                                    w2ui['rootSchoolsAdminList'].remove(old_record.id);
-                                    newRecord.role_ids = old_record.role_ids;
-                                    old_record = null; // for garbage collection
-                                }
 
-                                newRecord.role_ids = [];
-                                w2ui['rootSchoolsAdminList'].add(newRecord);
+                                    old_record.username = newRecord.username;
+                                    old_record.name = newRecord.name;
+
+                                    w2ui['rootSchoolsAdminList'].refresh();
+
+                                } else {
+                                    w2ui['rootSchoolsAdminList'].add(newRecord);
+                                    school.admins.push(newRecord);
+                                }
 
                             } else {
                                 w2alert("Fehler beim Speichern", response.message);

@@ -49,7 +49,7 @@ public class LoginServlet extends BaseServlet {
 		} else {
 			// find school
 			String schoolNumber = getLastURLPart(request);
-			if(!schoolNumber.isEmpty()){
+			if(!schoolNumber.isEmpty() && !schoolNumber.equalsIgnoreCase("login")){
 				for (School school1 : schools) {
 					if(school1.getNumber().equals(schoolNumber)){
 						school = school1;
