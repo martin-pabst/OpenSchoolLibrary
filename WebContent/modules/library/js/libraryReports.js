@@ -15,11 +15,6 @@
 
         open: function (parameters) {
 
-            var used = $("body").height() + 50 + $("#entitychooser").height();
-            $("#libraryReportsDataNavigator").height($(window).height() - used - 100);
-            $("#reportsList").height($(window).height() - used - 100 - 60);
-
-
             initializeDOM();
 
             fetchData();
@@ -124,23 +119,26 @@
          */
 
         var html = '<a href="#" class="list-group-item" data-id="' + report.id + '">';
-        html += '<span style="display: inline-block">';
-        html += '<div style="font-weight: bold; color: black">' + report.name + "</div>";
-        html += '<div>' + report.description + "</div>";
-        html += '</span>';
-        html += '<span style="display: inline-block; float: right">';
-        html += '<div class="btn-group" data-toggle="buttons" >';
+        html += '<div style="display: flex; justify-content: space-between">';
+            html += '<div style="flex: 1">'
+                html += '<div style="font-weight: bold; color: black">' + report.name + "</div>";
+                html += '<div>' + report.description + "</div>";
+            html += '</div>';
+            html += '<div style="display: inline-block">';
+                html += '<div class="btn-group" data-toggle="buttons" >';
 
-        for (var i = 0; i < report.contentTypes.length; i++) {
-            var contentType = report.contentTypes[i];
-            html += '<label class="btn btn-default' + (i === 0 ? ' active' : '') + '" data-contenttype="' + contentType + '">';
-            html += '<input type="radio" autocomplete="off"' + (i === 0 ? ' checked' : '') + '">';
-            html += '<i class="fa fa-file-' + CONTENTTYPETOICON[contentType].icon + '-o" style="font-size:24px; color:'
-                + CONTENTTYPETOICON[contentType].color + '"></i>';
-            html += '</label>'
-        }
+                for (var i = 0; i < report.contentTypes.length; i++) {
+                    var contentType = report.contentTypes[i];
+                    html += '<label class="btn btn-default' + (i === 0 ? ' active' : '') + '" data-contenttype="' + contentType + '">';
+                    html += '<input type="radio" autocomplete="off"' + (i === 0 ? ' checked' : '') + '">';
+                    html += '<i class="fa fa-file-' + CONTENTTYPETOICON[contentType].icon + '-o" style="font-size:24px; color:'
+                        + CONTENTTYPETOICON[contentType].color + '"></i>';
+                    html += '</label>'
+                }
 
-        html += '</div></span>';
+                html += '</div>';
+            html += '</div>';
+        html += '</div>';
 
         //Parameters
         if (report.parameters.length > 0) {

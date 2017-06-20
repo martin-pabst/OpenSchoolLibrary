@@ -10,19 +10,6 @@
 
         open: function (parameters) {
 
-            // app.getContent("embeddedReports", function(content){
-            //     $('#libraryReports').html(content);
-            // });
-
-            var used = $("body").height() + 50;
-            $("#libraryInventoryCopies").height($(window).height() - used - 160);
-
-            var restHeight = $(window).height() - used - 40;
-
-            $("#libraryInventoryBooks").height(restHeight * 0.60);
-            $("#libraryInventoryBookForm").height(restHeight * 0.40);
-
-
             initializeInventoryTables();
             initializeDOM();
 

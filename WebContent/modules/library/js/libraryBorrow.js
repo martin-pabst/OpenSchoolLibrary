@@ -14,15 +14,7 @@
 
         open: function (parameters) {
 
-            var used = $("body").height() + 50;
-            $("#libraryBorrowerList").height($(window).height() - used - 20);
-
-            $("#libraryBorrowedBooksList").height($(window).height() - used - 410);
-            $("#libraryNeededBooksList").height($(window).height() - used - 410);
-
-
             initializeBorrowTables();
-
 
             initializeDOM();
 

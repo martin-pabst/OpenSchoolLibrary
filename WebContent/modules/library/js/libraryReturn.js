@@ -11,14 +11,6 @@
 
         open: function (parameters) {
 
-            var used = $("body").height() + 50;
-
-            var restHeight = $(window).height() - used - 40;
-
-            $("#libraryReturnerList").height(restHeight * 0.50);
-            $("#libraryReturnBooksList").height(restHeight * 0.50);
-
-
             initializeReturnTables();
             initializeDOM();
 

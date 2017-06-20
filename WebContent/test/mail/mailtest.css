@@ -1,0 +1,12 @@
+html, body {
+    height: 100%;
+}
+
+#mainContent {
+    position: absolute;
+    background-color: dodgerblue;
+    top: 50px;
+    bottom: 0;
+    width: 100px;
+
+}
