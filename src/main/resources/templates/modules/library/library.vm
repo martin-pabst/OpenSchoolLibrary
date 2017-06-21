@@ -362,15 +362,13 @@
             </div>
         </div>
 
-        <!-- Clean -->
+        <!-- Settings -->
 
         <div id="librarySettings" class="tab-pane fade" style="margin-top: 10px">
             <div style="display: flex; height: 100%">
 
-                <div class="row">
-
                     <!-- Navigation Buttons -->
-                    <div class="col-md-3" style="padding-left: 2em">
+                    <div style="padding-left: 2em">
                         <ul class="nav nav-pills nav-stacked" id="myTabs">
                             <li class="active"><a href="#ls_deleteOldBookings" data-toggle="pill">Alte Buchungen
                                 löschen</a>
@@ -389,7 +387,7 @@
                     </div>
 
                     <!-- Content -->
-                    <div class="col-md-9">
+                    <div style="flex: 1">
                         <div class="tab-content">
                             <!-- First tab: delete old bookings -->
                             <div class="tab-pane active settingsPane" id="ls_deleteOldBookings">
@@ -451,6 +449,7 @@
                             </div>
                             <!-- third tab: merge student records -->
                             <div class="tab-pane settingsPane" id="ls_mergeStudentRecords">
+                                <h2>Schülerdatensätze zusammenführen</h2>
                                 <p>Falls es zu einem Schüler zwei Datensätze gibt, wählen Sie bitte in
                                     der folgenden Liste die beiden Datensätze aus:</p>
                                 <div id="librarySettingsMergeStudentsNavigator"
@@ -563,7 +562,6 @@
                         </div>
                     </div>
 
-                </div>
             </div>
         </div>
 

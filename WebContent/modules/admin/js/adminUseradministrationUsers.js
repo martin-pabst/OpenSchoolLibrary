@@ -14,13 +14,7 @@
 
         open: function (parameters) {
 
-            var used = $("body").height() + 55;
-            $("#adminUsersUserList").height($(window).height() - used - 20);
-            $("#adminUsersRoleList").height($(window).height()
-                - used - 35 - $("#adminUsersRoleList").next().height());
-
             initializeTables();
-
 
             initializeDOM();
 

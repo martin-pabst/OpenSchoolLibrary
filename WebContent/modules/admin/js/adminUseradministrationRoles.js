@@ -63,12 +63,6 @@
 
         $('#userAdministrationRolesTab').on('shown.bs.tab', function (e) {
 
-            var used = $("body").height() + 55;
-            $("#adminRolesPermissionsList").height($(window).height() - used - 20);
-            $("#adminRolesRolesList").height($(window).height()
-                - used - 35 - $("#adminRolesRolesList").next().height());
-
-
             fetchData();
 
             w2ui['adminRolesPermissionsList'].resize();

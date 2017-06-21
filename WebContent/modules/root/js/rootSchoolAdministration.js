@@ -344,9 +344,6 @@
 
             renderSchoolDetails();
 
-
-
-            // TODO: add admins to grid
         }
 
 

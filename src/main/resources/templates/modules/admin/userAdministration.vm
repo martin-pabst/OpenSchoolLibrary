@@ -1,4 +1,4 @@
-<div id="admin.user">
+<div id="admin.user" style="height: 100%; display: flex; flex-direction: column">
 
     <ul class="nav nav-tabs" style="background-color: white">
         <li role="presentation" class="active"><a data-toggle="tab" href="#userAdministrationUsers"
@@ -11,44 +11,48 @@
             <span class="menuitemtext">${ts.get("admin.useradministration.roles")}</span></a></li>
     </ul>
 
-    <div class="tab-content">
+    <div class="tab-content" style="flex: 1">
 
         <!-- Users -->
 
-        <div id="userAdministrationUsers" class="tab-pane fade active in" style="margin-top: 10px">
-            <div style="width: 50%; padding: 5px; float: left">
-                <div id="adminUsersUserList"></div>
-            </div>
-            <div style="width: 50%; padding: 5px; float: right">
-                <div id="adminUsersRoleList"></div>
-                <div class="panel panel-default" style="margin: 10px 0 0 0">
-                    <div class="panel-heading">Berechtigungen des selektierten Benutzers:
-                    </div>
-                    <div class="panel-body" style="padding: 5px">
-                        <div id="UserAdministrationRoleDetails" style="height: 250px; width: 100%;
-                             margin-bottom: 4px; overflow: auto"></div>
+        <div id="userAdministrationUsers" class="tab-pane fade active in" style="height: 100%">
+            <div style="display: flex; height: 100%">
+                <div style="padding: 5px; flex: 1">
+                    <div id="adminUsersUserList" style="height: 100%"></div>
+                </div>
+                <div style="padding: 5px; flex: 1; display: flex; flex-direction: column">
+                    <div id="adminUsersRoleList" style="flex: 2"></div>
+                    <div class="panel panel-default"
+                         style="margin: 10px 0 0 0; flex: 1; display: flex; flex-direction: column">
+                        <div class="panel-heading">Berechtigungen des selektierten Benutzers:
+                        </div>
+                        <div class="panel-body" style="padding: 5px; flex: 1: overflow: auto">
+                            <div id="UserAdministrationRoleDetails" style="width: 100%;
+                             margin-bottom: 4px"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-            <!-- Roles -->
+        <!-- Roles -->
 
-            <div id="userAdministrationRoles" class="tab-pane fade" style="margin-top: 10px">
-                <div style="width: 50%; padding: 5px; float: left">
-                    <div id="adminRolesRolesList"></div>
-                    <div class="panel panel-default" style="margin: 10px 0 0 0">
+        <div id="userAdministrationRoles" class="tab-pane fade" style="height: 100%">
+            <div style="display: flex; height: 100%">
+                <div style="padding: 5px; flex: 1; display: flex; flex-direction: column">
+                    <div id="adminRolesRolesList" style="flex: 1"></div>
+                    <div class="panel panel-default"
+                         style="margin: 10px 0 0 0; display: flex; flex-direction: column">
                         <div class="panel-heading">Benutzer mit der oben selektierten Rolle:
                         </div>
-                        <div class="panel-body" style="padding: 5px">
-                            <div id="UsersWithSelectedRole" style="height: 250px; width: 100%;
-                                 margin-bottom: 4px; overflow: auto"></div>
+                        <div class="panel-body" style="padding: 5px; flex: 1; overflow: auto">
+                            <div id="UsersWithSelectedRole" style="width: 100%;
+                         margin-bottom: 4px"></div>
                         </div>
                     </div>
                 </div>
-                <div style="width: 50%; padding: 5px; float: right">
-                    <div id="adminRolesPermissionsList"></div>
+                <div style="display: flex; height: 100%; flex: 1; padding: 5px">
+                    <div id="adminRolesPermissionsList" style="width: 100%"></div>
                 </div>
             </div>
-
-
         </div>
+

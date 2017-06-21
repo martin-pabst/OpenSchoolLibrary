@@ -11,8 +11,12 @@
 
         open: function (parameters) {
 
+/*
             var used = $("body").height() + 50;
             var calendarHeight = $(window).height() - used - 100;
+*/
+            var calendarHeight = $('#mainContent').height() - $('.navbar').height() - 20;
+
 
             initializeCalendar(calendarHeight);
 
