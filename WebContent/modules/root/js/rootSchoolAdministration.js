@@ -40,10 +40,12 @@
 
     function initializeDOM() {
         
+/*
             var used = $("body").height() + 55;
             $("#rootSchoolsAdminList").height($(window).height() - used - 20);
             $("#rootSchoolsSchoollist").height($(window).height()
                 - used - 75 - $("#rootSchoolsSchoolDetails").parent().height());
+*/
 
             fetchData();
 
