@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  */
 public class RoleData {
 
-    @Validation(notNull = true)
+    @Validation
     public Long id;
 
     @Validation(notEmpty = true, maxLength = 40)

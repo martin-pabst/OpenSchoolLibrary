@@ -162,7 +162,7 @@ public class AdminUserAdministrationServlet extends BaseServlet {
 
         User otherUserWithNewName = ups.getUserBySchoolIdAndName(sur.school_id, record.username);
 
-        if(otherUserWithNewName != user){
+        if(otherUserWithNewName != null && otherUserWithNewName != user){
             return new SaveUserResponse("error", "User with given name already exists in this school.", null);
         }
 

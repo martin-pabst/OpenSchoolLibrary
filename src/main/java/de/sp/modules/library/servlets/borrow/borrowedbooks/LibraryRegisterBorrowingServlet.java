@@ -41,6 +41,8 @@ public class LibraryRegisterBorrowingServlet extends BaseServlet {
 
 			rbr.validate(ts);
 
+			rbr.normalizeBarcode();
+
 			user.checkPermission(LibraryModule.PERMISSION_BORROW, rbr.getSchool_id());
 
 			if ((rbr.getStudent_id() != null || rbr.getTeacher_id() != null)

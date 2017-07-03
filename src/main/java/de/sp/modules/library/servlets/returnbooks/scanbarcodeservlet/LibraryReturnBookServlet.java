@@ -41,6 +41,9 @@ public class LibraryReturnBookServlet extends BaseServlet {
         ReturnBookRequest rbr = gson
                 .fromJson(postData, ReturnBookRequest.class);
 
+        rbr.normalizeBarcode();
+
+
         try (Connection con = ConnectionPool.beginTransaction()) {
 
             try {

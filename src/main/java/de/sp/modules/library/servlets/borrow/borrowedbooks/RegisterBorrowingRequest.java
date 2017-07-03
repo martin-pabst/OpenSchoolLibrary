@@ -42,4 +42,11 @@ public class RegisterBorrowingRequest extends BaseRequestData{
 	public Boolean getOver_holidays() {
 		return over_holidays;
 	}
+
+	public void normalizeBarcode(){
+		while(barcode.startsWith("0")){
+			barcode = barcode.substring(1);
+		}
+	}
+
 }

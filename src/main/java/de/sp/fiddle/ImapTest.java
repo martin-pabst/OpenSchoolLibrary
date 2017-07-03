@@ -11,12 +11,12 @@ import java.util.Properties;
 public class ImapTest {
 
     public static void main(String[] args) {
-        String server = "imap.gmail.comxx";
-        String username =  "asv.pabst@gmail.comxx";
+        String server = "imap.gmail.com";
+        String username =  "asv.pabst@gmail.com";
 		/*
 		 * !!! NOTE: The password is displayed in the console and CAN BE READ by anyone watching. !!!
 		 */
-        String password = "";
+        String password = "Schrobenhausen1mp";
 
         try {
             listMessages(server, username, password);

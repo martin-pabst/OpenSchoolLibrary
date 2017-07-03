@@ -163,7 +163,7 @@ public class AdminRoleAdministrationServlet extends BaseServlet {
 
         Role otherRoleWithNewName = ups.getRoleBySchoolIdAndName(srr.school_id, record.name);
 
-        if(otherRoleWithNewName != role){
+        if(otherRoleWithNewName != null && otherRoleWithNewName != role){
             return new SaveRoleResponse("error", "Role with given name already exists in this school.", null);
         }
 

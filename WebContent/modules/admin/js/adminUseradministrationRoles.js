@@ -450,7 +450,7 @@
                                     roleToUserlistMap[newRecord.id] = [];
                                 }
 
-                                w2ui['adminUsersUserList'].add(newRecord);
+                                w2ui['adminRolesRolesList'].add(newRecord);
 
                             } else {
                                 w2alert("Fehler beim Speichern", response.message);

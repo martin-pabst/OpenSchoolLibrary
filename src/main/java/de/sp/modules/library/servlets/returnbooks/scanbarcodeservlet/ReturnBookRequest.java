@@ -25,7 +25,11 @@ public class ReturnBookRequest extends BaseRequestData{
 		return performReturn;
 	}
 	
-	
+	public void normalizeBarcode(){
+		while(barcode.startsWith("0")){
+			barcode = barcode.substring(1);
+		}
+	}
 	
 	
 }
