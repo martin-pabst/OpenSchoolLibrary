@@ -76,8 +76,6 @@
 
             if (returner.records.length === 0) {
                 fetchData();
-
-                onSelectUnselectReturner();
                 showBookCopyDetails();
                 showFeeDetails();
             }
@@ -85,6 +83,8 @@
             $('#libraryReturnBarcodeField').focus();
 
             $('html').bind('click',backgroundClickHandler);
+
+            onSelectUnselectReturner();
 
 
         });
@@ -439,6 +439,9 @@
                     bookCopyDetailsData = undefined;
                     showBookCopyDetails();
                 }
+
+                returner.numberOfBorrowedBooks = records.length;
+                returnerGrid.refresh();
 
             });
 

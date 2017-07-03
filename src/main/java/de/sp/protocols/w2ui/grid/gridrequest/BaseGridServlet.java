@@ -6,6 +6,7 @@ import de.sp.database.connection.ConnectionPool;
 import de.sp.database.model.User;
 import de.sp.main.resources.text.TS;
 import de.sp.tools.server.BaseServlet;
+import de.sp.tools.server.ErrorResponse;
 import de.sp.tools.validation.Validator;
 import org.slf4j.Logger;
 import org.sql2o.Connection;
@@ -105,6 +106,8 @@ public abstract class BaseGridServlet<E> extends BaseServlet {
 			} catch (Exception ex) {
 				logger.error("Error serving Request", ex);
 				con.rollback();
+				ErrorResponse resp = new ErrorResponse(ex.toString());
+				responseString = gson.toJson(resp);
 			}
 
 		}

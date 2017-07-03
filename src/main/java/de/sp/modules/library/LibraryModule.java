@@ -31,7 +31,9 @@ public class LibraryModule extends Module {
 	public static final String MODULE_IDENTIFIER = "library";
 
 	public static final String PERMISSION_OPEN = "library.open";
-	public static final String PERMISSION_INVENTORY = "library.inventory";
+	public static final String PERMISSION_INVENTORY_READ = "library.inventory.read";
+	public static final String PERMISSION_INVENTORY_WRITE_BOOKS = "library.inventory.write.books";
+	public static final String PERMISSION_INVENTORY_WRITE_COPIES = "library.inventory.write.copies";
 	public static final String PERMISSION_BORROW = "library.borrow";
 	public static final String PERMISSION_RETURN = "library.return";
 	public static final String PERMISSION_EXAMINE = "library.examine";
@@ -57,7 +59,9 @@ public class LibraryModule extends Module {
 	public String[] getPermissionNames() {
 		
 		return new String[]{
-				PERMISSION_OPEN, PERMISSION_INVENTORY, PERMISSION_BORROW,
+				PERMISSION_OPEN, PERMISSION_INVENTORY_READ, PERMISSION_INVENTORY_WRITE_BOOKS,
+				PERMISSION_INVENTORY_WRITE_COPIES,
+				PERMISSION_BORROW,
 			PERMISSION_RETURN, PERMISSION_EXAMINE, PERMISSION_REPORTS,
 			PERMISSION_SETTINGS, PERMISSION_EDIT_STUDENTS, PERMISSION_ORDER_PAYMENTS,
 				PERMISSION_ACCEPT_PAYMENTS

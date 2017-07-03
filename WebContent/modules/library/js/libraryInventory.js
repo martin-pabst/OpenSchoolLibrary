@@ -12,6 +12,7 @@
 
             initializeInventoryTables();
             initializeDOM();
+            w2ui['libraryInventoryBooks'].load('/library/inventoryBooks/get');
 
         },
         close: function () {
@@ -34,7 +35,7 @@
             w2ui['libraryInventoryBookForm'].resize();
             //}
 
-            w2ui['libraryInventoryBooks'].load('/library/inventoryBooks/get');
+            loadInventoryCopies();
 
             var searchAll = $('#libraryInventoryBooks').find('.w2ui-search-all');
 
@@ -151,11 +152,14 @@
                             bookGrid.select(data.book_id);
                             bookGrid.scrollIntoView(bookGrid.get(data.book_id, true));
 
-                            $('#libraryInventorySelect').val('');
-
-
                         } else if (data.status === "error") {
+
+                            w2alert("Es gibt kein Buch mit dem Barcode " + barcode + ".");
+
                         }
+
+                        $('#libraryInventorySelect').val('');
+
                     },
                     "json"
                 );
@@ -348,51 +352,8 @@
                 w2ui['libraryInventoryBookForm'].book = record;
 
                 w2ui['libraryInventoryCopies'].postData['reference_id'] = record.id;
-                w2ui['libraryInventoryCopies'].load('/library/inventoryCopies/get',
-                function(){
 
-                    var imLager = 0;
-                    var entliehen = 0;
-                    var records = w2ui['libraryInventoryCopies'].records;
-
-                    for(var i = 0; i < records.length; i++){
-                        if(records[i].borrower.indexOf("Lager") !== -1){
-                            imLager++;
-                        } else {
-                            entliehen++;
-                        }
-                    }
-
-                    var text = 'Entliehen: <span style="color:red; font-weight: bold">' + entliehen + '</span>, im Lager: <span style="color:green; font-weight: bold">' + imLager;
-                    $('#grid_'+ 'libraryInventoryCopies' +'_footer').find('.w2ui-footer-center').html(text);
-
-                    if(w2ui['libraryInventoryCopies'].barcodeToSelect !== null) {
-
-                        var recordToSelect = null;
-
-                        var barcode = w2ui['libraryInventoryCopies'].barcodeToSelect;
-                        w2ui['libraryInventoryCopies'].barcodeToSelect = null;
-
-                        w2ui['libraryInventoryCopies'].records.forEach(function (record) {
-                            if (record.barcode === barcode) {
-                                recordToSelect = record;
-                            }
-                        });
-
-                        if (recordToSelect === null) {
-                            w2alert("Das Buch mit dem Barcode " + barcode + " ist nicht in der Tabelle enthalten.", "Hinweis");
-                        } else {
-
-                            w2ui['libraryInventoryCopies'].selectNone();
-                            w2ui['libraryInventoryCopies'].select(recordToSelect.id);
-
-                        }
-
-                    } else {
-                        w2ui['libraryInventoryCopies'].selectNone();
-                    }
-
-                });
+                loadInventoryCopies();
 
             },
             onAdd: function (event) {
@@ -771,6 +732,59 @@
 
     }
 
+
+    function loadInventoryCopies(){
+
+        if(typeof w2ui['libraryInventoryCopies'].postData['reference_id'] !== 'undefined') {
+
+            w2ui['libraryInventoryCopies'].load('/library/inventoryCopies/get',
+                function () {
+
+                    var imLager = 0;
+                    var entliehen = 0;
+                    var records = w2ui['libraryInventoryCopies'].records;
+
+                    for (var i = 0; i < records.length; i++) {
+                        if (records[i].borrower.indexOf("Lager") !== -1) {
+                            imLager++;
+                        } else {
+                            entliehen++;
+                        }
+                    }
+
+                    var text = 'Entliehen: <span style="color:red; font-weight: bold">' + entliehen + '</span>, im Lager: <span style="color:green; font-weight: bold">' + imLager;
+                    $('#grid_' + 'libraryInventoryCopies' + '_footer').find('.w2ui-footer-center').html(text);
+
+                    if (w2ui['libraryInventoryCopies'].barcodeToSelect !== null) {
+
+                        var recordToSelect = null;
+
+                        var barcode = w2ui['libraryInventoryCopies'].barcodeToSelect;
+                        w2ui['libraryInventoryCopies'].barcodeToSelect = null;
+
+                        w2ui['libraryInventoryCopies'].records.forEach(function (record) {
+                            if (record.barcode === barcode) {
+                                recordToSelect = record;
+                            }
+                        });
+
+                        if (recordToSelect === null) {
+                            w2alert("Das Buch mit dem Barcode " + barcode + " ist nicht in der Tabelle enthalten.", "Hinweis");
+                        } else {
+
+                            w2ui['libraryInventoryCopies'].selectNone();
+                            w2ui['libraryInventoryCopies'].select(recordToSelect.id);
+                            w2ui['libraryInventoryCopies'].scrollIntoView(w2ui['libraryInventoryCopies'].get(recordToSelect.id, true));
+                        }
+
+                    } else {
+                        w2ui['libraryInventoryCopies'].selectNone();
+                    }
+
+                });
+
+        }
+    }
 
     /**
      * Dialog for adding new books

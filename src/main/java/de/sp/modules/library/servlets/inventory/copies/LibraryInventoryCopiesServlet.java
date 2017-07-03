@@ -114,13 +114,13 @@ public class LibraryInventoryCopiesServlet extends
 	protected String getRequiredPermission(String command) {
 		switch (command) {
 		case "get":
-			return LibraryModule.PERMISSION_OPEN;
+			return LibraryModule.PERMISSION_INVENTORY_READ;
 		case "update":
-			return LibraryModule.PERMISSION_INVENTORY;
+			return LibraryModule.PERMISSION_INVENTORY_WRITE_COPIES;
 		case "save":
-			return LibraryModule.PERMISSION_INVENTORY;
+			return LibraryModule.PERMISSION_INVENTORY_WRITE_COPIES;
 		case "delete":
-			return LibraryModule.PERMISSION_INVENTORY;
+			return LibraryModule.PERMISSION_INVENTORY_WRITE_COPIES;
 
 		default:
 			return LibraryModule.PERMISSION_OPEN;

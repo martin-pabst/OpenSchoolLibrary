@@ -127,6 +127,8 @@
             $('html').bind('click',backgroundClickHandler);
             $('#libraryBorrowBarcodeField').focus();
 
+            libraryBorrowsOnSelectUnselect();
+
 
         });
 

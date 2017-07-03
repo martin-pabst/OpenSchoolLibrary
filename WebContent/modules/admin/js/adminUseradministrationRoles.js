@@ -450,6 +450,7 @@
                                     roleToUserlistMap[newRecord.id] = [];
                                 }
 
+                                newRecord.translated_name = newRecord.name;
                                 w2ui['adminRolesRolesList'].add(newRecord);
 
                             } else {

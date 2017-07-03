@@ -10,7 +10,7 @@
             #set( $defaultTabClass = "")
         #end
 
-        #if($user.hasPermission("library.inventory", $school_id))
+        #if($user.hasPermission("library.inventory.read", $school_id))
             <li role="presentation"><a data-toggle="tab" href="#libraryInventory" id="libraryInventoryTab">
                 <i class="fa fa-th-list fa-fw" aria-hidden="true"></i>
                 <span class="menuitemtext">${ts.get("library.menu.inventory")}</span></a></li>
