@@ -31,6 +31,10 @@ public class LibraryInventoryCopiesServlet extends
 
 			BookCopyDAO.setSortedOutDate(id, Calendar.getInstance().getTime(), con);
 
+			if(BookCopyDAO.deletePossible(id, deleteData.getSchool_id(), con)){
+				BookCopyDAO.delete(id, con);
+			}
+
 		}
 
 		return new GridResponseUpdateDelete(GridResponseStatus.success, "");

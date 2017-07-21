@@ -220,4 +220,49 @@ public class BookCopyDAO {
 
 		return response;
 	}
+
+	private class DeletePossibleRecord {
+		public Date begindate;
+		public Date return_date;
+		public Double amount;
+		public Date paid_date;
+	}
+
+	/**
+	 * If a book is borrowed and not returned yet or if there is a fee for this book
+	 * which is not paid yet then delete is not possible.
+	 *
+	 * @param id
+	 * @param school_id
+	 * @param con
+	 * @return
+	 */
+	public static boolean deletePossible(Long id, Long school_id, Connection con){
+
+		String sql = StatementStore.getStatement("book_copy.deletePossible");
+
+		List<DeletePossibleRecord> dprList =
+				con.createQuery(sql)
+				.addParameter("id", id)
+				.addParameter("school_id", school_id)
+				.executeAndFetch(DeletePossibleRecord.class);
+
+		for (DeletePossibleRecord dpr : dprList) {
+
+			if(dpr.begindate != null && dpr.return_date == null){
+				return false;
+			}
+
+			if(dpr.amount != null && dpr.paid_date != null){
+				return false;
+			}
+
+		}
+
+
+		return true;
+
+	}
+
+
 }

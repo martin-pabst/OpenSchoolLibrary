@@ -113,4 +113,14 @@
 			barcode = :barcode
 	</statement>
 
+	<statement name="book_copy.deletePossible">
+		select borrows.begindate, borrows.return_date, fee.amount, fee.paid_date
+		from book_copy
+		join book on book_copy.book_id = book.id
+		left join borrows on book_copy.id = borrows.book_copy_id
+		left join fee on borrows.id = fee.borrows_id and fee.paid_date is NULL
+		where book_copy.id = :id
+		      and book.school_id = :school_id
+	</statement>
+
 </statementlist>
