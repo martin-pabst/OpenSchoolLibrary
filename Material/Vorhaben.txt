@@ -1,3 +1,22 @@
+Einstellungen
+ - Unterhalb des Werkzeugkastens für Admins:
+   - Voreinstellungen für Benutzer (schulweit)
+   - Systemeinstellungen
+ - Unterhalb des Benutzer-Menüpunkts gibt es schon "Einstellungen" -> umbenennen zu "Benutzereinstellungen"
+ - Einstellungsmöglichkeiten werden in einem Baum verwaltet
+   - Speicherung als Pfad-Wert-Paare in einem Text-Attribut der Tabellen user und school; Die Werte werden als json serialisiert
+ - Jedes Modul registriert beim Hochfahren des Servers seine Einstellungsmöglichkeiten
+   - Pfad, Name, Datentyp, Beschreibung, Schlagworte, Berechtigungen zum Bearbeiten der Einstellung
+   - ggf. Objekt, das den html-Code für die html-Ansicht im Einstellungsmodul ausgibt und eingegebene Werte parst und validiert
+   - Für Standarddatentypen gibt es default-Editor-Klassen (String, int, ...)
+ - Beim Login werden die Einstellungden des Users und (falls noch nicht geschechen) der Schule eingelesen und im Arbeitsspeicher gecached
+ - Serverseitige und clientseitige Schnittstelle zum Auslesen der Einstellungen. Gesucht wird zuerst in den Einstellungen des Benutzers, dann
+   in den schulweiten Voreinstellungen, dann in den Systemeinstellungen
+ - Im Einstellungen-Modul: Links Baumansicht mit Filter-Feld; rechts Einstellungen (scrollbar). Rechts oben farbiger Button zum Speichern
+   der Einstellungnen
+ - Wurd eine Einstellung geändert, so erfolgt eine Änderung der clientseitigen und serverseitigen Datenstruktur, ggf. Neuaufbau des Hauptmenüs?
+
+
 Nächste Arbeiten:
  - Neue Berechtigung zum Bearbeiten von Terminen
  - Die Anzeige der absenten Klassen ist vom Schuljahr abhängig, in dem sich der Termin(vereinfachtend: -start) befindet!
@@ -17,14 +36,12 @@ Aus Sicht des Benutzers:
  - Die Termine haben Icons, anhand denen sichtbar ist, ob mit dem Termin
    - eine Reservierung
    - eine Absenz verbunden ist
- - öffentliche Termine werden mit grüner Hintergrundfarbe gesetzt.
  - Prüfungen werden mit roter Hintergrundfarbe gesetzt
  - Für die Eingabe/Änderung eines Termins modales Fenster mit Tabs:
    - Termindetails (Text, Kurzform, von, bis, öffentlich (j/n), Ersteller)
    - Benötigte Ressourcen (Räume, ...)
    - Prüfungsdetails (welche Klasse/n, welche Art von Prüfung, geheim?, weitere erlaubt?)
 
- - Ferien und Feiertage als "Background events" von Fullcalendar
  - Schulaufgabenkalender
  - Verwaltung von Ressourcen (Räume, Beamer, ...)
 

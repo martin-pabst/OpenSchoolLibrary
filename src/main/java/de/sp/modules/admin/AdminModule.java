@@ -60,6 +60,11 @@ public class AdminModule extends Module {
 		m.addItem(new MenuItem("admin.menu.useradministration", "startUserAdministration", "fa-users",
 				null, new String[] {PERMISSIONADMINUSERADMINISTRATION}, PERMISSIONADMINUSERADMINISTRATION,
 				10));
+		m.addItem(new MenuItem("admin.menu.defaultsettings", "defaultSettings", "fa-cog",
+				null, null, null, 20));
+		m.addItem(new MenuItem("admin.menu.sytemsettings", "systemSettings", "fa-cogs",
+				null, null, null, 20));
+
 
 		return new MenuItem[] { m };
 

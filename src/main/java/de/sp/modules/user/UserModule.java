@@ -49,7 +49,7 @@ public class UserModule extends Module {
 
 		m.addItem(new MenuItem("user.menu.logout", "logout", "fa-sign-out",
 				null, null, null, 10));
-		m.addItem(new MenuItem("user.menu.settings", "userSettings", "fa-cogs",
+		m.addItem(new MenuItem("user.menu.settings", "userSettings", "fa-cog",
 				null, null, null, 20));
 
 		return new MenuItem[] { m };

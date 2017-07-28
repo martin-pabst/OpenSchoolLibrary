@@ -2,7 +2,7 @@
 <textresourcefile>
 	<textresources path="user" language="de-DE">
 		<text path="menu.logout">Abmelden</text>
-		<text path="menu.settings">Einstellungen</text>
+		<text path="menu.settings">Benutzereinstellungen</text>
 	</textresources>
 </textresourcefile>
 
