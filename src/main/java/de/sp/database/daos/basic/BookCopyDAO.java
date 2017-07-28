@@ -15,190 +15,223 @@ import java.util.List;
 
 public class BookCopyDAO {
 
-	public static List<BookCopy> getAll(Connection con) {
+    public static List<BookCopy> getAll(Connection con) {
 
-		String sql = StatementStore.getStatement("book_copy.getAll");
-		List<BookCopy> book_copylist = con.createQuery(sql).executeAndFetch(
-				BookCopy.class);
-		return book_copylist;
+        String sql = StatementStore.getStatement("book_copy.getAll");
 
-	}
+        List<BookCopy> book_copylist = con.createQuery(sql).executeAndFetch(
+                BookCopy.class);
 
-	public static List<BookCopy> findAvailableCopiesBySchool(Connection con, Long school_id) {
+        return book_copylist;
 
-		String sql = StatementStore.getStatement("book_copy.findAvailableCopiesBySchool");
+    }
 
-		return  con.createQuery(sql)
-				.addParameter("school_id", school_id)
-				.executeAndFetch(BookCopy.class);
+    public static List<BookCopy> findAvailableCopiesBySchool(Connection con, Long school_id) {
 
-	}
+        String sql = StatementStore.getStatement("book_copy.findAvailableCopiesBySchool");
 
+        return con.createQuery(sql)
+                .addParameter("school_id", school_id)
+                .executeAndFetch(BookCopy.class);
 
-	public static void changeBarcode(String oldBarcode, String newBarcode, Long school_id, Connection con){
-
-		oldBarcode = convertBarcodeToDatabaseFormat(oldBarcode);
-		newBarcode = convertBarcodeToDatabaseFormat(newBarcode);
-
-		String sql = StatementStore.getStatement("book_copy.changeBarcode");
-
-		con.createQuery(sql)
-				.addParameter("oldBarcode", oldBarcode)
-				.addParameter("newBarcode", newBarcode)
-				.addParameter("school_id", school_id)
-				.executeUpdate();
-
-	}
-
-	public static BookCopy insert(Long book_id, String edition, String barcode,
-			Date purchase_date,
-			Connection con) throws Exception {
-
-		barcode = convertBarcodeToDatabaseFormat(barcode);
-
-		if(purchase_date == null){
-			purchase_date = Calendar.getInstance().getTime();
-		}
-
-		String sql = StatementStore.getStatement("book_copy.insert");
-
-		Long id = con.createQuery(sql, true).addParameter("book_id", book_id)
-				.addParameter("edition", edition)
-				.addParameter("barcode", barcode)
-				.addParameter("purchase_date", purchase_date)
-				.executeUpdate()
-				.getKey(Long.class);
-
-		return new BookCopy(id, book_id, edition, barcode, purchase_date, null);
-
-	}
-
-	private static String completeBarcode(String barcode, boolean checksumAlreadyIncluded) {
-		while(barcode.length() < 12 + (checksumAlreadyIncluded ? 1 : 0)){
-			barcode = "0" + barcode;
-		}
-
-		if(barcode.length() < 13) {
-			barcode = addCheckSumEAN13(barcode);
-		}
-		return barcode;
-	}
-
-	private static String convertBarcodeToDatabaseFormat(String barcode){
-
-		while(barcode.startsWith("0")){
-			barcode = barcode.substring(1);
-		}
-
-		return barcode;
-	}
-
-	public static String addLeadingZerosToGetEAN13(String barcode){
-		while (barcode.length() < 13){
-			barcode = "0" + barcode;
-		}
-
-		return barcode;
-	}
+    }
 
 
-	public static void setSortedOutDate(Long book_copy_id, Date sorted_out_date, Connection con){
+    public static void changeBarcode(String oldBarcode, String newBarcode, Long school_id, Connection con) {
 
-		String sql0 = StatementStore.getStatement("book_copy.setSorted_out_date");
+        oldBarcode = convertBarcodeToDatabaseFormat(oldBarcode);
+        newBarcode = convertBarcodeToDatabaseFormat(newBarcode);
 
-		con.createQuery(sql0).addParameter("book_copy_id", book_copy_id)
-				.addParameter("sorted_out_date", sorted_out_date)
-				.executeUpdate();
+        String sql = StatementStore.getStatement("book_copy.changeBarcode");
 
-	}
+        con.createQuery(sql)
+                .addParameter("oldBarcode", oldBarcode)
+                .addParameter("newBarcode", newBarcode)
+                .addParameter("school_id", school_id)
+                .executeUpdate();
 
-	public static void delete(Long book_copy_id, Connection con) {
+    }
 
-		String sql0 = StatementStore.getStatement("book_copy.deleteFees");
+    public static BookCopy insert(Long book_id, String edition, String barcode,
+                                  Date purchase_date,
+                                  Connection con) throws Exception {
 
-		con.createQuery(sql0).addParameter("book_copy_id", book_copy_id)
-				.executeUpdate();
+        barcode = convertBarcodeToDatabaseFormat(barcode);
+
+        if (purchase_date == null) {
+            purchase_date = Calendar.getInstance().getTime();
+        }
+
+        String sql = StatementStore.getStatement("book_copy.insert");
+
+        Long id = con.createQuery(sql, true).addParameter("book_id", book_id)
+                .addParameter("edition", edition)
+                .addParameter("barcode", barcode)
+                .addParameter("purchase_date", purchase_date)
+                .executeUpdate()
+                .getKey(Long.class);
+
+        return new BookCopy(id, book_id, edition, barcode, purchase_date, null);
+
+    }
+
+    private static String completeBarcode(String barcode, boolean checksumAlreadyIncluded) {
+        while (barcode.length() < 12 + (checksumAlreadyIncluded ? 1 : 0)) {
+            barcode = "0" + barcode;
+        }
+
+        if (barcode.length() < 13) {
+            barcode = addCheckSumEAN13(barcode);
+        }
+        return barcode;
+    }
+
+    private static String convertBarcodeToDatabaseFormat(String barcode) {
+
+        barcode = convertShiftedDigits(barcode);
 
 
-		String sql1 = StatementStore.getStatement("book_copy.deleteBorrows");
+        while (barcode.startsWith("0")) {
+            barcode = barcode.substring(1);
+        }
 
-		con.createQuery(sql1).addParameter("book_copy_id", book_copy_id)
-				.executeUpdate();
+        return barcode;
+    }
 
-		String sql2 = StatementStore.getStatement("book_copy.delete");
+    private static String convertShiftedDigits(String barcode) {
 
-		con.createQuery(sql2)
+        String s = "";
 
-		.addParameter("id", book_copy_id)
+        for (int i = 0; i < barcode.length(); i++) {
+            char c = barcode.charAt(i);
+            char c1;
 
-		.executeUpdate();
+            switch (c){
+                case '!': c1 = 1; break;
+                case '"': c1 = 2; break;
+                case '§': c1 = 3; break;
+                case '$': c1 = 4; break;
+                case '%': c1 = 5; break;
+                case '&': c1 = 6; break;
+                case '/': c1 = 7; break;
+                case '(': c1 = 8; break;
+                case ')': c1 = 9; break;
+                case '=': c1 = 0; break;
+                default: c1 = c;
+            }
 
-	}
+            s += c1;
+        }
 
-	public static List<Long> getFeeIds(Long book_copy_id, Connection con){
-		String sql = StatementStore.getStatement("book_copy.getFeeList");
+        return s;
 
-		List<Long> feeIds = con.createQuery(sql)
-				.addParameter("book_copy_id", book_copy_id)
-				.executeAndFetch(Long.class);
+    }
 
-		return feeIds;
-	}
+    public static String addLeadingZerosToGetEAN13(String barcode) {
+        while (barcode.length() < 13) {
+            barcode = "0" + barcode;
+        }
 
-	public static List<LibraryInventoryCopiesRecord> getBookCopyInventory(
-			Long book_id, Long school_term_id, Connection con) {
+        return barcode;
+    }
 
-		String sql = StatementStore.getStatement("book_copy.inventoryList");
 
-		List<LibraryInventoryCopiesRecord> inventoryList = con.createQuery(sql)
-				.addParameter("book_id", book_id)
-				.addParameter("school_term_id", school_term_id)
-				.executeAndFetch(LibraryInventoryCopiesRecord.class);
+    public static void setSortedOutDate(Long book_copy_id, Date sorted_out_date, Connection con) {
 
-		for (LibraryInventoryCopiesRecord licr : inventoryList) {
+        String sql0 = StatementStore.getStatement("book_copy.setSorted_out_date");
 
-			licr.init();
+        con.createQuery(sql0).addParameter("book_copy_id", book_copy_id)
+                .addParameter("sorted_out_date", sorted_out_date)
+                .executeUpdate();
 
-		}
+    }
 
-		return inventoryList;
+    public static void delete(Long book_copy_id, Connection con) {
 
-	}
+        String sql0 = StatementStore.getStatement("book_copy.deleteFees");
 
-	public static List<BookCopyInfoRecord> getBookCopyInInfo(Long school_id,
-			String barcode, Connection con) {
+        con.createQuery(sql0).addParameter("book_copy_id", book_copy_id)
+                .executeUpdate();
 
-		barcode = convertBarcodeToDatabaseFormat(barcode);
 
-		String sql = StatementStore
-				.getStatement("book_copy.findByBarcodeAndSchool");
+        String sql1 = StatementStore.getStatement("book_copy.deleteBorrows");
 
-		List<BookCopyInfoRecord> inventoryList = con.createQuery(sql)
-				.addParameter("school_id", school_id)
-				.addParameter("barcode", barcode)
-				.executeAndFetch(BookCopyInfoRecord.class);
+        con.createQuery(sql1).addParameter("book_copy_id", book_copy_id)
+                .executeUpdate();
 
-		return inventoryList;
+        String sql2 = StatementStore.getStatement("book_copy.delete");
 
-	}
+        con.createQuery(sql2)
 
-	public static Long getSchoolIdForBookCopy(Long book_copy_id, Connection con) {
+                .addParameter("id", book_copy_id)
 
-		String sql = StatementStore
-				.getStatement("book_copy.getSchoolIdForBookCopy");
+                .executeUpdate();
 
-		return con.createQuery(sql).addParameter("book_copy_id", book_copy_id)
-				.executeAndFetchFirst(Long.class);
-	}
+    }
 
+    public static List<Long> getFeeIds(Long book_copy_id, Connection con) {
+        String sql = StatementStore.getStatement("book_copy.getFeeList");
+
+        List<Long> feeIds = con.createQuery(sql)
+                .addParameter("book_copy_id", book_copy_id)
+                .executeAndFetch(Long.class);
+
+        return feeIds;
+    }
+
+    public static List<LibraryInventoryCopiesRecord> getBookCopyInventory(
+            Long book_id, Long school_term_id, Connection con) {
+
+        String sql = StatementStore.getStatement("book_copy.inventoryList");
+
+        List<LibraryInventoryCopiesRecord> inventoryList = con.createQuery(sql)
+                .addParameter("book_id", book_id)
+                .addParameter("school_term_id", school_term_id)
+                .executeAndFetch(LibraryInventoryCopiesRecord.class);
+
+        for (LibraryInventoryCopiesRecord licr : inventoryList) {
+
+            licr.init();
+
+        }
+
+        return inventoryList;
+
+    }
+
+    public static List<BookCopyInfoRecord> getBookCopyInInfo(Long school_id,
+                                                             String barcode, Connection con) {
+
+        barcode = convertBarcodeToDatabaseFormat(barcode);
+
+        String sql = StatementStore
+                .getStatement("book_copy.findByBarcodeAndSchool");
+
+        List<BookCopyInfoRecord> inventoryList = con.createQuery(sql)
+                .addParameter("school_id", school_id)
+                .addParameter("barcode", barcode)
+                .executeAndFetch(BookCopyInfoRecord.class);
+
+        return inventoryList;
+
+    }
+
+    public static Long getSchoolIdForBookCopy(Long book_copy_id, Connection con) {
+
+        String sql = StatementStore
+                .getStatement("book_copy.getSchoolIdForBookCopy");
+
+        return con.createQuery(sql).addParameter("book_copy_id", book_copy_id)
+                .executeAndFetchFirst(Long.class);
+    }
 
 
     public static String addCheckSumEAN13(String codigo) {
 
-		String codigo12 = codigo;
-		while(codigo12.length() < 12){
-			codigo12 = "0" + codigo12;
-		}
+        String codigo12 = codigo;
+        while (codigo12.length() < 12) {
+            codigo12 = "0" + codigo12;
+        }
 
         EAN13Bean generator = new EAN13Bean();
         UPCEANLogicImpl impl = generator.createLogicImpl();
@@ -208,61 +241,61 @@ public class BookCopyDAO {
 
     public static FindBookIdByBarcodeResponse findBookIdByBarcode(String barcode, Long school_id, Connection con) {
 
-		barcode = convertBarcodeToDatabaseFormat(barcode);
+        barcode = convertBarcodeToDatabaseFormat(barcode);
 
-		String sql = StatementStore.getStatement("book_copy.findIdByBarcode");
+        String sql = StatementStore.getStatement("book_copy.findIdByBarcode");
 
-		FindBookIdByBarcodeResponse response =
-				con.createQuery(sql)
-				.addParameter("school_id", school_id)
-				.addParameter("barcode", barcode)
-				.executeAndFetchFirst(FindBookIdByBarcodeResponse.class);
+        FindBookIdByBarcodeResponse response =
+                con.createQuery(sql)
+                        .addParameter("school_id", school_id)
+                        .addParameter("barcode", barcode)
+                        .executeAndFetchFirst(FindBookIdByBarcodeResponse.class);
 
-		return response;
-	}
+        return response;
+    }
 
-	private class DeletePossibleRecord {
-		public Date begindate;
-		public Date return_date;
-		public Double amount;
-		public Date paid_date;
-	}
+    private class DeletePossibleRecord {
+        public Date begindate;
+        public Date return_date;
+        public Double amount;
+        public Date paid_date;
+    }
 
-	/**
-	 * If a book is borrowed and not returned yet or if there is a fee for this book
-	 * which is not paid yet then delete is not possible.
-	 *
-	 * @param id
-	 * @param school_id
-	 * @param con
-	 * @return
-	 */
-	public static boolean deletePossible(Long id, Long school_id, Connection con){
+    /**
+     * If a book is borrowed and not returned yet or if there is a fee for this book
+     * which is not paid yet then delete is not possible.
+     *
+     * @param id
+     * @param school_id
+     * @param con
+     * @return
+     */
+    public static boolean deletePossible(Long id, Long school_id, Connection con) {
 
-		String sql = StatementStore.getStatement("book_copy.deletePossible");
+        String sql = StatementStore.getStatement("book_copy.deletePossible");
 
-		List<DeletePossibleRecord> dprList =
-				con.createQuery(sql)
-				.addParameter("id", id)
-				.addParameter("school_id", school_id)
-				.executeAndFetch(DeletePossibleRecord.class);
+        List<DeletePossibleRecord> dprList =
+                con.createQuery(sql)
+                        .addParameter("id", id)
+                        .addParameter("school_id", school_id)
+                        .executeAndFetch(DeletePossibleRecord.class);
 
-		for (DeletePossibleRecord dpr : dprList) {
+        for (DeletePossibleRecord dpr : dprList) {
 
-			if(dpr.begindate != null && dpr.return_date == null){
-				return false;
-			}
+            if (dpr.begindate != null && dpr.return_date == null) {
+                return false;
+            }
 
-			if(dpr.amount != null && dpr.paid_date != null){
-				return false;
-			}
+            if (dpr.amount != null && dpr.paid_date != null) {
+                return false;
+            }
 
-		}
+        }
 
 
-		return true;
+        return true;
 
-	}
+    }
 
 
 }

@@ -65,7 +65,10 @@
                 var edition = $('#libraryInventoryEdition').val();
 
                 var selection = w2ui['libraryInventoryBooks'].getSelection(false);
-                if (selection.length < 1) {
+
+                if(barcode.length >= 13){
+                    w2alert("Sie haben eine ISBN-Nummer gescannt.\n Es wird keine Aktion ausgeführt.");
+                } else if (selection.length < 1) {
                     w2alert("Bitte wählen Sie zuerst in der linken Tabelle ein Buch aus.");
                     $('#libraryInventoryAddCopy').blur();
                 } else if (barcode !== "") {
