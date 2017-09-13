@@ -759,7 +759,13 @@
                     languageskills.forEach(function (ls) {
                         if (ls.subject_id === bookFormStoreRecord.subject_id) {
 
-                            if (typeof ls.from_year === "undefined" || year_of_school - ls.from_year + 1 === entry.languageyear) {
+                            var from_year = ls.from_year;
+
+                            if(typeof from_year !== "undefined" && from_year < 5){
+                                from_year = 5; // Englisch ab Jgst. 3!
+                            }
+
+                            if (typeof from_year === "undefined" || year_of_school - from_year + 1 === entry.languageyear) {
                                 if (typeof ls.to_year === "undefined" || year_of_school <= ls.to_year) {
                                     languageSkillFound = true;
                                 }

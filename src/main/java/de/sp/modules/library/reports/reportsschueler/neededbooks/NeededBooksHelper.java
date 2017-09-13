@@ -105,11 +105,17 @@ public class NeededBooksHelper {
 
                         for (Languageskill languageskill : languageskills) {
 
+                            int from_year = languageskill.getFrom_year();
+                            if(from_year < 5){
+                                from_year = 5;
+                            }
+
+
                             if (bookFormStoreRecord.getSubject_id() == null || !bookFormStoreRecord.getSubject_id().equals(languageskill.getSubject_id())) {
                                 continue;
                             }
 
-                            if (year_of_school - languageskill.getFrom_year() + 1 == bookFormEntry.getLanguageyear()) {
+                            if (year_of_school - from_year + 1 == bookFormEntry.getLanguageyear()) {
                                 ok = true;
                                 break;
                             }
