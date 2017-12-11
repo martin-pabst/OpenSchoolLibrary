@@ -11,3 +11,4 @@ target/
 temp/
 /ASV_Schnittstelle/src/test/java/de/sp/ASVImporterTest.java
 /ASV_Schnittstelle/src/main/resources/asvwertelisten/
+/configuration/configuration.xml
