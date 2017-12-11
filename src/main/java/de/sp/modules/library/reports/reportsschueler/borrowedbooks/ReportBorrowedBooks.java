@@ -76,7 +76,7 @@ public class ReportBorrowedBooks extends BaseReport {
         sql = sql.replace(":ids", getSQLList(ids));
 
         List<BorrowedBooksRecord> borrowedBooks = con.createQuery(sql)
-                .addParameter("school_id", school_term_id)
+                .addParameter("school_id", school_id)
                 .addParameter("school_term_id", school_term_id)
                 .executeAndFetch(BorrowedBooksRecord.class);
 

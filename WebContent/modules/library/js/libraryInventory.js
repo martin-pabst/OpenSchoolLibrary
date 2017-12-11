@@ -473,7 +473,8 @@
 
                 var json = {
                     cmd: "delete-records",
-                    selected: selectedIds
+                    selected: selectedIds,
+                    school_id: global_school_id
                 };
 
 

@@ -68,7 +68,7 @@ public class ReportPaidFees extends BaseReport {
         sql = sql.replace(":ids", getSQLList(ids));
 
         List<PaidFeeRecord> paidFees = con.createQuery(sql)
-                .addParameter("school_id", school_term_id)
+                .addParameter("school_id", school_id)
                 .addParameter("school_term_id", school_term_id)
                 .executeAndFetch(PaidFeeRecord.class);
 

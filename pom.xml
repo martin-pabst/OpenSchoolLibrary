@@ -11,13 +11,7 @@
     <name>Open School Platform</name>
     <url>http://www.pabst-software.de</url>
 
-    <distributionManagement>
-        <repository>
-            <id>internal.repo</id>
-            <name>Internal repo</name>
-            <url>file:///home/thara/testesb/in</url>
-        </repository>
-    </distributionManagement>
+
 
     <build>
         <plugins>
@@ -34,6 +28,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
                 <configuration>
                     <archive>
                         <manifest>
