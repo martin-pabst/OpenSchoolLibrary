@@ -19,6 +19,7 @@ import de.sp.modules.library.servlets.borrow.updateBorrowHoliday.UpdateBorrowHol
 import de.sp.modules.library.servlets.inventory.books.LibraryBookFormServlet;
 import de.sp.modules.library.servlets.inventory.books.LibraryInventoryBooksServlet;
 import de.sp.modules.library.servlets.inventory.copies.LibraryInventoryCopiesServlet;
+import de.sp.modules.library.servlets.orderbooks.LibraryOrderBooksServlet;
 import de.sp.modules.library.servlets.returnbooks.returnerlist.ReturnerListServlet;
 import de.sp.modules.library.servlets.returnbooks.scanbarcodeservlet.FeeServlet;
 import de.sp.modules.library.servlets.returnbooks.scanbarcodeservlet.LibraryReturnBookServlet;
@@ -118,6 +119,7 @@ public class LibraryModule extends Module {
 		context.addServlet(LibraryAddStudentServlet.class, "/library/students/save");
 		context.addServlet(LibrarySettingsServlet.class, "/library/settings/*");
 		context.addServlet(LibraryToolsServlet.class, "/library/tools/*");
+		context.addServlet(LibraryOrderBooksServlet.class, "/library/orderBooks");
 	}
 
 	@Override

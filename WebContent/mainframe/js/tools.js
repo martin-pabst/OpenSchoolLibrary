@@ -216,8 +216,10 @@ function mergeOrDiscard2GridChanges(gridObject, changes, isMerge) {
             } catch (e) {
             }
 
-            if (Object.keys(record.changes).length == 0) {
-                delete record.changes;
+            if(typeof (record.changes) !== 'undefined') {
+                if (Object.keys(record.changes).length == 0) {
+                    delete record.changes;
+                }
             }
         }
 

@@ -26,6 +26,10 @@
             <li role="presentation"><a data-toggle="tab" href="#libraryReports" id="libraryReportsTab">
                 <i class="fa fa-print fa-fw" aria-hidden="true"></i>
                 <span class="menuitemtext">${ts.get("library.menu.reports")}</span></a></li>
+
+            <li role="presentation"><a data-toggle="tab" href="#libraryOrder" id="libraryOrderTab">
+                <i class="fa fa-money fa-fw" aria-hidden="true"></i>
+                <span class="menuitemtext">${ts.get("library.menu.order")}</span></a></li>
         #end
 
         #if($user.hasPermission("library.settings", $school_id))
@@ -33,6 +37,7 @@
                 <i class="fa fa-wrench fa-fw" aria-hidden="true"></i>
                 <span class="menuitemtext">Einstellungen/Datenpflege</span></a></li>
         #end
+
     </ul>
 
     <div class="tab-content" style="flex: 1">
@@ -209,20 +214,20 @@
                                 </div>
                                 #if($user.hasPermission("library.examine", $school_id))
                                     <div style="display: flex">
-                                    <div style="padding-left: 0; padding-right: 5px; flex: 1">
+                                        <div style="padding-left: 0; padding-right: 5px; flex: 1">
                                         <textarea id="bookReturnDetailText" style="height: 85px; width: 100%"
                                                   placeholder="Beschreibung des Buchzustands hier eingeben..."></textarea>
-                                    </div>
-                                    <div style="padding-right: 0; padding-top: 0">
+                                        </div>
+                                        <div style="padding-right: 0; padding-top: 0">
                                         <span class="w2ui-field">
                                             <input id="bookReturnDetailDate" style="width: 100px">
                                         </span>
-                                        <span class="dropdown">
+                                            <span class="dropdown">
                                         <button id="bookReturnDetailMark" class="btn btn-default dropdown-toggle"
-                                            type="button"
-                                            data-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="true">Zustand als Note<span
-                                            class="caret"></span>
+                                                type="button"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="true">Zustand als Note<span
+                                                class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" id="bookReturnDetailMarkUL">
                                             <li><a href="#" data-value="1 (wie neu)">1 (wie neu)</a></li>
@@ -241,57 +246,61 @@
                                             </li>
                                         </ul>
                                         </span>
-                                        <div style="height: 5px"></div>
-                                        <button id="bookReturnDetailButton" class="btn btn-default">Hinzufügen</button>
-                                    </div>
+                                            <div style="height: 5px"></div>
+                                            <button id="bookReturnDetailButton" class="btn btn-default">Hinzufügen
+                                            </button>
+                                        </div>
                                     </div>
                                 #end
                             </div>
                         </div>
 
-                        <div class="panel panel-default" style="padding: 0; margin-bottom: 0; flex: 1; display: flex; flex-direction: column">
+                        <div class="panel panel-default"
+                             style="padding: 0; margin-bottom: 0; flex: 1; display: flex; flex-direction: column">
                             <div class="panel-heading" id="bookReturnPaymentsHeader">Zahlungen</div>
-                            <div class="panel-body" style="flex: 1; padding: 5px; display: flex; flex-direction: column">
+                            <div class="panel-body"
+                                 style="flex: 1; padding: 5px; display: flex; flex-direction: column">
 
                                 <div id="bookReturnPaymentsList" style="flex: 1; width: 100%;
                             margin-bottom: 10px; overflow: auto"></div>
                                 <div>
-                                <table style="margin-bottom: 0px">
+                                    <table style="margin-bottom: 0px">
 
-                                    #if($user.hasPermission("library.orderPayments", $school_id))
+                                        #if($user.hasPermission("library.orderPayments", $school_id))
+                                            <tr>
+                                                <td>
+                                                    <label for="bookReturnAmount">Betrag für obiges Buch:</label></td>
+                                                <td><input type="text" pattern="[0-9]+([,|\.][0-9][0-9]?)? ?\u20AC?"
+                                                           class="form-control clearfix"
+                                                           id="bookReturnAmount" style="width: 100px; margin: 0 10px">
+                                                </td>
+                                                <td>
+                                                    <button id="bookReturnUpdatePaymentButton" class="btn btn-default"
+                                                            style="margin: 0 10px">Erfassen
+                                                    </button>
+                                                </td>
+                                                <td>
+                                                    <button id="bookReturnDeletePaymentButton" class="btn btn-default"
+                                                            style="margin: 0 10px">Löschen
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        #end
+                                        <tr style="height: 15px"></tr>
                                         <tr>
+                                            <td><label for="bookReturnSumAmount">Ausstehend gesamt:</label></td>
+                                            <td><input type="text" class="form-control" id="bookReturnSumAmount"
+                                                       style="width: 100px; margin: 0 10px" readonly></td>
                                             <td>
-                                                <label for="bookReturnAmount">Betrag für obiges Buch:</label></td>
-                                            <td><input type="text" pattern="[0-9]+([,|\.][0-9][0-9]?)? ?\u20AC?"
-                                                       class="form-control clearfix"
-                                                       id="bookReturnAmount" style="width: 100px; margin: 0 10px"></td>
-                                            <td>
-                                                <button id="bookReturnUpdatePaymentButton" class="btn btn-default"
-                                                        style="margin: 0 10px">Erfassen
-                                                </button>
+                                                #if($user.hasPermission("library.acceptPayments", $school_id))
+                                                <button id="bookReturnPaymentDoneButton" class="btn btn-default"
+                                                        style="margin: 0 10px">Gezahlt
+                                                #end
+                                            </button>
                                             </td>
-                                            <td>
-                                                <button id="bookReturnDeletePaymentButton" class="btn btn-default"
-                                                        style="margin: 0 10px">Löschen
-                                                </button>
-                                            </td>
+                                            <td></td>
                                         </tr>
-                                    #end
-                                    <tr style="height: 15px"></tr>
-                                    <tr>
-                                        <td><label for="bookReturnSumAmount">Ausstehend gesamt:</label></td>
-                                        <td><input type="text" class="form-control" id="bookReturnSumAmount"
-                                                   style="width: 100px; margin: 0 10px" readonly></td>
-                                        <td>
-                                            #if($user.hasPermission("library.acceptPayments", $school_id))
-                                            <button id="bookReturnPaymentDoneButton" class="btn btn-default"
-                                                    style="margin: 0 10px">Gezahlt
-                                            #end
-                                        </button>
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                </table>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -310,28 +319,28 @@
 
         <div id="libraryReports" class="tab-pane fade" style="padding: 10px; height: 100%; width: 100%">
             <div style="height: 100%; display: flex; flex-direction: column; ">
-               <div style="display: flex; justify-content: space-between">
-                   <div id="entitychooser">
-                       <div class="btn-group" data-toggle="buttons">
-                           <label class="btn btn-default active">
-                               <input type="radio"
-                                      id="reportsSchuelerSelected" autocomplete="off" checked>Schüler/innen
-                           </label>
-                           <label class="btn btn-default">
-                               <input type="radio"
-                                      id="reportsLehrerSelected" autocomplete="off">Lehrkräfte
-                           </label>
-                           <label class="btn btn-default">
-                               <input type="radio" id="reportsKlassenSelected" autocomplete="off">Klassen
-                           </label>
-                           <label class="btn btn-default">
-                               <input type="radio" id="reportsBuecherSelected" autocomplete="off">Bücher
-                           </label>
-                           <label class="btn btn-default">
-                               <input type="radio" id="reportsAndereSelected" autocomplete="off">Andere
-                           </label>
-                       </div>
-                   </div>
+                <div style="display: flex; justify-content: space-between">
+                    <div id="entitychooser">
+                        <div class="btn-group" data-toggle="buttons">
+                            <label class="btn btn-default active">
+                                <input type="radio"
+                                       id="reportsSchuelerSelected" autocomplete="off" checked>Schüler/innen
+                            </label>
+                            <label class="btn btn-default">
+                                <input type="radio"
+                                       id="reportsLehrerSelected" autocomplete="off">Lehrkräfte
+                            </label>
+                            <label class="btn btn-default">
+                                <input type="radio" id="reportsKlassenSelected" autocomplete="off">Klassen
+                            </label>
+                            <label class="btn btn-default">
+                                <input type="radio" id="reportsBuecherSelected" autocomplete="off">Bücher
+                            </label>
+                            <label class="btn btn-default">
+                                <input type="radio" id="reportsAndereSelected" autocomplete="off">Andere
+                            </label>
+                        </div>
+                    </div>
                     <div>
                         <form name="startReportForm" action="/library/reports/start" target="_blank" method="post">
                             <textarea id="reportParameterTextarea" name="reportParameters"
@@ -342,13 +351,13 @@
                             </button>
                         </form>
                     </div>
-               </div>
+                </div>
                 <div style="flex: 1; display: flex">
                     <div style="margin: 5px 5px 5px 0; flex: 5; height: 100%">
-                    <div id="libraryReportsDataNavigator" style="height: 100%">
+                        <div id="libraryReportsDataNavigator" style="height: 100%">
+                        </div>
                     </div>
-                    </div>
-                    <div class="panel panel-default" id="reportsChooser"; style="margin: 5px; flex: 7; display: flex;
+                    <div class="panel panel-default" id="reportsChooser" ; style="margin: 5px; flex: 7; display: flex;
                      flex-direction: column; height: 100%">
                         <div id="reportsListHeading" class="panel-heading">Bericht wählen:</div>
                         <div class="panel-body" style="padding: 10px; flex: 1">
@@ -362,39 +371,92 @@
             </div>
         </div>
 
+        <div id="libraryOrder" class="tab-pane fade" style="padding: 10px; height: 100%; width: 100%">
+            <div style="height: 100%; display: flex; flex-direction: row; ">
+
+                <div id="libraryOrderLeft" style="flex: 8">
+
+                </div>
+
+                <div id="libraryOrderRight" style="flex:4; padding: 5px">
+
+
+                    <div>
+                            <textarea id="bookdealeraddress" style="height: 70px; width: 100%"
+                                      placeholder="Anschrift des Händlers..."></textarea>
+                    </div>
+
+
+                    <div>
+                        <form name="startOrderBooksForm" action="/library/orderBooks" target="_blank" method="post">
+                            <textarea id="orderBooksParameterTextarea" name="reportParameters"
+                                      style="visibility: hidden; width: 0; height: 0"></textarea>
+                            <button id="orderBooksStart" class="btn btn-default" type="submit"
+                                    style="margin: 0 10px; float: right">Bestellung generieren
+                                <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
         <!-- Settings -->
 
         <div id="librarySettings" class="tab-pane fade" style="margin-top: 10px">
             <div style="display: flex; height: 100%">
 
-                    <!-- Navigation Buttons -->
-                    <div style="padding-left: 2em">
-                        <ul class="nav nav-pills nav-stacked" id="myTabs">
-                            <li class="active"><a href="#ls_deleteOldBookings" data-toggle="pill">Alte Buchungen
-                                löschen</a>
-                            </li>
-                            <li><a href="#ls_deleteResignedStudentsTeachers" data-toggle="pill">Ausgetretene
-                                Schüler/Lehrkräfte löschen</a></li>
-                            <li><a href="#ls_mergeStudentRecords" data-toggle="pill" id="mergeStudentRecordsTab">Schülerdatensätze
-                                zusammenführen</a>
-                            </li>
-                            <li><a href="#ls_sortOut" data-toggle="pill" id="sortOutTab">Bücherexemplare ausmustern</a>
-                            </li>
-                            <li><a href="#ls_changeBarcode" data-toggle="pill" id="changeBarcodeTab">Barcode eines Buchs
-                                ändern</a>
-                            </li>
-                        </ul>
-                    </div>
+                <!-- Navigation Buttons -->
+                <div style="padding-left: 2em">
+                    <ul class="nav nav-pills nav-stacked" id="myTabs">
+                        <li class="active"><a href="#ls_deleteOldBookings" data-toggle="pill">Alte Buchungen
+                            löschen</a>
+                        </li>
+                        <li><a href="#ls_deleteResignedStudentsTeachers" data-toggle="pill">Ausgetretene
+                            Schüler/Lehrkräfte löschen</a></li>
+                        <li><a href="#ls_mergeStudentRecords" data-toggle="pill" id="mergeStudentRecordsTab">Schülerdatensätze
+                            zusammenführen</a>
+                        </li>
+                        <li><a href="#ls_sortOut" data-toggle="pill" id="sortOutTab">Bücherexemplare ausmustern</a>
+                        </li>
+                        <li><a href="#ls_changeBarcode" data-toggle="pill" id="changeBarcodeTab">Barcode eines Buchs
+                            ändern</a>
+                        </li>
+                    </ul>
+                </div>
 
-                    <!-- Content -->
-                    <div style="flex: 1">
-                        <div class="tab-content">
-                            <!-- First tab: delete old bookings -->
-                            <div class="tab-pane active settingsPane" id="ls_deleteOldBookings">
-                                <h2>Alte Buchungen löschen</h2>
-                                <p>Alle Ausleihvorgänge löschen, bei denen die Bücher bis zum
+                <!-- Content -->
+                <div style="flex: 1">
+                    <div class="tab-content">
+                        <!-- First tab: delete old bookings -->
+                        <div class="tab-pane active settingsPane" id="ls_deleteOldBookings">
+                            <h2>Alte Buchungen löschen</h2>
+                            <p>Alle Ausleihvorgänge löschen, bei denen die Bücher bis zum
+                                <input class="dateinput" type="text" maxlength="100" style="width: 90px">
+                                bereits zurückgegeben worden sind.
+                            </p>
+                            <div style="margin: 0 0 10px 0">
+                                <div style="vertical-align: middle;display: inline-block;height: 100%;">
+                                    <img src="/public/img/spiffygif_26x26.gif" style="display: none"
+                                         class="animated_gif">
+                                </div>
+                                <button type="button" class="btn btn-default">
+                                    Start
+                                    <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                            <div class="alert alert-success" role="alert" style="display: none"></div>
+                        </div>
+                        <!-- Second tab: delete resigned students/teachers -->
+                        <div class="tab-pane settingsPane" id="ls_deleteResignedStudentsTeachers">
+                            <h2>Ausgetretene Schüler/innen löschen</h2>
+                            <div id="ls_deleteResignedStudents">
+                                <p>Alle Schüler/innen löschen, die vor dem
                                     <input class="dateinput" type="text" maxlength="100" style="width: 90px">
-                                    bereits zurückgegeben worden sind.
+                                    ausgetreten sind, bereits alle Bücher zurückgegeben haben und keine Zahlungen
+                                    schuldig sind.
                                 </p>
                                 <div style="margin: 0 0 10px 0">
                                     <div style="vertical-align: middle;display: inline-block;height: 100%;">
@@ -408,74 +470,11 @@
                                 </div>
                                 <div class="alert alert-success" role="alert" style="display: none"></div>
                             </div>
-                            <!-- Second tab: delete resigned students/teachers -->
-                            <div class="tab-pane settingsPane" id="ls_deleteResignedStudentsTeachers">
-                                <h2>Ausgetretene Schüler/innen löschen</h2>
-                                <div id="ls_deleteResignedStudents">
-                                    <p>Alle Schüler/innen löschen, die vor dem
-                                        <input class="dateinput" type="text" maxlength="100" style="width: 90px">
-                                        ausgetreten sind, bereits alle Bücher zurückgegeben haben und keine Zahlungen
-                                        schuldig sind.
-                                    </p>
-                                    <div style="margin: 0 0 10px 0">
-                                        <div style="vertical-align: middle;display: inline-block;height: 100%;">
-                                            <img src="/public/img/spiffygif_26x26.gif" style="display: none"
-                                                 class="animated_gif">
-                                        </div>
-                                        <button type="button" class="btn btn-default">
-                                            Start
-                                            <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-                                        </button>
-                                    </div>
-                                    <div class="alert alert-success" role="alert" style="display: none"></div>
-                                </div>
-                                <h2>Ausgetretene Lehrkräfte löschen</h2>
-                                <div id="ls_deleteResignedTeachers">
-                                    <p>Alle Lehrkräfte löschen, die beim letzten ASV-Import nicht übertragen wurden und
-                                        bereits alle Bücher zurückgegeben haben.
-                                    </p>
-                                    <div style="margin: 0 0 10px 0">
-                                        <div style="vertical-align: middle;display: inline-block;height: 100%;">
-                                            <img src="/public/img/spiffygif_26x26.gif" style="display: none"
-                                                 class="animated_gif">
-                                        </div>
-                                        <button type="button" class="btn btn-default">
-                                            Start
-                                            <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-                                        </button>
-                                    </div>
-                                    <div class="alert alert-success" role="alert" style="display: none"></div>
-                                </div>
-                            </div>
-                            <!-- third tab: merge student records -->
-                            <div class="tab-pane settingsPane" id="ls_mergeStudentRecords">
-                                <h2>Schülerdatensätze zusammenführen</h2>
-                                <p>Falls es zu einem Schüler zwei Datensätze gibt, wählen Sie bitte in
-                                    der folgenden Liste die beiden Datensätze aus:</p>
-                                <div id="librarySettingsMergeStudentsNavigator"
-                                     style="height: 25em; width: 95%"></div>
-                                <div style="margin-top: 10px">
-                                    <p>Bitte wählen Sie nachfolgend aus, welcher der beien Datensätze gelöscht werden
-                                        soll.
-                                        Die ausgeliehenen Bücher werden vorher natürlich auf den anderen Datensatz
-                                        übertragen.</p>
-                                    <table style="margin-bottom: 5px">
-                                        <tr style="color: blue; font-weight: bold">
-                                            <td>Datensatz 1</td>
-                                            <td>Datensatz 2</td>
-                                        </tr>
-                                        <tr>
-                                            <td id="ls_merge_student_1"></td>
-                                            <td id="ls_merge_student_2"></td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="radio" id="ls_deleteStudent1" name="ls_deleteStudentRB">
-                                                <label for="ls_deleteStudent1"> Datensatz 1 löschen</label></td>
-                                            <td><input type="radio" id="ls_deleteStudent2" name="ls_deleteStudentRB">
-                                                <label for="ls_deleteStudent2"> Datensatz 2 löschen</label></td>
-                                        </tr>
-                                    </table>
-                                </div>
+                            <h2>Ausgetretene Lehrkräfte löschen</h2>
+                            <div id="ls_deleteResignedTeachers">
+                                <p>Alle Lehrkräfte löschen, die beim letzten ASV-Import nicht übertragen wurden und
+                                    bereits alle Bücher zurückgegeben haben.
+                                </p>
                                 <div style="margin: 0 0 10px 0">
                                     <div style="vertical-align: middle;display: inline-block;height: 100%;">
                                         <img src="/public/img/spiffygif_26x26.gif" style="display: none"
@@ -487,80 +486,122 @@
                                     </button>
                                 </div>
                                 <div class="alert alert-success" role="alert" style="display: none"></div>
-
                             </div>
-                            <!-- 4. tab: sort out book copies -->
-                            <div class="tab-pane settingsPane" id="ls_sortOut">
-                                <h2>Bücherexemplare ausmustern</h2>
-                                <p>Die Bücherexemplare mit dem angegebenen Barcode werden aussortiert. Sollten noch
-                                    Ausleihvorgänge darauf
-                                    gebucht sein, so wird automatisch eine Rückgabe gebucht.</p>
-                                <p>Bitte platzieren sie den Cursor in das Feld für den Barcode.</p>
-                                <p><span style="color: red; font-weight: bold">
-                                Vorsicht: </span>Nach dem Einscannen
-                                    (oder der Eingabe von Enter) wird das Ausmustern sofort vollzogen.</p>
-                                <div style="margin: 10px 0 10px 0">
-                                    <div class="input-group">
-                                        <span class="input-group-addon" id="basic-addon6">Ausgemustert am:</span>
-                                        <input type="text"
-                                               class="form-control dateinput"
-                                               aria-describedby="basic-addon6" style="width: 90px">
-                                    </div>
-                                </div>
-                                <div style="margin: 10px 0 10px 0">
-                                    <div class="input-group">
-                                        <span class="input-group-addon" id="basic-addon5">Ausmustern:</span>
-                                        <input id="librarySortOutBarcodeField" type="text" class="form-control"
-                                               placeholder="Barcode"
-                                               aria-describedby="basic-addon5"
-                                               style="width: 20em">
-                                    </div>
-                                    <div style="vertical-align: middle;display: inline-block;height: 100%;">
-                                        <img src="/public/img/spiffygif_26x26.gif" style="display: none"
-                                             class="animated_gif">
-                                    </div>
-                                </div>
-                                <div class="alert alert-success" role="alert"
-                                     style="display: none; height: 15em; overflow: auto"></div>
+                        </div>
+                        <!-- third tab: merge student records -->
+                        <div class="tab-pane settingsPane" id="ls_mergeStudentRecords">
+                            <h2>Schülerdatensätze zusammenführen</h2>
+                            <p>Falls es zu einem Schüler zwei Datensätze gibt, wählen Sie bitte in
+                                der folgenden Liste die beiden Datensätze aus:</p>
+                            <div id="librarySettingsMergeStudentsNavigator"
+                                 style="height: 25em; width: 95%"></div>
+                            <div style="margin-top: 10px">
+                                <p>Bitte wählen Sie nachfolgend aus, welcher der beien Datensätze gelöscht werden
+                                    soll.
+                                    Die ausgeliehenen Bücher werden vorher natürlich auf den anderen Datensatz
+                                    übertragen.</p>
+                                <table style="margin-bottom: 5px">
+                                    <tr style="color: blue; font-weight: bold">
+                                        <td>Datensatz 1</td>
+                                        <td>Datensatz 2</td>
+                                    </tr>
+                                    <tr>
+                                        <td id="ls_merge_student_1"></td>
+                                        <td id="ls_merge_student_2"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="radio" id="ls_deleteStudent1" name="ls_deleteStudentRB">
+                                            <label for="ls_deleteStudent1"> Datensatz 1 löschen</label></td>
+                                        <td><input type="radio" id="ls_deleteStudent2" name="ls_deleteStudentRB">
+                                            <label for="ls_deleteStudent2"> Datensatz 2 löschen</label></td>
+                                    </tr>
+                                </table>
                             </div>
-                            <!-- 5. tab: change barcode of a book -->
-                            <div class="tab-pane settingsPane" id="ls_changeBarcode">
-                                <h2>Barcode eines Buches ändern</h2>
-                                <p>Bitte erfasssen Sie unten den alten und neuen Barcode des Buchexemplars und Klicken
-                                    Sie
-                                    auf "ändern".
-                                    Das Buchexemplar wird dann auf den neuen Barcode registriert.</p>
-                                <div style="margin: 10px 0 10px 0">
-                                    <div class="input-group">
-                                        <span class="input-group-addon" id="basic-addon6">Alter Barcode:</span>
-                                        <input id="libraryChangeBarcodeOld" type="text" class="form-control"
-                                               placeholder="Barcode"
-                                               aria-describedby="basic-addon6"
-                                               style="width: 20em">
-                                        <span class="input-group-addon" id="basic-addon7">Neuer Barcode:</span>
-                                        <input id="libraryChangeBarcodeNew" type="text" class="form-control"
-                                               placeholder="Barcode"
-                                               aria-describedby="basic-addon7"
-                                               style="width: 20em">
-                                    </div>
+                            <div style="margin: 0 0 10px 0">
+                                <div style="vertical-align: middle;display: inline-block;height: 100%;">
+                                    <img src="/public/img/spiffygif_26x26.gif" style="display: none"
+                                         class="animated_gif">
                                 </div>
-
-                                <div style="margin: 0 0 10px 0">
-                                    <div style="vertical-align: middle;display: inline-block;height: 100%;">
-                                        <img src="/public/img/spiffygif_26x26.gif" style="display: none"
-                                             class="animated_gif">
-                                    </div>
-                                    <button type="button" class="btn btn-default">
-                                        Start
-                                        <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
-                                    </button>
-                                </div>
-                                <div class="alert alert-success" role="alert" style="display: none"></div>
-
+                                <button type="button" class="btn btn-default">
+                                    Start
+                                    <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                                </button>
                             </div>
+                            <div class="alert alert-success" role="alert" style="display: none"></div>
 
                         </div>
+                        <!-- 4. tab: sort out book copies -->
+                        <div class="tab-pane settingsPane" id="ls_sortOut">
+                            <h2>Bücherexemplare ausmustern</h2>
+                            <p>Die Bücherexemplare mit dem angegebenen Barcode werden aussortiert. Sollten noch
+                                Ausleihvorgänge darauf
+                                gebucht sein, so wird automatisch eine Rückgabe gebucht.</p>
+                            <p>Bitte platzieren sie den Cursor in das Feld für den Barcode.</p>
+                            <p><span style="color: red; font-weight: bold">
+                                Vorsicht: </span>Nach dem Einscannen
+                                (oder der Eingabe von Enter) wird das Ausmustern sofort vollzogen.</p>
+                            <div style="margin: 10px 0 10px 0">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon6">Ausgemustert am:</span>
+                                    <input type="text"
+                                           class="form-control dateinput"
+                                           aria-describedby="basic-addon6" style="width: 90px">
+                                </div>
+                            </div>
+                            <div style="margin: 10px 0 10px 0">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon5">Ausmustern:</span>
+                                    <input id="librarySortOutBarcodeField" type="text" class="form-control"
+                                           placeholder="Barcode"
+                                           aria-describedby="basic-addon5"
+                                           style="width: 20em">
+                                </div>
+                                <div style="vertical-align: middle;display: inline-block;height: 100%;">
+                                    <img src="/public/img/spiffygif_26x26.gif" style="display: none"
+                                         class="animated_gif">
+                                </div>
+                            </div>
+                            <div class="alert alert-success" role="alert"
+                                 style="display: none; height: 15em; overflow: auto"></div>
+                        </div>
+                        <!-- 5. tab: change barcode of a book -->
+                        <div class="tab-pane settingsPane" id="ls_changeBarcode">
+                            <h2>Barcode eines Buches ändern</h2>
+                            <p>Bitte erfasssen Sie unten den alten und neuen Barcode des Buchexemplars und Klicken
+                                Sie
+                                auf "ändern".
+                                Das Buchexemplar wird dann auf den neuen Barcode registriert.</p>
+                            <div style="margin: 10px 0 10px 0">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon6">Alter Barcode:</span>
+                                    <input id="libraryChangeBarcodeOld" type="text" class="form-control"
+                                           placeholder="Barcode"
+                                           aria-describedby="basic-addon6"
+                                           style="width: 20em">
+                                    <span class="input-group-addon" id="basic-addon7">Neuer Barcode:</span>
+                                    <input id="libraryChangeBarcodeNew" type="text" class="form-control"
+                                           placeholder="Barcode"
+                                           aria-describedby="basic-addon7"
+                                           style="width: 20em">
+                                </div>
+                            </div>
+
+                            <div style="margin: 0 0 10px 0">
+                                <div style="vertical-align: middle;display: inline-block;height: 100%;">
+                                    <img src="/public/img/spiffygif_26x26.gif" style="display: none"
+                                         class="animated_gif">
+                                </div>
+                                <button type="button" class="btn btn-default">
+                                    Start
+                                    <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                            <div class="alert alert-success" role="alert" style="display: none"></div>
+
+                        </div>
+
                     </div>
+                </div>
 
             </div>
         </div>

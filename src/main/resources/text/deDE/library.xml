@@ -14,6 +14,7 @@
 		<text path="booksPerLevel">Bücher je Jgst.</text>
 		<text path="admonition">Mahnungen</text>
 		<text path="reports">Berichte</text>
+		<text path="order">Bestellung</text>
 	</textresources>
 	<textresources path="permissions.library" language="de-DE">
 		<text path="open">Lernmittelbibliotheksmodul öffnen und alle Daten lesen</text>
