@@ -1,8 +1,8 @@
 package de.sp.modules.admin.servlets.useradministration;
 
-import de.sp.main.resources.modules.ModuleManager;
-import de.sp.main.resources.modules.Permission;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.modules.ModuleManager;
+import de.sp.main.services.modules.Permission;
+import de.sp.main.services.text.TS;
 import de.sp.modules.root.RootModule;
 import org.sql2o.Connection;
 

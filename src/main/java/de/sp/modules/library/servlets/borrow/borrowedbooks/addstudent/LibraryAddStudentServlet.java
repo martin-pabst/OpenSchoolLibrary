@@ -8,7 +8,7 @@ import de.sp.database.daos.basic.StudentDAO;
 import de.sp.database.daos.basic.StudentSchoolTermDAO;
 import de.sp.database.model.Student;
 import de.sp.database.model.User;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.text.TS;
 import de.sp.modules.library.LibraryModule;
 import de.sp.modules.library.daos.LibraryDAO;
 import de.sp.modules.library.servlets.borrow.borrowerlist.BorrowerRecord;

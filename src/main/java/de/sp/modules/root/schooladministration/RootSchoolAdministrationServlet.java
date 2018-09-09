@@ -11,7 +11,7 @@ import de.sp.database.model.StoreManager;
 import de.sp.database.model.User;
 import de.sp.database.stores.SchoolTermStore;
 import de.sp.database.stores.UserRolePermissionStore;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.text.TS;
 import de.sp.modules.library.servlets.settings.DeleteOldRecordsResponse;
 import de.sp.tools.server.BaseServlet;
 import org.slf4j.Logger;

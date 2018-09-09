@@ -24,8 +24,8 @@ import de.sp.database.setup.DatabaseStateEnum;
 import de.sp.database.setup.DatabaseTester;
 import de.sp.main.config.Configuration;
 import de.sp.main.login.LoginServlet;
-import de.sp.main.resources.templates.VelocityEngineFactory;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.templates.VelocityEngineFactory;
+import de.sp.main.services.text.TS;
 import de.sp.tools.server.BaseServlet;
 import de.sp.tools.server.progressServlet.ProgressServlet;
 

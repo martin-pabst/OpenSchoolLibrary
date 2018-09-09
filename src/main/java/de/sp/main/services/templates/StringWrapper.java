@@ -1,4 +1,4 @@
-package de.sp.main.resources.templates;
+package de.sp.main.services.templates;
 
 public class StringWrapper {
 	private String text;

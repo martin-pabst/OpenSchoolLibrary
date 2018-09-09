@@ -1,7 +1,7 @@
 package de.sp.tools.file;
 
 import de.sp.database.statements.StatementStore;
-import de.sp.main.resources.modules.ModuleManager;
+import de.sp.main.services.modules.ModuleManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

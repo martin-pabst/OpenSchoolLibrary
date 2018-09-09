@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <textresourcefile>
 	<textresources path="user" language="de-DE">
-		<text path="menu.logout">Abmelden</text>
-		<text path="menu.settings">Benutzereinstellungen</text>
+		<text path="moduleName">Benutzer-Modul</text>
+	</textresources>
+	<textresources path="user.menu" language="de-DE">
+		<text path="logout">Abmelden</text>
+		<text path="settings">Benutzereinstellungen</text>
+	</textresources>
+	<textresources path="permissions.user" language="de-DE">
+		<text path="open">Benutzer-Modul öffnen</text>
 	</textresources>
 </textresourcefile>
 

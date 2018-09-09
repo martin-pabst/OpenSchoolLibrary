@@ -1,7 +1,7 @@
 package de.sp.modules.admin.servlets.useradministration;
 
 import de.sp.database.statements.StatementStore;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.text.TS;
 import org.sql2o.Connection;
 
 import java.util.ArrayList;

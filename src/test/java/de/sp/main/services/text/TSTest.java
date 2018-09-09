@@ -1,4 +1,4 @@
-package de.sp.main.resources.text;
+package de.sp.main.services.text;
 
 import de.sp.main.config.Configuration;
 import org.junit.Assert;

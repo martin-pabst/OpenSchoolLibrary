@@ -1,6 +1,6 @@
 package de.sp.database.model;
 
-import de.sp.main.resources.modules.Permission;
+import de.sp.main.services.modules.Permission;
 import org.apache.commons.lang.StringUtils;
 import org.simpleframework.xml.Transient;
 

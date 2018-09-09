@@ -5,7 +5,7 @@ import de.sp.database.model.School;
 import de.sp.database.model.SchoolTerm;
 import de.sp.database.model.User;
 import de.sp.database.stores.SchoolTermStore;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.text.TS;
 import de.sp.tools.server.BaseServlet;
 import de.sp.tools.server.ErrorResponse;
 import org.slf4j.Logger;

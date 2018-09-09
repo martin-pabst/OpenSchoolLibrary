@@ -3,8 +3,9 @@ package de.sp.modules.mail;
 import de.sp.database.model.User;
 import de.sp.main.mainframe.menu.MenuItem;
 import de.sp.main.mainframe.menu.MenuItemSide;
-import de.sp.main.resources.modules.Module;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.modules.Module;
+import de.sp.main.services.settings.ModuleSettingsTypes;
+import de.sp.main.services.text.TS;
 
 public class MailModule extends Module {
 
@@ -71,6 +72,11 @@ public class MailModule extends Module {
 	@Override
 	public String[] addFragmentIds() {
 		return new String[] { "startMail" };
+	}
+
+	@Override
+	public ModuleSettingsTypes getModuleSettingsTypes() {
+		return null;
 	}
 
 

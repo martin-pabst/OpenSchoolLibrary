@@ -1,15 +1,20 @@
 package de.sp.modules.user;
 
+import de.sp.main.services.settings.ModuleSettingsTypes;
 import org.apache.velocity.Template;
 
 import de.sp.database.model.User;
 import de.sp.main.mainframe.menu.MenuItem;
 import de.sp.main.mainframe.menu.MenuItemSide;
-import de.sp.main.resources.modules.Module;
-import de.sp.main.resources.templates.VelocityEngineFactory;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.modules.Module;
+import de.sp.main.services.templates.VelocityEngineFactory;
+import de.sp.main.services.text.TS;
 
 public class UserModule extends Module {
+
+	public static final String USER = "user";
+	public static final String USEROPEN = "user.open";
+
 
 	private Template logoutTemplate, settingsTemplate;
 
@@ -28,12 +33,12 @@ public class UserModule extends Module {
 
 	@Override
 	public String[] getPermissionNames() {
-		return new String[] {};
+		return new String[] {USEROPEN};
 	}
 
 	@Override
 	public String getIdentifier() {
-		return "user";
+		return USER;
 	}
 
 	@Override
@@ -83,6 +88,11 @@ public class UserModule extends Module {
 	@Override
 	public String[] addFragmentIds() {
 		return new String[] { "logout", "userSettings" };
+	}
+
+	@Override
+	public ModuleSettingsTypes getModuleSettingsTypes() {
+		return null;
 	}
 
 }

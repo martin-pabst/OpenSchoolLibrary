@@ -1,4 +1,4 @@
-package de.sp.main.resources.templates;
+package de.sp.main.services.templates;
 
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;

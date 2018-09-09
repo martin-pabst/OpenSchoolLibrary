@@ -1,8 +1,8 @@
 package de.sp.database.model;
 
 import de.sp.database.stores.SchoolTermStore;
-import de.sp.main.resources.modules.InsufficientPermissionException;
-import de.sp.main.resources.modules.Permission;
+import de.sp.main.services.modules.InsufficientPermissionException;
+import de.sp.main.services.modules.Permission;
 import de.sp.tools.string.PasswordSecurity;
 import de.sp.tools.string.SaltAndHash;
 

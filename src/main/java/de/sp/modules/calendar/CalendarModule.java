@@ -3,9 +3,10 @@ package de.sp.modules.calendar;
 import de.sp.database.model.User;
 import de.sp.main.mainframe.menu.MenuItem;
 import de.sp.main.mainframe.menu.MenuItemSide;
-import de.sp.main.resources.modules.Module;
-import de.sp.main.resources.templates.VelocityEngineFactory;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.modules.Module;
+import de.sp.main.services.settings.ModuleSettingsTypes;
+import de.sp.main.services.templates.VelocityEngineFactory;
+import de.sp.main.services.text.TS;
 import de.sp.modules.calendar.servlet.CalendarServlet;
 import org.apache.velocity.Template;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -76,6 +77,11 @@ public class CalendarModule extends Module {
 	@Override
 	public String[] addFragmentIds() {
 		return new String[] { "startCalendar" };
+	}
+
+	@Override
+	public ModuleSettingsTypes getModuleSettingsTypes() {
+		return null;
 	}
 
 	@Override

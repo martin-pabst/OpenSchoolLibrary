@@ -1,4 +1,4 @@
-package de.sp.main.resources.text;
+package de.sp.main.services.text;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;

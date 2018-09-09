@@ -3,7 +3,7 @@ package de.sp.modules.library.servlets.borrow.bookformstore;
 import com.google.gson.Gson;
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.model.User;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.text.TS;
 import de.sp.modules.library.LibraryModule;
 import de.sp.modules.library.daos.LibraryDAO;
 import de.sp.tools.server.BaseServlet;

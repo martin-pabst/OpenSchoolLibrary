@@ -1,8 +1,9 @@
-package de.sp.main.resources.modules;
+package de.sp.main.services.modules;
 
 import de.sp.database.model.User;
 import de.sp.main.mainframe.menu.MenuItem;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.settings.SettingsManager;
+import de.sp.main.services.text.TS;
 import de.sp.modules.admin.AdminModule;
 import de.sp.modules.calendar.CalendarModule;
 import de.sp.modules.install.InstallModule;
@@ -48,6 +49,8 @@ public class ModuleManager {
 	public static void addModule(Module module) {
 		modules.add(module);
 		moduleMap.put(module.getName(), module);
+
+		SettingsManager.getInstance().registerModule(module);
 
 		for (String fragmentId : module.addFragmentIds()) {
 			htmlFragmentIdMap.put(fragmentId, module);

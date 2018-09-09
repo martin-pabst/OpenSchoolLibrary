@@ -10,7 +10,7 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Transient;
 
-import de.sp.main.resources.text.TextMap;
+import de.sp.main.services.text.TextMap;
 
 @Root(name="language")
 @Default(DefaultType.FIELD)

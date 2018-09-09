@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.model.User;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.text.TS;
 import de.sp.modules.library.LibraryModule;
 import de.sp.modules.library.reports.model.BaseReport;
 import de.sp.modules.library.reports.model.ContentType;

@@ -1,4 +1,4 @@
-package de.sp.main.resources.htmlfragments;
+package de.sp.main.services.htmlfragments;
 
 public class HtmlFragmentRequest {
 

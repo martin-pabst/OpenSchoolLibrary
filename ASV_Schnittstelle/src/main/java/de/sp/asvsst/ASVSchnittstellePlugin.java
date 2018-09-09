@@ -1,5 +1,6 @@
 package de.sp.asvsst;
 
+import de.sp.main.services.settings.ModuleSettingsTypes;
 import de.sp.modules.admin.AdminModule;
 import org.apache.velocity.Template;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -7,9 +8,9 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import de.sp.asvsst.servlet.ASVImportServlet;
 import de.sp.database.model.User;
 import de.sp.main.mainframe.menu.MenuItem;
-import de.sp.main.resources.modules.Plugin;
-import de.sp.main.resources.templates.VelocityEngineFactory;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.modules.Plugin;
+import de.sp.main.services.templates.VelocityEngineFactory;
+import de.sp.main.services.text.TS;
 
 public class ASVSchnittstellePlugin extends Plugin {
 
@@ -78,6 +79,11 @@ public class ASVSchnittstellePlugin extends Plugin {
 	@Override
 	public String[] addFragmentIds() {
 		return new String[] { "startAdminASVImport" };
+	}
+
+	@Override
+	public ModuleSettingsTypes getModuleSettingsTypes() {
+		return null;
 	}
 
 }

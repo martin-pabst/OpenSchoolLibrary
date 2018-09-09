@@ -1,6 +1,6 @@
 package de.sp.tools.validation;
 
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.text.TS;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 

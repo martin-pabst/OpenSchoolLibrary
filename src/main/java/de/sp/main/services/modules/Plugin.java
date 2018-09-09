@@ -1,11 +1,11 @@
-package de.sp.main.resources.modules;
+package de.sp.main.services.modules;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.sp.database.model.User;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.text.TS;
 
 public abstract class Plugin extends Module {
 	

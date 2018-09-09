@@ -1,6 +1,6 @@
 package de.sp.modules.admin.servlets.useradministration;
 
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.text.TS;
 import de.sp.tools.validation.Validation;
 
 import java.util.regex.Pattern;

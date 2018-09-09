@@ -8,7 +8,7 @@ import de.sp.database.model.DatabaseStore;
 import de.sp.database.model.Role;
 import de.sp.database.model.School;
 import de.sp.database.model.User;
-import de.sp.main.resources.modules.Permission;
+import de.sp.main.services.modules.Permission;
 import org.sql2o.Connection;
 
 import java.util.ArrayList;

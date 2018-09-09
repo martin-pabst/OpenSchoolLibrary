@@ -3,7 +3,7 @@ package de.sp.tools.server;
 import de.sp.database.model.User;
 import de.sp.main.login.LoginServlet;
 import de.sp.main.mainframe.MainFrameServlet;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.text.TS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

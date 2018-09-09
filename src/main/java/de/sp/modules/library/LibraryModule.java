@@ -3,9 +3,10 @@ package de.sp.modules.library;
 import de.sp.database.model.User;
 import de.sp.main.mainframe.menu.MenuItem;
 import de.sp.main.mainframe.menu.MenuItemSide;
-import de.sp.main.resources.modules.Module;
-import de.sp.main.resources.templates.VelocityEngineFactory;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.modules.Module;
+import de.sp.main.services.settings.ModuleSettingsTypes;
+import de.sp.main.services.templates.VelocityEngineFactory;
+import de.sp.main.services.text.TS;
 import de.sp.modules.library.reports.LibraryNavigatorDataServlet;
 import de.sp.modules.library.reports.LibraryReportServlet;
 import de.sp.modules.library.servlets.borrow.bookcopystatus.LibraryBookCopyStatusServlet;
@@ -140,6 +141,10 @@ public class LibraryModule extends Module {
 		return new String[] { "startLibrary" };
 	}
 
+	@Override
+	public ModuleSettingsTypes getModuleSettingsTypes() {
+		return null;
+	}
 
-	
+
 }

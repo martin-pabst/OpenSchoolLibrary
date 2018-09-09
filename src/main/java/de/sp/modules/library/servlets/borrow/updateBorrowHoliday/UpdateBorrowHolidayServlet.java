@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.BorrowsDAO;
 import de.sp.database.model.User;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.text.TS;
 import de.sp.modules.library.LibraryModule;
 import de.sp.tools.server.BaseServlet;
 import org.slf4j.Logger;

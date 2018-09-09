@@ -3,9 +3,10 @@ package de.sp.modules.root;
 import de.sp.database.model.User;
 import de.sp.main.mainframe.menu.MenuItem;
 import de.sp.main.mainframe.menu.MenuItemSide;
-import de.sp.main.resources.modules.Module;
-import de.sp.main.resources.templates.VelocityEngineFactory;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.modules.Module;
+import de.sp.main.services.settings.ModuleSettingsTypes;
+import de.sp.main.services.templates.VelocityEngineFactory;
+import de.sp.main.services.text.TS;
 import de.sp.modules.root.schooladministration.RootSchoolAdministrationServlet;
 import org.apache.velocity.Template;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -84,7 +85,12 @@ public class RootModule extends Module {
 		return new String[] {"startSchoolAdministration"};
 	}
 
-    @Override
+	@Override
+	public ModuleSettingsTypes getModuleSettingsTypes() {
+		return null;
+	}
+
+	@Override
     public void addServlets(ServletContextHandler context) {
         context.addServlet(RootSchoolAdministrationServlet.class, "/root/schoolAdministration/*");
     }

@@ -1,11 +1,12 @@
 package de.sp.modules.install;
 
+import de.sp.main.services.settings.ModuleSettingsTypes;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
 import de.sp.database.model.User;
 import de.sp.main.mainframe.menu.MenuItem;
-import de.sp.main.resources.modules.Module;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.modules.Module;
+import de.sp.main.services.text.TS;
 import de.sp.modules.install.servlets.InitDBServlet;
 
 public class InstallModule extends Module {
@@ -59,6 +60,11 @@ public class InstallModule extends Module {
 	@Override
 	public String[] addFragmentIds() {
 		return new String[] {};
+	}
+
+	@Override
+	public ModuleSettingsTypes getModuleSettingsTypes() {
+		return null;
 	}
 
 }

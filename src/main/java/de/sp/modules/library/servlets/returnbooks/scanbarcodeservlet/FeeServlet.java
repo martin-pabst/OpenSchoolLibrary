@@ -8,7 +8,7 @@ import de.sp.database.daos.basic.StudentDAO;
 import de.sp.database.daos.basic.TeacherDAO;
 import de.sp.database.model.Fee;
 import de.sp.database.model.User;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.text.TS;
 import de.sp.modules.library.LibraryModule;
 import de.sp.protocols.w2ui.grid.gridrequest.GridResponseStatus;
 import de.sp.tools.server.BaseServlet;

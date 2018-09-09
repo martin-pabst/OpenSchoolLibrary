@@ -1,7 +1,7 @@
 package de.sp.modules.admin.servlets.useradministration;
 
-import de.sp.main.resources.modules.Permission;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.modules.Permission;
+import de.sp.main.services.text.TS;
 
 /**
  * Created by martin on 03.05.2017.

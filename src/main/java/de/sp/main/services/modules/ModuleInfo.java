@@ -1,4 +1,4 @@
-package de.sp.main.resources.modules;
+package de.sp.main.services.modules;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;

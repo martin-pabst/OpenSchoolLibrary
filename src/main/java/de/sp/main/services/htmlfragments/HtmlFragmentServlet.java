@@ -1,9 +1,9 @@
-package de.sp.main.resources.htmlfragments;
+package de.sp.main.services.htmlfragments;
 
 import com.google.gson.Gson;
 import de.sp.database.model.User;
-import de.sp.main.resources.modules.ModuleManager;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.modules.ModuleManager;
+import de.sp.main.services.text.TS;
 import de.sp.tools.server.BaseServlet;
 import org.slf4j.Logger;
 

@@ -6,7 +6,7 @@ import de.sp.asvsst.ASVXMLParser;
 import de.sp.asvsst.databasewriter.ASVToDatabaseWriter;
 import de.sp.asvsst.model.ASVExport;
 import de.sp.database.model.User;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.text.TS;
 import de.sp.protocols.w2ui.forms.ResponseStatusEnum;
 import de.sp.protocols.w2ui.forms.upload.UploadRequest;
 import de.sp.protocols.w2ui.forms.upload.UploadRequestFile;

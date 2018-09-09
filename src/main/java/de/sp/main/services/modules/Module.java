@@ -1,8 +1,9 @@
-package de.sp.main.resources.modules;
+package de.sp.main.services.modules;
 
 import de.sp.database.model.User;
 import de.sp.main.mainframe.menu.MenuItem;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.settings.ModuleSettingsTypes;
+import de.sp.main.services.text.TS;
 import de.sp.tools.file.FileTool;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -191,4 +192,5 @@ public abstract class Module {
 
 	abstract public String[] addFragmentIds();
 
+    public abstract ModuleSettingsTypes getModuleSettingsTypes();
 }

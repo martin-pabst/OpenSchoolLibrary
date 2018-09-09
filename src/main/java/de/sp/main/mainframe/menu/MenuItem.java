@@ -1,7 +1,7 @@
 package de.sp.main.mainframe.menu;
 
 import de.sp.database.model.User;
-import de.sp.main.resources.text.TS;
+import de.sp.main.services.text.TS;
 
 import java.util.ArrayList;
 
