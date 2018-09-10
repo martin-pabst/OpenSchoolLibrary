@@ -1,5 +1,8 @@
 package de.sp.tools.word;
 
+import de.sp.tools.string.Finder;
+
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -9,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.io.File;
 
 /**
  * Created by martin on 07.04.2017.
@@ -168,7 +170,33 @@ public class WordTool {
     }
 
     public void replace(String placeholder, String newValue){
-        xml = xml.replace(placeholder, newValue);
+        if(!newValue.contains("\n")) {
+            xml = xml.replace(placeholder, newValue);
+        } else {
+
+            String[] lines = newValue.split("\n");
+
+            // find begin and end of enclosing paragraph
+            Finder finder = new Finder(xml);
+            finder.find(placeholder);
+            finder.findBackward("<w:p");
+            int posStart = finder.getPos();
+            finder.find("</w:p>");
+            finder.skipFoundWord();
+            int posEnd = finder.getPos();
+
+
+            String paragraph = xml.substring(posStart, posEnd);
+            String before = xml.substring(0, posStart);
+            String after = xml.substring(posEnd, xml.length());
+
+            for(String line: lines){
+                before += paragraph.replace(placeholder, line);
+            }
+
+            xml = before + after;
+
+        }
     }
 
 
@@ -177,4 +205,8 @@ public class WordTool {
         return xml.contains(hint);
 
     }
+
+
+
+
 }
