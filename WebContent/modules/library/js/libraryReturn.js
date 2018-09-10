@@ -165,6 +165,7 @@
                         if (data.status == "success") {
 
                             returnerGrid.selectNone();
+                            printLog(data, barcode);
 
                             bookCopyDetailsRecord = data; // Java-Type: BookReturnResponse
                             bookCopyDetailsRecord['id'] = data.book_copy_id;
@@ -232,6 +233,22 @@
 
     }
 
+
+    function printLog(data, barcode){
+        //data.title
+        //data.student_firstname
+        //data.student_surname
+        //barcode
+        //data.subject ('D')
+        var html = '<div><span style="font-weight: bold">'
+            + data.student_firstname + " " + data.student_surname + ": </span>";
+        html += '<span style="color: blue">' + barcode + '</span>';
+        html += '<div style="margin-bottom: 5px">(<span style="font-weight: bold">' + data.subject + '</span>: ' + data.title + ')' + '</div>';
+        html += '</div>';
+
+        $('#libraryReturnLog').append(html)
+            .animate({scrollTop: $('#libraryReturnLog').prop("scrollHeight")}, 500);
+    }
 
     function initializeReturnTables() {
 
@@ -462,9 +479,21 @@
     function returnBooks(selectedItems) {
 
         var borrows_ids = [];
+        var logData = [];
+        var returner = getSelectedReturner();
+
         selectedItems.forEach(function (si) {
             var record = w2ui['libraryReturnBooksList'].get(si);
             borrows_ids.push(record.borrows_id);
+
+            logData.push({
+                barcode: record.barcode,
+                title: record.title,
+                student_firstname:returner.name,
+                student_surname: '',
+                subject:record.subject
+            });
+
         });
 
         var message = "Soll die Rückgabe der " + selectedItems.length + " Bücher gebucht werden?";
@@ -483,6 +512,10 @@
                     returner.numberOfBorrowedBooks--;
                     w2ui['libraryReturnerList'].refresh();
                 }
+
+                logData.forEach(function(ld){
+                   printLog(ld, ld.barcode);
+                });
 
             }, message);
 

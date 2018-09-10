@@ -67,9 +67,13 @@
                 var selection = w2ui['libraryInventoryBooks'].getSelection(false);
 
                 if(barcode.length >= 13){
-                    w2alert("Sie haben eine ISBN-Nummer gescannt.\n Es wird keine Aktion ausgeführt.");
+                    w2alert("Sie haben eine ISBN-Nummer gescannt.\n Es wird keine Aktion ausgeführt.", "Fehler:", function() {
+                        $('#libraryInventoryAddCopy').focus();
+                    });
                 } else if (selection.length < 1) {
-                    w2alert("Bitte wählen Sie zuerst in der linken Tabelle ein Buch aus.");
+                    w2alert("Bitte wählen Sie zuerst in der linken Tabelle ein Buch aus.", "Fehler: ", function() {
+                        $('#libraryInventoryAddCopy').focus();
+                    });
                     $('#libraryInventoryAddCopy').blur();
                 } else if (barcode !== "") {
 
@@ -100,7 +104,11 @@
                                     }
                                 );
                             } else {
-                                w2alert("Fehler beim Speichern der Daten: " + data.message);
+                                if(!$("#noErrorMessagesWhenAddCopy").is(':checked')){
+                                    w2alert("Fehler beim Speichern der Daten: " + data.message, "Fehler: ", function(){
+                                        $('#libraryInventoryAddCopy').focus();
+                                    });
+                                }
                             }
                         },
                         "json"
@@ -157,7 +165,7 @@
 
                         } else if (data.status === "error") {
 
-                            w2alert("Es gibt kein Buch mit dem Barcode " + barcode + ".");
+                            w2alert(data.message);
 
                         }
 

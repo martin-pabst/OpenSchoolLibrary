@@ -1,17 +1,12 @@
 package de.sp.asvsst.model;
 
+import de.sp.asvsst.ParseASVDataException;
+import de.sp.asvsst.model.wertelisten.ASVGeschlecht;
+import org.simpleframework.xml.*;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import org.simpleframework.xml.Default;
-import org.simpleframework.xml.DefaultType;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-
-import de.sp.asvsst.ParseASVDataException;
-import de.sp.asvsst.model.wertelisten.ASVGeschlecht;
 
 @Root(name="schuelerin")
 @Default(DefaultType.FIELD)
@@ -74,7 +69,8 @@ public class ASVSchuelerin {
 	
 	@Element(required = false)
 	public Date austrittsdatum;
-	
+
+	@Element(required = false)
 	public int sortierung;
 
 	@ElementList(name="schueleranschriften")

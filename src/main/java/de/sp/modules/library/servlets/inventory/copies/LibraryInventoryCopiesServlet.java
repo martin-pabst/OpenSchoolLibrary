@@ -79,6 +79,14 @@ public class LibraryInventoryCopiesServlet extends
 			String message = "Der Barcode wurde beim Buch '" + bci.getTitle()
 					+ "' (" + bci.getAuthor() + ") schon registriert.";
 
+			if(bci.getSorted_out_date() != null){
+
+				SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+				String date = sdf.format(bci.getSorted_out_date());
+				message += "<div><b>Bemerkung:</b> Dieses Buchexemplar wurde am " + date + " ausgemustert.</div>";
+
+			}
+
 			return new GridResponseSave(GridResponseStatus.error, message, null);
 
 		} else {

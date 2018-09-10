@@ -147,7 +147,8 @@ public enum ASVUnterrichtsfach {
 	FSem("0100700800", "FSem", "Französisch (Seminarleitfach)"), //
 	Fsp("0102500100", "Fsp", "sonstige Fremdsprache"), //
 	Ru("0101700100", "Ru", "Russisch"), //
-	Rus("0101700200", "Rus", "Russisch spätbeginnend"); //
+	Rus("0101700200", "Rus", "Russisch spätbeginnend"), //
+	Chis("0100400200", "Chis", "Chinesisch spätbeginnend"); //
 
 	private String schluessel;
 	private String kurzform;

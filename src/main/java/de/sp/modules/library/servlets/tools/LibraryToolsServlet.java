@@ -7,6 +7,7 @@ import de.sp.database.daos.basic.BookCopyDAO;
 import de.sp.database.model.User;
 import de.sp.main.services.text.TS;
 import de.sp.modules.library.LibraryModule;
+import de.sp.modules.library.servlets.inventory.copies.BookCopyInfoRecord;
 import de.sp.tools.server.BaseServlet;
 import de.sp.tools.server.ErrorResponse;
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class LibraryToolsServlet extends BaseServlet {
 
@@ -49,6 +51,8 @@ public class LibraryToolsServlet extends BaseServlet {
                                 fbr.school_id);
 
                         FindBookIdByBarcodeResponse fbrp = findBookIdByBarcode(fbr, con);
+
+
 
                         responseString = gson.toJson(fbrp);
 
@@ -86,10 +90,23 @@ public class LibraryToolsServlet extends BaseServlet {
         }
 
         if(response.sorted_out_date != null){
+
+            List<BookCopyInfoRecord> bookInfo = BookCopyDAO.getBookCopyInInfo(fbr.school_id, fbr.barcode, con);
+            String bookInformation = "";
+
+            if(bookInfo != null && bookInfo.size() == 1){
+                BookCopyInfoRecord bcir = bookInfo.get(0);
+                bookInformation = "<div><b>Informationen zum Buch:</b></div>";
+                bookInformation += "<div><b>Titel:</b> " + bcir.getTitle() + "</div>";
+                bookInformation += "<div><b>Autor:</b> " + bcir.getAuthor() + "</div>";
+            }
+
+
+
             response.setStatus("error");
             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
             response.setMessage("Das Buch mit dem Barcode " + fbr.barcode + " wurde am "
-                    + sdf.format(response.sorted_out_date) + " ausgemustert.");
+                    + sdf.format(response.sorted_out_date) + " ausgemustert." + bookInformation);
             return response;
         }
 
