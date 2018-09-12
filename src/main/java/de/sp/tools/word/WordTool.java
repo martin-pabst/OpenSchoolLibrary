@@ -23,6 +23,8 @@ public class WordTool {
     private String xml;
     private String filename;
 
+    private List<DocumentPart> documentParts = new ArrayList<>();
+
     private HashMap<String, ArrayList<RowChanger>> rowChangers = new HashMap<>();
 
     public WordTool(String originalFilename, String filename) throws URISyntaxException, IOException {
@@ -49,7 +51,15 @@ public class WordTool {
     }
 
     public String getXml() {
-        return xml;
+
+        String newXML = xml;
+
+        for(DocumentPart dp: documentParts){
+
+            newXML = newXML.replace(dp.getId(), dp.getCopies());
+        }
+
+        return newXML;
     }
 
     public void setXml(String xml) {
@@ -80,17 +90,17 @@ public class WordTool {
 
     private void commitRowChangers() {
 
-        rowChangers.forEach( (hint, rowChangerList) -> {
+        rowChangers.forEach((hint, rowChangerList) -> {
 
             String originalRow = extractTableRowXML(hint);
 
             ArrayList<String> newLines = new ArrayList<>();
 
-            for(RowChanger rc: rowChangerList){
+            for (RowChanger rc : rowChangerList) {
 
                 String newLine = originalRow;
 
-                for(CellData cd: rc.getCellDataList()){
+                for (CellData cd : rc.getCellDataList()) {
 
                     newLine = newLine.replace(cd.getPlaceholder(), cd.getNewValue());
 
@@ -107,20 +117,20 @@ public class WordTool {
     }
 
 
-    private String extractTableRowXML(String hint){
+    private String extractTableRowXML(String hint) {
 
         int i = xml.indexOf(hint);
-        int lineBegin = xml.lastIndexOf("<w:tr ",i);
+        int lineBegin = xml.lastIndexOf("<w:tr ", i);
         int lineEnd = xml.indexOf("</w:tr>", i) + "</w:tr>".length();
 
         return xml.substring(lineBegin, lineEnd);
 
     }
 
-    private void replaceTableRowXML(String hint, List<String> xmlForNewLines){
+    private void replaceTableRowXML(String hint, List<String> xmlForNewLines) {
 
         int i = xml.indexOf(hint);
-        int lineBegin = xml.lastIndexOf("<w:tr ",i);
+        int lineBegin = xml.lastIndexOf("<w:tr ", i);
         int lineEnd = xml.indexOf("</w:tr>", i) + "</w:tr>".length();
 
         String xmlBefore = xml.substring(0, lineBegin);
@@ -130,7 +140,7 @@ public class WordTool {
 
         sb.append(xmlBefore);
 
-        for(String xml: xmlForNewLines){
+        for (String xml : xmlForNewLines) {
             sb.append(xml);
         }
 
@@ -140,11 +150,11 @@ public class WordTool {
 
     }
 
-    public RowChanger getRowChanger(String hint){
+    public RowChanger getRowChanger(String hint) {
 
         ArrayList<RowChanger> rowChangerList = rowChangers.get(hint);
 
-        if(rowChangerList == null){
+        if (rowChangerList == null) {
             rowChangerList = new ArrayList<>();
             rowChangers.put(hint, rowChangerList);
         }
@@ -156,21 +166,53 @@ public class WordTool {
 
     }
 
-    public void cancelRowChanger(RowChanger rc){
+    public void cancelRowChanger(RowChanger rc) {
 
         ArrayList<RowChanger> rowChangerList = rowChangers.get(rc.getHint());
 
-        if(rowChangerList != null){
+        if (rowChangerList != null) {
             rowChangerList.remove(rc);
-            if(rowChangerList.size() == 0){
+            if (rowChangerList.size() == 0) {
                 rowChangers.remove(rc.getHint());
             }
         }
 
     }
 
-    public void replace(String placeholder, String newValue){
-        if(!newValue.contains("\n")) {
+
+    public DocumentPart getDocumentPart(String placeholderStart, String placeholderEnd) {
+        Finder finder = new Finder(xml);
+        finder.find(placeholderStart);
+        finder.findBackward("<w:p");
+        int posPlaceholderStart = finder.getPos();
+        finder.find("</w:p>");
+        finder.skipFoundWord();
+        int partStart = finder.getPos();
+
+        finder.find(placeholderEnd);
+        finder.findBackward("<w:p");
+        int partEnd = finder.getPos();
+        finder.find("</w:p>");
+        finder.skipFoundWord();
+        int posPlaceholderEnd = finder.getPos();
+
+        String before = xml.substring(0, posPlaceholderStart);
+        String after = xml.substring(posPlaceholderEnd, xml.length());
+        String partXML = xml.substring(partStart, partEnd);
+
+        DocumentPart dp = new DocumentPart(partXML);
+
+        xml = before + dp.getId() + after;
+
+        documentParts.add(dp);
+
+        return dp;
+
+    }
+
+
+    public void replace(String placeholder, String newValue) {
+        if (!newValue.contains("\n")) {
             xml = xml.replace(placeholder, newValue);
         } else {
 
@@ -190,7 +232,7 @@ public class WordTool {
             String before = xml.substring(0, posStart);
             String after = xml.substring(posEnd, xml.length());
 
-            for(String line: lines){
+            for (String line : lines) {
                 before += paragraph.replace(placeholder, line);
             }
 
@@ -205,8 +247,6 @@ public class WordTool {
         return xml.contains(hint);
 
     }
-
-
 
 
 }
