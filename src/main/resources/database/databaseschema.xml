@@ -9,6 +9,7 @@
 		<column name="name" type="varchar" length="200" />
 		<column name="number" type="varchar" length="10" />
 		<column name="abbreviation" type="varchar" length="20" />
+		<column name="librarysettings" type="text" />
 	</table>
 
 	<table name="school_term">

@@ -78,7 +78,7 @@ public class WordTool {
 
             Path documentXmlPath = zipFS.getPath("/word/document.xml");
 
-            byte[] content = xml.getBytes(StandardCharsets.UTF_8);
+            byte[] content = getXml().getBytes(StandardCharsets.UTF_8);
             Files.delete(documentXmlPath);
             Files.write(documentXmlPath, content);
 
@@ -183,14 +183,14 @@ public class WordTool {
     public DocumentPart getDocumentPart(String placeholderStart, String placeholderEnd) {
         Finder finder = new Finder(xml);
         finder.find(placeholderStart);
-        finder.findBackward("<w:p");
+        finder.findBackward("<w:p ");
         int posPlaceholderStart = finder.getPos();
         finder.find("</w:p>");
         finder.skipFoundWord();
         int partStart = finder.getPos();
 
         finder.find(placeholderEnd);
-        finder.findBackward("<w:p");
+        finder.findBackward("<w:p ");
         int partEnd = finder.getPos();
         finder.find("</w:p>");
         finder.skipFoundWord();
@@ -221,7 +221,7 @@ public class WordTool {
             // find begin and end of enclosing paragraph
             Finder finder = new Finder(xml);
             finder.find(placeholder);
-            finder.findBackward("<w:p");
+            finder.findBackward("<w:p ");
             int posStart = finder.getPos();
             finder.find("</w:p>");
             finder.skipFoundWord();

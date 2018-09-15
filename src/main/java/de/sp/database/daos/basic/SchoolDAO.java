@@ -60,13 +60,15 @@ public class SchoolDAO {
 	 * @throws Exception
 	 */
 	public static School insert(String name, String number,
-			String abbreviation, Connection con) throws Exception {
+			String abbreviation, String librarysettings, Connection con) throws Exception {
 
 		String sql = StatementStore.getStatement("school.insert");
 
 		Long id = con.createQuery(sql, true).addParameter("name", name)
 				.addParameter("number", number)
-				.addParameter("abbreviation", abbreviation).executeUpdate()
+				.addParameter("abbreviation", abbreviation)
+				.addParameter("librarysettings", librarysettings)
+				.executeUpdate()
 				.getKey(Long.class);
 
 		return new School(id, name, number, abbreviation);
@@ -92,6 +94,7 @@ public class SchoolDAO {
 				.addParameter("name", school.getName())
 				.addParameter("abbreviation", school.getAbbreviation())
 				.addParameter("id", school.getId())
+				.addParameter("librarysettings", school.getLibrarysettings())
 				.executeUpdate();
 
 	}

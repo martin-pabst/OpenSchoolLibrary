@@ -14,6 +14,8 @@ public class School {
 
 	private String number;
 
+	private String librarysettings;
+
 	private ArrayList<SchoolTerm> schoolTerms = new ArrayList<>();
 
 	public School() {
@@ -37,6 +39,10 @@ public class School {
 
 	public String getNumber() {
 		return number;
+	}
+
+	public String getLibrarysettings() {
+		return librarysettings;
 	}
 
 	public void addSchoolTerm(SchoolTerm schoolTerm) {
@@ -101,5 +107,11 @@ public class School {
 
 	public void setNumber(String number) {
 		this.number = number;
+	}
+
+	public void setLibarysettings(String librarysettings) {
+
+		this.librarysettings = librarysettings;
+
 	}
 }

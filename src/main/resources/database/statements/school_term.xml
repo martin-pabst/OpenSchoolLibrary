@@ -7,7 +7,8 @@
 		UPDATE school
 		set number = :number,
 			name = :name,
-			abbreviation = :abbreviation
+			abbreviation = :abbreviation,
+			librarysettings = :librarysettings
 		WHERE id = :id
 	</statement>
 
@@ -20,8 +21,8 @@
 	</statement>
 
 	<statement name="school.insert">
-		insert into school (name, number, abbreviation) 
-		values (:name, :number, :abbreviation)
+		insert into school (name, number, abbreviation, librarysettings)
+		values (:name, :number, :abbreviation, :librarysettings)
 	</statement>
 
 	<statement name="school.remove">

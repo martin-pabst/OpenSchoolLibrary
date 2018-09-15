@@ -1,5 +1,8 @@
 package de.sp.main.mainframe.definitionsservlet;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import de.sp.database.connection.ConnectionPool;
 import de.sp.database.daos.basic.DBClassDAO;
 import de.sp.database.daos.basic.SubjectDAO;
@@ -37,6 +40,8 @@ public class Definitions {
 	private String username;
 
 	private Set<String> permissions;
+
+	private JsonObject librarysettings;
 	
 	public Definitions(User user, School school, SchoolTerm schoolTerm) {
 
@@ -62,6 +67,15 @@ public class Definitions {
                 classList = DBClassDAO.getSimpleValueList(schoolTerm.getId(), con);
 
                 permissions = user.getPermissions();
+
+                String librarySettingsStr = school.getLibrarysettings();
+                if(librarySettingsStr == null || librarySettingsStr.isEmpty()){
+                	librarySettingsStr = "{}";
+
+				}
+
+				Gson gson = new Gson();
+				librarysettings = new JsonParser().parse(librarySettingsStr).getAsJsonObject();
 
             }
 		}

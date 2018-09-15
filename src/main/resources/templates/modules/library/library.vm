@@ -395,10 +395,26 @@
 
 
                     <div>
-                            <textarea id="bookdealeraddress" style="height: 70px; width: 100%"
-                                      placeholder="Anschrift des Händlers..."></textarea>
+                            <textarea id="bookdealeraddressleft" style="height: 70px; width: 100%"
+                                      placeholder="Anschrift linke Seite..."></textarea>
                     </div>
 
+                    <div>
+                            <textarea id="bookdealeraddressright" style="height: 70px; width: 100%"
+                                      placeholder="Anschrift rechte Seite..."></textarea>
+                    </div>
+
+                    <div style="margin-bottom: 5px">
+                        <input id="orderid" type="text" placeholder="Bestellnummer" />
+                    </div>
+
+                    <div style="margin-bottom: 5px">
+                        <input id="customerid" type="text" placeholder="Kundennummer" />
+                    </div>
+
+                    <div style="margin-bottom: 5px">
+                        <input id="rabatt" type="number" placeholder="Rabatt" />%
+                    </div>
 
                     <div>
                         <form name="startOrderBooksForm" action="/library/orderBooks" target="_blank" method="post">

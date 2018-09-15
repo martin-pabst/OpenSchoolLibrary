@@ -32,6 +32,31 @@
            collectData();
         });
 
+        var ls = App.globalDefinitions().librarysettings;
+        if(ls){
+            if(ls.addressLeft){
+                $('#bookdealeraddressleft').val(ls.addressLeft);
+            }
+
+            if(ls.addressRight){
+                $('#bookdealeraddressright').val(ls.addressRight);
+            }
+
+            if(ls.orderId){
+                $('#orderid').val(ls.orderId);
+            }
+
+            if(ls.customerId){
+                $('#customerid').val(ls.customerId);
+            }
+
+            if(ls.rabatt){
+                $('#rabatt').val(ls.rabatt);
+            }
+
+        }
+
+
     }
 
 
@@ -47,11 +72,27 @@
             }
         }
 
+
+        App.globalDefinitions().librarysettings = {
+            addressLeft: $('#bookdealeraddressleft').val(),
+            addressRight: $('#bookdealeraddressright').val(),
+            orderId: $('#orderid').val(),
+            customerId: $('#customerid').val(),
+            rabatt: $('#rabatt').val(),
+        };
+
+
         var requestData = {
             selectedRows: selectedRows,
-            address: $('#bookdealeraddress').val(),
-            school_id: global_school_id
-        }
+            addressLeft: $('#bookdealeraddressleft').val(),
+            addressRight: $('#bookdealeraddressright').val(),
+            orderId: $('#orderid').val(),
+            customerId: $('#customerid').val(),
+            rabatt: $('#rabatt').val(),
+            school_id: global_school_id,
+            librarysettings: JSON.stringify(App.globalDefinitions().librarysettings)
+        };
+
 
        var text = JSON.stringify(requestData);
 

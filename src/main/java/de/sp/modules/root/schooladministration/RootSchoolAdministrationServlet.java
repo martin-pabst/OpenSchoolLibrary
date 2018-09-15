@@ -238,7 +238,7 @@ public class RootSchoolAdministrationServlet extends BaseServlet {
 
         SchoolData record = srr.record;
 
-        School school = SchoolDAO.insert(record.name, record.number, record.abbreviation, con);
+        School school = SchoolDAO.insert(record.name, record.number, record.abbreviation, "", con);
 
         SchoolTermStore.getInstance().addSchool(school);
 
