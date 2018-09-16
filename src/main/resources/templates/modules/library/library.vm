@@ -434,7 +434,7 @@
         </div>
         <!-- Settings -->
 
-        <div id="librarySettings" class="tab-pane fade" style="margin-top: 10px">
+        <div id="librarySettings" class="tab-pane fade" style="height: 100%; overflow-y:auto">
             <div style="display: flex; height: 100%">
 
                 <!-- Navigation Buttons -->

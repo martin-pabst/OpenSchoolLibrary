@@ -1,6 +1,60 @@
 <div id="userData" style="display: none">
 <span id="userName">$user.name</span>
 </div>
-<div>
-    <h1>User Settings</h1>
+
+<div style="display: flex; height: 100%">
+    <div style="padding: 0 5px; border-right: 1px solid gray">
+        <ul class="nav nav-pills nav-stacked" id="myTabs" style="padding-top: 10px">
+            <li class="active"><a href="#ls_changePassword" data-toggle="pill">Passwort ändern</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Content -->
+    <div style="flex: 1">
+        <div class="tab-content">
+            <!-- First tab: delete old bookings -->
+            <div class="tab-pane active settingsPane" id="ls_changePassword">
+
+                <div class="input-group" style="margin-bottom: 5px">
+                    <span class="input-group-addon" id="usersettings_addon_1" style="width: 20em">Altes Passwort:</span>
+                    <input id="usersettings_old_password"
+                            type="password"
+                           class="form-control password-field"
+                           aria-describedby="usersettings_addon_1" style="width: 20em">
+                </div>
+                <div class="input-group" style="margin-bottom: 5px">
+                    <span class="input-group-addon" id="usersettings_addon_2" style="width: 20em">Neues Passwort:</span>
+                    <input id="usersettings_new_password1"
+                            type="password"
+                           class="form-control password-field"
+                           aria-describedby="usersettings_addon_2" style="width: 20em">
+                </div>
+                <div class="input-group" style="margin-bottom: 10px">
+                    <span class="input-group-addon" id="usersettings_addon_3" style="width: 20em">Neues Passwort (wiederholen):</span>
+                    <input id="usersettings_new_password2"
+                            type="password"
+                           class="form-control password-field"
+                           aria-describedby="usersettings_addon_3" style="width: 20em">
+                </div>
+
+                <button type="button" class="btn btn-default">
+                    OK
+                    <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                </button>
+
+                <div style="vertical-align: middle;display: inline-block;height: 100%;">
+                    <img src="/public/img/spiffygif_26x26.gif" style="display: none"
+                         class="animated_gif">
+                </div>
+            </div>
+
+            <div class="alert alert-success" role="alert"
+                 style="display: none; height: 15em; overflow: auto">
+
+            </div>
+
+            </div>
+        </div>
+    </div>
 </div>
