@@ -1,14 +1,15 @@
 package de.sp.modules.user;
 
-import de.sp.main.services.settings.ModuleSettingsTypes;
-import org.apache.velocity.Template;
-
 import de.sp.database.model.User;
 import de.sp.main.mainframe.menu.MenuItem;
 import de.sp.main.mainframe.menu.MenuItemSide;
 import de.sp.main.services.modules.Module;
+import de.sp.main.services.settings.ModuleSettingsTypes;
 import de.sp.main.services.templates.VelocityEngineFactory;
 import de.sp.main.services.text.TS;
+import de.sp.modules.user.servlets.UserChangePasswordServlet;
+import org.apache.velocity.Template;
+import org.eclipse.jetty.servlet.ServletContextHandler;
 
 public class UserModule extends Module {
 
@@ -93,6 +94,12 @@ public class UserModule extends Module {
 	@Override
 	public ModuleSettingsTypes getModuleSettingsTypes() {
 		return null;
+	}
+
+
+	@Override
+	public void addServlets(ServletContextHandler context) {
+		context.addServlet(UserChangePasswordServlet.class, "/user/settings/changePassword/*");
 	}
 
 }

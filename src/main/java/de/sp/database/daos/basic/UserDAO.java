@@ -83,6 +83,8 @@ public class UserDAO {
 						user.getLast_selected_school_term_id())
 				.addParameter("is_root", user.is_root())
 				.addParameter("school_id", user.getSchool_id())
+				.addParameter("salt", user.getSalt())
+				.addParameter("hash", user.getHash())
 				.executeUpdate();
 
 	}

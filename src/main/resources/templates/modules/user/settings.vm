@@ -47,10 +47,10 @@
                     <img src="/public/img/spiffygif_26x26.gif" style="display: none"
                          class="animated_gif">
                 </div>
+                <div class="alert alert-success" role="alert"
+                     style="display: none; height: 5em; overflow: auto; margin-top: 10px">
             </div>
 
-            <div class="alert alert-success" role="alert"
-                 style="display: none; height: 15em; overflow: auto">
 
             </div>
 

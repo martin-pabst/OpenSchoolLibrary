@@ -36,7 +36,7 @@
             animatedGif.show();
             button.prop('disabled', true);
 
-            $.post("/library/settings/changePassword", JSON.stringify(
+            $.post("/user/settings/changePassword", JSON.stringify(
                 {
                     school_id: global_school_id,
                     oldPassword: oldPassword,
@@ -68,6 +68,29 @@
 
 
         });
+    }
+
+    function showMessage(alertDiv, type, message) {
+
+        alertDiv.attr('class', 'alert alert-' + type);
+
+        message = insertSigns(message);
+
+        alertDiv.html(message);
+
+        alertDiv.show();
+
+    }
+
+    function insertSigns(message){
+
+        message = message.replace(/check_mark/g,
+            '<img src="/public/img/green_check_mark.png" style="height: 1em; vertical-align: middle; margin-left: 0.2em">');
+
+        message = message.replace(/warning_sign/g,
+            '<img src="/public/img/warning_sign.png" style="height: 1em; vertical-align: middle; margin-left: 0.2em">');
+
+        return message;
     }
 
 

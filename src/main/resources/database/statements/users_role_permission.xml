@@ -19,7 +19,9 @@
 		languageCode = :languageCode,
 		last_selected_school_term_id = :last_selected_school_term_id,
 		is_root = :is_root,
-		school_id = :school_id
+		school_id = :school_id,
+		salt = :salt,
+		hash = :hash
 		where 
 		id = :id
 	</statement>
