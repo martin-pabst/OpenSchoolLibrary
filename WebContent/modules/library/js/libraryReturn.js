@@ -145,6 +145,8 @@
 
             if (event.which == 13) {
 
+                w2ui['libraryReturnerList'].searchReset();
+
                 var barcode = $('#libraryReturnBarcodeField').val();
 
                 var returnerGrid = w2ui['libraryReturnerList'];
@@ -163,7 +165,7 @@
                         hideUpdateMessage(booksGrid);
 
                         if (data.status == "success") {
-
+                            beep_ok();
                             returnerGrid.selectNone();
                             printLog(data, barcode);
 
@@ -203,6 +205,7 @@
                             showFeeDetails();
 
                         } else if (data.status == "error") {
+                            beep_error();
                             w2alert("Fehler beim Speichern der Daten: " + data.message);
                         }
                     },

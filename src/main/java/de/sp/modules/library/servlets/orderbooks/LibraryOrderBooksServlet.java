@@ -133,7 +133,7 @@ public class LibraryOrderBooksServlet extends BaseServlet {
                 double netto = gesamtpreis - rabatt;
 
                 dp.addCopy("$NR", "" + nr++,
-                        "$TI", book.getTitle(),
+                        "$TI", book.getTitle().replace("[2x]", "").trim(),
                         "$AU", book.getAuthor(),
                         "$VE", book.getPublisher(),
                         "$IS", book.getIsbn(),

@@ -94,6 +94,7 @@
                             hideUpdateMessage(w2ui['libraryInventoryCopies']);
 
                             if (data.status == "success") {
+                                beep_ok();
                                 w2ui['libraryInventoryCopies'].add(
                                     {
                                         id: data.id,
@@ -103,7 +104,9 @@
                                         edition: edition
                                     }
                                 );
+
                             } else {
+                                beep_error();
                                 if(!$("#noErrorMessagesWhenAddCopy").is(':checked')){
                                     w2alert("Fehler beim Speichern der Daten: " + data.message, "Fehler: ", function(){
                                         $('#libraryInventoryAddCopy').focus();
@@ -145,6 +148,9 @@
 
             if (event.which == 13) {
 
+                w2ui['libraryInventoryBooks'].searchReset();
+                w2ui['libraryInventoryCopies'].searchReset();
+
                 var barcode = $('#libraryInventorySelect').val();
 
                 barcode = barcode.replace(/^0+/, ''); // remove leading "0"s
@@ -156,7 +162,7 @@
                     function (data) {
 
                         if (data.status === "success") {
-
+                            beep_ok();
                             w2ui['libraryInventoryCopies'].barcodeToSelect = barcode;
 
                             var bookGrid = w2ui['libraryInventoryBooks'];
@@ -164,7 +170,7 @@
                             bookGrid.scrollIntoView(bookGrid.get(data.book_id, true));
 
                         } else if (data.status === "error") {
-
+                            beep_error();
                             w2alert(data.message);
 
                         }
@@ -696,7 +702,7 @@
                             w2popup.close();
 
                             if (response.status == "success") {
-
+                                beep_ok();
                                 var newRecord = {};
                                 for (key in record) {
                                     newRecord[key] = record[key];
@@ -707,6 +713,7 @@
                                 w2ui['libraryInventoryBooks'].add(newRecord);
 
                             } else {
+                                beep_error();
                                 w2alert("Fehler beim Speichern", response.message);
                             }
                         });
@@ -862,7 +869,7 @@
                             w2popup.close();
 
                             if (response.status == "success") {
-
+                                beep_ok();
                                 var newRecord = {
                                     form: {
                                         id: record.form.id,
@@ -892,6 +899,7 @@
                                 );
 
                             } else {
+                                beep_error();
                                 w2alert("Fehler beim Speichern", response.message);
                             }
                         });

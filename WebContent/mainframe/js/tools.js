@@ -153,13 +153,16 @@ function commitW2GridChanges(gridObject, updateRequest, url) {
             hideUpdateMessage(gridObject);
 
             if (!(data.status == "success")) {
+                beep_error();
                 w2alert(data.message, "Fehler beim Speichern:");
+            } else {
+                beep_ok();
             }
 
             mergeOrDiscard2GridChanges(gridObject, changes, data.status == "success");
         },
         error: function (jqXhr, textStatus, errorThrown) {
-
+            beep_error();
             w2alert(errorThrown, "Verbindungsfehler:");
             mergeOrDiscard2GridChanges(gridObject, changes, false);
 
@@ -257,9 +260,10 @@ function commitW2GridDelete(gridObject, json, url, callBackIfSuccessful, confirm
                         hideUpdateMessage(gridObject);
 
                         if (!(data.status == "success")) {
+                            beep_error();
                             w2alert(data.message, "Fehler beim Löschen:");
                         } else {
-
+                            beep_ok();
                             gridObject.getSelection(false).forEach(function (recid) {
                                 gridObject.remove(recid);
                             });
@@ -275,7 +279,7 @@ function commitW2GridDelete(gridObject, json, url, callBackIfSuccessful, confirm
                         }
                     },
                     error: function (jqXhr, textStatus, errorThrown) {
-
+                        beep_error();
                         w2alert(errorThrown, "Verbindungsfehler:");
 
                         hideUpdateMessage(gridObject);
@@ -286,4 +290,12 @@ function commitW2GridDelete(gridObject, json, url, callBackIfSuccessful, confirm
         }
     });
 
+}
+
+function beep_ok(){
+    $('#beep_ok').get(0).play();
+}
+
+function beep_error(){
+    $('#beep_error').get(0).play();
 }

@@ -47,6 +47,9 @@
 </head>
 <body style="background-color: #fff; padding-top: 50px;">
 
+<audio id="beep_ok" src="/mainframe/sound/341871__edsward__ping.wav"></audio>
+<audio id="beep_error" src="/mainframe/sound/325113__fisch12345__error.wav"></audio>
+
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
