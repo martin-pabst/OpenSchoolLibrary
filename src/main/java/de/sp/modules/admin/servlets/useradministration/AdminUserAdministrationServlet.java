@@ -81,7 +81,7 @@ public class AdminUserAdministrationServlet extends BaseServlet {
                                 sur.school_id);
 
                         if(sur.record.id != null){
-                            responseString = gson.toJson(updateUser(sur, con));
+                            responseString = gson.toJson(updateUser(sur, con, user));
                         } else {
                             responseString = gson.toJson(saveUser(sur, con));
                         }
@@ -144,7 +144,7 @@ public class AdminUserAdministrationServlet extends BaseServlet {
 
     }
 
-    private SaveUserResponse updateUser(SaveUserRequest sur, Connection con) throws Exception {
+    private SaveUserResponse updateUser(SaveUserRequest sur, Connection con, User loggedInUser) throws Exception {
 
         UserRolePermissionStore ups = UserRolePermissionStore.getInstance();
 
@@ -178,6 +178,11 @@ public class AdminUserAdministrationServlet extends BaseServlet {
         user.setIs_root(false);
 
         if(record.password != null && !record.password.isEmpty()){
+
+            if(user.getId() == loggedInUser.getId()){
+                return new SaveUserResponse("error", "Admin cannot change her/his password here. Please use user settings.", null);
+            }
+
             user.setPassword(record.password);
         }
 

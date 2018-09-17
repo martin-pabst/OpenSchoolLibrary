@@ -435,7 +435,8 @@
                 '    </div>' +
                 '</div>' +
                 '<div class="w2ui-buttons">' +
-                '    <button class="btn" name="reset">Zurücksetzen</button>' +
+                (record === null ?
+                '    <button class="btn" name="reset">Zurücksetzen</button>' : '') +
                 '    <button class="btn" name="save">Speichern</button>' +
                 '</div>',
                 fields: [
@@ -482,7 +483,7 @@
 
 
         $().w2popup('open', {
-            title: 'Benutzer hinzufügen',
+            title: record === null ? 'Benutzer hinzufügen' : 'Benutzerdaten bearbeiten',
             body: '<div id="form" style="width: 100%; height: 100%;"></div>',
             style: 'padding: 15px 0px 0px 0px',
             width: 800,
