@@ -140,6 +140,22 @@ public class LibrarySettingsServlet extends BaseServlet {
 
                         break;
 
+                    case "bookinfo":
+
+                        BookinfoRequest bir = gson.fromJson(postData, BookinfoRequest.class);
+
+                        bir.validate(ts);
+
+                        user.checkPermission("library.settings",
+                                bir.school_id);
+
+                        BookinfoResponse biResp = new BookinfoResponse(bir, con);
+
+
+                        responseString = gson.toJson(biResp);
+
+                        break;
+
                 }
 
                 con.commit(true);

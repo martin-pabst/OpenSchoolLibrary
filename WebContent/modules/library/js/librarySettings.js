@@ -179,12 +179,69 @@
 
         });
 
+        // Change Barcode
+        $('#bookinfoTab').on('shown.bs.tab', function (e) {
+
+            var bookinfoDiv = $('#ls_bookinfo');
+
+            var button = bookinfoDiv.find('button');
+
+            button.click(function () {
+
+                var barcodeInput = $('#librarybookinfobarcodefield');
+
+                var animatedGif = bookinfoDiv.find('.animated_gif');
+                var alertDiv = bookinfoDiv.find('.alert-success');
+
+                animatedGif.show();
+                button.prop('disabled', true);
+
+                $.post("/library/settings/changeBarcode", JSON.stringify(
+                    {
+                        school_id: global_school_id,
+                        barcode: barcodeInput.val()
+                    }),
+                    function (data) {
+
+                        animatedGif.hide();
+                        button.prop('disabled', false);
+
+                        if (data.status === "success") {
+
+                            showMessage(alertDiv, 'success', data.message);
+                            barcodeInput.val('');
+                            $('#bookinfooutput').html(processBookInfoResponse(data));
+
+                        } else {
+
+                            showMessage(alertDiv, 'danger', data.message);
+
+                        }
+
+                    }, "json"
+                );
+
+
+            });
+
+        });
+
 
         var searchAll1 = $('#librarySettingsMergeStudentsNavigator').find('.w2ui-search-all');
 
         searchAll1.keyup(function (event) {
             this.onchange();
         });
+
+    }
+
+
+    function processBookInfoResponse(bir){
+
+
+
+
+        return "";
 
     }
 

@@ -123,4 +123,47 @@
 		      and book.school_id = :school_id
 	</statement>
 
+	<statement name="book_copy.bookinfo1">
+		select
+		borrows.id as borrows_id,
+		book.title,
+		book.author,
+		book.publisher,
+		book.isbn,
+		student.id as student_id,
+		student.surname as student_surname,
+		student.firstname as student_firstname,
+		school_term.name as school_term_name,
+		class.name as class_name,
+		teacher.id as teacher_id,
+		teacher.surname as teacher_surname,
+		teacher.firstname as teacher_firstname,
+		borrows.begindate,
+		borrows.return_date
+		from borrows
+		LEFT JOIN student on student_id = student.id
+		left join student_school_term on student.id = student_school_term.student_id
+		left join school_term on student_school_term.school_term_id = school_term.id
+		left join class on student_school_term.class_id = class.id
+		left JOIN teacher on teacher_id = teacher.id
+		join book_copy on book_copy_id = book_copy.id
+		join book on book_id = book.id
+		where book_copy.barcode = :barcode
+		and book.school_id = :school_id
+	</statement>
+	<statement name="book_copy.bookinfo2">
+        select
+        statusdate,
+        evidence,
+        username,
+        borrowername,
+        mark
+        from book_copy_status
+        join book_copy on book_copy_status.book_copy_id = book_copy.id
+        join book on book_copy.book_id = book.id
+        where
+        book_copy.barcode = :barcode
+		and book.school_id = :school_id
+	</statement>
+
 </statementlist>

@@ -453,6 +453,8 @@
                         <li><a href="#ls_changeBarcode" data-toggle="pill" id="changeBarcodeTab">Barcode eines Buchs
                             ändern</a>
                         </li>
+                        <li><a href="#ls_bookinfo" data-toggle="pill" id="bookinfoTab">Buchinfo</a>
+                        </li>
                     </ul>
                 </div>
 
@@ -627,6 +629,28 @@
                             </div>
                             <div class="alert alert-success" role="alert" style="display: none"></div>
 
+                        </div>
+
+
+                        <!-- 6. tab: bookinfo -->
+                        <div class="tab-pane settingsPane" id="ls_bookinfo">
+                            <h2>Buchinfo</h2>
+                            <div style="margin: 10px 0 10px 0">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon5">Barcode:</span>
+                                    <input id="libraryBookinfoBarcodeField" type="text" class="form-control"
+                                           placeholder="Barcode"
+                                           aria-describedby="basic-addon5"
+                                           style="width: 20em">
+                                </div>
+                                <div style="vertical-align: middle;display: inline-block;height: 100%;">
+                                    <img src="/public/img/spiffygif_26x26.gif" style="display: none"
+                                         class="animated_gif">
+                                </div>
+                            </div>
+                            <div class="alert alert-success" role="alert"
+                                 style="display: none; height: 5em; overflow: auto"></div>
+                            <div id="bookinfoOutput"></div>
                         </div>
 
                     </div>
