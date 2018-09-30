@@ -10,10 +10,13 @@ public class BookinfoResponse {
 
     private List<BookinfoData> bookInfoList;
 
-    private String title;
-    private String author;
-    private String publisher;
-    private String isbn;
+    private String title = "";
+    private String author = "";
+    private String publisher = "";
+    private String isbn = "";
+
+    private String status = "";
+    private String message = "";
 
     public BookinfoResponse(BookinfoRequest bir, Connection con) {
 
@@ -22,6 +25,12 @@ public class BookinfoResponse {
 
         bookInfoList = BookCopyHelperDAO.getBookinfo(con, bir.barcode, bir.school_id);
 
+        if(bookInfoList.size() == 0){
+            status = "error";
+            message = "Kein Buch zum Barcode " + bir.barcode + " gefunden.";
+            return;
+        }
+
         for(int i = 0; i < bookInfoList.size(); i++){
 
             BookinfoData bid = bookInfoList.get(i);
@@ -29,14 +38,17 @@ public class BookinfoResponse {
             if(bid.getClass_name() != null) {
                 bid.setClass_name(bid.getClass_name() + "(" + bid.getSchool_term_name() + ")");
 
-                if (bid.getBorrows_id() == lastBorrowsId && lastData.getClass_name() != null) {
-                    lastData.setClass_name(lastData.getClass_name() + bid.getClass_name());
+                if (bid.getBorrows_id() == lastBorrowsId && lastData != null && lastData.getClass_name() != null) {
+                    lastData.setClass_name(lastData.getClass_name() + ", " + bid.getClass_name());
+                    bookInfoList.remove(i);
+                    i--;
+                } else {
+                    lastData = bid;
+                    lastBorrowsId = bid.getBorrows_id();
                 }
-                bookInfoList.remove(i);
-                i--;
             }
 
-            if(title == null && bid.getTitle() != null){
+            if(title.isEmpty() && bid.getTitle() != null){
                 title = bid.getTitle();
                 author = bid.getAuthor();
                 isbn = bid.getIsbn();
@@ -44,6 +56,9 @@ public class BookinfoResponse {
             }
 
         }
+
+        status = "success";
+        message = "Buch mit Barcode " + bir.barcode + " gefunden.";
 
     }
 }

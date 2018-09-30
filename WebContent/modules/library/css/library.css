@@ -8,3 +8,8 @@
 .settingsPane {
     padding: 10px;
 }
+
+.bookInfoDataHeading{
+    font-size: 150%;
+    font-weight: bold;
+}

@@ -44,6 +44,13 @@ public class BaseServlet extends HttpServlet {
 
 	}
 
+	/**
+	 *
+	 * See https://stackoverflow.com/questions/3831680/httpservletrequest-get-json-post-data
+	 *
+	 * @param request
+	 * @return post data as String
+	 */
 	protected String getPostData(HttpServletRequest request) {
 		StringBuffer jb = new StringBuffer();
 		String line = null;

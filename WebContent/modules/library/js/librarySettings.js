@@ -179,50 +179,51 @@
 
         });
 
-        // Change Barcode
+        // Bookinfo
         $('#bookinfoTab').on('shown.bs.tab', function (e) {
 
             var bookinfoDiv = $('#ls_bookinfo');
 
-            var button = bookinfoDiv.find('button');
+            $('#libraryBookinfoBarcodeField').keypress(function(event){
 
-            button.click(function () {
+                if (event.which === 13) {
+                    var barcodeInput = $('#libraryBookinfoBarcodeField');
 
-                var barcodeInput = $('#librarybookinfobarcodefield');
+                    var animatedGif = bookinfoDiv.find('.animated_gif');
+                    var alertDiv = bookinfoDiv.find('.alert');
 
-                var animatedGif = bookinfoDiv.find('.animated_gif');
-                var alertDiv = bookinfoDiv.find('.alert-success');
+                    animatedGif.show();
 
-                animatedGif.show();
-                button.prop('disabled', true);
+                    $.post("/library/settings/bookinfo", JSON.stringify(
+                        {
+                            school_id: global_school_id,
+                            barcode: barcodeInput.val()
+                        }),
+                        function (data) {
 
-                $.post("/library/settings/changeBarcode", JSON.stringify(
-                    {
-                        school_id: global_school_id,
-                        barcode: barcodeInput.val()
-                    }),
-                    function (data) {
-
-                        animatedGif.hide();
-                        button.prop('disabled', false);
-
-                        if (data.status === "success") {
-
-                            showMessage(alertDiv, 'success', data.message);
+                            animatedGif.hide();
                             barcodeInput.val('');
-                            $('#bookinfooutput').html(processBookInfoResponse(data));
 
-                        } else {
+                            if (data.status === "success") {
 
-                            showMessage(alertDiv, 'danger', data.message);
+                                showMessage(alertDiv, 'success', data.message);
+                                $('#bookinfoOutput').html(processBookInfoResponse(data));
 
-                        }
+                            } else {
 
-                    }, "json"
-                );
+                                showMessage(alertDiv, 'danger', data.message);
+                                $('#bookinfoOutput').html('');
+
+                            }
+
+                        }, "json"
+                    );
 
 
+
+                }
             });
+
 
         });
 
@@ -236,13 +237,68 @@
     }
 
 
+
     function processBookInfoResponse(bir){
 
+        var html = '';
+        html += '<div class="bookInfoDataHeading">Buchdaten: </div>';
+        html += keyValueToHtml('Titel', bir.title);
+        html += keyValueToHtml('Autor', bir.author);
+        html += keyValueToHtml('Verlag', bir.publisher);
+        html += keyValueToHtml('ISBN', bir.isbn);
 
+        for(var i = bir.bookInfoList.length - 1; i >= 0; i--){
 
+            var bid = bir.bookInfoList[i]; // BookInfoData
 
-        return "";
+            if(!bid.return_date){
+                bid.return_date = "---";
+            }
 
+            html += '<div>';
+            if(bid.statusdate){
+
+                html += '<div class="bookInfoDataHeading">Bewertung am ' + bid.statusdate + ': </div>';
+                html += '<div><span style="font-weight: bold">Bewertet von: </span>';
+                html += '<span>' + bid.username + '</span></div>';
+                html += '<div><span style="font-weight: bold">Beschreibung: </span>';
+                html += '<span>' + bid.evidence + '</span></div>';
+                html += '<div><span style="font-weight: bold">Note:</span>';
+                html += '<span>' + bid.mark + '</span></div>';
+
+            } else {
+
+                html += '<div class="bookInfoDataHeading">Ausleihvorgang am ' + bid.begindate + ': </div>';
+                html += '<div><span style="font-weight: bold">Rückgabe: </span>';
+                html += '<span>' + bid.return_date + '</span></div>';
+
+                if(bid.student_id){
+
+                    html += '<div><span style="font-weight: bold">Entliehen von Schüler/in: </span>';
+                    html += '<span>' + bid.student_surname + ', ' + bid.student_firstname + '</span></div>';
+                    html += '<div><span style="font-weight: bold">Klasse: </span>';
+                    html += '<span>' + bid.class_name + '</span></div>';
+                }
+                if(bid.teacher_id){
+
+                    html += '<div><span style="font-weight: bold">Entliehen von Lehrkraft: </span>';
+                    html += '<span>' + bid.teacher_surname + ', ' + bid.teacher_firstname + '</span></div>';
+
+                }
+            }
+            html += '</div>';
+
+        }
+
+        return html;
+
+    }
+
+    function keyValueToHtml(key, value){
+        var html = '<div>';
+        html += '<span style="font-weight: bold;">' + key + ': </span>';
+        html += '<span>' + value + '</span></div>';
+        return html;
     }
 
     function doSortOut(event) {
@@ -585,7 +641,7 @@
                 }, "json"
             );
         } else {
-            showMessage(alertDiv, 'danger', 'Das Beginndatum ist nicht gesetzt.')
+            showMessage(alertDiv, 'danger', 'Das Beginndatum ist nicht gesetzt.');
             animatedGif.hide();
             button.prop('disabled', false);
         }

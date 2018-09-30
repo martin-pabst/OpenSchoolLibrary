@@ -10,14 +10,17 @@ public class BookinfoData implements Comparable<BookinfoData> {
     private transient String author;
     private transient String publisher;
     private transient String isbn;
+
     private Long student_id;
     private String student_surname;
     private String student_firstname;
     private String school_term_name;
     private String class_name;
+
     private Long teacher_id;
     private String teacher_surname;
     private String teacher_firstname;
+
     private Date begindate;
     private Date return_date;
 

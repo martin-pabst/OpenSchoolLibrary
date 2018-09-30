@@ -20,7 +20,7 @@ public class BookCopyHelperDAO {
 
         String sql2 = StatementStore.getStatement("book_copy.bookinfo2");
 
-        List<BookinfoData> statusList = con.createQuery(sql1)
+        List<BookinfoData> statusList = con.createQuery(sql2)
                 .addParameter("school_id", school_id)
                 .addParameter("barcode", barcode)
                 .executeAndFetch(BookinfoData.class);
