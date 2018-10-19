@@ -1,3 +1,10 @@
+Weitere Wünsche:
+ - Künstliche Personen (z.B. K-Seminar)
+ - Lehrkräfte anlegen und bearbeiten
+
+
+
+
 Einstellungen
  - Unterhalb des Werkzeugkastens für Admins:
    - Voreinstellungen für Benutzer (schulweit)
