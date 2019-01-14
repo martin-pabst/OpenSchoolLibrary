@@ -162,7 +162,7 @@ public class ASVToDatabaseWriter {
         ASVSStDAO.deleteStudentClassReferendes(schoolTerm.getId(), con);
 
 
-        List<DBClass> classes = DBClassDAO.getAll(con);
+        List<DBClass> classes = DBClassDAO.findBySchoolTermId(schoolTerm.getId() , con);
         HashMap<String, DBClass> classMap = new HashMap<>();
         classes.forEach(dbClass -> classMap.put(dbClass.getName(), dbClass));
 
